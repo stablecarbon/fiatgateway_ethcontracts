@@ -11,6 +11,13 @@ contract Carbonfiat is StandardBurnableToken, MintableToken {
     uint8 public constant decimals = 18;
 
 
+    function create() public {
+      mint(msg.sender, 1);
 
+    }
+    function destroy() public {
+      burn(1);
+
+    }
 
   }
