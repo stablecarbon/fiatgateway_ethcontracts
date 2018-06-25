@@ -6,18 +6,16 @@ import "zeppelin-solidity/contracts/math/SafeMath.sol";
 
 contract Carbonfiat is StandardBurnableToken, MintableToken {
     using SafeMath for uint256;
-    string public name = "CarbonFiat";
+    string public name = "Carbonfiat";
     string public symbol = "CF";
     uint8 public constant decimals = 18;
 
 
     function create() public {
-      mint(msg.sender, 1);
+      mint(msg.sender, 100);
 
     }
     function destroy() public {
-      burn(1);
-
+      burn(100);
     }
-
   }
