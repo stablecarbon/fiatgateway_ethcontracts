@@ -1,7 +1,7 @@
 /* Loading all imports */
 const _ = require('lodash');
 const expectRevert = require('./expectRevert');
-const CreateRedeemToken = artifacts.require("./CreateRedeemTokenMock.sol");
+const PermissionedToken = artifacts.require("./PermissionedTokenMock.sol");
 const RegulatorService = artifacts.require("./RegulatorService.sol");
 const ServiceRegistry = artifacts.require("./ServiceRegistry.sol");
 const BigNumber = web3.BigNumber;
@@ -16,7 +16,6 @@ require('chai')
 class CommonVariables {
     constructor(_accounts) {
         this.accounts = _accounts;
-
         this.appOwner = _accounts[0]
         this.tokenOwner = _accounts[1]
         this.participants = _.difference(_accounts, [_accounts[0], _accounts[1]]);
@@ -26,7 +25,7 @@ class CommonVariables {
 /* Exporting the module */
 module.exports = {
     BigNumber,
-    CreateRedeemToken,
+    PermissionedToken,
     expectRevert,
     CommonVariables,
     ZERO_ADDRESS,
