@@ -1,16 +1,26 @@
 pragma solidity ^0.4.23;
 
-import "./CreateRedeemToken.sol";
 import "./RegulatorService.sol";
 import "./ServiceRegistry.sol";
 import "openzeppelin-solidity/contracts/ownership/Ownable.sol";
+import "openzeppelin-solidity/contracts/token/ERC20/PausableToken.sol";
+import "openzeppelin-solidity/contracts/token/ERC20/BurnableToken.sol";
+import "openzeppelin-solidity/contracts/token/ERC20/MintableToken.sol";
 
 
-contract PermissionedToken is Ownable, CreateRedeemToken {
-	string constant CAN_DEPOSIT_USD = "canDeposit";
-	string constant CAN_REDEEM = "canRedeem";
-	string constant CAN_CREATE = "canCreate";
-	string constant CAN_TRANSFER = "canTransfer";
+/**
+ * @title Permissioned Token
+ * @dev A token that is self-regulates
+ *
+ */
+contract PermissionedToken is Ownable, PausableToken, BurnableToken, MintableToken {
+	
+	// Passes KYC & AML and therefore can redeem CarbonUSD and mint new CarbonUSD for USD
+	string constant WHITELISTED = "whitelist";
+	// User has an ERC20 wallet and can transfer, but still needs to pass KYC & AML to burn or mint
+	string constant NONLISTED = "nonlisted";
+	// Cannot transfer, burn, or mint
+	string constant BLACKLISTED = "blacklisted";
 
 	/**
 	* @notice Address of the `ServiceRegistry` that has the location of the
@@ -43,37 +53,27 @@ contract PermissionedToken is Ownable, CreateRedeemToken {
 
 	// Overriden Methods that include logic to check for action validity
 
-	function addFiatCredits(address _to, uint256 _amount) onlyOwner public returns (bool) {
-		require(check(_to, CAN_DEPOSIT_USD), "account does not have canDeposit attribute");
-		emit PassChecks(CAN_DEPOSIT_USD, _to);
-		super.addFiatCredits(_to, _amount);
-	}
-
-	function create(uint256 _amount) public {
-		require(check(msg.sender, CAN_CREATE), "account does not have canCreate attribute");
-		emit PassChecks(CAN_CREATE, msg.sender);
-		super.create(_amount);
+	function mint(address _to, uint256 _amount) onlyOwner public returns (bool) {
+		require(check(msg.sender, WHITELISTED), "account is not allowed to mint");
+		emit PassChecks(WHITELISTED, msg.sender);
+		super.mint(_to, _amount);
 	}
 
 	function burn(uint256 _amount) public {
-		require(check(msg.sender, CAN_REDEEM), "account does not have canRedeem attribute");
-		emit PassChecks(CAN_REDEEM, msg.sender);
+		require(check(msg.sender, WHITELISTED), "account is not allowed to burn");
+		emit PassChecks(WHITELISTED, msg.sender);
 		super.burn(_amount);
 	}
 
 	function transfer(address _to, uint256 _amount) public returns (bool) {
-		require(check(msg.sender, CAN_TRANSFER), "sender does not have canTransfer attribute)");
-		require(check(_to, CAN_TRANSFER), "receiver does not have canTransfer attribute)");
-		emit PassChecks(CAN_TRANSFER, msg.sender);
-		emit PassChecks(CAN_TRANSFER, _to);
+		require(!check(msg.sender, BLACKLISTED), "sender is blacklisted");
+		require(!check(_to, BLACKLISTED), "receiver is blacklisted");
 		super.transfer(_to, _amount);
 	}
 
 	function transferFrom(address _from, address _to, uint256 _amount) public returns (bool) {
-		require(check(_from, CAN_TRANSFER), "sender does not have canTransfer attribute)");
-		require(check(_to, CAN_TRANSFER), "receiver does not have canTransfer attribute)");
-		emit PassChecks(CAN_TRANSFER, _from);
-		emit PassChecks(CAN_TRANSFER, _to);
+		require(!check(_from, BLACKLISTED), "sender is blacklisted");
+		require(!check(_to, BLACKLISTED), "receiver is blacklisted");
 		super.transferFrom(_from, _to, _amount);
 	}
 
