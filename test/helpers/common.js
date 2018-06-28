@@ -1,7 +1,7 @@
 /* Loading all imports */
 const _ = require('lodash');
 const expectRevert = require('./expectRevert');
-const PermissionedToken = artifacts.require("./PermissionedTokenMock.sol");
+const PermissionedToken = artifacts.require("./PermissionedToken.sol");
 const RegulatorService = artifacts.require("./RegulatorService.sol");
 const ServiceRegistry = artifacts.require("./ServiceRegistry.sol");
 const BigNumber = web3.BigNumber;
@@ -16,9 +16,11 @@ require('chai')
 class CommonVariables {
     constructor(_accounts) {
         this.accounts = _accounts;
-        this.appOwner = _accounts[0]
-        this.tokenOwner = _accounts[1]
-        this.participants = _.difference(_accounts, [_accounts[0], _accounts[1]]);
+        this.appOwner = _accounts[0];
+        this.tokenOwner = _accounts[1];
+        this.regulatorService1 = _accounts[2];
+        this.regulatorService2 = _accounts[3];
+        this.attacker = _accounts[4];
     }
 }
 
