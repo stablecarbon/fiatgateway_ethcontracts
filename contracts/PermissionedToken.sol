@@ -39,10 +39,10 @@ contract PermissionedToken is Ownable, PausableToken, BurnableToken, MintableTok
 	// New Methods
 
 	/**
-	* @dev Owner sets the Service registry that determines whether account can transfer, redeem, create
+	* @dev Constructor sets the Service registry that determines account permissions
 	* @param _registry Address of `ServiceRegistry` contract
 	*/
-	function setRegistry(ServiceRegistry _registry) onlyOwner public {
+	constructor (ServiceRegistry _registry) public {
 		require(_registry != address(0));
 		registry = _registry;
 	}

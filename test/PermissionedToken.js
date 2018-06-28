@@ -1,6 +1,8 @@
 /* Loading all libraries from common */
 const {
   PermissionedToken, //Permissioned Token Contract
+  ServiceRegistry, //Service Registry Contract
+  RegulatorService, //Regulator Service Contract
   BigNumber, //BigNumber from web3 (for ease to use)
   CommonVariables, //Multiple common variables
   expectRevert, //Check if the Solidity returns "revert" exception (usually result from require failed)
@@ -18,9 +20,12 @@ contract('PermissionedToken', _accounts => {
   const _participants = commonVars.participants;
 
   let token = null;
+  let serviceRegistry = null;
+  let regulatorService = null;
   const initialBalance = 1000;
   
   beforeEach(async () => {
+    
     token = await PermissionedToken.new(_appOwner, initialBalance, { from: _tokenOwner });
   });
 
