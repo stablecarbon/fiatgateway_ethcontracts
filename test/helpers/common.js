@@ -2,8 +2,8 @@
 const _ = require('lodash');
 const expectRevert = require('./expectRevert');
 const PermissionedToken = artifacts.require("./PermissionedToken.sol");
-const RegulatorService = artifacts.require("./RegulatorService.sol");
-const ServiceRegistry = artifacts.require("./ServiceRegistry.sol");
+const Regulator = artifacts.require("./Regulator.sol");
+const RegulatorProxy = artifacts.require("./RegulatorProxy.sol");
 const BigNumber = web3.BigNumber;
 const ZERO_ADDRESS = '0x0000000000000000000000000000000000000000';
 
@@ -16,11 +16,13 @@ require('chai')
 class CommonVariables {
     constructor(_accounts) {
         this.accounts = _accounts;
-        this.appOwner = _accounts[0];
-        this.tokenOwner = _accounts[1];
-        this.regulatorService1 = _accounts[2];
-        this.regulatorService2 = _accounts[3];
+        this.tokenOwner = _accounts[0];
+        this.regulatorOwner = _accounts[1];
+        this.regulatorProxyOwner = _accounts[2];
+        this.regulatorOwner2 = _accounts[3];
         this.attacker = _accounts[4];
+        this.userSender = _accounts[5];
+        this.userReceiver = _accounts[6];
     }
 }
 
@@ -31,6 +33,6 @@ module.exports = {
     expectRevert,
     CommonVariables,
     ZERO_ADDRESS,
-    RegulatorService,
-    ServiceRegistry
+    Regulator,
+    RegulatorProxy
 }
