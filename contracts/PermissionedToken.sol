@@ -14,14 +14,16 @@ import "openzeppelin-solidity/contracts/token/ERC20/MintableToken.sol";
 * ERC-20 smart contract representing ownership of securities and overrides the
 * transfer, burn, and mint methods to check with the Regulator
 *
-* Current assumptions: 
+* Current responsibilities: 
 * 	Anyone can transfer 
+*	Owner can mint, destroy blacklisted tokens
+*	Depositors can burn
 */
 contract PermissionedToken is Ownable, PausableToken, BurnableToken, MintableToken {
 	
 	// ASSUMPTION: account can only have one status at any given time
 
-	// Passes KYC & AML and therefore can redeem CarbonUSD and mint new CarbonUSD for USD
+	// Passes KYC & AML and therefore can mint new tokens
 	string constant WHITELISTED = "whitelist";
 	// User has an ERC20 wallet and can transfer, but still needs to pass KYC & AML to burn or mint
 	string constant NONLISTED = "nonlisted";

@@ -95,18 +95,71 @@ contract('PermissionedToken', _accounts => {
       
       beforeEach(async () => {
         // Make userReceiver the initial account with burn access
-        await token.addDepositor(userReceiver, {from: _tokenOwner});
+        await token.addDepositor(_tokenOwner, {from: _tokenOwner});
+        
+        // Add permissions for testing
+        await regulator.addValidator(_regulatorOwner, {from: _regulatorOwner});
+        await regulator.setAttribute(_userSender, "whitelist", 1, "can mint", {from: _regulatorOwner});
+        await regulator.setAttribute(_userReceiver, "whitelist", 1, "can mint", {from: _regulatorOwner});
       });
 
       describe('mint', function () {
+        
+        describe('owner tries to mint to whitelisted account', function () {
+          it('should mint to account', async function () {
+            await token.mint(_userSender, 100, {from: _tokenOwner});
+            assert.equal(await token.balanceOf(_userSender), 100);
+          });
+        });
 
+        describe('owner tries to mint to unauthorized account', function () {
+          it('reverts', async function () {
+            await expectRevert(token.mint(_attacker, 100, {from: _tokenOwner}));
+          });
+
+        });
+
+        describe('non-owner tries to mint to whitelisted account', function () {
+          it('reverts', async function () {
+            await expectRevert(token.mint(_userSender, 100, {from: _userSender}));
+          });
+        });
       });
       
       describe('transfer', function () {
 
       });
       
-      describe('burn', function () {
+      describe('_burn', function () {
+
+        beforeEach(async () => {
+          // Mint tokens to a depositor account
+          await token.addDepositor(_userSender, {from: _tokenOwner});
+          await token.mint(_userSender, 100, {from: _tokenOwner});
+
+          // Mint tokens to a non-depositor whitelisted account
+          await token.mint(_userReceiver, 100, {from: _tokenOwner});
+        });
+
+        describe('authorized depositor tries to burn', function () {
+          it('should burn depositor tokens', async function () {
+            await token._burn(100, {from: _userSender});
+            assert.equal(await token.balanceOf(_userSender), 0);
+          });
+        });
+
+        describe('unauthorized whitelisted depositor tries to burn', function () {
+          it('reverts', async function () {
+            await expectRevert(token._burn(100, {from: _userReceiver}));
+          });
+        });
+
+        describe('unauthorized non-whitelisted depositor trues to burn', function () {
+          it('reverts', async function () {
+            await regulator.setAttribute(_userSender, "whitelist", 0, "can no longer mint", {from: _regulatorOwner});
+            await expectRevert(token._burn(100, {from: _userSender}));
+          });
+        });
 
       });
 
