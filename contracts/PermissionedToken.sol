@@ -14,9 +14,13 @@ import "openzeppelin-solidity/contracts/token/ERC20/MintableToken.sol";
 * ERC-20 smart contract representing ownership of securities and overrides the
 * transfer, burn, and mint methods to check with the Regulator
 *
+* Current assumptions: 
+* 	Anyone can transfer 
 */
 contract PermissionedToken is Ownable, PausableToken, BurnableToken, MintableToken {
 	
+	// ASSUMPTION: account can only have one status at any given time
+
 	// Passes KYC & AML and therefore can redeem CarbonUSD and mint new CarbonUSD for USD
 	string constant WHITELISTED = "whitelist";
 	// User has an ERC20 wallet and can transfer, but still needs to pass KYC & AML to burn or mint
@@ -44,13 +48,14 @@ contract PermissionedToken is Ownable, PausableToken, BurnableToken, MintableTok
 	*
 	*/
 	modifier onlyDepositor() {
-		require (depositAccounts[msg.sender]);
+		require (isDepositor(msg.sender));
 		_;
 	}
 
 	// Events
 	event DepositorAdded(address depositor);
 	event DepositorRemoved(address depositor);
+	event DestroyBlacklistedTokens(address account, uint256 amount);
 
 	// Methods
 
@@ -58,9 +63,9 @@ contract PermissionedToken is Ownable, PausableToken, BurnableToken, MintableTok
 	* @notice Constructor sets the RegulatorProxy that determines account permissions
 	* @param _regulatorProxy Address of `RegulatorProxy` contract
 	*/
-	constructor (RegulatorProxy _regulatorProxy) public {
+	constructor (address _regulatorProxy) public {
 		require(_regulatorProxy != address(0));
-		regulatorProxy = _regulatorProxy;
+		regulatorProxy = RegulatorProxy(_regulatorProxy);
 	}
 
 	/**
@@ -79,6 +84,10 @@ contract PermissionedToken is Ownable, PausableToken, BurnableToken, MintableTok
 	function removeDepositor(address _depositor) public onlyOwner {
 		depositAccounts[_depositor] = false;
 		emit DepositorRemoved(_depositor);
+	}
+
+	function isDepositor(address _depositor) public view returns (bool) {
+		return depositAccounts[_depositor];
 	}
 
 	/**
@@ -114,6 +123,18 @@ contract PermissionedToken is Ownable, PausableToken, BurnableToken, MintableTok
 		require(check(msg.sender, WHITELISTED), "account is not allowed to burn");
 		super.burn(_amount);
 		return true;
+	}
+
+	/**
+	* @notice destroy the tokens owned by a blacklisted account
+	* @param _who account to destroy tokens from
+	*/
+	function destroyBlacklistedTokens(address _who) public onlyOwner {
+		require(check(_who, BLACKLISTED), "account is not blacklisted");
+		uint256 oldAmount = balanceOf(_who);
+		balances[_who] = balances[_who].sub(oldAmount);
+		totalSupply_ = totalSupply_.sub(oldAmount);
+		emit DestroyBlacklistedTokens(_who, oldAmount);
 	}
 
 	/**
