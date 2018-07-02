@@ -1,0 +1,819 @@
+{
+  "contractName": "ServiceRegistry",
+  "abi": [
+    {
+      "constant": false,
+      "inputs": [],
+      "name": "renounceOwnership",
+      "outputs": [],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "owner",
+      "outputs": [
+        {
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "service",
+      "outputs": [
+        {
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "_newOwner",
+          "type": "address"
+        }
+      ],
+      "name": "transferOwnership",
+      "outputs": [],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "name": "_service",
+          "type": "address"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "constructor"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "name": "previousOwner",
+          "type": "address"
+        }
+      ],
+      "name": "OwnershipRenounced",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "name": "previousOwner",
+          "type": "address"
+        },
+        {
+          "indexed": true,
+          "name": "newOwner",
+          "type": "address"
+        }
+      ],
+      "name": "OwnershipTransferred",
+      "type": "event"
+    }
+  ],
+  "bytecode": "0x608060405234801561001057600080fd5b5060405160208061054983398101806040528101908080519060200190929190505050336000806101000a81548173ffffffffffffffffffffffffffffffffffffffff021916908373ffffffffffffffffffffffffffffffffffffffff160217905550600073ffffffffffffffffffffffffffffffffffffffff168173ffffffffffffffffffffffffffffffffffffffff16141515156100af57600080fd5b80600160006101000a81548173ffffffffffffffffffffffffffffffffffffffff021916908373ffffffffffffffffffffffffffffffffffffffff16021790555050610449806101006000396000f300608060405260043610610062576000357c0100000000000000000000000000000000000000000000000000000000900463ffffffff168063715018a6146100675780638da5cb5b1461007e578063d598d4c9146100d5578063f2fde38b1461012c575b600080fd5b34801561007357600080fd5b5061007c61016f565b005b34801561008a57600080fd5b50610093610271565b604051808273ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200191505060405180910390f35b3480156100e157600080fd5b506100ea610296565b604051808273ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200191505060405180910390f35b34801561013857600080fd5b5061016d600480360381019080803573ffffffffffffffffffffffffffffffffffffffff1690602001909291905050506102bc565b005b6000809054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff163373ffffffffffffffffffffffffffffffffffffffff161415156101ca57600080fd5b6000809054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff167ff8df31144d9c2f0f6b59d69b8b98abd5459d07f2742c4df920b25aae33c6482060405160405180910390a260008060006101000a81548173ffffffffffffffffffffffffffffffffffffffff021916908373ffffffffffffffffffffffffffffffffffffffff160217905550565b6000809054906101000a900473ffffffffffffffffffffffffffffffffffffffff1681565b600160009054906101000a900473ffffffffffffffffffffffffffffffffffffffff1681565b6000809054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff163373ffffffffffffffffffffffffffffffffffffffff1614151561031757600080fd5b61032081610323565b50565b600073ffffffffffffffffffffffffffffffffffffffff168173ffffffffffffffffffffffffffffffffffffffff161415151561035f57600080fd5b8073ffffffffffffffffffffffffffffffffffffffff166000809054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff167f8be0079c531659141344cd1fd0a4f28419497f9722a3daafe3b4186f6b6457e060405160405180910390a3806000806101000a81548173ffffffffffffffffffffffffffffffffffffffff021916908373ffffffffffffffffffffffffffffffffffffffff160217905550505600a165627a7a72305820764d2fb23a7852634d7f0c23f6b5dc7371e20e58c0d7837062f4181ca50e5b000029",
+  "deployedBytecode": "0x608060405260043610610062576000357c0100000000000000000000000000000000000000000000000000000000900463ffffffff168063715018a6146100675780638da5cb5b1461007e578063d598d4c9146100d5578063f2fde38b1461012c575b600080fd5b34801561007357600080fd5b5061007c61016f565b005b34801561008a57600080fd5b50610093610271565b604051808273ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200191505060405180910390f35b3480156100e157600080fd5b506100ea610296565b604051808273ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200191505060405180910390f35b34801561013857600080fd5b5061016d600480360381019080803573ffffffffffffffffffffffffffffffffffffffff1690602001909291905050506102bc565b005b6000809054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff163373ffffffffffffffffffffffffffffffffffffffff161415156101ca57600080fd5b6000809054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff167ff8df31144d9c2f0f6b59d69b8b98abd5459d07f2742c4df920b25aae33c6482060405160405180910390a260008060006101000a81548173ffffffffffffffffffffffffffffffffffffffff021916908373ffffffffffffffffffffffffffffffffffffffff160217905550565b6000809054906101000a900473ffffffffffffffffffffffffffffffffffffffff1681565b600160009054906101000a900473ffffffffffffffffffffffffffffffffffffffff1681565b6000809054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff163373ffffffffffffffffffffffffffffffffffffffff1614151561031757600080fd5b61032081610323565b50565b600073ffffffffffffffffffffffffffffffffffffffff168173ffffffffffffffffffffffffffffffffffffffff161415151561035f57600080fd5b8073ffffffffffffffffffffffffffffffffffffffff166000809054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff167f8be0079c531659141344cd1fd0a4f28419497f9722a3daafe3b4186f6b6457e060405160405180910390a3806000806101000a81548173ffffffffffffffffffffffffffffffffffffffff021916908373ffffffffffffffffffffffffffffffffffffffff160217905550505600a165627a7a72305820764d2fb23a7852634d7f0c23f6b5dc7371e20e58c0d7837062f4181ca50e5b000029",
+  "sourceMap": "186:741:3:-;;;427:111;8:9:-1;5:2;;;30:1;27;20:12;5:2;427:111:3;;;;;;;;;;;;;;;;;;;;;;;;;;;;;575:10:6;567:5;;:18;;;;;;;;;;;;;;;;;;507:1:3;487:22;;:8;:22;;;;479:31;;;;;;;;525:8;515:7;;:18;;;;;;;;;;;;;;;;;;427:111;186:741;;;;;;",
+  "deployedSourceMap": "186:741:3:-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;827:111:6;;8:9:-1;5:2;;;30:1;27;20:12;5:2;827:111:6;;;;;;238:20;;8:9:-1;5:2;;;30:1;27;20:12;5:2;238:20:6;;;;;;;;;;;;;;;;;;;;;;;;;;;226:31:3;;8:9:-1;5:2;;;30:1;27;20:12;5:2;226:31:3;;;;;;;;;;;;;;;;;;;;;;;;;;;1100:103:6;;8:9:-1;5:2;;;30:1;27;20:12;5:2;1100:103:6;;;;;;;;;;;;;;;;;;;;;;;;;;;;827:111;719:5;;;;;;;;;;;705:19;;:10;:19;;;697:28;;;;;;;;903:5;;;;;;;;;;;884:25;;;;;;;;;;;;931:1;915:5;;:18;;;;;;;;;;;;;;;;;;827:111::o;238:20::-;;;;;;;;;;;;;:::o;226:31:3:-;;;;;;;;;;;;;:::o;1100:103:6:-;719:5;;;;;;;;;;;705:19;;:10;:19;;;697:28;;;;;;;;1169:29;1188:9;1169:18;:29::i;:::-;1100:103;:::o;1338:171::-;1429:1;1408:23;;:9;:23;;;;1400:32;;;;;;;;1471:9;1443:38;;1464:5;;;;;;;;;;;1443:38;;;;;;;;;;;;1495:9;1487:5;;:17;;;;;;;;;;;;;;;;;;1338:171;:::o",
+  "source": "pragma solidity ^0.4.23;\r\n\r\nimport \"openzeppelin-solidity/contracts/ownership/Ownable.sol\";\r\nimport \"./RegulatorService.sol\";\r\n\r\n// @notice A service that points to a Regulator Service\r\ncontract ServiceRegistry is Ownable {\r\n\tRegulatorService public service;\r\n\r\n\t// Events\r\n\r\n\t/**\r\n\t* @notice Triggered when service address is replaced\r\n\t*/\r\n\t// event ReplaceService(address oldService, address newService);\r\n\r\n\t// Methods\r\n\r\n\tconstructor (RegulatorService _service) public {\r\n\t\trequire(_service != address(0));\r\n\t\tservice = _service;\r\n\t}\r\n\r\n\t/**\r\n\t* @notice Replaces the address pointer to the `RegulatorService`\r\n\t*\r\n\t* @dev This method is only callable by the contract's owner\r\n\t*\r\n\t* @param _service The new `RegulatorService`\r\n\t*/\r\n\t// function replaceService(address _service) onlyOwner public {\r\n\t// \taddress oldService = service;\r\n\t// \tservice = _service;\r\n\t// \temit ReplaceService(oldService, service);\r\n\t// }\r\n\r\n\r\n\r\n}",
+  "sourcePath": "C:\\Users\\npain\\Projects\\Carbon\\fiat_gateway\\contracts\\ServiceRegistry.sol",
+  "ast": {
+    "absolutePath": "/C/Users/npain/Projects/Carbon/fiat_gateway/contracts/ServiceRegistry.sol",
+    "exportedSymbols": {
+      "ServiceRegistry": [
+        384
+      ]
+    },
+    "id": 385,
+    "nodeType": "SourceUnit",
+    "nodes": [
+      {
+        "id": 359,
+        "literals": [
+          "solidity",
+          "^",
+          "0.4",
+          ".23"
+        ],
+        "nodeType": "PragmaDirective",
+        "src": "0:24:3"
+      },
+      {
+        "absolutePath": "openzeppelin-solidity/contracts/ownership/Ownable.sol",
+        "file": "openzeppelin-solidity/contracts/ownership/Ownable.sol",
+        "id": 360,
+        "nodeType": "ImportDirective",
+        "scope": 385,
+        "sourceUnit": 625,
+        "src": "28:63:3",
+        "symbolAliases": [],
+        "unitAlias": ""
+      },
+      {
+        "absolutePath": "/C/Users/npain/Projects/Carbon/fiat_gateway/contracts/RegulatorService.sol",
+        "file": "./RegulatorService.sol",
+        "id": 361,
+        "nodeType": "ImportDirective",
+        "scope": 385,
+        "sourceUnit": 358,
+        "src": "93:32:3",
+        "symbolAliases": [],
+        "unitAlias": ""
+      },
+      {
+        "baseContracts": [
+          {
+            "arguments": null,
+            "baseName": {
+              "contractScope": null,
+              "id": 362,
+              "name": "Ownable",
+              "nodeType": "UserDefinedTypeName",
+              "referencedDeclaration": 624,
+              "src": "214:7:3",
+              "typeDescriptions": {
+                "typeIdentifier": "t_contract$_Ownable_$624",
+                "typeString": "contract Ownable"
+              }
+            },
+            "id": 363,
+            "nodeType": "InheritanceSpecifier",
+            "src": "214:7:3"
+          }
+        ],
+        "contractDependencies": [
+          624
+        ],
+        "contractKind": "contract",
+        "documentation": null,
+        "fullyImplemented": true,
+        "id": 384,
+        "linearizedBaseContracts": [
+          384,
+          624
+        ],
+        "name": "ServiceRegistry",
+        "nodeType": "ContractDefinition",
+        "nodes": [
+          {
+            "constant": false,
+            "id": 365,
+            "name": "service",
+            "nodeType": "VariableDeclaration",
+            "scope": 384,
+            "src": "226:31:3",
+            "stateVariable": true,
+            "storageLocation": "default",
+            "typeDescriptions": {
+              "typeIdentifier": "t_contract$_RegulatorService_$357",
+              "typeString": "contract RegulatorService"
+            },
+            "typeName": {
+              "contractScope": null,
+              "id": 364,
+              "name": "RegulatorService",
+              "nodeType": "UserDefinedTypeName",
+              "referencedDeclaration": 357,
+              "src": "226:16:3",
+              "typeDescriptions": {
+                "typeIdentifier": "t_contract$_RegulatorService_$357",
+                "typeString": "contract RegulatorService"
+              }
+            },
+            "value": null,
+            "visibility": "public"
+          },
+          {
+            "body": {
+              "id": 382,
+              "nodeType": "Block",
+              "src": "474:64:3",
+              "statements": [
+                {
+                  "expression": {
+                    "argumentTypes": null,
+                    "arguments": [
+                      {
+                        "argumentTypes": null,
+                        "commonType": {
+                          "typeIdentifier": "t_address",
+                          "typeString": "address"
+                        },
+                        "id": 375,
+                        "isConstant": false,
+                        "isLValue": false,
+                        "isPure": false,
+                        "lValueRequested": false,
+                        "leftExpression": {
+                          "argumentTypes": null,
+                          "id": 371,
+                          "name": "_service",
+                          "nodeType": "Identifier",
+                          "overloadedDeclarations": [],
+                          "referencedDeclaration": 367,
+                          "src": "487:8:3",
+                          "typeDescriptions": {
+                            "typeIdentifier": "t_contract$_RegulatorService_$357",
+                            "typeString": "contract RegulatorService"
+                          }
+                        },
+                        "nodeType": "BinaryOperation",
+                        "operator": "!=",
+                        "rightExpression": {
+                          "argumentTypes": null,
+                          "arguments": [
+                            {
+                              "argumentTypes": null,
+                              "hexValue": "30",
+                              "id": 373,
+                              "isConstant": false,
+                              "isLValue": false,
+                              "isPure": true,
+                              "kind": "number",
+                              "lValueRequested": false,
+                              "nodeType": "Literal",
+                              "src": "507:1:3",
+                              "subdenomination": null,
+                              "typeDescriptions": {
+                                "typeIdentifier": "t_rational_0_by_1",
+                                "typeString": "int_const 0"
+                              },
+                              "value": "0"
+                            }
+                          ],
+                          "expression": {
+                            "argumentTypes": [
+                              {
+                                "typeIdentifier": "t_rational_0_by_1",
+                                "typeString": "int_const 0"
+                              }
+                            ],
+                            "id": 372,
+                            "isConstant": false,
+                            "isLValue": false,
+                            "isPure": true,
+                            "lValueRequested": false,
+                            "nodeType": "ElementaryTypeNameExpression",
+                            "src": "499:7:3",
+                            "typeDescriptions": {
+                              "typeIdentifier": "t_type$_t_address_$",
+                              "typeString": "type(address)"
+                            },
+                            "typeName": "address"
+                          },
+                          "id": 374,
+                          "isConstant": false,
+                          "isLValue": false,
+                          "isPure": true,
+                          "kind": "typeConversion",
+                          "lValueRequested": false,
+                          "names": [],
+                          "nodeType": "FunctionCall",
+                          "src": "499:10:3",
+                          "typeDescriptions": {
+                            "typeIdentifier": "t_address",
+                            "typeString": "address"
+                          }
+                        },
+                        "src": "487:22:3",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_bool",
+                          "typeString": "bool"
+                        }
+                      }
+                    ],
+                    "expression": {
+                      "argumentTypes": [
+                        {
+                          "typeIdentifier": "t_bool",
+                          "typeString": "bool"
+                        }
+                      ],
+                      "id": 370,
+                      "name": "require",
+                      "nodeType": "Identifier",
+                      "overloadedDeclarations": [
+                        1339,
+                        1340
+                      ],
+                      "referencedDeclaration": 1339,
+                      "src": "479:7:3",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_function_require_pure$_t_bool_$returns$__$",
+                        "typeString": "function (bool) pure"
+                      }
+                    },
+                    "id": 376,
+                    "isConstant": false,
+                    "isLValue": false,
+                    "isPure": false,
+                    "kind": "functionCall",
+                    "lValueRequested": false,
+                    "names": [],
+                    "nodeType": "FunctionCall",
+                    "src": "479:31:3",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_tuple$__$",
+                      "typeString": "tuple()"
+                    }
+                  },
+                  "id": 377,
+                  "nodeType": "ExpressionStatement",
+                  "src": "479:31:3"
+                },
+                {
+                  "expression": {
+                    "argumentTypes": null,
+                    "id": 380,
+                    "isConstant": false,
+                    "isLValue": false,
+                    "isPure": false,
+                    "lValueRequested": false,
+                    "leftHandSide": {
+                      "argumentTypes": null,
+                      "id": 378,
+                      "name": "service",
+                      "nodeType": "Identifier",
+                      "overloadedDeclarations": [],
+                      "referencedDeclaration": 365,
+                      "src": "515:7:3",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_contract$_RegulatorService_$357",
+                        "typeString": "contract RegulatorService"
+                      }
+                    },
+                    "nodeType": "Assignment",
+                    "operator": "=",
+                    "rightHandSide": {
+                      "argumentTypes": null,
+                      "id": 379,
+                      "name": "_service",
+                      "nodeType": "Identifier",
+                      "overloadedDeclarations": [],
+                      "referencedDeclaration": 367,
+                      "src": "525:8:3",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_contract$_RegulatorService_$357",
+                        "typeString": "contract RegulatorService"
+                      }
+                    },
+                    "src": "515:18:3",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_contract$_RegulatorService_$357",
+                      "typeString": "contract RegulatorService"
+                    }
+                  },
+                  "id": 381,
+                  "nodeType": "ExpressionStatement",
+                  "src": "515:18:3"
+                }
+              ]
+            },
+            "documentation": "@notice Triggered when service address is replaced\r",
+            "id": 383,
+            "implemented": true,
+            "isConstructor": true,
+            "isDeclaredConst": false,
+            "modifiers": [],
+            "name": "",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 368,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 367,
+                  "name": "_service",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 383,
+                  "src": "440:25:3",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_contract$_RegulatorService_$357",
+                    "typeString": "contract RegulatorService"
+                  },
+                  "typeName": {
+                    "contractScope": null,
+                    "id": 366,
+                    "name": "RegulatorService",
+                    "nodeType": "UserDefinedTypeName",
+                    "referencedDeclaration": 357,
+                    "src": "440:16:3",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_contract$_RegulatorService_$357",
+                      "typeString": "contract RegulatorService"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "439:27:3"
+            },
+            "payable": false,
+            "returnParameters": {
+              "id": 369,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "474:0:3"
+            },
+            "scope": 384,
+            "src": "427:111:3",
+            "stateMutability": "nonpayable",
+            "superFunction": null,
+            "visibility": "public"
+          }
+        ],
+        "scope": 385,
+        "src": "186:741:3"
+      }
+    ],
+    "src": "0:927:3"
+  },
+  "legacyAST": {
+    "absolutePath": "/C/Users/npain/Projects/Carbon/fiat_gateway/contracts/ServiceRegistry.sol",
+    "exportedSymbols": {
+      "ServiceRegistry": [
+        384
+      ]
+    },
+    "id": 385,
+    "nodeType": "SourceUnit",
+    "nodes": [
+      {
+        "id": 359,
+        "literals": [
+          "solidity",
+          "^",
+          "0.4",
+          ".23"
+        ],
+        "nodeType": "PragmaDirective",
+        "src": "0:24:3"
+      },
+      {
+        "absolutePath": "openzeppelin-solidity/contracts/ownership/Ownable.sol",
+        "file": "openzeppelin-solidity/contracts/ownership/Ownable.sol",
+        "id": 360,
+        "nodeType": "ImportDirective",
+        "scope": 385,
+        "sourceUnit": 625,
+        "src": "28:63:3",
+        "symbolAliases": [],
+        "unitAlias": ""
+      },
+      {
+        "absolutePath": "/C/Users/npain/Projects/Carbon/fiat_gateway/contracts/RegulatorService.sol",
+        "file": "./RegulatorService.sol",
+        "id": 361,
+        "nodeType": "ImportDirective",
+        "scope": 385,
+        "sourceUnit": 358,
+        "src": "93:32:3",
+        "symbolAliases": [],
+        "unitAlias": ""
+      },
+      {
+        "baseContracts": [
+          {
+            "arguments": null,
+            "baseName": {
+              "contractScope": null,
+              "id": 362,
+              "name": "Ownable",
+              "nodeType": "UserDefinedTypeName",
+              "referencedDeclaration": 624,
+              "src": "214:7:3",
+              "typeDescriptions": {
+                "typeIdentifier": "t_contract$_Ownable_$624",
+                "typeString": "contract Ownable"
+              }
+            },
+            "id": 363,
+            "nodeType": "InheritanceSpecifier",
+            "src": "214:7:3"
+          }
+        ],
+        "contractDependencies": [
+          624
+        ],
+        "contractKind": "contract",
+        "documentation": null,
+        "fullyImplemented": true,
+        "id": 384,
+        "linearizedBaseContracts": [
+          384,
+          624
+        ],
+        "name": "ServiceRegistry",
+        "nodeType": "ContractDefinition",
+        "nodes": [
+          {
+            "constant": false,
+            "id": 365,
+            "name": "service",
+            "nodeType": "VariableDeclaration",
+            "scope": 384,
+            "src": "226:31:3",
+            "stateVariable": true,
+            "storageLocation": "default",
+            "typeDescriptions": {
+              "typeIdentifier": "t_contract$_RegulatorService_$357",
+              "typeString": "contract RegulatorService"
+            },
+            "typeName": {
+              "contractScope": null,
+              "id": 364,
+              "name": "RegulatorService",
+              "nodeType": "UserDefinedTypeName",
+              "referencedDeclaration": 357,
+              "src": "226:16:3",
+              "typeDescriptions": {
+                "typeIdentifier": "t_contract$_RegulatorService_$357",
+                "typeString": "contract RegulatorService"
+              }
+            },
+            "value": null,
+            "visibility": "public"
+          },
+          {
+            "body": {
+              "id": 382,
+              "nodeType": "Block",
+              "src": "474:64:3",
+              "statements": [
+                {
+                  "expression": {
+                    "argumentTypes": null,
+                    "arguments": [
+                      {
+                        "argumentTypes": null,
+                        "commonType": {
+                          "typeIdentifier": "t_address",
+                          "typeString": "address"
+                        },
+                        "id": 375,
+                        "isConstant": false,
+                        "isLValue": false,
+                        "isPure": false,
+                        "lValueRequested": false,
+                        "leftExpression": {
+                          "argumentTypes": null,
+                          "id": 371,
+                          "name": "_service",
+                          "nodeType": "Identifier",
+                          "overloadedDeclarations": [],
+                          "referencedDeclaration": 367,
+                          "src": "487:8:3",
+                          "typeDescriptions": {
+                            "typeIdentifier": "t_contract$_RegulatorService_$357",
+                            "typeString": "contract RegulatorService"
+                          }
+                        },
+                        "nodeType": "BinaryOperation",
+                        "operator": "!=",
+                        "rightExpression": {
+                          "argumentTypes": null,
+                          "arguments": [
+                            {
+                              "argumentTypes": null,
+                              "hexValue": "30",
+                              "id": 373,
+                              "isConstant": false,
+                              "isLValue": false,
+                              "isPure": true,
+                              "kind": "number",
+                              "lValueRequested": false,
+                              "nodeType": "Literal",
+                              "src": "507:1:3",
+                              "subdenomination": null,
+                              "typeDescriptions": {
+                                "typeIdentifier": "t_rational_0_by_1",
+                                "typeString": "int_const 0"
+                              },
+                              "value": "0"
+                            }
+                          ],
+                          "expression": {
+                            "argumentTypes": [
+                              {
+                                "typeIdentifier": "t_rational_0_by_1",
+                                "typeString": "int_const 0"
+                              }
+                            ],
+                            "id": 372,
+                            "isConstant": false,
+                            "isLValue": false,
+                            "isPure": true,
+                            "lValueRequested": false,
+                            "nodeType": "ElementaryTypeNameExpression",
+                            "src": "499:7:3",
+                            "typeDescriptions": {
+                              "typeIdentifier": "t_type$_t_address_$",
+                              "typeString": "type(address)"
+                            },
+                            "typeName": "address"
+                          },
+                          "id": 374,
+                          "isConstant": false,
+                          "isLValue": false,
+                          "isPure": true,
+                          "kind": "typeConversion",
+                          "lValueRequested": false,
+                          "names": [],
+                          "nodeType": "FunctionCall",
+                          "src": "499:10:3",
+                          "typeDescriptions": {
+                            "typeIdentifier": "t_address",
+                            "typeString": "address"
+                          }
+                        },
+                        "src": "487:22:3",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_bool",
+                          "typeString": "bool"
+                        }
+                      }
+                    ],
+                    "expression": {
+                      "argumentTypes": [
+                        {
+                          "typeIdentifier": "t_bool",
+                          "typeString": "bool"
+                        }
+                      ],
+                      "id": 370,
+                      "name": "require",
+                      "nodeType": "Identifier",
+                      "overloadedDeclarations": [
+                        1339,
+                        1340
+                      ],
+                      "referencedDeclaration": 1339,
+                      "src": "479:7:3",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_function_require_pure$_t_bool_$returns$__$",
+                        "typeString": "function (bool) pure"
+                      }
+                    },
+                    "id": 376,
+                    "isConstant": false,
+                    "isLValue": false,
+                    "isPure": false,
+                    "kind": "functionCall",
+                    "lValueRequested": false,
+                    "names": [],
+                    "nodeType": "FunctionCall",
+                    "src": "479:31:3",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_tuple$__$",
+                      "typeString": "tuple()"
+                    }
+                  },
+                  "id": 377,
+                  "nodeType": "ExpressionStatement",
+                  "src": "479:31:3"
+                },
+                {
+                  "expression": {
+                    "argumentTypes": null,
+                    "id": 380,
+                    "isConstant": false,
+                    "isLValue": false,
+                    "isPure": false,
+                    "lValueRequested": false,
+                    "leftHandSide": {
+                      "argumentTypes": null,
+                      "id": 378,
+                      "name": "service",
+                      "nodeType": "Identifier",
+                      "overloadedDeclarations": [],
+                      "referencedDeclaration": 365,
+                      "src": "515:7:3",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_contract$_RegulatorService_$357",
+                        "typeString": "contract RegulatorService"
+                      }
+                    },
+                    "nodeType": "Assignment",
+                    "operator": "=",
+                    "rightHandSide": {
+                      "argumentTypes": null,
+                      "id": 379,
+                      "name": "_service",
+                      "nodeType": "Identifier",
+                      "overloadedDeclarations": [],
+                      "referencedDeclaration": 367,
+                      "src": "525:8:3",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_contract$_RegulatorService_$357",
+                        "typeString": "contract RegulatorService"
+                      }
+                    },
+                    "src": "515:18:3",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_contract$_RegulatorService_$357",
+                      "typeString": "contract RegulatorService"
+                    }
+                  },
+                  "id": 381,
+                  "nodeType": "ExpressionStatement",
+                  "src": "515:18:3"
+                }
+              ]
+            },
+            "documentation": "@notice Triggered when service address is replaced\r",
+            "id": 383,
+            "implemented": true,
+            "isConstructor": true,
+            "isDeclaredConst": false,
+            "modifiers": [],
+            "name": "",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 368,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 367,
+                  "name": "_service",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 383,
+                  "src": "440:25:3",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_contract$_RegulatorService_$357",
+                    "typeString": "contract RegulatorService"
+                  },
+                  "typeName": {
+                    "contractScope": null,
+                    "id": 366,
+                    "name": "RegulatorService",
+                    "nodeType": "UserDefinedTypeName",
+                    "referencedDeclaration": 357,
+                    "src": "440:16:3",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_contract$_RegulatorService_$357",
+                      "typeString": "contract RegulatorService"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "439:27:3"
+            },
+            "payable": false,
+            "returnParameters": {
+              "id": 369,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "474:0:3"
+            },
+            "scope": 384,
+            "src": "427:111:3",
+            "stateMutability": "nonpayable",
+            "superFunction": null,
+            "visibility": "public"
+          }
+        ],
+        "scope": 385,
+        "src": "186:741:3"
+      }
+    ],
+    "src": "0:927:3"
+  },
+  "compiler": {
+    "name": "solc",
+    "version": "0.4.24+commit.e67f0147.Emscripten.clang"
+  },
+  "networks": {},
+  "schemaVersion": "2.0.1",
+  "updatedAt": "2018-06-28T16:37:10.151Z"
+}
