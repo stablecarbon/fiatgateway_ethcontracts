@@ -24,7 +24,7 @@ contract PermissionedToken is Ownable, PausableToken, BurnableToken, MintableTok
 	// ASSUMPTION: account can only have one status at any given time
 
 	// Passes KYC & AML and therefore can mint new tokens
-	string constant WHITELISTED = "whitelist";
+	string constant WHITELISTED = "whitelisted";
 	// User has an ERC20 wallet and can transfer, but still needs to pass KYC & AML to burn or mint
 	string constant NONLISTED = "nonlisted";
 	// Cannot transfer, burn, or mint
@@ -122,7 +122,7 @@ contract PermissionedToken is Ownable, PausableToken, BurnableToken, MintableTok
 	* @return `true` if successful and `false` if unsuccessful
 	*/
 	function _burn(uint256 _amount) public onlyDepositor returns (bool) {
-		require(check(msg.sender, WHITELISTED), "account is not allowed to burn");
+		// require(check(msg.sender, WHITELISTED), "account is not allowed to burn");
 		super.burn(_amount);
 		return true;
 	}
