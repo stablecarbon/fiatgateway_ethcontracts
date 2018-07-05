@@ -5,7 +5,8 @@ const {
   Regulator, 
   BigNumber,
   CommonVariables,
-  expectRevert, 
+  expectRevert,
+  assertBalance, 
   ZERO_ADDRESS 
 } = require('./helpers/common');
 
@@ -30,14 +31,15 @@ contract('PermissionedToken', _accounts => {
   let regulatorProxy = null;
   let token = null;
   
-  beforeEach(async () => {
-    regulator = await Regulator.new( { from: _regulatorOwner } );
-    regulatorProxy = await RegulatorProxy.new (regulator.address, { from: _regulatorProxyOwner } );
-    token = await PermissionedToken.new(regulatorProxy.address, { from: _tokenOwner });
-  });
 
   describe('PermissionedToken', function () {
     
+    beforeEach(async () => {
+      regulator = await Regulator.new( { from: _regulatorOwner } );
+      regulatorProxy = await RegulatorProxy.new (regulator.address, { from: _regulatorProxyOwner } );
+      token = await PermissionedToken.new(regulatorProxy.address, { from: _tokenOwner });
+    });
+
     describe('after smart contract creation', function () {
       it('owner should be token owner', async function () {
         const tokenOwner = await token.owner();
@@ -94,21 +96,21 @@ contract('PermissionedToken', _accounts => {
     describe('check', function () {
       
       beforeEach(async () => {
-        // Make userReceiver the initial account with burn access
-        await token.addDepositor(_tokenOwner, {from: _tokenOwner});
         
-        // Add permissions for testing
+        // Make _regulatorOwner a validator to modify regulator state
         await regulator.addValidator(_regulatorOwner, {from: _regulatorOwner});
-        await regulator.setAttribute(_userSender, "whitelist", 1, "can mint", {from: _regulatorOwner});
-        await regulator.setAttribute(_userReceiver, "whitelist", 1, "can mint", {from: _regulatorOwner});
+
       });
 
       describe('mint', function () {
         
         describe('owner tries to mint to whitelisted account', function () {
           it('should mint to account', async function () {
+            const oldBalance = await token.balanceOf(_userSender);
+            await regulator.setAttribute(_userSender, "whitelisted", 1, "can mint", {from: _regulatorOwner});
             await token.mint(_userSender, 100, {from: _tokenOwner});
-            assert.equal(await token.balanceOf(_userSender), 100);
+            const newBalance = await token.balanceOf(_userSender);
+            await assertBalance(token, _userSender, 100);
           });
         });
 
@@ -121,43 +123,70 @@ contract('PermissionedToken', _accounts => {
 
         describe('non-owner tries to mint to whitelisted account', function () {
           it('reverts', async function () {
+            await regulator.setAttribute(_userSender, "whitelisted", 1, "can mint", {from: _regulatorOwner});
             await expectRevert(token.mint(_userSender, 100, {from: _userSender}));
           });
         });
+
       });
       
       describe('transfer', function () {
+
+        beforeEach(async () => {
+
+            await regulator.setAttribute(_userSender, "whitelisted", 1, "can mint", {from: _regulatorOwner});
+            await token.mint(_userSender, 100, {from: _tokenOwner});
+            await regulator.setAttribute(_attacker, "blacklisted", 1, "frozen", {from: _regulatorOwner});
+
+        });
+
+        describe('blacklisted sender', function () {
+          it('reverts', async function () {
+            await expectRevert(token.transfer(_userReceiver, 50, {from: _attacker}));
+          });
+        });
+
+        describe('blacklisted receiver', function () {
+          it('reverts', async function () {
+            await expectRevert(token.transfer(_attacker, 50, {from: _userSender}));
+          });
+        });
+
+        describe('valid sender and receiver', function () {
+          it('should transfer amount', async function () {
+            await token.transfer(_userReceiver, 50, {from: _userSender});
+            await assertBalance(token, _userReceiver, 50);
+            await assertBalance(token, _userSender, 50);
+          });
+        });
 
       });
       
       describe('_burn', function () {
 
         beforeEach(async () => {
-          // Mint tokens to a depositor account
-          await token.addDepositor(_userSender, {from: _tokenOwner});
-          await token.mint(_userSender, 100, {from: _tokenOwner});
 
-          // Mint tokens to a non-depositor whitelisted account
-          await token.mint(_userReceiver, 100, {from: _tokenOwner});
+            await regulator.setAttribute(_userSender, "whitelisted", 1, "can mint", {from: _regulatorOwner});
+            await token.mint(_userSender, 100, {from: _tokenOwner});
+
         });
 
         describe('authorized depositor tries to burn', function () {
           it('should burn depositor tokens', async function () {
-            await token._burn(100, {from: _userSender});
-            assert.equal(await token.balanceOf(_userSender), 0);
+            
+            // Enable burn permission 
+            await token.addDepositor(_userSender, {from: _tokenOwner});
+            await token._burn(50, {from: _userSender});
+            await assertBalance(token, _userSender, 50);
+
           });
         });
 
         describe('unauthorized whitelisted depositor tries to burn', function () {
           it('reverts', async function () {
-            await expectRevert(token._burn(100, {from: _userReceiver}));
-          });
-        });
+            
+            await expectRevert(token._burn(50, {from: _userSender}));
 
-        describe('unauthorized non-whitelisted depositor trues to burn', function () {
-          it('reverts', async function () {
-            await regulator.setAttribute(_userSender, "whitelist", 0, "can no longer mint", {from: _regulatorOwner});
-            await expectRevert(token._burn(100, {from: _userSender}));
           });
         });
 
@@ -165,6 +194,62 @@ contract('PermissionedToken', _accounts => {
 
     });
 
+    describe ('destroyBlacklistedTokens', function () {
+      
+      beforeEach(async () => {
+        
+        // Make _regulatorOwner a validator to modify regulator state
+        await regulator.addValidator(_regulatorOwner, {from: _regulatorOwner});
+        await regulator.setAttribute(_userSender, "whitelisted", 1, "can mint", {from: _regulatorOwner});
+        await token.mint(_userSender, 100, {from: _tokenOwner});
+
+        // blacklist user
+        await regulator.setAttribute(_userSender, "blacklisted", 1, "frozen", {from: _regulatorOwner});
+
+
+      });
+
+      describe('owner destroys blacklisted tokens', function () {
+
+        it('destroys tokens successfully', async function () {
+
+          await token.destroyBlacklistedTokens(_userSender, {from: _tokenOwner});
+          await assertBalance(token, _userSender, 0);
+          await assert.equal(await token.totalSupply(),0);
+
+        });
+
+        it('emits destroyBlacklistedTokens event', async function () {
+
+          const {logs} = await token.destroyBlacklistedTokens(_userSender, {from: _tokenOwner});
+
+          assert.equal(logs.length, 1);
+          assert.equal(logs[0].event, 'DestroyBlacklistedTokens');
+          assert.equal(logs[0].args.account, _userSender);
+          assert.equal(logs[0].args.amount, 100);
+
+        });
+
+      });
+
+      describe('non-owner destroys blacklisted tokens', function () {
+        it('reverts', async function () {
+          
+          await expectRevert(token.destroyBlacklistedTokens(_userSender, {from: _attacker}));
+
+        });
+      });
+
+      describe('owner destroys non-blacklisted tokens', function () {
+        it('reverts', async function () {
+          
+          await regulator.setAttribute(_userSender, "blacklisted", 0, "frozen", {from: _regulatorOwner});
+          await expectRevert(token.destroyBlacklistedTokens(_userSender, {from: _tokenOwner}));
+
+        });
+      });
+
+    });
   });
 
   describe('Regulator', function () {

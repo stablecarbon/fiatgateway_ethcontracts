@@ -1,6 +1,7 @@
 /* Loading all imports */
 const _ = require('lodash');
 const expectRevert = require('./expectRevert');
+const assertBalance = require('./assertBalance');
 const PermissionedToken = artifacts.require("./PermissionedToken.sol");
 const Regulator = artifacts.require("./Regulator.sol");
 const RegulatorProxy = artifacts.require("./RegulatorProxy.sol");
@@ -31,6 +32,7 @@ module.exports = {
     BigNumber,
     PermissionedToken,
     expectRevert,
+    assertBalance,
     CommonVariables,
     ZERO_ADDRESS,
     Regulator,
