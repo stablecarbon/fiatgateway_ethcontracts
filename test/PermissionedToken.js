@@ -203,12 +203,16 @@ contract('PermissionedToken', _accounts => {
         await regulator.setAttribute(_userSender, "whitelisted", 1, "can mint", {from: _regulatorOwner});
         await token.mint(_userSender, 100, {from: _tokenOwner});
 
+        // blacklist user
+        await regulator.setAttribute(_userSender, "blacklisted", 1, "frozen", {from: _regulatorOwner});
+
+
       });
 
       describe('owner destroys blacklisted tokens', function () {
 
         it('destroys tokens successfully', async function () {
-          await regulator.setAttribute(_userSender, "blacklisted", 1, "frozen", {from: _regulatorOwner});
+
           await token.destroyBlacklistedTokens(_userSender, {from: _tokenOwner});
           await assertBalance(token, _userSender, 0);
           await assert.equal(await token.totalSupply(),0);
@@ -216,13 +220,14 @@ contract('PermissionedToken', _accounts => {
         });
 
         it('emits destroyBlacklistedTokens event', async function () {
-          await regulator.setAttribute(_userSender, "blacklisted", 1, "frozen", {from: _regulatorOwner});
+
           const {logs} = await token.destroyBlacklistedTokens(_userSender, {from: _tokenOwner});
 
           assert.equal(logs.length, 1);
           assert.equal(logs[0].event, 'DestroyBlacklistedTokens');
           assert.equal(logs[0].args.account, _userSender);
           assert.equal(logs[0].args.amount, 100);
+
         });
 
       });
@@ -230,7 +235,6 @@ contract('PermissionedToken', _accounts => {
       describe('non-owner destroys blacklisted tokens', function () {
         it('reverts', async function () {
           
-          await regulator.setAttribute(_userSender, "blacklisted", 1, "frozen", {from: _regulatorOwner});
           await expectRevert(token.destroyBlacklistedTokens(_userSender, {from: _attacker}));
 
         });
@@ -239,6 +243,7 @@ contract('PermissionedToken', _accounts => {
       describe('owner destroys non-blacklisted tokens', function () {
         it('reverts', async function () {
           
+          await regulator.setAttribute(_userSender, "blacklisted", 0, "frozen", {from: _regulatorOwner});
           await expectRevert(token.destroyBlacklistedTokens(_userSender, {from: _tokenOwner}));
 
         });
