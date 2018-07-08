@@ -72,6 +72,11 @@ contract Regulator is Ownable {
 	*/
 	function removeValidator(address _validator) public onlyOwner {
 		validators[_validator] = false;
+		emit ValidatorRemoved(_validator);
+	}
+
+	function isValidator(address _validator) public view returns (bool) {
+		return validators[_validator];
 	}
 		
 	/**

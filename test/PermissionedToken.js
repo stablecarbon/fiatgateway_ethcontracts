@@ -50,8 +50,11 @@ contract('PermissionedToken', _accounts => {
     describe('addDepositor', function () {
       describe('token owner adds token owner as depositor', function () {
         it('token owner should have deposit access', async function () {
+          
+          (await token.isDepositor(_tokenOwner)).should.not.be.true;
           await token.addDepositor(_tokenOwner, {from: _tokenOwner});
           (await token.isDepositor(_tokenOwner)).should.be.true;
+        
         });
         it('emits DepositorAdded event', async function () {
           const {logs} = await token.addDepositor(_tokenOwner, {from: _tokenOwner});
@@ -252,122 +255,112 @@ contract('PermissionedToken', _accounts => {
     });
   });
 
-  describe('Regulator', function () {
-    describe('after smart contract creation', function () {
-      it('owner should be regulator owner', async function () {
-        const regulatorOwner = await regulator.owner();
-        regulatorOwner.should.equal(_regulatorOwner);
-      });
-    });
-  });
 
-  describe('RegulatorProxy', function () {
+  // describe('RegulatorProxy', function () {
 
-    beforeEach(async () => {
+  //   beforeEach(async () => {
 
-      beforeEach(async () => {
-        regulator = await Regulator.new( { from: _regulatorOwner } );
-        regulatorProxy = await RegulatorProxy.new (regulator.address, { from: _regulatorProxyOwner } );
-        token = await PermissionedToken.new(regulatorProxy.address, { from: _tokenOwner });
-      });
+  //     regulator = await Regulator.new( { from: _regulatorOwner } );
+  //     regulatorProxy = await RegulatorProxy.new (regulator.address, { from: _regulatorProxyOwner } );
+  //     token = await PermissionedToken.new(regulatorProxy.address, { from: _tokenOwner });
 
-      // Make _regulatorOwner a validator to modify regulator state
-      await regulator.addValidator(_regulatorOwner, {from: _regulatorOwner});
+  //     // Make _regulatorOwner a validator to modify regulator state
+  //     await regulator.addValidator(_regulatorOwner, {from: _regulatorOwner});
 
-      // Initialize attributes of first regulator
-      await regulator.setAttribute(_userSender, "whitelisted", 1, "can mint", {from: _regulatorOwner});
+  //     // Initialize attributes of first regulator
+  //     await regulator.setAttribute(_userSender, "whitelisted", 1, "can mint", {from: _regulatorOwner});
 
-      // Create a replacement regulator with a different attribute state
-      newRegulator = await Regulator.new( { from: _regulatorOwner2 } );
-      // // Keep the regulator the same
-      await newRegulator.addValidator(_regulatorOwner, {from: _regulatorOwner2});
-      await newRegulator.setAttribute(_userSender, "blacklisted", 1, "frozen", {from: _regulatorOwner});
+  //     // Create a replacement regulator with a different attribute state
+  //     newRegulator = await Regulator.new( { from: _regulatorOwner2 } );
+  //     // // Keep the regulator the same
+  //     await newRegulator.addValidator(_regulatorOwner, {from: _regulatorOwner2});
+  //     await newRegulator.setAttribute(_userSender, "blacklisted", 1, "frozen", {from: _regulatorOwner});
     
-    });
+  //   });
 
-    describe('after smart contract creation', function () {
-      it('owner should be regulator proxy owner', async function () {
-        const regulatorProxyOwner = await regulatorProxy.owner();
-        regulatorProxyOwner.should.equal(_regulatorProxyOwner);
-      });
-    });
+  //   describe('after smart contract creation', function () {
+  //     it('owner should be regulator proxy owner', async function () {
+  //       const regulatorProxyOwner = await regulatorProxy.owner();
+  //       regulatorProxyOwner.should.equal(_regulatorProxyOwner);
+  //     });
+  //   });
 
-    describe('replaceService', function () {
+  //   describe('replaceService', function () {
       
-      beforeEach(async () => {
+  //     beforeEach(async () => {
         
-        const currentRegulator = await regulatorProxy.regulator();
-        assert.equal(currentRegulator, regulator.address);
+  //       const currentRegulator = await regulatorProxy.regulator();
+  //       assert.equal(currentRegulator, regulator.address);
 
-      });
+  //     });
 
-      describe('owner replaces the regulator service with a valid address', function () {
+  //     describe('owner replaces the regulator service with a valid address', function () {
 
-        it('replaces the regulator address', async function () {
+  //       it('replaces the regulator address', async function () {
 
-          const {logs} = await regulatorProxy.replaceService(newRegulator.address, {from: _regulatorProxyOwner});
-          const replacementRegulator = await regulatorProxy.regulator();
-          assert.equal(replacementRegulator, newRegulator.address);
+  //         const {logs} = await regulatorProxy.replaceService(newRegulator.address, {from: _regulatorProxyOwner});
+  //         const replacementRegulator = await regulatorProxy.regulator();
+  //         assert.equal(replacementRegulator, newRegulator.address);
 
-          // Check that event was emitted
-          assert.equal(logs.length, 1);
-          assert.equal(logs[0].event, 'ReplaceRegulator');
-          assert.equal(logs[0].args.oldRegulator, regulator.address);
-          assert.equal(logs[0].args.newRegulator, newRegulator.address);
+  //         // Check that event was emitted
+  //         assert.equal(logs.length, 1);
+  //         assert.equal(logs[0].event, 'ReplaceRegulator');
+  //         assert.equal(logs[0].args.oldRegulator, regulator.address);
+  //         assert.equal(logs[0].args.newRegulator, newRegulator.address);
 
-        });
+  //       });
 
-      });
+  //     });
 
-      describe('owner replaces the regulator service with an invalid address', function () {
+  //     describe('owner replaces the regulator service with an invalid address', function () {
 
-        it('reverts', async function () {
+  //       it('reverts', async function () {
           
-          await expectRevert(regulatorProxy.replaceService(_userSender, {from: _regulatorProxyOwner}));
-          await expectRevert(regulatorProxy.replaceService(0, {from: _regulatorProxyOwner}));
+  //         await expectRevert(regulatorProxy.replaceService(_userSender, {from: _regulatorProxyOwner}));
+  //         await expectRevert(regulatorProxy.replaceService(0, {from: _regulatorProxyOwner}));
 
-          // State shouldn't change
-          const currentRegulator = await regulatorProxy.regulator();
-          assert.equal(currentRegulator, regulator.address);
+  //         // State shouldn't change
+  //         const currentRegulator = await regulatorProxy.regulator();
+  //         assert.equal(currentRegulator, regulator.address);
 
-        });
+  //       });
 
-      });
+  //     });
 
-      describe('non-owner replaces the regulator service', function () {
+  //     describe('non-owner replaces the regulator service', function () {
 
-        it('reverts', async function () {
+  //       it('reverts', async function () {
 
-          await expectRevert(regulatorProxy.replaceService(newRegulator.address, {from: _attacker}));
+  //         await expectRevert(regulatorProxy.replaceService(newRegulator.address, {from: _attacker}));
 
-          // State shouldn't change
-          const currentRegulator = await regulatorProxy.regulator();
-          assert.equal(currentRegulator, regulator.address);
+  //         // State shouldn't change
+  //         const currentRegulator = await regulatorProxy.regulator();
+  //         assert.equal(currentRegulator, regulator.address);
 
-        });
+  //       });
 
-      });
+  //     });
 
-    });
+  //   });
 
-    describe('hasAttribute', function () {
+  //   describe('hasAttribute', function () {
 
-      describe('owner replaces the regulator service with a different valid regulator', function () {
+  //     describe('owner replaces the regulator service with a different valid regulator', function () {
 
-        it('replaces regulator and attribute state', async function () {
+  //       it('replaces regulator and attribute state', async function () {
 
-          assert(await regulatorProxy.hasAttribute(_userSender, "whitelisted"));
-          assert(! await regulatorProxy.hasAttribute(_userSender, "blacklisted"));
-          await regulatorProxy.replaceService(newRegulator.address, {from: _regulatorProxyOwner});
-          assert(await regulatorProxy.hasAttribute(_userSender, "blacklisted"));
-          assert(! await regulatorProxy.hasAttribute(_userSender, "whitelisted"));
+  //         assert(await regulatorProxy.hasAttribute(_userSender, "whitelisted"));
+  //         assert(! await regulatorProxy.hasAttribute(_userSender, "blacklisted"));
+  //         await regulatorProxy.replaceService(newRegulator.address, {from: _regulatorProxyOwner});
+  //         assert(await regulatorProxy.hasAttribute(_userSender, "blacklisted"));
+  //         assert(! await regulatorProxy.hasAttribute(_userSender, "whitelisted"));
 
-        });
+  //       });
 
-      });
+  //     });
 
-    });
+  //   });
 
-  });
+  // });
 
 });
