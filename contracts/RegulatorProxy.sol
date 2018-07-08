@@ -53,6 +53,9 @@ contract RegulatorProxy is Ownable {
 	*/
 	function replaceService(address _regulator) public onlyOwner withContract(_regulator) {
 		address oldRegulator = regulator;
+
+		// TODO: Save regulator.attributes and regulator.validators
+
 		regulator = _regulator;
 		emit ReplaceRegulator(oldRegulator, regulator);
 	}
