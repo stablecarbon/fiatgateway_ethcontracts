@@ -4,10 +4,13 @@ pragma solidity ^0.4.23;
 
 import "openzeppelin-solidity/contracts/ownership/Claimable.sol";
 import "openzeppelin-solidity/contracts/math/SafeMath.sol";
+import "./DepositorSheet.sol";
 
 // A wrapper around a depositor mapping.
 contract DepositorBasedToken is Claimable {
-    DepositSheet depositAccounts;
+    DepositorSheet depositAccounts;
+
+    event DepositorSheetSet(address indexed sheet);
 
     /**
     * @dev claim ownership of the balancesheet contract
@@ -25,7 +28,7 @@ contract DepositorBasedToken is Claimable {
     *
     */
     modifier onlyDepositor() {
-        require (depositAccounts.depositAccounts[msg.sender]);
+        require (depositAccounts.isDepositor(msg.sender));
         _;
     }
 }

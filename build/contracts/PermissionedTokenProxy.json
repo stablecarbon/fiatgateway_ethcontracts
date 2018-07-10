@@ -1,5 +1,5 @@
 {
-  "contractName": "RegulatorProxy",
+  "contractName": "PermissionedTokenProxy",
   "abi": [
     {
       "constant": false,
@@ -114,20 +114,20 @@
   "deployedBytecode": "0x",
   "sourceMap": "",
   "deployedSourceMap": "",
-  "source": "pragma solidity ^0.4.23;\n\nimport \"zos-lib/contracts/upgradeability/AdminUpgradeabilityProxy.sol\";\n\n/**\n* @title RegulatorProxy\n* @dev Accounts for regulatory requirement changes over time. \n* Routes the PermissionedToken to the correct version of the Regulator\n* service.\n*\n*/\ncontract RegulatorProxy is AdminUpgradeabilityProxy {}",
-  "sourcePath": "/Users/tanishqaggarwal/Documents/carbon/fiat_gateway/contracts/permissions/RegulatorProxy.sol",
+  "source": "pragma solidity ^0.4.23;\n\nimport \"zos-lib/contracts/upgradeability/AdminUpgradeabilityProxy.sol\";\n\n/**\n* @title PermissionedTokenProxy\n* @dev Token contracts may change over time, so this proxy serves as a\n* pointer to the latest version.\n*\n*/\ncontract PermissionedTokenProxy is AdminUpgradeabilityProxy {}",
+  "sourcePath": "/Users/tanishqaggarwal/Documents/carbon/fiat_gateway/contracts/permissions/PermissionedTokenProxy.sol",
   "ast": {
-    "absolutePath": "/Users/tanishqaggarwal/Documents/carbon/fiat_gateway/contracts/permissions/RegulatorProxy.sol",
+    "absolutePath": "/Users/tanishqaggarwal/Documents/carbon/fiat_gateway/contracts/permissions/PermissionedTokenProxy.sol",
     "exportedSymbols": {
-      "RegulatorProxy": [
-        1908
+      "PermissionedTokenProxy": [
+        1484
       ]
     },
-    "id": 1909,
+    "id": 1485,
     "nodeType": "SourceUnit",
     "nodes": [
       {
-        "id": 1904,
+        "id": 1480,
         "literals": [
           "solidity",
           "^",
@@ -135,16 +135,16 @@
           ".23"
         ],
         "nodeType": "PragmaDirective",
-        "src": "0:24:13"
+        "src": "0:24:10"
       },
       {
         "absolutePath": "zos-lib/contracts/upgradeability/AdminUpgradeabilityProxy.sol",
         "file": "zos-lib/contracts/upgradeability/AdminUpgradeabilityProxy.sol",
-        "id": 1905,
+        "id": 1481,
         "nodeType": "ImportDirective",
-        "scope": 1909,
-        "sourceUnit": 2823,
-        "src": "26:71:13",
+        "scope": 1485,
+        "sourceUnit": 2562,
+        "src": "26:71:10",
         "symbolAliases": [],
         "unitAlias": ""
       },
@@ -154,57 +154,57 @@
             "arguments": null,
             "baseName": {
               "contractScope": null,
-              "id": 1906,
+              "id": 1482,
               "name": "AdminUpgradeabilityProxy",
               "nodeType": "UserDefinedTypeName",
-              "referencedDeclaration": 2822,
-              "src": "304:24:13",
+              "referencedDeclaration": 2561,
+              "src": "279:24:10",
               "typeDescriptions": {
-                "typeIdentifier": "t_contract$_AdminUpgradeabilityProxy_$2822",
+                "typeIdentifier": "t_contract$_AdminUpgradeabilityProxy_$2561",
                 "typeString": "contract AdminUpgradeabilityProxy"
               }
             },
-            "id": 1907,
+            "id": 1483,
             "nodeType": "InheritanceSpecifier",
-            "src": "304:24:13"
+            "src": "279:24:10"
           }
         ],
         "contractDependencies": [
-          2822,
-          2860,
-          2935
+          2561,
+          2599,
+          2674
         ],
         "contractKind": "contract",
-        "documentation": "@title RegulatorProxy\n@dev Accounts for regulatory requirement changes over time. \nRoutes the PermissionedToken to the correct version of the Regulator\nservice.\n",
+        "documentation": "@title PermissionedTokenProxy\n@dev Token contracts may change over time, so this proxy serves as a\npointer to the latest version.\n",
         "fullyImplemented": false,
-        "id": 1908,
+        "id": 1484,
         "linearizedBaseContracts": [
-          1908,
-          2822,
-          2935,
-          2860
+          1484,
+          2561,
+          2674,
+          2599
         ],
-        "name": "RegulatorProxy",
+        "name": "PermissionedTokenProxy",
         "nodeType": "ContractDefinition",
         "nodes": [],
-        "scope": 1909,
-        "src": "277:54:13"
+        "scope": 1485,
+        "src": "244:62:10"
       }
     ],
-    "src": "0:331:13"
+    "src": "0:306:10"
   },
   "legacyAST": {
-    "absolutePath": "/Users/tanishqaggarwal/Documents/carbon/fiat_gateway/contracts/permissions/RegulatorProxy.sol",
+    "absolutePath": "/Users/tanishqaggarwal/Documents/carbon/fiat_gateway/contracts/permissions/PermissionedTokenProxy.sol",
     "exportedSymbols": {
-      "RegulatorProxy": [
-        1908
+      "PermissionedTokenProxy": [
+        1484
       ]
     },
-    "id": 1909,
+    "id": 1485,
     "nodeType": "SourceUnit",
     "nodes": [
       {
-        "id": 1904,
+        "id": 1480,
         "literals": [
           "solidity",
           "^",
@@ -212,16 +212,16 @@
           ".23"
         ],
         "nodeType": "PragmaDirective",
-        "src": "0:24:13"
+        "src": "0:24:10"
       },
       {
         "absolutePath": "zos-lib/contracts/upgradeability/AdminUpgradeabilityProxy.sol",
         "file": "zos-lib/contracts/upgradeability/AdminUpgradeabilityProxy.sol",
-        "id": 1905,
+        "id": 1481,
         "nodeType": "ImportDirective",
-        "scope": 1909,
-        "sourceUnit": 2823,
-        "src": "26:71:13",
+        "scope": 1485,
+        "sourceUnit": 2562,
+        "src": "26:71:10",
         "symbolAliases": [],
         "unitAlias": ""
       },
@@ -231,44 +231,44 @@
             "arguments": null,
             "baseName": {
               "contractScope": null,
-              "id": 1906,
+              "id": 1482,
               "name": "AdminUpgradeabilityProxy",
               "nodeType": "UserDefinedTypeName",
-              "referencedDeclaration": 2822,
-              "src": "304:24:13",
+              "referencedDeclaration": 2561,
+              "src": "279:24:10",
               "typeDescriptions": {
-                "typeIdentifier": "t_contract$_AdminUpgradeabilityProxy_$2822",
+                "typeIdentifier": "t_contract$_AdminUpgradeabilityProxy_$2561",
                 "typeString": "contract AdminUpgradeabilityProxy"
               }
             },
-            "id": 1907,
+            "id": 1483,
             "nodeType": "InheritanceSpecifier",
-            "src": "304:24:13"
+            "src": "279:24:10"
           }
         ],
         "contractDependencies": [
-          2822,
-          2860,
-          2935
+          2561,
+          2599,
+          2674
         ],
         "contractKind": "contract",
-        "documentation": "@title RegulatorProxy\n@dev Accounts for regulatory requirement changes over time. \nRoutes the PermissionedToken to the correct version of the Regulator\nservice.\n",
+        "documentation": "@title PermissionedTokenProxy\n@dev Token contracts may change over time, so this proxy serves as a\npointer to the latest version.\n",
         "fullyImplemented": false,
-        "id": 1908,
+        "id": 1484,
         "linearizedBaseContracts": [
-          1908,
-          2822,
-          2935,
-          2860
+          1484,
+          2561,
+          2674,
+          2599
         ],
-        "name": "RegulatorProxy",
+        "name": "PermissionedTokenProxy",
         "nodeType": "ContractDefinition",
         "nodes": [],
-        "scope": 1909,
-        "src": "277:54:13"
+        "scope": 1485,
+        "src": "244:62:10"
       }
     ],
-    "src": "0:331:13"
+    "src": "0:306:10"
   },
   "compiler": {
     "name": "solc",
@@ -276,5 +276,5 @@
   },
   "networks": {},
   "schemaVersion": "2.0.0",
-  "updatedAt": "2018-07-10T20:12:33.255Z"
+  "updatedAt": "2018-07-10T20:14:48.114Z"
 }
