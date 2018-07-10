@@ -44,9 +44,89 @@ contract Regulator is Ownable {
     // Events
     event SetPermissionStorage(address oldStorage, address newStorage);
     function setPermissionStorage(address _newStorage) public onlyOwner {
-        _oldStorage = address(availablePermissions);
+        address _oldStorage = address(availablePermissions);
         availablePermissions = PermissionStorage(_newStorage);
-        emit SetPermissionsStorage(_oldStorage, _newStorage);
+        emit SetPermissionStorage(_oldStorage, _newStorage);
+    }
+
+    bytes4 MINT_SIG = bytes4(keccak256("mint(address,uint256)"));
+    bytes4 DESTROYBLACKLIST_SIG = bytes4(keccak256("destroyBlacklistedTokens(address)"));
+    /**
+    * @notice Sets the necessary permissions for a user to mint tokens.
+    * @param _who The address of the account that we are setting permissions for.
+    */
+    function setMinter(address _who) public onlyValidator {
+        require(availablePermissions.isPermission(MINT_SIG), "Minting not supported by token");
+        userPermissions.setPermission(_who, MINT_SIG);
+    }
+
+    /** Returns whether or not a user is a minter.
+     * @param _who The address of the account in question.
+     * @return `true` if the user is a minter, `false` otherwise.
+     */
+    function isMinter(address _who) public view returns (bool) {
+        return hasPermission(_who, MINT_SIG);
+    }
+
+    bytes4 DESTROYSELF_SIG = bytes4(keccak256("destroySelf()"));
+    bytes4 BURN_SIG = bytes4(keccak256("burn(uint256)"));
+    /**
+    * @notice Sets the necessary permissions for a "whitelisted" user.
+    * @param _who The address of the account that we are setting permissions for.
+    */
+    function setWhitelistedUser(address _who) public onlyValidator {
+        require(availablePermissions.isPermission(BURN_SIG), "Burn method not supported by token");
+        require(availablePermissions.isPermission(DESTROYSELF_SIG), "Self-destruct method not supported by token");
+        userPermissions.setPermission(_who, BURN_SIG);
+        userPermissions.removePermission(_who, DESTROYSELF_SIG);
+    }
+
+    /**
+    * @notice Sets the necessary permissions for a "blacklisted" user. A blacklisted user has their accounts
+    * frozen; they cannot transfer, burn, or withdraw any tokens.
+    * @param _who The address of the account that we are setting permissions for.
+    */
+    function setBlacklistedUser(address _who) public onlyValidator {
+        require(availablePermissions.isPermission(BURN_SIG), "Burn method not supported by token");
+        require(availablePermissions.isPermission(DESTROYSELF_SIG), "Self-destruct method not supported by token");
+        userPermissions.removePermission(_who, BURN_SIG);
+        userPermissions.setPermission(_who, DESTROYSELF_SIG);
+    }
+
+    /**
+    * @notice Sets the necessary permissions for a "nonlisted" user. Nonlisted users can trade tokens,
+    * but cannot burn them (and therefore cannot convert them into fiat.)
+    * @param _who The address of the account that we are setting permissions for.
+    */
+    function setNonlistedUser(address _who) public onlyValidator {
+        require(availablePermissions.isPermission(BURN_SIG), "Burn method not supported by token");
+        require(availablePermissions.isPermission(DESTROYSELF_SIG), "Self-destruct method not supported by token");
+        userPermissions.removePermission(_who, BURN_SIG);
+        userPermissions.removePermission(_who, DESTROYSELF_SIG);
+    }
+
+    /** Returns whether or not a user is whitelisted.
+     * @param _who The address of the account in question.
+     * @return `true` if the user is whitelisted, `false` otherwise.
+     */
+    function isWhitelistedUser(address _who) public view returns (bool) {
+        return (hasPermission(_who, BURN_SIG) && !hasPermission(_who, DESTROYSELF_SIG));
+    }
+
+    /** Returns whether or not a user is blacklisted.
+     * @param _who The address of the account in question.
+     * @return `true` if the user is blacklisted, `false` otherwise.
+     */
+    function isBlacklistedUser(address _who) public view returns (bool) {
+        return (!hasPermission(_who, BURN_SIG) && hasPermission(_who, DESTROYSELF_SIG));
+    }
+
+    /** Returns whether or not a user is nonlisted.
+     * @param _who The address of the account in question.
+     * @return `true` if the user is nonlisted, `false` otherwise.
+     */
+    function isNonlistedUser(address _who) public view returns (bool) {
+        return (!hasPermission(_who, BURN_SIG) && !hasPermission(_who, DESTROYSELF_SIG));
     }
         
     /**
@@ -54,9 +134,9 @@ contract Regulator is Ownable {
     * @param _who The address of the account that we are setting the value of an attribute for
     * @param _methodsignature The signature of the method that the user is getting permission to run.
     */
-    function setPermission(address _who, string _methodsignature) public onlyValidator {
+    function setPermission(address _who, bytes4 _methodsignature) public onlyValidator {
         require(availablePermissions.isPermission(_methodsignature));
-        userPermissions.setPermission(_who, _permission);
+        userPermissions.setPermission(_who, _methodsignature);
     }
 
     /**
@@ -64,9 +144,9 @@ contract Regulator is Ownable {
     * @param _who The address of the account that we are setting the value of an attribute for
     * @param _methodsignature The signature of the method that the user will no longer be able to execute.
     */
-    function removePermission(address _who, string _methodsignature) public onlyValidator {
+    function removePermission(address _who, bytes4 _methodsignature) public onlyValidator {
         require(availablePermissions.isPermission(_methodsignature));
-        userPermissions.removePermission(_who, _permission);
+        userPermissions.removePermission(_who, _methodsignature);
     }
 
     /**
@@ -75,7 +155,7 @@ contract Regulator is Ownable {
     * @param _methodsignature The signature of the method in question
     * @return A boolean indicating whether the user has permission or not
     */
-    function hasPermission(address _who, string _methodsignature) public view returns (bool) {
+    function hasPermission(address _who, bytes4 _methodsignature) public view returns (bool) {
         return userPermissions.getPermission(_who, _methodsignature);
     }
 }

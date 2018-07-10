@@ -9,8 +9,8 @@ import "openzeppelin-solidity/contracts/math/SafeMath.sol";
 contract DepositorSheet is Claimable {
     using SafeMath for uint256;
 
-    event DepositorAdded(address depositor);
-    event DepositorRemoved(address depositor);
+    event DepositorAdded(address indexed depositor);
+    event DepositorRemoved(address indexed depositor);
 
     mapping (address => bool) public depositAccounts;
 
@@ -19,7 +19,7 @@ contract DepositorSheet is Claimable {
     * @param _depositor Address to add
     */
     function addDepositor(address _depositor) public onlyOwner {
-        depositAccounts.addDepositor(_depositor);
+        depositAccounts[_depositor] = true;
         emit DepositorAdded(_depositor);
     }
 
@@ -28,7 +28,11 @@ contract DepositorSheet is Claimable {
     * @param _depositor Address to remove
     */
     function removeDepositor(address _depositor) public onlyOwner {
-        depositAccounts.removeDepositor(_depositor);
+        depositAccounts[_depositor] = false;
         emit DepositorRemoved(_depositor);
+    }
+
+    function isDepositor(address _who) public view returns (bool) {
+        return depositAccounts[_who];
     }
 }

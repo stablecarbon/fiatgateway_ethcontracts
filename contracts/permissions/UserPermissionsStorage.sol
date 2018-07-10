@@ -3,22 +3,34 @@ pragma solidity ^0.4.23;
 import "openzeppelin-solidity/contracts/ownership/Claimable.sol";
 
 contract UserPermissionsStorage is Claimable {
-    mapping (address => mapping(string => bool)) internal permissions;
+    mapping (address => mapping(bytes4 => bool)) internal permissions;
 
-    event SetUserPermission(address indexed who, string methodsignature);
-    event RemoveUserPermission(address indexed who, string methodsignature);
+    event SetUserPermission(address indexed who, bytes4 methodsignature);
+    event RemovedUserPermission(address indexed who, bytes4 methodsignature);
     
-    function setPermission(address _who, string _methodsignature) public onlyOwner {
+    /**
+    * @notice Sets a permission in the list of permissions that a user has.
+    * @param _methodsignature Signature of the method that this permission controls.
+    */
+    function setPermission(address _who, bytes4 _methodsignature) public onlyOwner {
         permissions[_who][_methodsignature] = true;
-        emit SetUserPermission(_who, _permission);
+        emit SetUserPermission(_who, _methodsignature);
     }
 
-    function getPermission(address _who, string _methodsignature) public onlyOwner returns (bool) {
+    /**
+    * @notice Indicates whether or not a user has a particular permission.
+    * @param _methodsignature Signature of the method that this permission controls.
+    */
+    function getPermission(address _who, bytes4 _methodsignature) public view returns (bool) {
         return permissions[_who][_methodsignature];
     }
 
-    function removePermission(address _who, string _methodsignature) public onlyOwner {
+    /**
+    * @notice Removes a permission from the list of permissions that a user has.
+    * @param _methodsignature Signature of the method that this permission controls.
+    */
+    function removePermission(address _who, bytes4 _methodsignature) public onlyOwner {
         permissions[_who][_methodsignature] = true;
-        emit RemoveUserPermission(_who, _permission);
+        emit RemovedUserPermission(_who, _methodsignature);
     }
 }
