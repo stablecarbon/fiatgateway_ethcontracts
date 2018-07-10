@@ -29,8 +29,6 @@ contract PermissionedToken is Ownable, ModularPausableToken, ModularBurnableToke
     */
     RegulatorProxy public regulator;
 
-    event DestroyBlacklistedTokens(address account, uint256 amount);
-
     /**
     * @notice Constructor sets the regulator that determines account permissions
     * @param _regulatorProxy Address of `RegulatorProxy` contract
@@ -45,15 +43,30 @@ contract PermissionedToken is Ownable, ModularPausableToken, ModularBurnableToke
         _;
     }
 
+    /** 
+    * @notice Sheet that is used as an intermediary between users when a transfer takes place.
+    * We use an intermediary sheet so that the user's permissions can be checked when 
+    * they withdraw from their "pendingBalance" sheet.
+    */
+    BalanceSheet public pendingBalances;
+    event PendingBalanceSheetSet(address indexed sheet);
+
+    function setPendingBalanceSheet(address _sheet) public onlyOwner returns(bool){
+        pendingBalances = BalanceSheet(_sheet);
+        pendingBalances.claimOwnership();
+        emit PendingBalanceSheetSet(_sheet);
+        return true;
+    }
+
     /**
     * @notice overridden function that include logic to check whether account can withdraw tokens.
     * @param _to The address of the receiver
     * @param _amount The number of tokens to withdraw
-    *
     * @return `true` if successful and `false` if unsuccessful
     */
     function mint(address _to, uint256 _amount) public requiresPermission returns (bool) {
         super.mint(_to, _amount);
+        return true;
     }
 
     /**
@@ -67,6 +80,7 @@ contract PermissionedToken is Ownable, ModularPausableToken, ModularBurnableToke
         return true;
     }
 
+    event DestroyBlacklistedTokens(address account, uint256 amount);
     /**
     * @notice destroy the tokens owned by an account
     * @param _who account to destroy tokens from
@@ -79,22 +93,47 @@ contract PermissionedToken is Ownable, ModularPausableToken, ModularBurnableToke
     }
 
     /**
-    * @notice overridden function that includes logic to check for trade validity.
+    * @notice Initiates a "send" operation towards another user. See `transferFrom` for details.
     * @param _to The address of the receiver
     * @param _amount The number of tokens to transfer
     *
     * @return `true` if successful and `false` if unsuccessful
     */
-    function transfer(address _to, uint256 _amount) public returns (bool) {
-        require(!check(msg.sender, BLACKLISTED), "sender is blacklisted");
-        require(!check(_to, BLACKLISTED), "receiver is blacklisted");
-        super.transfer(_to, _amount);
+    function transfer(address _to, uint256 _amount) requiresPermission public returns (bool) {
+        return transferFrom(msg.sender, _to, _amount);
     }
 
-    function transferFrom(address _from, address _to, uint256 _amount) public returns (bool) {
-        require(!check(_from, BLACKLISTED), "sender is blacklisted");
-        require(!check(_to, BLACKLISTED), "receiver is blacklisted");
-        super.transferFrom(_from, _to, _amount);
+    /**
+    * @notice Initiates a transfer operation between address `_from` and `_to`. The balance is not
+    * transferred immediately; rather, there is a "pendingBalance" balance sheet in between. This sheet
+    * is used so that a receiver's permissions can be checked via the requiresPermission
+    * modifier on the "withdraw" function.
+    * @param _to The address of the receiver
+    * @param _from The address of the sender
+    * @param _amount The number of tokens to transfer
+    *
+    * @return `true` if successful and `false` if unsuccessful
+    */
+    function transferFrom(address _from, address _to, uint256 _amount) requiresPermission public returns (bool) {
+        require(balances.getBalance(_from) < _amount);
+        balances.subBalance(_from, _amount);
+        pendingBalances.addBalance(_to, _amount);
+        return true;
+    }
+
+    /**
+    * @notice Transfers tokens from the pendingBalance sheet to the balance of the message sender.
+    * @param _to The address of the receiver
+    * @param _from The address of the sender
+    * @param _amount The number of tokens to transfer
+    *
+    * @return `true` if successful and `false` if unsuccessful
+    */
+    function withdraw(uint256 _amount) requiresPermission public returns (bool) {
+        require(_amount <= pendingBalances.getBalance(msg.sender));
+        pendingBalances.subBalance(msg.sender, _amount);
+        balances.addBalance(msg.sender, _amount);
+        return true;
     }
 
 }

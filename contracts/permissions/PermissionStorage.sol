@@ -1,12 +1,11 @@
 pragma solidity ^0.4.23;
 
-import "openzeppelin-solidity/contracts/ownership/Ownable.sol";
-import "./Authorizable.sol";
+import "openzeppelin-solidity/contracts/ownership/Claimable.sol";
 
 /**
 * @notice Storage contract for list of permissions that a Regulator can set on users.
 */
-contract PermissionsStorage is Ownable, Authorizable {
+contract PermissionsStorage is Claimable {
     mapping (string => Permission) permissions; // Key is a method signature, value is a Permission struct, which contains
                                                 // a description for the permission
     mapping (string => bool) isPermissionSet; // True if permission[key] is set, false otherwise.
@@ -32,7 +31,7 @@ contract PermissionsStorage is Ownable, Authorizable {
         string permissionName, 
         string permissionDescription, 
         string contractName) 
-    onlyAuthorized public {
+    onlyAdmin public {
         permissions[methodsignature] = Permission(permissionName, permissionDescription, contractName);
         isPermissionSet[methodsignature] = true;
         emit PermissionSet(methodsignature);
@@ -42,7 +41,7 @@ contract PermissionsStorage is Ownable, Authorizable {
     * @notice Removes a permission the list of permissions.
     * @param methodsignature Signature of the method that this permission controls.
     */
-    function removePermission(string methodsignature) onlyAuthorized public {
+    function removePermission(string methodsignature) onlyAdmin public {
         isPermissionSet[methodsignature] = false;
         emit PermissionRemoved(permission);
     }
