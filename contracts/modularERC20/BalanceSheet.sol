@@ -22,4 +22,8 @@ contract BalanceSheet is Claimable {
     function setBalance(address _addr, uint256 _value) public onlyOwner {
         balanceOf[_addr] = _value;
     }
+
+    function getBalance(address _addr) public view returns (uint256) {
+        return balanceOf[_addr];
+    }
 }
