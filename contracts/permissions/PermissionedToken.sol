@@ -4,6 +4,7 @@ import "./Regulator.sol";
 import "./RegulatorProxy.sol";
 import "openzeppelin-solidity/contracts/ownership/Ownable.sol";
 import "openzeppelin-solidity/contracts/AddressUtils.sol";
+import "zos-lib/contracts/migrations/Migratable.sol";
 import "../modularERC20/ModularBurnableToken.sol";
 import "../modularERC20/ModularMintableToken.sol";
 import "../modularERC20/ModularPausableToken.sol";
@@ -21,7 +22,7 @@ import "../modularERC20/ModularPausableToken.sol";
 *	Owner can mint, destroy blacklisted tokens
 *	Depositors can burn
 */
-contract PermissionedToken is Ownable, ModularPausableToken {
+contract PermissionedToken is Ownable, Migratable, ModularPausableToken {
     /**
     * @notice Address of `RegulatorProxy` that points to the latest
     *         `Regulator` contract responsible for checking and applying trade
@@ -33,8 +34,12 @@ contract PermissionedToken is Ownable, ModularPausableToken {
     * @notice Constructor sets the regulator that determines account permissions
     * @param _rProxy Address of `RegulatorProxy` contract
     */
-    constructor (address _rProxy) public {
-        setRegulatorProxy(_rProxy);
+    function initialize() isInitializer("PermissionedToken", "0") public {
+        _transferOwnership(msg.sender);
+    }
+
+    function migrate() isMigration("PermissionedToken", "0", "1.0") public {
+        
     }
 
     modifier requiresPermission() {
@@ -68,44 +73,8 @@ contract PermissionedToken is Ownable, ModularPausableToken {
         RegulatorProxy proxy = RegulatorProxy(rProxy);
         address oldRegulator = proxy.implementation();
         proxy.upgradeTo(_reg);
-        if (_migrateData) migrateAllRegulatorData(oldRegulator);
+        if (_migrateData) proxy.migrateAllRegulatorData(oldRegulator);
         emit ChangedRegulator(oldRegulator, _reg);
-    }
-
-    event RegulatorUserPermissionsMigrated(address oldRegulator, address newRegulator);
-    event RegulatorPermissionStorageMigrated(address oldRegulator, address newRegulator);
-
-    /**
-    * @notice Migrates all data from a regulator address to the current regulator
-    * @param _oldRegulatorAddr Address of old `Regulator` contract
-    */
-    function migrateAllRegulatorData(address _oldRegulatorAddr) public onlyOwner {
-        migrateUserPermissionsStorage(_oldRegulatorAddr);
-        migratePermissionStorage(_oldRegulatorAddr);
-    }
-
-    /**
-    * @notice Migrates user permission data from a regulator address to the current regulator
-    * @param _oldRegulatorAddr Address of old `Regulator` contract
-    */
-    function migrateUserPermissionsStorage(address _oldRegulatorAddr) public onlyOwner {
-        Regulator oldRegulator = Regulator(_oldRegulatorAddr);
-        address oldPermissions = address(oldRegulator.userPermissions);
-        Regulator newRegulator = Regulator(rProxy);
-        newRegulator.setUserPermissionsStorage(oldPermissions);
-        emit RegulatorUserPermissionsMigrated(_oldRegulatorAddr, RegulatorProxy(rProxy).implementation());
-    }
-
-    /**
-    * @notice Migrates permission type data from a regulator address to the current regulator
-    * @param _oldRegulatorAddr Address of old `Regulator` contract
-    */
-    function migratePermissionStorage(address _oldRegulatorAddr) public onlyOwner {
-        Regulator oldRegulator = Regulator(_oldRegulatorAddr);
-        address oldPermissions = address(oldRegulator.availablePermissions);
-        Regulator newRegulator = Regulator(rProxy);
-        newRegulator.setPermissionStorage(oldPermissions);
-        emit RegulatorUserPermissionsMigrated(_oldRegulatorAddr, RegulatorProxy(rProxy).implementation());
     }
 
     /**
