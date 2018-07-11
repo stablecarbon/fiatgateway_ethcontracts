@@ -66,6 +66,16 @@ contract Regulator is Ownable {
         require(availablePermissions.isPermission(MINT_SIG), "Minting not supported by token");
         userPermissions.setPermission(_who, MINT_SIG);
     }
+    
+
+    /**
+    * @notice Removes the necessary permissions for a user to mint tokens.
+    * @param _who The address of the account that we are removing permissions for.
+    */
+    function removeMinter(address _who) public onlyValidator {
+        require(availablePermissions.isPermission(MINT_SIG), "Minting not supported by token");
+        userPermissions.removePermission(_who, MINT_SIG);
+    }
 
     /** Returns whether or not a user is a minter.
      * @param _who The address of the account in question.
