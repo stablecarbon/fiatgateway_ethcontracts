@@ -2,9 +2,10 @@ pragma solidity ^0.4.23;
 
 import "openzeppelin-solidity/contracts/ownership/Ownable.sol";
 import "./modularERC20/BalanceSheet.sol";
+import "./permissions/PermissionedToken.sol";
 import "./CarbonToken.sol";
 
-contract CarbonDollar is Ownable {
+contract CarbonDollar is Ownable, PermissionedToken {
 
     // TODO: Some sort of blacklist/whitelisting (similar to permissionedToken) @tanishq/@sam
     // Random Thought: GreyList (mark Dirty Money without prevent it from being transferred or receiving)
@@ -22,34 +23,30 @@ contract CarbonDollar is Ownable {
 
     // Whitelist of stablecoins that can be traded into Carbon. The addresses stored in this list are actually
     // proxies to CarbonToken objects.
-    StablecoinWhitelist public whitelist;
-
-    // A balance sheet indicating how much of each stablecoin is owned by this contract.
-    BalanceSheet public stablecoinBalances;
+    StablecoinWhitelist public stablecoinWhitelist;
 
     /**
      * @notice add new stablecoin to whitelist
      */
     function whitelistToken(address _stablecoin) public onlyOwner {
-        whitelist.addStablecoin(stablecoin); // add new stablecoin in whitelist mapping
+        stablecoinWhitelist.addStablecoin(stablecoin); // add new stablecoin in whitelist mapping
     }
 
     /**
      * @notice remove existing stablecoin from whitelist
      */
     function unlistToken(address _stablecoin) public onlyOwner {
-        whitelist.removeStablecoin(stablecoin);
+        stablecoinWhitelist.removeStablecoin(stablecoin);
     }
 
-    /**
-     * @notice TODO: if stablecoin is whitelisted, proceed to accept the stablecoin into the current smart contract address
-     * TODO: once the stablecoin is held in this escrow, we mint new carbonUSD in the quantity required and to the address listed
-     */
-    function mintCarbonDollar(address stablecoin, address _to, uint256 _amount) public onlyOwner returns (bool) {
-        require(whitelist[_stablecoin] == true);
-        CarbonToken(stablecoin).burn(_to, _amount);
-        stablecoinBalances.addBalance(stablecoin, _amount);
-        return true;
+    /** Ensures that the caller of the function is a whitelisted token. */
+    modifier requiresWhitelistedToken() {
+        require(stablecoinWhitelist.isWhitelisted(msg.sender));
+        _;
+    }
+
+    function mintCarbonDollar(address _to, uint256 _amount) public requiresWhitelistedToken returns (bool) {
+        return mint(_to, _amount);
     }
 
     /**
@@ -75,9 +72,11 @@ contract CarbonDollar is Ownable {
      * @params _fee is deterrmined
      * we credit the user's account at the _to address with the _amount minus the percentage fee we want to charge.
      */
-    function burnCarbonDollar(address stablecoin, address _to, uint256 _amount) public onlyOwner returns (bool) {
-        require(whitelist[_stablecoin] == true);
-        stablecoinBalances.subBalance(stablecoin, _amount);
+    function burnCarbonDollar(address stablecoin, uint256 _amount) public returns (bool) {
+        require(stablecoinWhitelist.isWhitelisted(_stablecoin));
+        bool burned = burn(_to, _amount);
+        if (!burned)
+            return false;
 
         uint16 fee = feeSheet.getFee(stablecoin);
         if (fee == 0) // Fee for coin is not set
