@@ -28,51 +28,52 @@ contract CarbonToken is Ownable {
 
     /**
     * @notice Sets a currency proxy to point to a particular token implementation.
-    * @param _proxy Address of the token implementation.
-    * @param _currency String indicating the name of the currency whose proxy need sto be set.
+    * @param _tokenAddr Address of the token implementation.
+    * @param _currency String indicating the name of the currency whose proxy needs to be set.
+    * @param _migrateData If true, data will be migrated from the old token contract to the new one.
     * @return The address of the old token implementation for the currency, if it was set.
     */
-    function setCurrencyToken(address tokenAddr, string currency, bool migrateData) public onlyOwner returns (address oldAddr) {
-        require(AddressUtils.isContract(currencyProxies[currency]), "Currency proxy not set");
-        require(AddressUtils.isContract(tokenAddr), "Token contract address is not valid");
-        PermissionedTokenProxy p = PermissionedTokenProxy(currencyProxies[currency]);
+    function setCurrencyToken(address _tokenAddr, string _currency, bool _migrateData) public onlyOwner returns (address oldAddr) {
+        require(AddressUtils.isContract(currencyProxies[_currency]), "Currency proxy not set");
+        require(AddressUtils.isContract(_tokenAddr), "Token contract address is not valid");
+        PermissionedTokenProxy p = PermissionedTokenProxy(currencyProxies[_currency]);
         oldAddr = p.implementation();
-        p.upgradeTo(tokenAddr);
-        if (migrateData) migrateAll(oldAddr, currency);
-        emit CurrencyTokenChanged(oldAddr, tokenAddr, currency);
+        p.upgradeTo(_tokenAddr);
+        if (_migrateData) migrateAllTokenData(oldAddr, _currency);
+        emit CurrencyTokenChanged(oldAddr, _tokenAddr, _currency);
     }
 
     /**
     * @notice Migrates all data (allowances and balances) from an old token implementation to a new token implementation.
-    * @param _proxy Address of the old token implementation.
+    * @param _tokenAddr Address of the old token implementation.
     * @param _currency String indicating the name of the currency whose token implementation needs the data upgrade.
     */
-    function migrateAll(address tokenAddr, string currency) public onlyOwner {
-        migrateBalances(tokenAddr, currency);
-        migrateAllowances(tokenAddr, currency);
+    function migrateAllTokenData(address _tokenAddr, string _currency) public onlyOwner {
+        migrateBalances(_tokenAddr, _currency);
+        migrateAllowances(_tokenAddr, _currency);
     }
 
     /**
     * @notice Migrates all balances from an old token implementation to a new token implementation.
-    * @param _proxy Address of the old token implementation.
+    * @param _tokenAddr Address of the old token implementation.
     * @param _currency String indicating the name of the currency whose token implementation needs the data upgrade.
     */
-    function migrateBalances(address tokenAddr, string currency) public onlyOwner {
-        PermissionedToken pOld = PermissionedToken(tokenAddr);
-        PermissionedToken pNew = PermissionedToken(currencyProxies[currency]);
+    function migrateBalances(address _tokenAddr, string _currency) public onlyOwner {
+        PermissionedToken pOld = PermissionedToken(_tokenAddr);
+        PermissionedToken pNew = PermissionedToken(currencyProxies[_currency]);
         pNew.setBalanceSheet(address(pOld.balances));
-        emit CurrencyBalancesMigrated(tokenAddr, address(pNew), address(pOld.balances), currency);
+        emit CurrencyBalancesMigrated(_tokenAddr, address(pNew), address(pOld.balances), _currency);
     }
 
     /**
     * @notice Migrates all allowances from an old token implementation to a new token implementation.
-    * @param _proxy Address of the old token implementation.
+    * @param _tokenAddr Address of the old token implementation.
     * @param _currency String indicating the name of the currency whose token implementation needs the data upgrade.
     */
-    function migrateAllowances(address tokenAddr, string currency) public onlyOwner {
-        PermissionedToken pOld = PermissionedToken(tokenAddr);
-        PermissionedToken pNew = PermissionedToken(currencyProxies[currency]);
+    function migrateAllowances(address _tokenAddr, string _currency) public onlyOwner {
+        PermissionedToken pOld = PermissionedToken(_tokenAddr);
+        PermissionedToken pNew = PermissionedToken(currencyProxies[_currency]);
         pNew.setAllowanceSheet(address(pOld.allowances));
-        emit CurrencyAllowancesMigrated(tokenAddr, address(pNew), address(pOld.allowances), currency);
+        emit CurrencyAllowancesMigrated(_tokenAddr, address(pNew), address(pOld.allowances), _currency);
     }
 }

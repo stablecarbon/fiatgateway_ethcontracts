@@ -49,6 +49,13 @@ contract Regulator is Ownable {
         emit SetPermissionStorage(_oldStorage, _newStorage);
     }
 
+    event SetUserPermissionsStorage(address oldStorage, address newStorage);
+    function setUserPermissionsStorage(address _newStorage) public onlyOwner {
+        address _oldStorage = address(userPermissions);
+        userPermissions = UserPermissionsStorage(_newStorage);
+        emit SetUserPermissionsStorage(_oldStorage, _newStorage);
+    }
+
     bytes4 MINT_SIG = bytes4(keccak256("mint(address,uint256)"));
     bytes4 DESTROYBLACKLIST_SIG = bytes4(keccak256("destroyBlacklistedTokens(address)"));
     /**
@@ -138,7 +145,7 @@ contract Regulator is Ownable {
         require(availablePermissions.isPermission(_methodsignature));
         userPermissions.setPermission(_who, _methodsignature);
     }
-
+ 
     /**
     * @notice Removes a permission for an acccount. Only validators can remove a permission
     * @param _who The address of the account that we are setting the value of an attribute for

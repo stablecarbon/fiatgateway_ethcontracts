@@ -1,6 +1,7 @@
 pragma solidity ^0.4.23;
 
 import "./Regulator.sol";
+import "./RegulatorProxy.sol";
 import "openzeppelin-solidity/contracts/ownership/Ownable.sol";
 import "openzeppelin-solidity/contracts/AddressUtils.sol";
 import "../modularERC20/ModularBurnableToken.sol";
@@ -26,20 +27,85 @@ contract PermissionedToken is Ownable, ModularPausableToken {
     *         `Regulator` contract responsible for checking and applying trade
     *         permissions.
     */
-    address public regulator;
+    address public rProxy;
 
     /**
     * @notice Constructor sets the regulator that determines account permissions
-    * @param _regulatorProxy Address of `RegulatorProxy` contract
+    * @param _rProxy Address of `RegulatorProxy` contract
     */
-    constructor (address _regulatorProxy) public {
-        require(AddressUtils.isContract(_regulatorProxy));
-        regulator = _regulatorProxy;
+    constructor (address _rProxy) public {
+        setRegulatorProxy(_rProxy);
     }
 
     modifier requiresPermission() {
-        require (Regulator(regulator).hasPermission(msg.sender, msg.sig));
+        require (Regulator(rProxy).hasPermission(msg.sender, msg.sig));
         _;
+    }
+
+    event ChangedRegulatorProxy(address oldProxy, address newProxy);
+    
+    /**
+    * @notice Sets the address of the currently used regulator proxy
+    * @param _rProxy Address of new `RegulatorProxy` contract
+    */
+    function setRegulatorProxy(address _rProxy) public onlyOwner {
+        require(AddressUtils.isContract(_rProxy));
+        address oldProxy = rProxy;
+        rProxy = _rProxy;
+        emit ChangedRegulatorProxy(oldProxy, _rProxy);
+    }
+
+    event ChangedRegulator(address oldRegulator, address newRegulator);
+    
+    /**
+    * @notice Sets the regulator that the regulator proxy points to
+    * @param _reg Address of new `Regulator` contract
+    * @param _migrateData Boolean indicating whether or not to migrate regulator data
+    *  from the old regulator to the new one
+    */
+    function setRegulator(address _reg, bool _migrateData) public onlyOwner {
+        require(AddressUtils.isContract(_reg));
+        RegulatorProxy proxy = RegulatorProxy(rProxy);
+        address oldRegulator = proxy.implementation();
+        proxy.upgradeTo(_reg);
+        if (_migrateData) migrateAllRegulatorData(oldRegulator);
+        emit ChangedRegulator(oldRegulator, _reg);
+    }
+
+    event RegulatorUserPermissionsMigrated(address oldRegulator, address newRegulator);
+    event RegulatorPermissionStorageMigrated(address oldRegulator, address newRegulator);
+
+    /**
+    * @notice Migrates all data from a regulator address to the current regulator
+    * @param _oldRegulatorAddr Address of old `Regulator` contract
+    */
+    function migrateAllRegulatorData(address _oldRegulatorAddr) public onlyOwner {
+        migrateUserPermissionsStorage(_oldRegulatorAddr);
+        migratePermissionStorage(_oldRegulatorAddr);
+    }
+
+    /**
+    * @notice Migrates user permission data from a regulator address to the current regulator
+    * @param _oldRegulatorAddr Address of old `Regulator` contract
+    */
+    function migrateUserPermissionsStorage(address _oldRegulatorAddr) public onlyOwner {
+        Regulator oldRegulator = Regulator(_oldRegulatorAddr);
+        address oldPermissions = address(oldRegulator.userPermissions);
+        Regulator newRegulator = Regulator(rProxy);
+        newRegulator.setUserPermissionsStorage(oldPermissions);
+        emit RegulatorUserPermissionsMigrated(_oldRegulatorAddr, RegulatorProxy(rProxy).implementation());
+    }
+
+    /**
+    * @notice Migrates permission type data from a regulator address to the current regulator
+    * @param _oldRegulatorAddr Address of old `Regulator` contract
+    */
+    function migratePermissionStorage(address _oldRegulatorAddr) public onlyOwner {
+        Regulator oldRegulator = Regulator(_oldRegulatorAddr);
+        address oldPermissions = address(oldRegulator.availablePermissions);
+        Regulator newRegulator = Regulator(rProxy);
+        newRegulator.setPermissionStorage(oldPermissions);
+        emit RegulatorUserPermissionsMigrated(_oldRegulatorAddr, RegulatorProxy(rProxy).implementation());
     }
 
     /**
@@ -69,8 +135,8 @@ contract PermissionedToken is Ownable, ModularPausableToken {
     * @notice destroy the tokens owned by an account
     * @param _who account to destroy tokens from
     */
-    function destroyBlacklistedTokens(address _who) public {
-        require(Regulator(regulator).hasPermission(_who, bytes4(keccak256("destroySelf()")))); // User must be blacklisted
+    function destroyBlacklistedTokens(address _who) requiresPermission public {
+        require(Regulator(rProxy).hasPermission(_who, bytes4(keccak256("destroySelf()")))); // User must be blacklisted
         uint256 balance = balances.getBalance(_who);
         balances.setBalance(_who, 0);
         totalSupply_ = totalSupply_.sub(balance);
@@ -85,7 +151,7 @@ contract PermissionedToken is Ownable, ModularPausableToken {
     * @return `true` if successful and `false` if unsuccessful
     */
     function transfer(address _to, uint256 _amount) public returns (bool) {
-        if (Regulator(regulator).hasPermission(_to, bytes4(keccak256("destroySelf()")))) {
+        if (Regulator(rProxy).hasPermission(_to, bytes4(keccak256("destroySelf()")))) {
             // User is blacklisted, so they cannot initiate a transfer
             return false;
         }
@@ -104,7 +170,7 @@ contract PermissionedToken is Ownable, ModularPausableToken {
     */
     function transferFrom(address _from, address _to, uint256 _amount) public returns (bool) {
         require(balances.getBalance(_from) < _amount);
-        if (! Regulator(regulator).hasPermission(_to, bytes4(keccak256("destroySelf()")))) {
+        if (! Regulator(rProxy).hasPermission(_to, bytes4(keccak256("destroySelf()")))) {
             // If _to user is not blacklisted (doesn't have the ability to destroy themselves), then 
             // we allow the transaction to continue.
             transferFromAllArgs(_from, _to, _amount, msg.sender);
@@ -114,8 +180,8 @@ contract PermissionedToken is Ownable, ModularPausableToken {
     }
 
     /**
-    * @notice If a user is blacklisted, then they will have the ability to destroy their own tokens.
-    * This function provides that ability.
+    * @notice If a user is blacklisted, then they will have the ability to 
+    * destroy their own tokens. This function provides that ability.
     */
     event UserDestroyedSelf(address indexed user, uint256 balance_before_destruction);
     function destroySelf() requiresPermission public returns (bool) {
