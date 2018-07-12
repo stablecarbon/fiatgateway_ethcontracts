@@ -12,7 +12,7 @@ contract FeeSheet is Claimable {
     mapping (address => uint16) public fees;
 
     event FeeChanged(address stablecoin, uint16 oldFee, uint16 fee);
-    function setFee(address stablecoin, uint256 fee) public onlyOwner {
+    function setFee(address stablecoin, uint16 fee) public onlyOwner {
         uint16 oldFee = fees[stablecoin];
         fees[stablecoin] = fee;
         emit FeeChanged(stablecoin, oldFee, fee);

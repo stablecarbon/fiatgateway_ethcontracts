@@ -49,6 +49,29 @@
     },
     {
       "constant": false,
+      "inputs": [],
+      "name": "renounceOwnership",
+      "outputs": [],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "owner",
+      "outputs": [
+        {
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": false,
       "inputs": [
         {
           "name": "newAdmin",
@@ -56,6 +79,20 @@
         }
       ],
       "name": "changeAdmin",
+      "outputs": [],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "_newOwner",
+          "type": "address"
+        }
+      ],
+      "name": "transferOwnership",
       "outputs": [],
       "payable": false,
       "stateMutability": "nonpayable",
@@ -108,26 +145,69 @@
       ],
       "name": "Upgraded",
       "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "name": "previousOwner",
+          "type": "address"
+        }
+      ],
+      "name": "OwnershipRenounced",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "name": "previousOwner",
+          "type": "address"
+        },
+        {
+          "indexed": true,
+          "name": "newOwner",
+          "type": "address"
+        }
+      ],
+      "name": "OwnershipTransferred",
+      "type": "event"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "_reg",
+          "type": "address"
+        }
+      ],
+      "name": "claimOwnership",
+      "outputs": [],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function"
     }
   ],
   "bytecode": "0x",
   "deployedBytecode": "0x",
   "sourceMap": "",
   "deployedSourceMap": "",
-  "source": "pragma solidity ^0.4.23;\n\nimport \"zos-lib/contracts/upgradeability/AdminUpgradeabilityProxy.sol\";\n\n/**\n* @title RegulatorProxy\n* @dev Accounts for regulatory requirement changes over time. \n* Routes the PermissionedToken to the correct version of the Regulator\n* service.\n*\n*/\ncontract RegulatorProxy is AdminUpgradeabilityProxy {}",
+  "source": "pragma solidity ^0.4.23;\n\nimport \"openzeppelin-solidity/contracts/ownership/Ownable.sol\";\nimport \"zos-lib/contracts/upgradeability/AdminUpgradeabilityProxy.sol\";\nimport \"./Regulator.sol\";\n\n/**\n* @title RegulatorProxy\n* @dev Accounts for regulatory requirement changes over time. \n* Routes the PermissionedToken to the correct version of the Regulator\n* service.\n*\n*/\ncontract RegulatorProxy is Ownable, AdminUpgradeabilityProxy {\n    function claimOwnership(address _reg) public onlyOwner {\n        Regulator(_reg).claimOwnership();\n    }\n}",
   "sourcePath": "/Users/tanishqaggarwal/Documents/carbon/fiat_gateway/contracts/permissions/RegulatorProxy.sol",
   "ast": {
     "absolutePath": "/Users/tanishqaggarwal/Documents/carbon/fiat_gateway/contracts/permissions/RegulatorProxy.sol",
     "exportedSymbols": {
       "RegulatorProxy": [
-        2076
+        2355
       ]
     },
-    "id": 2077,
+    "id": 2356,
     "nodeType": "SourceUnit",
     "nodes": [
       {
-        "id": 2072,
+        "id": 2333,
         "literals": [
           "solidity",
           "^",
@@ -135,16 +215,38 @@
           ".23"
         ],
         "nodeType": "PragmaDirective",
-        "src": "0:24:12"
+        "src": "0:24:14"
+      },
+      {
+        "absolutePath": "openzeppelin-solidity/contracts/ownership/Ownable.sol",
+        "file": "openzeppelin-solidity/contracts/ownership/Ownable.sol",
+        "id": 2334,
+        "nodeType": "ImportDirective",
+        "scope": 2356,
+        "sourceUnit": 2891,
+        "src": "26:63:14",
+        "symbolAliases": [],
+        "unitAlias": ""
       },
       {
         "absolutePath": "zos-lib/contracts/upgradeability/AdminUpgradeabilityProxy.sol",
         "file": "zos-lib/contracts/upgradeability/AdminUpgradeabilityProxy.sol",
-        "id": 2073,
+        "id": 2335,
         "nodeType": "ImportDirective",
-        "scope": 2077,
-        "sourceUnit": 2793,
-        "src": "26:71:12",
+        "scope": 2356,
+        "sourceUnit": 3240,
+        "src": "90:71:14",
+        "symbolAliases": [],
+        "unitAlias": ""
+      },
+      {
+        "absolutePath": "/Users/tanishqaggarwal/Documents/carbon/fiat_gateway/contracts/permissions/Regulator.sol",
+        "file": "./Regulator.sol",
+        "id": 2336,
+        "nodeType": "ImportDirective",
+        "scope": 2356,
+        "sourceUnit": 2332,
+        "src": "162:25:14",
         "symbolAliases": [],
         "unitAlias": ""
       },
@@ -154,57 +256,247 @@
             "arguments": null,
             "baseName": {
               "contractScope": null,
-              "id": 2074,
+              "id": 2337,
+              "name": "Ownable",
+              "nodeType": "UserDefinedTypeName",
+              "referencedDeclaration": 2890,
+              "src": "394:7:14",
+              "typeDescriptions": {
+                "typeIdentifier": "t_contract$_Ownable_$2890",
+                "typeString": "contract Ownable"
+              }
+            },
+            "id": 2338,
+            "nodeType": "InheritanceSpecifier",
+            "src": "394:7:14"
+          },
+          {
+            "arguments": null,
+            "baseName": {
+              "contractScope": null,
+              "id": 2339,
               "name": "AdminUpgradeabilityProxy",
               "nodeType": "UserDefinedTypeName",
-              "referencedDeclaration": 2792,
-              "src": "304:24:12",
+              "referencedDeclaration": 3239,
+              "src": "403:24:14",
               "typeDescriptions": {
-                "typeIdentifier": "t_contract$_AdminUpgradeabilityProxy_$2792",
+                "typeIdentifier": "t_contract$_AdminUpgradeabilityProxy_$3239",
                 "typeString": "contract AdminUpgradeabilityProxy"
               }
             },
-            "id": 2075,
+            "id": 2340,
             "nodeType": "InheritanceSpecifier",
-            "src": "304:24:12"
+            "src": "403:24:14"
           }
         ],
         "contractDependencies": [
-          2792,
-          2830,
-          2905
+          2890,
+          3239,
+          3277,
+          3352
         ],
         "contractKind": "contract",
         "documentation": "@title RegulatorProxy\n@dev Accounts for regulatory requirement changes over time. \nRoutes the PermissionedToken to the correct version of the Regulator\nservice.\n",
         "fullyImplemented": false,
-        "id": 2076,
+        "id": 2355,
         "linearizedBaseContracts": [
-          2076,
-          2792,
-          2905,
-          2830
+          2355,
+          3239,
+          3352,
+          3277,
+          2890
         ],
         "name": "RegulatorProxy",
         "nodeType": "ContractDefinition",
-        "nodes": [],
-        "scope": 2077,
-        "src": "277:54:12"
+        "nodes": [
+          {
+            "body": {
+              "id": 2353,
+              "nodeType": "Block",
+              "src": "489:49:14",
+              "statements": [
+                {
+                  "expression": {
+                    "argumentTypes": null,
+                    "arguments": [],
+                    "expression": {
+                      "argumentTypes": [],
+                      "expression": {
+                        "argumentTypes": null,
+                        "arguments": [
+                          {
+                            "argumentTypes": null,
+                            "id": 2348,
+                            "name": "_reg",
+                            "nodeType": "Identifier",
+                            "overloadedDeclarations": [],
+                            "referencedDeclaration": 2342,
+                            "src": "509:4:14",
+                            "typeDescriptions": {
+                              "typeIdentifier": "t_address",
+                              "typeString": "address"
+                            }
+                          }
+                        ],
+                        "expression": {
+                          "argumentTypes": [
+                            {
+                              "typeIdentifier": "t_address",
+                              "typeString": "address"
+                            }
+                          ],
+                          "id": 2347,
+                          "name": "Regulator",
+                          "nodeType": "Identifier",
+                          "overloadedDeclarations": [],
+                          "referencedDeclaration": 2331,
+                          "src": "499:9:14",
+                          "typeDescriptions": {
+                            "typeIdentifier": "t_type$_t_contract$_Regulator_$2331_$",
+                            "typeString": "type(contract Regulator)"
+                          }
+                        },
+                        "id": 2349,
+                        "isConstant": false,
+                        "isLValue": false,
+                        "isPure": false,
+                        "kind": "typeConversion",
+                        "lValueRequested": false,
+                        "names": [],
+                        "nodeType": "FunctionCall",
+                        "src": "499:15:14",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_contract$_Regulator_$2331",
+                          "typeString": "contract Regulator"
+                        }
+                      },
+                      "id": 2350,
+                      "isConstant": false,
+                      "isLValue": false,
+                      "isPure": false,
+                      "lValueRequested": false,
+                      "memberName": "claimOwnership",
+                      "nodeType": "MemberAccess",
+                      "referencedDeclaration": 2803,
+                      "src": "499:30:14",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_function_external_nonpayable$__$returns$__$",
+                        "typeString": "function () external"
+                      }
+                    },
+                    "id": 2351,
+                    "isConstant": false,
+                    "isLValue": false,
+                    "isPure": false,
+                    "kind": "functionCall",
+                    "lValueRequested": false,
+                    "names": [],
+                    "nodeType": "FunctionCall",
+                    "src": "499:32:14",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_tuple$__$",
+                      "typeString": "tuple()"
+                    }
+                  },
+                  "id": 2352,
+                  "nodeType": "ExpressionStatement",
+                  "src": "499:32:14"
+                }
+              ]
+            },
+            "documentation": null,
+            "id": 2354,
+            "implemented": true,
+            "isConstructor": false,
+            "isDeclaredConst": false,
+            "modifiers": [
+              {
+                "arguments": null,
+                "id": 2345,
+                "modifierName": {
+                  "argumentTypes": null,
+                  "id": 2344,
+                  "name": "onlyOwner",
+                  "nodeType": "Identifier",
+                  "overloadedDeclarations": [],
+                  "referencedDeclaration": 2838,
+                  "src": "479:9:14",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_modifier$__$",
+                    "typeString": "modifier ()"
+                  }
+                },
+                "nodeType": "ModifierInvocation",
+                "src": "479:9:14"
+              }
+            ],
+            "name": "claimOwnership",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 2343,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 2342,
+                  "name": "_reg",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 2354,
+                  "src": "458:12:14",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 2341,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "458:7:14",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "457:14:14"
+            },
+            "payable": false,
+            "returnParameters": {
+              "id": 2346,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "489:0:14"
+            },
+            "scope": 2355,
+            "src": "434:104:14",
+            "stateMutability": "nonpayable",
+            "superFunction": null,
+            "visibility": "public"
+          }
+        ],
+        "scope": 2356,
+        "src": "367:173:14"
       }
     ],
-    "src": "0:331:12"
+    "src": "0:540:14"
   },
   "legacyAST": {
     "absolutePath": "/Users/tanishqaggarwal/Documents/carbon/fiat_gateway/contracts/permissions/RegulatorProxy.sol",
     "exportedSymbols": {
       "RegulatorProxy": [
-        2076
+        2355
       ]
     },
-    "id": 2077,
+    "id": 2356,
     "nodeType": "SourceUnit",
     "nodes": [
       {
-        "id": 2072,
+        "id": 2333,
         "literals": [
           "solidity",
           "^",
@@ -212,16 +504,38 @@
           ".23"
         ],
         "nodeType": "PragmaDirective",
-        "src": "0:24:12"
+        "src": "0:24:14"
+      },
+      {
+        "absolutePath": "openzeppelin-solidity/contracts/ownership/Ownable.sol",
+        "file": "openzeppelin-solidity/contracts/ownership/Ownable.sol",
+        "id": 2334,
+        "nodeType": "ImportDirective",
+        "scope": 2356,
+        "sourceUnit": 2891,
+        "src": "26:63:14",
+        "symbolAliases": [],
+        "unitAlias": ""
       },
       {
         "absolutePath": "zos-lib/contracts/upgradeability/AdminUpgradeabilityProxy.sol",
         "file": "zos-lib/contracts/upgradeability/AdminUpgradeabilityProxy.sol",
-        "id": 2073,
+        "id": 2335,
         "nodeType": "ImportDirective",
-        "scope": 2077,
-        "sourceUnit": 2793,
-        "src": "26:71:12",
+        "scope": 2356,
+        "sourceUnit": 3240,
+        "src": "90:71:14",
+        "symbolAliases": [],
+        "unitAlias": ""
+      },
+      {
+        "absolutePath": "/Users/tanishqaggarwal/Documents/carbon/fiat_gateway/contracts/permissions/Regulator.sol",
+        "file": "./Regulator.sol",
+        "id": 2336,
+        "nodeType": "ImportDirective",
+        "scope": 2356,
+        "sourceUnit": 2332,
+        "src": "162:25:14",
         "symbolAliases": [],
         "unitAlias": ""
       },
@@ -231,44 +545,234 @@
             "arguments": null,
             "baseName": {
               "contractScope": null,
-              "id": 2074,
+              "id": 2337,
+              "name": "Ownable",
+              "nodeType": "UserDefinedTypeName",
+              "referencedDeclaration": 2890,
+              "src": "394:7:14",
+              "typeDescriptions": {
+                "typeIdentifier": "t_contract$_Ownable_$2890",
+                "typeString": "contract Ownable"
+              }
+            },
+            "id": 2338,
+            "nodeType": "InheritanceSpecifier",
+            "src": "394:7:14"
+          },
+          {
+            "arguments": null,
+            "baseName": {
+              "contractScope": null,
+              "id": 2339,
               "name": "AdminUpgradeabilityProxy",
               "nodeType": "UserDefinedTypeName",
-              "referencedDeclaration": 2792,
-              "src": "304:24:12",
+              "referencedDeclaration": 3239,
+              "src": "403:24:14",
               "typeDescriptions": {
-                "typeIdentifier": "t_contract$_AdminUpgradeabilityProxy_$2792",
+                "typeIdentifier": "t_contract$_AdminUpgradeabilityProxy_$3239",
                 "typeString": "contract AdminUpgradeabilityProxy"
               }
             },
-            "id": 2075,
+            "id": 2340,
             "nodeType": "InheritanceSpecifier",
-            "src": "304:24:12"
+            "src": "403:24:14"
           }
         ],
         "contractDependencies": [
-          2792,
-          2830,
-          2905
+          2890,
+          3239,
+          3277,
+          3352
         ],
         "contractKind": "contract",
         "documentation": "@title RegulatorProxy\n@dev Accounts for regulatory requirement changes over time. \nRoutes the PermissionedToken to the correct version of the Regulator\nservice.\n",
         "fullyImplemented": false,
-        "id": 2076,
+        "id": 2355,
         "linearizedBaseContracts": [
-          2076,
-          2792,
-          2905,
-          2830
+          2355,
+          3239,
+          3352,
+          3277,
+          2890
         ],
         "name": "RegulatorProxy",
         "nodeType": "ContractDefinition",
-        "nodes": [],
-        "scope": 2077,
-        "src": "277:54:12"
+        "nodes": [
+          {
+            "body": {
+              "id": 2353,
+              "nodeType": "Block",
+              "src": "489:49:14",
+              "statements": [
+                {
+                  "expression": {
+                    "argumentTypes": null,
+                    "arguments": [],
+                    "expression": {
+                      "argumentTypes": [],
+                      "expression": {
+                        "argumentTypes": null,
+                        "arguments": [
+                          {
+                            "argumentTypes": null,
+                            "id": 2348,
+                            "name": "_reg",
+                            "nodeType": "Identifier",
+                            "overloadedDeclarations": [],
+                            "referencedDeclaration": 2342,
+                            "src": "509:4:14",
+                            "typeDescriptions": {
+                              "typeIdentifier": "t_address",
+                              "typeString": "address"
+                            }
+                          }
+                        ],
+                        "expression": {
+                          "argumentTypes": [
+                            {
+                              "typeIdentifier": "t_address",
+                              "typeString": "address"
+                            }
+                          ],
+                          "id": 2347,
+                          "name": "Regulator",
+                          "nodeType": "Identifier",
+                          "overloadedDeclarations": [],
+                          "referencedDeclaration": 2331,
+                          "src": "499:9:14",
+                          "typeDescriptions": {
+                            "typeIdentifier": "t_type$_t_contract$_Regulator_$2331_$",
+                            "typeString": "type(contract Regulator)"
+                          }
+                        },
+                        "id": 2349,
+                        "isConstant": false,
+                        "isLValue": false,
+                        "isPure": false,
+                        "kind": "typeConversion",
+                        "lValueRequested": false,
+                        "names": [],
+                        "nodeType": "FunctionCall",
+                        "src": "499:15:14",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_contract$_Regulator_$2331",
+                          "typeString": "contract Regulator"
+                        }
+                      },
+                      "id": 2350,
+                      "isConstant": false,
+                      "isLValue": false,
+                      "isPure": false,
+                      "lValueRequested": false,
+                      "memberName": "claimOwnership",
+                      "nodeType": "MemberAccess",
+                      "referencedDeclaration": 2803,
+                      "src": "499:30:14",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_function_external_nonpayable$__$returns$__$",
+                        "typeString": "function () external"
+                      }
+                    },
+                    "id": 2351,
+                    "isConstant": false,
+                    "isLValue": false,
+                    "isPure": false,
+                    "kind": "functionCall",
+                    "lValueRequested": false,
+                    "names": [],
+                    "nodeType": "FunctionCall",
+                    "src": "499:32:14",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_tuple$__$",
+                      "typeString": "tuple()"
+                    }
+                  },
+                  "id": 2352,
+                  "nodeType": "ExpressionStatement",
+                  "src": "499:32:14"
+                }
+              ]
+            },
+            "documentation": null,
+            "id": 2354,
+            "implemented": true,
+            "isConstructor": false,
+            "isDeclaredConst": false,
+            "modifiers": [
+              {
+                "arguments": null,
+                "id": 2345,
+                "modifierName": {
+                  "argumentTypes": null,
+                  "id": 2344,
+                  "name": "onlyOwner",
+                  "nodeType": "Identifier",
+                  "overloadedDeclarations": [],
+                  "referencedDeclaration": 2838,
+                  "src": "479:9:14",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_modifier$__$",
+                    "typeString": "modifier ()"
+                  }
+                },
+                "nodeType": "ModifierInvocation",
+                "src": "479:9:14"
+              }
+            ],
+            "name": "claimOwnership",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 2343,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 2342,
+                  "name": "_reg",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 2354,
+                  "src": "458:12:14",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 2341,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "458:7:14",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "457:14:14"
+            },
+            "payable": false,
+            "returnParameters": {
+              "id": 2346,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "489:0:14"
+            },
+            "scope": 2355,
+            "src": "434:104:14",
+            "stateMutability": "nonpayable",
+            "superFunction": null,
+            "visibility": "public"
+          }
+        ],
+        "scope": 2356,
+        "src": "367:173:14"
       }
     ],
-    "src": "0:331:12"
+    "src": "0:540:14"
   },
   "compiler": {
     "name": "solc",
@@ -276,5 +780,5 @@
   },
   "networks": {},
   "schemaVersion": "2.0.0",
-  "updatedAt": "2018-07-11T01:40:09.746Z"
+  "updatedAt": "2018-07-12T04:30:55.065Z"
 }
