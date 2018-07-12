@@ -1,5 +1,5 @@
 {
-  "contractName": "PermissionedTokenProxy",
+  "contractName": "WhitelistedTokenRegulatorProxy",
   "abi": [
     {
       "constant": false,
@@ -179,7 +179,7 @@
       "constant": false,
       "inputs": [
         {
-          "name": "_pToken",
+          "name": "_reg",
           "type": "address"
         }
       ],
@@ -194,20 +194,20 @@
   "deployedBytecode": "0x",
   "sourceMap": "",
   "deployedSourceMap": "",
-  "source": "pragma solidity ^0.4.23;\n\nimport \"openzeppelin-solidity/contracts/ownership/Ownable.sol\";\nimport \"zos-lib/contracts/upgradeability/AdminUpgradeabilityProxy.sol\";\nimport \"./PermissionedToken.sol\";\n\n/**\n* @title PermissionedTokenProxy\n* @dev Token contracts may change over time, so this proxy serves as a\n* pointer to the latest version.\n*\n*/\ncontract PermissionedTokenProxy is Ownable, AdminUpgradeabilityProxy {\n    function claimOwnership(address _pToken) public onlyOwner {\n        PermissionedToken(_pToken).claimOwnership();\n    }\n}",
-  "sourcePath": "/Users/tanishqaggarwal/Documents/carbon/fiat_gateway/contracts/permissionedToken/PermissionedTokenProxy.sol",
+  "source": "pragma solidity ^0.4.23;\n\nimport \"../permissionedToken/RegulatorProxy.sol\";\nimport \"./WhitelistedTokenRegulator.sol\";\n\n/**\n* @title WhitelistedTokenRegulatorProxy\n* @dev Accounts for regulatory requirement changes over time. \n* Routes the WhitelistedToken to the correct version of the WhitelistedTokenRegulator\n* service.\n*\n*/\ncontract WhitelistedTokenRegulatorProxy is RegulatorProxy {\n    function claimOwnership(address _reg) public onlyOwner {\n        WhitelistedTokenRegulator(_reg).claimOwnership();\n    }\n}",
+  "sourcePath": "/Users/tanishqaggarwal/Documents/carbon/fiat_gateway/contracts/whitelistedToken/WhitelistedTokenRegulatorProxy.sol",
   "ast": {
-    "absolutePath": "/Users/tanishqaggarwal/Documents/carbon/fiat_gateway/contracts/permissionedToken/PermissionedTokenProxy.sol",
+    "absolutePath": "/Users/tanishqaggarwal/Documents/carbon/fiat_gateway/contracts/whitelistedToken/WhitelistedTokenRegulatorProxy.sol",
     "exportedSymbols": {
-      "PermissionedTokenProxy": [
-        1798
+      "WhitelistedTokenRegulatorProxy": [
+        2726
       ]
     },
-    "id": 1799,
+    "id": 2727,
     "nodeType": "SourceUnit",
     "nodes": [
       {
-        "id": 1776,
+        "id": 2707,
         "literals": [
           "solidity",
           "^",
@@ -215,38 +215,27 @@
           ".23"
         ],
         "nodeType": "PragmaDirective",
-        "src": "0:24:13"
+        "src": "0:24:20"
       },
       {
-        "absolutePath": "openzeppelin-solidity/contracts/ownership/Ownable.sol",
-        "file": "openzeppelin-solidity/contracts/ownership/Ownable.sol",
-        "id": 1777,
+        "absolutePath": "/Users/tanishqaggarwal/Documents/carbon/fiat_gateway/contracts/permissionedToken/RegulatorProxy.sol",
+        "file": "../permissionedToken/RegulatorProxy.sol",
+        "id": 2708,
         "nodeType": "ImportDirective",
-        "scope": 1799,
-        "sourceUnit": 3038,
-        "src": "26:63:13",
+        "scope": 2727,
+        "sourceUnit": 2380,
+        "src": "26:49:20",
         "symbolAliases": [],
         "unitAlias": ""
       },
       {
-        "absolutePath": "zos-lib/contracts/upgradeability/AdminUpgradeabilityProxy.sol",
-        "file": "zos-lib/contracts/upgradeability/AdminUpgradeabilityProxy.sol",
-        "id": 1778,
+        "absolutePath": "/Users/tanishqaggarwal/Documents/carbon/fiat_gateway/contracts/whitelistedToken/WhitelistedTokenRegulator.sol",
+        "file": "./WhitelistedTokenRegulator.sol",
+        "id": 2709,
         "nodeType": "ImportDirective",
-        "scope": 1799,
-        "sourceUnit": 3387,
-        "src": "90:71:13",
-        "symbolAliases": [],
-        "unitAlias": ""
-      },
-      {
-        "absolutePath": "/Users/tanishqaggarwal/Documents/carbon/fiat_gateway/contracts/permissionedToken/PermissionedToken.sol",
-        "file": "./PermissionedToken.sol",
-        "id": 1779,
-        "nodeType": "ImportDirective",
-        "scope": 1799,
-        "sourceUnit": 1775,
-        "src": "162:33:13",
+        "scope": 2727,
+        "sourceUnit": 2706,
+        "src": "76:41:20",
         "symbolAliases": [],
         "unitAlias": ""
       },
@@ -256,64 +245,48 @@
             "arguments": null,
             "baseName": {
               "contractScope": null,
-              "id": 1780,
-              "name": "Ownable",
+              "id": 2710,
+              "name": "RegulatorProxy",
               "nodeType": "UserDefinedTypeName",
-              "referencedDeclaration": 3037,
-              "src": "377:7:13",
+              "referencedDeclaration": 2379,
+              "src": "371:14:20",
               "typeDescriptions": {
-                "typeIdentifier": "t_contract$_Ownable_$3037",
-                "typeString": "contract Ownable"
+                "typeIdentifier": "t_contract$_RegulatorProxy_$2379",
+                "typeString": "contract RegulatorProxy"
               }
             },
-            "id": 1781,
+            "id": 2711,
             "nodeType": "InheritanceSpecifier",
-            "src": "377:7:13"
-          },
-          {
-            "arguments": null,
-            "baseName": {
-              "contractScope": null,
-              "id": 1782,
-              "name": "AdminUpgradeabilityProxy",
-              "nodeType": "UserDefinedTypeName",
-              "referencedDeclaration": 3386,
-              "src": "386:24:13",
-              "typeDescriptions": {
-                "typeIdentifier": "t_contract$_AdminUpgradeabilityProxy_$3386",
-                "typeString": "contract AdminUpgradeabilityProxy"
-              }
-            },
-            "id": 1783,
-            "nodeType": "InheritanceSpecifier",
-            "src": "386:24:13"
+            "src": "371:14:20"
           }
         ],
         "contractDependencies": [
+          2379,
           3037,
           3386,
           3424,
           3499
         ],
         "contractKind": "contract",
-        "documentation": "@title PermissionedTokenProxy\n@dev Token contracts may change over time, so this proxy serves as a\npointer to the latest version.\n",
+        "documentation": "@title WhitelistedTokenRegulatorProxy\n@dev Accounts for regulatory requirement changes over time. \nRoutes the WhitelistedToken to the correct version of the WhitelistedTokenRegulator\nservice.\n",
         "fullyImplemented": false,
-        "id": 1798,
+        "id": 2726,
         "linearizedBaseContracts": [
-          1798,
+          2726,
+          2379,
           3386,
           3499,
           3424,
           3037
         ],
-        "name": "PermissionedTokenProxy",
+        "name": "WhitelistedTokenRegulatorProxy",
         "nodeType": "ContractDefinition",
         "nodes": [
           {
             "body": {
-              "id": 1796,
+              "id": 2724,
               "nodeType": "Block",
-              "src": "475:60:13",
+              "src": "447:65:20",
               "statements": [
                 {
                   "expression": {
@@ -326,12 +299,12 @@
                         "arguments": [
                           {
                             "argumentTypes": null,
-                            "id": 1791,
-                            "name": "_pToken",
+                            "id": 2719,
+                            "name": "_reg",
                             "nodeType": "Identifier",
                             "overloadedDeclarations": [],
-                            "referencedDeclaration": 1785,
-                            "src": "503:7:13",
+                            "referencedDeclaration": 2713,
+                            "src": "483:4:20",
                             "typeDescriptions": {
                               "typeIdentifier": "t_address",
                               "typeString": "address"
@@ -345,18 +318,18 @@
                               "typeString": "address"
                             }
                           ],
-                          "id": 1790,
-                          "name": "PermissionedToken",
+                          "id": 2718,
+                          "name": "WhitelistedTokenRegulator",
                           "nodeType": "Identifier",
                           "overloadedDeclarations": [],
-                          "referencedDeclaration": 1774,
-                          "src": "485:17:13",
+                          "referencedDeclaration": 2705,
+                          "src": "457:25:20",
                           "typeDescriptions": {
-                            "typeIdentifier": "t_type$_t_contract$_PermissionedToken_$1774_$",
-                            "typeString": "type(contract PermissionedToken)"
+                            "typeIdentifier": "t_type$_t_contract$_WhitelistedTokenRegulator_$2705_$",
+                            "typeString": "type(contract WhitelistedTokenRegulator)"
                           }
                         },
-                        "id": 1792,
+                        "id": 2720,
                         "isConstant": false,
                         "isLValue": false,
                         "isPure": false,
@@ -364,13 +337,13 @@
                         "lValueRequested": false,
                         "names": [],
                         "nodeType": "FunctionCall",
-                        "src": "485:26:13",
+                        "src": "457:31:20",
                         "typeDescriptions": {
-                          "typeIdentifier": "t_contract$_PermissionedToken_$1774",
-                          "typeString": "contract PermissionedToken"
+                          "typeIdentifier": "t_contract$_WhitelistedTokenRegulator_$2705",
+                          "typeString": "contract WhitelistedTokenRegulator"
                         }
                       },
-                      "id": 1793,
+                      "id": 2721,
                       "isConstant": false,
                       "isLValue": false,
                       "isPure": false,
@@ -378,13 +351,13 @@
                       "memberName": "claimOwnership",
                       "nodeType": "MemberAccess",
                       "referencedDeclaration": 2950,
-                      "src": "485:41:13",
+                      "src": "457:46:20",
                       "typeDescriptions": {
                         "typeIdentifier": "t_function_external_nonpayable$__$returns$__$",
                         "typeString": "function () external"
                       }
                     },
-                    "id": 1794,
+                    "id": 2722,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
@@ -392,57 +365,57 @@
                     "lValueRequested": false,
                     "names": [],
                     "nodeType": "FunctionCall",
-                    "src": "485:43:13",
+                    "src": "457:48:20",
                     "typeDescriptions": {
                       "typeIdentifier": "t_tuple$__$",
                       "typeString": "tuple()"
                     }
                   },
-                  "id": 1795,
+                  "id": 2723,
                   "nodeType": "ExpressionStatement",
-                  "src": "485:43:13"
+                  "src": "457:48:20"
                 }
               ]
             },
             "documentation": null,
-            "id": 1797,
+            "id": 2725,
             "implemented": true,
             "isConstructor": false,
             "isDeclaredConst": false,
             "modifiers": [
               {
                 "arguments": null,
-                "id": 1788,
+                "id": 2716,
                 "modifierName": {
                   "argumentTypes": null,
-                  "id": 1787,
+                  "id": 2715,
                   "name": "onlyOwner",
                   "nodeType": "Identifier",
                   "overloadedDeclarations": [],
                   "referencedDeclaration": 2985,
-                  "src": "465:9:13",
+                  "src": "437:9:20",
                   "typeDescriptions": {
                     "typeIdentifier": "t_modifier$__$",
                     "typeString": "modifier ()"
                   }
                 },
                 "nodeType": "ModifierInvocation",
-                "src": "465:9:13"
+                "src": "437:9:20"
               }
             ],
             "name": "claimOwnership",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 1786,
+              "id": 2714,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 1785,
-                  "name": "_pToken",
+                  "id": 2713,
+                  "name": "_reg",
                   "nodeType": "VariableDeclaration",
-                  "scope": 1797,
-                  "src": "441:15:13",
+                  "scope": 2725,
+                  "src": "416:12:20",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -450,10 +423,10 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 1784,
+                    "id": 2712,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
-                    "src": "441:7:13",
+                    "src": "416:7:20",
                     "typeDescriptions": {
                       "typeIdentifier": "t_address",
                       "typeString": "address"
@@ -463,40 +436,40 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "440:17:13"
+              "src": "415:14:20"
             },
             "payable": false,
             "returnParameters": {
-              "id": 1789,
+              "id": 2717,
               "nodeType": "ParameterList",
               "parameters": [],
-              "src": "475:0:13"
+              "src": "447:0:20"
             },
-            "scope": 1798,
-            "src": "417:118:13",
+            "scope": 2726,
+            "src": "392:120:20",
             "stateMutability": "nonpayable",
-            "superFunction": null,
+            "superFunction": 2378,
             "visibility": "public"
           }
         ],
-        "scope": 1799,
-        "src": "342:195:13"
+        "scope": 2727,
+        "src": "328:186:20"
       }
     ],
-    "src": "0:537:13"
+    "src": "0:514:20"
   },
   "legacyAST": {
-    "absolutePath": "/Users/tanishqaggarwal/Documents/carbon/fiat_gateway/contracts/permissionedToken/PermissionedTokenProxy.sol",
+    "absolutePath": "/Users/tanishqaggarwal/Documents/carbon/fiat_gateway/contracts/whitelistedToken/WhitelistedTokenRegulatorProxy.sol",
     "exportedSymbols": {
-      "PermissionedTokenProxy": [
-        1798
+      "WhitelistedTokenRegulatorProxy": [
+        2726
       ]
     },
-    "id": 1799,
+    "id": 2727,
     "nodeType": "SourceUnit",
     "nodes": [
       {
-        "id": 1776,
+        "id": 2707,
         "literals": [
           "solidity",
           "^",
@@ -504,38 +477,27 @@
           ".23"
         ],
         "nodeType": "PragmaDirective",
-        "src": "0:24:13"
+        "src": "0:24:20"
       },
       {
-        "absolutePath": "openzeppelin-solidity/contracts/ownership/Ownable.sol",
-        "file": "openzeppelin-solidity/contracts/ownership/Ownable.sol",
-        "id": 1777,
+        "absolutePath": "/Users/tanishqaggarwal/Documents/carbon/fiat_gateway/contracts/permissionedToken/RegulatorProxy.sol",
+        "file": "../permissionedToken/RegulatorProxy.sol",
+        "id": 2708,
         "nodeType": "ImportDirective",
-        "scope": 1799,
-        "sourceUnit": 3038,
-        "src": "26:63:13",
+        "scope": 2727,
+        "sourceUnit": 2380,
+        "src": "26:49:20",
         "symbolAliases": [],
         "unitAlias": ""
       },
       {
-        "absolutePath": "zos-lib/contracts/upgradeability/AdminUpgradeabilityProxy.sol",
-        "file": "zos-lib/contracts/upgradeability/AdminUpgradeabilityProxy.sol",
-        "id": 1778,
+        "absolutePath": "/Users/tanishqaggarwal/Documents/carbon/fiat_gateway/contracts/whitelistedToken/WhitelistedTokenRegulator.sol",
+        "file": "./WhitelistedTokenRegulator.sol",
+        "id": 2709,
         "nodeType": "ImportDirective",
-        "scope": 1799,
-        "sourceUnit": 3387,
-        "src": "90:71:13",
-        "symbolAliases": [],
-        "unitAlias": ""
-      },
-      {
-        "absolutePath": "/Users/tanishqaggarwal/Documents/carbon/fiat_gateway/contracts/permissionedToken/PermissionedToken.sol",
-        "file": "./PermissionedToken.sol",
-        "id": 1779,
-        "nodeType": "ImportDirective",
-        "scope": 1799,
-        "sourceUnit": 1775,
-        "src": "162:33:13",
+        "scope": 2727,
+        "sourceUnit": 2706,
+        "src": "76:41:20",
         "symbolAliases": [],
         "unitAlias": ""
       },
@@ -545,64 +507,48 @@
             "arguments": null,
             "baseName": {
               "contractScope": null,
-              "id": 1780,
-              "name": "Ownable",
+              "id": 2710,
+              "name": "RegulatorProxy",
               "nodeType": "UserDefinedTypeName",
-              "referencedDeclaration": 3037,
-              "src": "377:7:13",
+              "referencedDeclaration": 2379,
+              "src": "371:14:20",
               "typeDescriptions": {
-                "typeIdentifier": "t_contract$_Ownable_$3037",
-                "typeString": "contract Ownable"
+                "typeIdentifier": "t_contract$_RegulatorProxy_$2379",
+                "typeString": "contract RegulatorProxy"
               }
             },
-            "id": 1781,
+            "id": 2711,
             "nodeType": "InheritanceSpecifier",
-            "src": "377:7:13"
-          },
-          {
-            "arguments": null,
-            "baseName": {
-              "contractScope": null,
-              "id": 1782,
-              "name": "AdminUpgradeabilityProxy",
-              "nodeType": "UserDefinedTypeName",
-              "referencedDeclaration": 3386,
-              "src": "386:24:13",
-              "typeDescriptions": {
-                "typeIdentifier": "t_contract$_AdminUpgradeabilityProxy_$3386",
-                "typeString": "contract AdminUpgradeabilityProxy"
-              }
-            },
-            "id": 1783,
-            "nodeType": "InheritanceSpecifier",
-            "src": "386:24:13"
+            "src": "371:14:20"
           }
         ],
         "contractDependencies": [
+          2379,
           3037,
           3386,
           3424,
           3499
         ],
         "contractKind": "contract",
-        "documentation": "@title PermissionedTokenProxy\n@dev Token contracts may change over time, so this proxy serves as a\npointer to the latest version.\n",
+        "documentation": "@title WhitelistedTokenRegulatorProxy\n@dev Accounts for regulatory requirement changes over time. \nRoutes the WhitelistedToken to the correct version of the WhitelistedTokenRegulator\nservice.\n",
         "fullyImplemented": false,
-        "id": 1798,
+        "id": 2726,
         "linearizedBaseContracts": [
-          1798,
+          2726,
+          2379,
           3386,
           3499,
           3424,
           3037
         ],
-        "name": "PermissionedTokenProxy",
+        "name": "WhitelistedTokenRegulatorProxy",
         "nodeType": "ContractDefinition",
         "nodes": [
           {
             "body": {
-              "id": 1796,
+              "id": 2724,
               "nodeType": "Block",
-              "src": "475:60:13",
+              "src": "447:65:20",
               "statements": [
                 {
                   "expression": {
@@ -615,12 +561,12 @@
                         "arguments": [
                           {
                             "argumentTypes": null,
-                            "id": 1791,
-                            "name": "_pToken",
+                            "id": 2719,
+                            "name": "_reg",
                             "nodeType": "Identifier",
                             "overloadedDeclarations": [],
-                            "referencedDeclaration": 1785,
-                            "src": "503:7:13",
+                            "referencedDeclaration": 2713,
+                            "src": "483:4:20",
                             "typeDescriptions": {
                               "typeIdentifier": "t_address",
                               "typeString": "address"
@@ -634,18 +580,18 @@
                               "typeString": "address"
                             }
                           ],
-                          "id": 1790,
-                          "name": "PermissionedToken",
+                          "id": 2718,
+                          "name": "WhitelistedTokenRegulator",
                           "nodeType": "Identifier",
                           "overloadedDeclarations": [],
-                          "referencedDeclaration": 1774,
-                          "src": "485:17:13",
+                          "referencedDeclaration": 2705,
+                          "src": "457:25:20",
                           "typeDescriptions": {
-                            "typeIdentifier": "t_type$_t_contract$_PermissionedToken_$1774_$",
-                            "typeString": "type(contract PermissionedToken)"
+                            "typeIdentifier": "t_type$_t_contract$_WhitelistedTokenRegulator_$2705_$",
+                            "typeString": "type(contract WhitelistedTokenRegulator)"
                           }
                         },
-                        "id": 1792,
+                        "id": 2720,
                         "isConstant": false,
                         "isLValue": false,
                         "isPure": false,
@@ -653,13 +599,13 @@
                         "lValueRequested": false,
                         "names": [],
                         "nodeType": "FunctionCall",
-                        "src": "485:26:13",
+                        "src": "457:31:20",
                         "typeDescriptions": {
-                          "typeIdentifier": "t_contract$_PermissionedToken_$1774",
-                          "typeString": "contract PermissionedToken"
+                          "typeIdentifier": "t_contract$_WhitelistedTokenRegulator_$2705",
+                          "typeString": "contract WhitelistedTokenRegulator"
                         }
                       },
-                      "id": 1793,
+                      "id": 2721,
                       "isConstant": false,
                       "isLValue": false,
                       "isPure": false,
@@ -667,13 +613,13 @@
                       "memberName": "claimOwnership",
                       "nodeType": "MemberAccess",
                       "referencedDeclaration": 2950,
-                      "src": "485:41:13",
+                      "src": "457:46:20",
                       "typeDescriptions": {
                         "typeIdentifier": "t_function_external_nonpayable$__$returns$__$",
                         "typeString": "function () external"
                       }
                     },
-                    "id": 1794,
+                    "id": 2722,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
@@ -681,57 +627,57 @@
                     "lValueRequested": false,
                     "names": [],
                     "nodeType": "FunctionCall",
-                    "src": "485:43:13",
+                    "src": "457:48:20",
                     "typeDescriptions": {
                       "typeIdentifier": "t_tuple$__$",
                       "typeString": "tuple()"
                     }
                   },
-                  "id": 1795,
+                  "id": 2723,
                   "nodeType": "ExpressionStatement",
-                  "src": "485:43:13"
+                  "src": "457:48:20"
                 }
               ]
             },
             "documentation": null,
-            "id": 1797,
+            "id": 2725,
             "implemented": true,
             "isConstructor": false,
             "isDeclaredConst": false,
             "modifiers": [
               {
                 "arguments": null,
-                "id": 1788,
+                "id": 2716,
                 "modifierName": {
                   "argumentTypes": null,
-                  "id": 1787,
+                  "id": 2715,
                   "name": "onlyOwner",
                   "nodeType": "Identifier",
                   "overloadedDeclarations": [],
                   "referencedDeclaration": 2985,
-                  "src": "465:9:13",
+                  "src": "437:9:20",
                   "typeDescriptions": {
                     "typeIdentifier": "t_modifier$__$",
                     "typeString": "modifier ()"
                   }
                 },
                 "nodeType": "ModifierInvocation",
-                "src": "465:9:13"
+                "src": "437:9:20"
               }
             ],
             "name": "claimOwnership",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 1786,
+              "id": 2714,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 1785,
-                  "name": "_pToken",
+                  "id": 2713,
+                  "name": "_reg",
                   "nodeType": "VariableDeclaration",
-                  "scope": 1797,
-                  "src": "441:15:13",
+                  "scope": 2725,
+                  "src": "416:12:20",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -739,10 +685,10 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 1784,
+                    "id": 2712,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
-                    "src": "441:7:13",
+                    "src": "416:7:20",
                     "typeDescriptions": {
                       "typeIdentifier": "t_address",
                       "typeString": "address"
@@ -752,27 +698,27 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "440:17:13"
+              "src": "415:14:20"
             },
             "payable": false,
             "returnParameters": {
-              "id": 1789,
+              "id": 2717,
               "nodeType": "ParameterList",
               "parameters": [],
-              "src": "475:0:13"
+              "src": "447:0:20"
             },
-            "scope": 1798,
-            "src": "417:118:13",
+            "scope": 2726,
+            "src": "392:120:20",
             "stateMutability": "nonpayable",
-            "superFunction": null,
+            "superFunction": 2378,
             "visibility": "public"
           }
         ],
-        "scope": 1799,
-        "src": "342:195:13"
+        "scope": 2727,
+        "src": "328:186:20"
       }
     ],
-    "src": "0:537:13"
+    "src": "0:514:20"
   },
   "compiler": {
     "name": "solc",
@@ -780,5 +726,5 @@
   },
   "networks": {},
   "schemaVersion": "2.0.0",
-  "updatedAt": "2018-07-12T17:36:17.974Z"
+  "updatedAt": "2018-07-12T17:36:17.973Z"
 }

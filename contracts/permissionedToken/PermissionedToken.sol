@@ -12,8 +12,8 @@ import "../modularERC20/ModularPausableToken.sol";
 
 /**
 * @title Permissioned Token
-* @dev A permissioned token that enables transfers, withdrawals, and deposits to occur if and only
-* if it is approved by an on-chain Regulator service. PermissionedToken is an
+* @notice A permissioned token that enables transfers, withdrawals, and deposits to occur 
+* if and only if it is approved by an on-chain Regulator service. PermissionedToken is an
 * ERC-20 smart contract representing ownership of securities and overrides the
 * transfer, burn, and mint methods to check with the Regulator
 *
@@ -30,21 +30,47 @@ contract PermissionedToken is Claimable, Migratable, ModularPausableToken {
     */
     address public rProxy;
 
+    /** Events */
+    event ChangedRegulatorProxy(address oldProxy, address newProxy);
+    event DestroyedBlacklistedTokens(address indexed account, uint256 amount);
+    event UserDestroyedSelf(address indexed user, uint256 balance_before_destruction);
+
+    /** Modifiers */
+
+    /** @notice Modifier that allows function access to be restricted based on
+    * whether the regulator allows the message sender to execute that function.
+    **/
+    modifier requiresPermission() {
+        require (Regulator(rProxy).hasPermission(msg.sender, msg.sig));
+        _;
+    }
+
     /**
-    * @notice Constructor sets the regulator that determines account permissions
+    * @notice Constructor sets the regulator proxy contract.
     * @param _rProxy Address of `RegulatorProxy` contract
     */
     constructor(address _rProxy) Ownable() public {
         setRegulatorProxy(_rProxy);
     }
 
+    /**
+    * @notice Function used as part of Migratable interface. Must be called when
+    * proxy is assigned to contract in order to correctly assign the contract's
+    * version number.
+    *
+    * If deploying a new contract version, the version number must be changed as well. 
+    */
     function initialize() isInitializer("PermissionedToken", "1.0") public {
         // Nothing to initialize!
     }
 
-    /** @dev Migrates data from an old token contract to a new one.
-        Precondition: the new contract has already been transferred ownership of the old contract.
-        @param _oldToken The address of the old token contract. */
+    /** @notice Migrates data from an old token contract to a new one.
+    * Precondition: the new contract has already been transferred ownership of the old contract.
+    *
+    * If deploying a new contract version, updating the version numbers is necessary if you
+    * wish to run the migration.
+    * @param _oldToken The address of the old token contract. 
+    */
     function migrate(address _oldToken) isMigration("PermissionedToken", "1.0", "1.1") public {
         PermissionedToken oldToken = PermissionedToken(_oldToken);
         oldToken.claimOwnership(); // Take the proferred ownership of the old contract
@@ -54,22 +80,25 @@ contract PermissionedToken is Claimable, Migratable, ModularPausableToken {
         claimStorageOwnership();
     }
 
+    /** @notice Transfers ownership of the balance and allowance sheets to the owner
+    * of this token contract. This is useful for migrations, since the new token contract is made the
+    * owner of the old token contract.
+    **/
     function transferStorageOwnership() onlyOwner public {
         balances.transferOwnership(msg.sender);
         allowances.transferOwnership(msg.sender);
     }
 
+    /** @notice Claims ownership of the balance and allowance sheets. Succeeds if the
+    * ownership of those contracts was transferred to this contract.
+    *
+    * This function is strictly used for migrations.
+    **/
     function claimStorageOwnership() internal {
         balances.claimOwnership();
         allowances.claimOwnership();
     }
 
-    modifier requiresPermission() {
-        require (Regulator(rProxy).hasPermission(msg.sender, msg.sig));
-        _;
-    }
-
-    event ChangedRegulatorProxy(address oldProxy, address newProxy);
     /**
     * @notice Sets the address of the currently used regulator proxy
     * @param _rProxy Address of new `RegulatorProxy` contract
@@ -82,34 +111,34 @@ contract PermissionedToken is Claimable, Migratable, ModularPausableToken {
     }
 
     /**
-    * @notice overridden function that include logic to check whether account can withdraw tokens.
+    * @notice Allows user to mint if they have the appropriate permissions. User generally
+    * has to be some sort of centralized authority, e.g. PrimeTrust.
     * @param _to The address of the receiver
     * @param _amount The number of tokens to withdraw
     * @return `true` if successful and `false` if unsuccessful
     */
     function mint(address _to, uint256 _amount) public requiresPermission returns (bool) {
-        super.mint(_to, _amount);
-        return true;
+        return super.mint(_to, _amount);
     }
 
     /**
-    * @notice overridden function that include logic to check whether account can deposit tokens.
+    * @notice Allows user to mint if they have the appropriate permissions. User generally
+    * is just a "whitelisted" user (i.e. a user registered with the fiat gateway.)
     * @param _amount The number of tokens to burn
     *
     * @return `true` if successful and `false` if unsuccessful
     */
     function burn(uint256 _amount) public requiresPermission returns (bool) {
-        super.burn(_amount, "");
-        return true;
+        return super.burn(_amount, "");
     }
 
-    event DestroyedBlacklistedTokens(address account, uint256 amount);
     /**
-    * @notice destroy the tokens owned by an account
-    * @param _who account to destroy tokens from
+    * @notice Destroy the tokens owned by a blacklisted account. This function can generally
+    * only be called by a central authority.
+    * @param _who Account to destroy tokens from. Must be a blacklisted account.
     */
     function destroyBlacklistedTokens(address _who) requiresPermission public {
-        require(Regulator(rProxy).hasPermission(_who, bytes4(keccak256("destroySelf()")))); // User must be blacklisted
+        require(Regulator(rProxy).isBlacklisted(_who));
         uint256 balance = balances.balanceOf(_who);
         balances.setBalance(_who, 0);
         totalSupply_ = totalSupply_.sub(balance);
@@ -117,46 +146,59 @@ contract PermissionedToken is Claimable, Migratable, ModularPausableToken {
     }
 
     /**
+    * @notice Allows a central authority to add themselves as a spender on a blacklisted account.
+    * By default, the allowance is set to the balance of the blacklisted account, so that the
+    * authority has full control over the account balance.
+    * @param _who The blacklisted account.
+    */
+    function addBlacklistedAddressSpender(address _who) requiresPermission public {
+        require(Regulator(rProxy).isBlacklisted(_who));
+        approveAllArgs(msg.sender, balances.balanceOf(_who), _who);
+    }
+
+    /**
     * @notice Initiates a "send" operation towards another user. See `transferFrom` for details.
-    * @param _to The address of the receiver
+    * @param _to The address of the receiver. This user must not be blacklisted, or else the tranfer
+    * will fail.
     * @param _amount The number of tokens to transfer
     *
     * @return `true` if successful and `false` if unsuccessful
     */
     function transfer(address _to, uint256 _amount) public returns (bool) {
-        if (Regulator(rProxy).hasPermission(_to, bytes4(keccak256("destroySelf()")))) {
+        if (Regulator(rProxy).isBlacklisted(_who)) {
             // User is blacklisted, so they cannot initiate a transfer
             return false;
         }
-        super.transfer(_to, _amount);
-        return true;
+        return super.transfer(_to, _amount);
     }
 
     /**
     * @notice Initiates a transfer operation between address `_from` and `_to`.
     *
-    * @param _to The address of the receiver
-    * @param _from The address of the sender
+    * @param _to The address of the recipient. This address must not be blacklisted.
+    * @param _from The address of the origin of funds. This address _could_ be blacklisted, because
+    * a regulator may want to transfer tokens out of a blacklisted account, for example.
+    * In order to do so, the regulator would have to add themselves as an approved spender
+    * on the account via `addBlacklistAddressSpender()`, and would then be able to transfer tokens out of it.
     * @param _amount The number of tokens to transfer
     *
     * @return `true` if successful and `false` if unsuccessful
     */
     function transferFrom(address _from, address _to, uint256 _amount) public returns (bool) {
         require(balances.balanceOf(_from) < _amount);
-        if (! Regulator(rProxy).hasPermission(_to, bytes4(keccak256("destroySelf()")))) {
-            // If _to user is not blacklisted (doesn't have the ability to destroy themselves), then 
-            // we allow the transaction to continue.
-            transferFromAllArgs(_from, _to, _amount, msg.sender);
-            return true;
+        if (Regulator(rProxy).isBlacklisted(_who)) {
+            // If user is blacklisted, fail the transaction.
+            return false; 
         }
-        return false;
+        // Otherwise, allow it to continue.
+        transferFromAllArgs(_from, _to, _amount, msg.sender);
+        return true;
     }
 
     /**
     * @notice If a user is blacklisted, then they will have the ability to 
     * destroy their own tokens. This function provides that ability.
     */
-    event UserDestroyedSelf(address indexed user, uint256 balance_before_destruction);
     function destroySelf() requiresPermission public returns (bool) {
         uint256 balance = balanceOf(msg.sender);
         balances.setBalance(msg.sender, 0);

@@ -12,6 +12,12 @@ import "./Regulator.sol";
 *
 */
 contract RegulatorProxy is Ownable, AdminUpgradeabilityProxy {
+    /**
+     * @notice Claims ownership of a Regulator. Precondition: the
+     * previous owner of the Regulator already transferred ownership to 
+     * this proxy.
+     * @param _pToken The address of the Regulator contract.
+     */
     function claimOwnership(address _reg) public onlyOwner {
         Regulator(_reg).claimOwnership();
     }

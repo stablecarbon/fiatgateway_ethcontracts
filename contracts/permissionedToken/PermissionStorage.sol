@@ -6,16 +6,29 @@ import "openzeppelin-solidity/contracts/ownership/Claimable.sol";
 * @notice Storage contract for list of permissions that a Regulator can set on users.
 */
 contract PermissionStorage is Claimable {
-    mapping (bytes4 => Permission) permissions; // Key is a method signature, value is a Permission struct, which contains
-                                                // a description for the permission
-    mapping (bytes4 => bool) isPermissionSet; // True if permission[key] is set, false otherwise.
+    /** 
+        Mappings 
+    */
+    /** Key is a method signature, value is a Permission struct, 
+    which contains a description for the permission. **/
+    mapping (bytes4 => Permission) permissions; 
+    /** Tracks whether or not a method signature is associated
+    with an actual permission. **/
+    mapping (bytes4 => bool) isPermissionSet;
 
+    /** 
+        Structs 
+    */
+    /** Contains metadata about a permission to execute a particular method signature. */
     struct Permission {
         string name; // A one-word description for the permission. e.g. "canMint"
         string description; // A longer description for the permission. e.g. "Allows user to mint tokens."
         string contract_name; // e.g. "PermissionedToken"
     }
 
+    /** 
+        Events 
+    */
     event PermissionSet(bytes4 methodsignature);
     event PermissionRemoved(bytes4 methodsignature);
 

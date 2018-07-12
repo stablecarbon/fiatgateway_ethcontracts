@@ -1,6 +1,6 @@
 pragma solidity ^0.4.23;
 
-import "./permissions/PermissionedToken.sol";
+import "./permissionedToken/PermissionedToken.sol";
 import "./whitelistedToken/WhitelistedToken.sol";
 import "./FeeSheet.sol";
 import "./StablecoinWhitelist.sol";
