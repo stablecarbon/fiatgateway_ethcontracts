@@ -9,22 +9,31 @@ import "openzeppelin-solidity/contracts/math/SafeMath.sol";
 contract StablecoinWhitelist is Claimable {
     using SafeMath for uint256;
 
-    mapping (address => bool) public whitelist;
+    /** 
+        Mappings
+    */
+    // (stablecoin address => is the stablecoin whitelisted)
+    mapping (address => bool) public isWhitelisted;
 
+    /** 
+        Events
+    */
     event StablecoinAdded(address stablecoin);
     event StablecoinRemoved(address stablecoin);
 
+    /** @notice Add a stablecoin to the whitelist.
+        @param stablecoin Address of the stablecoin.
+    */
     function addStablecoin(address stablecoin) public onlyOwner {
-        whitelist[stablecoin] = true;
+        isWhitelisted[stablecoin] = true;
         emit StablecoinAdded(stablecoin);
     }
 
+    /** @notice Removes a stablecoin from the whitelist.
+        @param stablecoin Address of the stablecoin.
+    */
     function removeStablecoin(address stablecoin) public onlyOwner {
-        whitelist[stablecoin] = false;
+        isWhitelisted[stablecoin] = false;
         emit StablecoinRemoved(stablecoin);
-    }
-
-    function isWhitelisted(address stablecoin) public view returns (bool) {
-        return whitelist[stablecoin];
     }
 }

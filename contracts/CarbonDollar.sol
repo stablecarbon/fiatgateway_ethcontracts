@@ -93,10 +93,18 @@ contract CarbonDollar is PermissionedToken {
         stablecoinWhitelist.removeStablecoin(_stablecoin);
     }
     
+    /**
+     * @notice Set the fee sheet for this CarbonUSD.
+     * @param _sheet Address of the fee sheet.
+     */
     function setFeeSheet(address _sheet) public onlyOwner {
         stablecoinFees = FeeSheet(_sheet);
     }
     
+    /**
+     * @notice Set the stablecoin whitelist contract.
+     * @param _whitelist Address of the stablecoin whitelist contract.
+     */
     function setStablecoinWhitelist(address _whitelist) public onlyOwner {
         stablecoinWhitelist = StablecoinWhitelist(_whitelist);
     }
@@ -122,10 +130,6 @@ contract CarbonDollar is PermissionedToken {
         return true;
     }
 
-    function computeFee(uint256 amount, uint16 fee) public pure returns (uint256) {
-        return (amount * fee) / 1000;
-    }
-
     /**
      * @notice user can convert CarbonUSD umbrella token into the underlying assets. This is potentially interchain (EOS, ETH, Hedera etc)
      * @param stablecoin represents the type of coin the users wishes to receive for burning carbonUSD
@@ -142,7 +146,7 @@ contract CarbonDollar is PermissionedToken {
             fee = stablecoinFees.fees(stablecoin);
         else
             fee = defaultFee;
-        uint256 feedAmount = _amount.sub(computeFee(_amount, fee));
+        uint256 feedAmount = _amount.sub(stablecoinFees.computeFee(_amount, fee));
         WhitelistedToken(stablecoin).transfer(msg.sender, feedAmount);
         return true;
     }
