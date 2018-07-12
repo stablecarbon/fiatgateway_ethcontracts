@@ -15,7 +15,7 @@ contract CarbonUSD is Ownable, AdminUpgradeabilityProxy {
      * @notice Claims ownership of a CarbonDollar contract. Precondition: the
      * previous owner of the CarbonDollar contract already transferred ownership to 
      * this proxy.
-     * @param _pToken The address of the CarbonDollar contract.
+     * @param _reg The address of the CarbonDollar contract.
      */
     function claimOwnership(address _reg) public onlyOwner {
         CarbonDollar(_reg).claimOwnership();

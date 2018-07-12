@@ -16,15 +16,34 @@ contract CarbonDollar is PermissionedToken {
 
     // Carbon-12 Labs, INC owns this smart contract.
 
-    // Global Variables
+    /**
+        Global Variables
+    */
     uint16 public defaultFee; // this fee will be charged for users trying to convert CarbonUSD into the original tokens
                                // units of this number: tenth of a percent
     FeeSheet public stablecoinFees;
-
     // Whitelist of stablecoins that can be traded into Carbon. The addresses stored in this list are actually
-    // proxies to CarbonToken objects.
+    // proxies to WhitelistedToken objects.
     StablecoinWhitelist public stablecoinWhitelist;
 
+
+
+    /**
+        Modifiers
+    */
+    /** Ensures that the caller of the function is a whitelisted token. */
+    modifier requiresWhitelistedToken() {
+        require(stablecoinWhitelist.isWhitelisted(msg.sender));
+        _;
+    }
+
+    /**
+    * @notice Function used as part of Migratable interface. Must be called when
+    * proxy is assigned to contract in order to correctly assign the contract's
+    * version number.
+    *
+    * If deploying a new contract version, the version number must be changed as well. 
+    */
     function initialize() isInitializer("CarbonDollar", "1.0") public {
         // Nothing to initialize!
     }
@@ -41,11 +60,20 @@ contract CarbonDollar is PermissionedToken {
         claimStorageOwnership();
     }
 
+    /** @notice Transfers ownership of the stablecoin whitelist and fee sheets to the owner
+    * of this token contract. This is useful for migrations, since the new token contract is made the
+    * owner of the old token contract.
+    **/
     function transferStorageOwnership() public onlyOwner {
         stablecoinFees.transferOwnership(msg.sender);
         stablecoinWhitelist.transferOwnership(msg.sender);
     }
 
+    /** @notice Claims ownership of the stablecoin whitelist and fee sheets. Succeeds if the
+    * ownership of those contracts was transferred to this contract.
+    *
+    * This function is strictly used for migrations.
+    **/
     function claimStorageOwnership() internal {
         stablecoinFees.claimOwnership();
         stablecoinWhitelist.claimOwnership();
@@ -64,12 +92,6 @@ contract CarbonDollar is PermissionedToken {
     function unlistToken(address _stablecoin) public onlyOwner {
         stablecoinWhitelist.removeStablecoin(_stablecoin);
     }
-
-    /** Ensures that the caller of the function is a whitelisted token. */
-    modifier requiresWhitelistedToken() {
-        require(stablecoinWhitelist.isWhitelisted(msg.sender));
-        _;
-    }
     
     function setFeeSheet(address _sheet) public onlyOwner {
         stablecoinFees = FeeSheet(_sheet);
@@ -84,13 +106,17 @@ contract CarbonDollar is PermissionedToken {
     }
 
     /**
-     * @notice change fees associated with going from CarbonUSD -> Whitelisted Tokens
+     * @notice Change fees associated with going from CarbonUSD to a particular WhitelistedToken.
      */
     function changeFee(address stablecoin, uint16 _newFee) public onlyOwner returns (bool) {
         stablecoinFees.setFee(stablecoin, _newFee);
         return true;
     }
 
+    /**
+     * @notice Change the default fee associated with going from CarbonUSD to a WhitelistedToken.
+     * This fee amount is used if the fee for a WhitelistedToken is not specified.
+     */
     function changeDefaultFee(uint16 _newFee) public onlyOwner returns (bool) {
         defaultFee = _newFee;
         return true;
@@ -111,8 +137,10 @@ contract CarbonDollar is PermissionedToken {
         burnAllArgs(msg.sender, _amount, "");
 
         // Remit back WhitelistedToken, but with a fee reduction
-        uint16 fee = stablecoinFees.fees(stablecoin);
-        if (fee == 0) // If fee for coin is not set
+        uint16 fee;
+        if (stablecoinFees.isFeeSet(stablecoin)) // If fee for coin is not set
+            fee = stablecoinFees.fees(stablecoin);
+        else
             fee = defaultFee;
         uint256 feedAmount = _amount.sub(computeFee(_amount, fee));
         WhitelistedToken(stablecoin).transfer(msg.sender, feedAmount);

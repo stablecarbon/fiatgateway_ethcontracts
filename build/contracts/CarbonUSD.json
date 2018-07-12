@@ -194,20 +194,20 @@
   "deployedBytecode": "0x",
   "sourceMap": "",
   "deployedSourceMap": "",
-  "source": "pragma solidity ^0.4.23;\n\nimport \"openzeppelin-solidity/contracts/ownership/Ownable.sol\";\nimport \"zos-lib/contracts/upgradeability/AdminUpgradeabilityProxy.sol\";\nimport \"./CarbonDollar.sol\";\n\n/**\n* @title CarbonUSD\n* @dev The CarbonDollar contract may change over time, so this proxy serves as a\n* pointer to the latest version.\n*\n*/\ncontract CarbonUSD is Ownable, AdminUpgradeabilityProxy {\n    function claimOwnership(address _reg) public onlyOwner {\n        CarbonDollar(_reg).claimOwnership();\n    }\n}",
+  "source": "pragma solidity ^0.4.23;\n\nimport \"openzeppelin-solidity/contracts/ownership/Ownable.sol\";\nimport \"zos-lib/contracts/upgradeability/AdminUpgradeabilityProxy.sol\";\nimport \"./CarbonDollar.sol\";\n\n/**\n* @title CarbonUSD\n* @dev The CarbonDollar contract may change over time, so this proxy serves as a\n* pointer to the latest version.\n*\n*/\ncontract CarbonUSD is Ownable, AdminUpgradeabilityProxy {\n    /**\n     * @notice Claims ownership of a CarbonDollar contract. Precondition: the\n     * previous owner of the CarbonDollar contract already transferred ownership to \n     * this proxy.\n     * @param _reg The address of the CarbonDollar contract.\n     */\n    function claimOwnership(address _reg) public onlyOwner {\n        CarbonDollar(_reg).claimOwnership();\n    }\n}",
   "sourcePath": "/Users/tanishqaggarwal/Documents/carbon/fiat_gateway/contracts/CarbonUSD.sol",
   "ast": {
     "absolutePath": "/Users/tanishqaggarwal/Documents/carbon/fiat_gateway/contracts/CarbonUSD.sol",
     "exportedSymbols": {
       "CarbonUSD": [
-        325
+        329
       ]
     },
-    "id": 326,
+    "id": 330,
     "nodeType": "SourceUnit",
     "nodes": [
       {
-        "id": 303,
+        "id": 307,
         "literals": [
           "solidity",
           "^",
@@ -220,10 +220,10 @@
       {
         "absolutePath": "openzeppelin-solidity/contracts/ownership/Ownable.sol",
         "file": "openzeppelin-solidity/contracts/ownership/Ownable.sol",
-        "id": 304,
+        "id": 308,
         "nodeType": "ImportDirective",
-        "scope": 326,
-        "sourceUnit": 3038,
+        "scope": 330,
+        "sourceUnit": 3101,
         "src": "26:63:1",
         "symbolAliases": [],
         "unitAlias": ""
@@ -231,10 +231,10 @@
       {
         "absolutePath": "zos-lib/contracts/upgradeability/AdminUpgradeabilityProxy.sol",
         "file": "zos-lib/contracts/upgradeability/AdminUpgradeabilityProxy.sol",
-        "id": 305,
+        "id": 309,
         "nodeType": "ImportDirective",
-        "scope": 326,
-        "sourceUnit": 3387,
+        "scope": 330,
+        "sourceUnit": 3450,
         "src": "90:71:1",
         "symbolAliases": [],
         "unitAlias": ""
@@ -242,10 +242,10 @@
       {
         "absolutePath": "/Users/tanishqaggarwal/Documents/carbon/fiat_gateway/contracts/CarbonDollar.sol",
         "file": "./CarbonDollar.sol",
-        "id": 306,
+        "id": 310,
         "nodeType": "ImportDirective",
-        "scope": 326,
-        "sourceUnit": 302,
+        "scope": 330,
+        "sourceUnit": 306,
         "src": "162:28:1",
         "symbolAliases": [],
         "unitAlias": ""
@@ -256,17 +256,17 @@
             "arguments": null,
             "baseName": {
               "contractScope": null,
-              "id": 307,
+              "id": 311,
               "name": "Ownable",
               "nodeType": "UserDefinedTypeName",
-              "referencedDeclaration": 3037,
+              "referencedDeclaration": 3100,
               "src": "356:7:1",
               "typeDescriptions": {
-                "typeIdentifier": "t_contract$_Ownable_$3037",
+                "typeIdentifier": "t_contract$_Ownable_$3100",
                 "typeString": "contract Ownable"
               }
             },
-            "id": 308,
+            "id": 312,
             "nodeType": "InheritanceSpecifier",
             "src": "356:7:1"
           },
@@ -274,46 +274,46 @@
             "arguments": null,
             "baseName": {
               "contractScope": null,
-              "id": 309,
+              "id": 313,
               "name": "AdminUpgradeabilityProxy",
               "nodeType": "UserDefinedTypeName",
-              "referencedDeclaration": 3386,
+              "referencedDeclaration": 3449,
               "src": "365:24:1",
               "typeDescriptions": {
-                "typeIdentifier": "t_contract$_AdminUpgradeabilityProxy_$3386",
+                "typeIdentifier": "t_contract$_AdminUpgradeabilityProxy_$3449",
                 "typeString": "contract AdminUpgradeabilityProxy"
               }
             },
-            "id": 310,
+            "id": 314,
             "nodeType": "InheritanceSpecifier",
             "src": "365:24:1"
           }
         ],
         "contractDependencies": [
-          3037,
-          3386,
-          3424,
-          3499
+          3100,
+          3449,
+          3487,
+          3562
         ],
         "contractKind": "contract",
         "documentation": "@title CarbonUSD\n@dev The CarbonDollar contract may change over time, so this proxy serves as a\npointer to the latest version.\n",
         "fullyImplemented": false,
-        "id": 325,
+        "id": 329,
         "linearizedBaseContracts": [
-          325,
-          3386,
-          3499,
-          3424,
-          3037
+          329,
+          3449,
+          3562,
+          3487,
+          3100
         ],
         "name": "CarbonUSD",
         "nodeType": "ContractDefinition",
         "nodes": [
           {
             "body": {
-              "id": 323,
+              "id": 327,
               "nodeType": "Block",
-              "src": "451:52:1",
+              "src": "710:52:1",
               "statements": [
                 {
                   "expression": {
@@ -326,12 +326,12 @@
                         "arguments": [
                           {
                             "argumentTypes": null,
-                            "id": 318,
+                            "id": 322,
                             "name": "_reg",
                             "nodeType": "Identifier",
                             "overloadedDeclarations": [],
-                            "referencedDeclaration": 312,
-                            "src": "474:4:1",
+                            "referencedDeclaration": 316,
+                            "src": "733:4:1",
                             "typeDescriptions": {
                               "typeIdentifier": "t_address",
                               "typeString": "address"
@@ -345,18 +345,18 @@
                               "typeString": "address"
                             }
                           ],
-                          "id": 317,
+                          "id": 321,
                           "name": "CarbonDollar",
                           "nodeType": "Identifier",
                           "overloadedDeclarations": [],
-                          "referencedDeclaration": 301,
-                          "src": "461:12:1",
+                          "referencedDeclaration": 305,
+                          "src": "720:12:1",
                           "typeDescriptions": {
-                            "typeIdentifier": "t_type$_t_contract$_CarbonDollar_$301_$",
+                            "typeIdentifier": "t_type$_t_contract$_CarbonDollar_$305_$",
                             "typeString": "type(contract CarbonDollar)"
                           }
                         },
-                        "id": 319,
+                        "id": 323,
                         "isConstant": false,
                         "isLValue": false,
                         "isPure": false,
@@ -364,27 +364,27 @@
                         "lValueRequested": false,
                         "names": [],
                         "nodeType": "FunctionCall",
-                        "src": "461:18:1",
+                        "src": "720:18:1",
                         "typeDescriptions": {
-                          "typeIdentifier": "t_contract$_CarbonDollar_$301",
+                          "typeIdentifier": "t_contract$_CarbonDollar_$305",
                           "typeString": "contract CarbonDollar"
                         }
                       },
-                      "id": 320,
+                      "id": 324,
                       "isConstant": false,
                       "isLValue": false,
                       "isPure": false,
                       "lValueRequested": false,
                       "memberName": "claimOwnership",
                       "nodeType": "MemberAccess",
-                      "referencedDeclaration": 2950,
-                      "src": "461:33:1",
+                      "referencedDeclaration": 3013,
+                      "src": "720:33:1",
                       "typeDescriptions": {
                         "typeIdentifier": "t_function_external_nonpayable$__$returns$__$",
                         "typeString": "function () external"
                       }
                     },
-                    "id": 321,
+                    "id": 325,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
@@ -392,57 +392,57 @@
                     "lValueRequested": false,
                     "names": [],
                     "nodeType": "FunctionCall",
-                    "src": "461:35:1",
+                    "src": "720:35:1",
                     "typeDescriptions": {
                       "typeIdentifier": "t_tuple$__$",
                       "typeString": "tuple()"
                     }
                   },
-                  "id": 322,
+                  "id": 326,
                   "nodeType": "ExpressionStatement",
-                  "src": "461:35:1"
+                  "src": "720:35:1"
                 }
               ]
             },
-            "documentation": null,
-            "id": 324,
+            "documentation": "@notice Claims ownership of a CarbonDollar contract. Precondition: the\nprevious owner of the CarbonDollar contract already transferred ownership to \nthis proxy.\n@param _reg The address of the CarbonDollar contract.",
+            "id": 328,
             "implemented": true,
             "isConstructor": false,
             "isDeclaredConst": false,
             "modifiers": [
               {
                 "arguments": null,
-                "id": 315,
+                "id": 319,
                 "modifierName": {
                   "argumentTypes": null,
-                  "id": 314,
+                  "id": 318,
                   "name": "onlyOwner",
                   "nodeType": "Identifier",
                   "overloadedDeclarations": [],
-                  "referencedDeclaration": 2985,
-                  "src": "441:9:1",
+                  "referencedDeclaration": 3048,
+                  "src": "700:9:1",
                   "typeDescriptions": {
                     "typeIdentifier": "t_modifier$__$",
                     "typeString": "modifier ()"
                   }
                 },
                 "nodeType": "ModifierInvocation",
-                "src": "441:9:1"
+                "src": "700:9:1"
               }
             ],
             "name": "claimOwnership",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 313,
+              "id": 317,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 312,
+                  "id": 316,
                   "name": "_reg",
                   "nodeType": "VariableDeclaration",
-                  "scope": 324,
-                  "src": "420:12:1",
+                  "scope": 328,
+                  "src": "679:12:1",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -450,10 +450,10 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 311,
+                    "id": 315,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
-                    "src": "420:7:1",
+                    "src": "679:7:1",
                     "typeDescriptions": {
                       "typeIdentifier": "t_address",
                       "typeString": "address"
@@ -463,40 +463,40 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "419:14:1"
+              "src": "678:14:1"
             },
             "payable": false,
             "returnParameters": {
-              "id": 316,
+              "id": 320,
               "nodeType": "ParameterList",
               "parameters": [],
-              "src": "451:0:1"
+              "src": "710:0:1"
             },
-            "scope": 325,
-            "src": "396:107:1",
+            "scope": 329,
+            "src": "655:107:1",
             "stateMutability": "nonpayable",
             "superFunction": null,
             "visibility": "public"
           }
         ],
-        "scope": 326,
-        "src": "334:171:1"
+        "scope": 330,
+        "src": "334:430:1"
       }
     ],
-    "src": "0:505:1"
+    "src": "0:764:1"
   },
   "legacyAST": {
     "absolutePath": "/Users/tanishqaggarwal/Documents/carbon/fiat_gateway/contracts/CarbonUSD.sol",
     "exportedSymbols": {
       "CarbonUSD": [
-        325
+        329
       ]
     },
-    "id": 326,
+    "id": 330,
     "nodeType": "SourceUnit",
     "nodes": [
       {
-        "id": 303,
+        "id": 307,
         "literals": [
           "solidity",
           "^",
@@ -509,10 +509,10 @@
       {
         "absolutePath": "openzeppelin-solidity/contracts/ownership/Ownable.sol",
         "file": "openzeppelin-solidity/contracts/ownership/Ownable.sol",
-        "id": 304,
+        "id": 308,
         "nodeType": "ImportDirective",
-        "scope": 326,
-        "sourceUnit": 3038,
+        "scope": 330,
+        "sourceUnit": 3101,
         "src": "26:63:1",
         "symbolAliases": [],
         "unitAlias": ""
@@ -520,10 +520,10 @@
       {
         "absolutePath": "zos-lib/contracts/upgradeability/AdminUpgradeabilityProxy.sol",
         "file": "zos-lib/contracts/upgradeability/AdminUpgradeabilityProxy.sol",
-        "id": 305,
+        "id": 309,
         "nodeType": "ImportDirective",
-        "scope": 326,
-        "sourceUnit": 3387,
+        "scope": 330,
+        "sourceUnit": 3450,
         "src": "90:71:1",
         "symbolAliases": [],
         "unitAlias": ""
@@ -531,10 +531,10 @@
       {
         "absolutePath": "/Users/tanishqaggarwal/Documents/carbon/fiat_gateway/contracts/CarbonDollar.sol",
         "file": "./CarbonDollar.sol",
-        "id": 306,
+        "id": 310,
         "nodeType": "ImportDirective",
-        "scope": 326,
-        "sourceUnit": 302,
+        "scope": 330,
+        "sourceUnit": 306,
         "src": "162:28:1",
         "symbolAliases": [],
         "unitAlias": ""
@@ -545,17 +545,17 @@
             "arguments": null,
             "baseName": {
               "contractScope": null,
-              "id": 307,
+              "id": 311,
               "name": "Ownable",
               "nodeType": "UserDefinedTypeName",
-              "referencedDeclaration": 3037,
+              "referencedDeclaration": 3100,
               "src": "356:7:1",
               "typeDescriptions": {
-                "typeIdentifier": "t_contract$_Ownable_$3037",
+                "typeIdentifier": "t_contract$_Ownable_$3100",
                 "typeString": "contract Ownable"
               }
             },
-            "id": 308,
+            "id": 312,
             "nodeType": "InheritanceSpecifier",
             "src": "356:7:1"
           },
@@ -563,46 +563,46 @@
             "arguments": null,
             "baseName": {
               "contractScope": null,
-              "id": 309,
+              "id": 313,
               "name": "AdminUpgradeabilityProxy",
               "nodeType": "UserDefinedTypeName",
-              "referencedDeclaration": 3386,
+              "referencedDeclaration": 3449,
               "src": "365:24:1",
               "typeDescriptions": {
-                "typeIdentifier": "t_contract$_AdminUpgradeabilityProxy_$3386",
+                "typeIdentifier": "t_contract$_AdminUpgradeabilityProxy_$3449",
                 "typeString": "contract AdminUpgradeabilityProxy"
               }
             },
-            "id": 310,
+            "id": 314,
             "nodeType": "InheritanceSpecifier",
             "src": "365:24:1"
           }
         ],
         "contractDependencies": [
-          3037,
-          3386,
-          3424,
-          3499
+          3100,
+          3449,
+          3487,
+          3562
         ],
         "contractKind": "contract",
         "documentation": "@title CarbonUSD\n@dev The CarbonDollar contract may change over time, so this proxy serves as a\npointer to the latest version.\n",
         "fullyImplemented": false,
-        "id": 325,
+        "id": 329,
         "linearizedBaseContracts": [
-          325,
-          3386,
-          3499,
-          3424,
-          3037
+          329,
+          3449,
+          3562,
+          3487,
+          3100
         ],
         "name": "CarbonUSD",
         "nodeType": "ContractDefinition",
         "nodes": [
           {
             "body": {
-              "id": 323,
+              "id": 327,
               "nodeType": "Block",
-              "src": "451:52:1",
+              "src": "710:52:1",
               "statements": [
                 {
                   "expression": {
@@ -615,12 +615,12 @@
                         "arguments": [
                           {
                             "argumentTypes": null,
-                            "id": 318,
+                            "id": 322,
                             "name": "_reg",
                             "nodeType": "Identifier",
                             "overloadedDeclarations": [],
-                            "referencedDeclaration": 312,
-                            "src": "474:4:1",
+                            "referencedDeclaration": 316,
+                            "src": "733:4:1",
                             "typeDescriptions": {
                               "typeIdentifier": "t_address",
                               "typeString": "address"
@@ -634,18 +634,18 @@
                               "typeString": "address"
                             }
                           ],
-                          "id": 317,
+                          "id": 321,
                           "name": "CarbonDollar",
                           "nodeType": "Identifier",
                           "overloadedDeclarations": [],
-                          "referencedDeclaration": 301,
-                          "src": "461:12:1",
+                          "referencedDeclaration": 305,
+                          "src": "720:12:1",
                           "typeDescriptions": {
-                            "typeIdentifier": "t_type$_t_contract$_CarbonDollar_$301_$",
+                            "typeIdentifier": "t_type$_t_contract$_CarbonDollar_$305_$",
                             "typeString": "type(contract CarbonDollar)"
                           }
                         },
-                        "id": 319,
+                        "id": 323,
                         "isConstant": false,
                         "isLValue": false,
                         "isPure": false,
@@ -653,27 +653,27 @@
                         "lValueRequested": false,
                         "names": [],
                         "nodeType": "FunctionCall",
-                        "src": "461:18:1",
+                        "src": "720:18:1",
                         "typeDescriptions": {
-                          "typeIdentifier": "t_contract$_CarbonDollar_$301",
+                          "typeIdentifier": "t_contract$_CarbonDollar_$305",
                           "typeString": "contract CarbonDollar"
                         }
                       },
-                      "id": 320,
+                      "id": 324,
                       "isConstant": false,
                       "isLValue": false,
                       "isPure": false,
                       "lValueRequested": false,
                       "memberName": "claimOwnership",
                       "nodeType": "MemberAccess",
-                      "referencedDeclaration": 2950,
-                      "src": "461:33:1",
+                      "referencedDeclaration": 3013,
+                      "src": "720:33:1",
                       "typeDescriptions": {
                         "typeIdentifier": "t_function_external_nonpayable$__$returns$__$",
                         "typeString": "function () external"
                       }
                     },
-                    "id": 321,
+                    "id": 325,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
@@ -681,57 +681,57 @@
                     "lValueRequested": false,
                     "names": [],
                     "nodeType": "FunctionCall",
-                    "src": "461:35:1",
+                    "src": "720:35:1",
                     "typeDescriptions": {
                       "typeIdentifier": "t_tuple$__$",
                       "typeString": "tuple()"
                     }
                   },
-                  "id": 322,
+                  "id": 326,
                   "nodeType": "ExpressionStatement",
-                  "src": "461:35:1"
+                  "src": "720:35:1"
                 }
               ]
             },
-            "documentation": null,
-            "id": 324,
+            "documentation": "@notice Claims ownership of a CarbonDollar contract. Precondition: the\nprevious owner of the CarbonDollar contract already transferred ownership to \nthis proxy.\n@param _reg The address of the CarbonDollar contract.",
+            "id": 328,
             "implemented": true,
             "isConstructor": false,
             "isDeclaredConst": false,
             "modifiers": [
               {
                 "arguments": null,
-                "id": 315,
+                "id": 319,
                 "modifierName": {
                   "argumentTypes": null,
-                  "id": 314,
+                  "id": 318,
                   "name": "onlyOwner",
                   "nodeType": "Identifier",
                   "overloadedDeclarations": [],
-                  "referencedDeclaration": 2985,
-                  "src": "441:9:1",
+                  "referencedDeclaration": 3048,
+                  "src": "700:9:1",
                   "typeDescriptions": {
                     "typeIdentifier": "t_modifier$__$",
                     "typeString": "modifier ()"
                   }
                 },
                 "nodeType": "ModifierInvocation",
-                "src": "441:9:1"
+                "src": "700:9:1"
               }
             ],
             "name": "claimOwnership",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 313,
+              "id": 317,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 312,
+                  "id": 316,
                   "name": "_reg",
                   "nodeType": "VariableDeclaration",
-                  "scope": 324,
-                  "src": "420:12:1",
+                  "scope": 328,
+                  "src": "679:12:1",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -739,10 +739,10 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 311,
+                    "id": 315,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
-                    "src": "420:7:1",
+                    "src": "679:7:1",
                     "typeDescriptions": {
                       "typeIdentifier": "t_address",
                       "typeString": "address"
@@ -752,27 +752,27 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "419:14:1"
+              "src": "678:14:1"
             },
             "payable": false,
             "returnParameters": {
-              "id": 316,
+              "id": 320,
               "nodeType": "ParameterList",
               "parameters": [],
-              "src": "451:0:1"
+              "src": "710:0:1"
             },
-            "scope": 325,
-            "src": "396:107:1",
+            "scope": 329,
+            "src": "655:107:1",
             "stateMutability": "nonpayable",
             "superFunction": null,
             "visibility": "public"
           }
         ],
-        "scope": 326,
-        "src": "334:171:1"
+        "scope": 330,
+        "src": "334:430:1"
       }
     ],
-    "src": "0:505:1"
+    "src": "0:764:1"
   },
   "compiler": {
     "name": "solc",
@@ -780,5 +780,5 @@
   },
   "networks": {},
   "schemaVersion": "2.0.0",
-  "updatedAt": "2018-07-12T17:36:17.972Z"
+  "updatedAt": "2018-07-12T20:04:49.596Z"
 }
