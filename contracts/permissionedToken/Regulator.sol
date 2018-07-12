@@ -15,6 +15,9 @@ import "./ValidatorStorage.sol";
  *
  */
 contract Regulator is Claimable, Migratable {
+    /** STORAGES
+    */
+
     /** 
     * @notice Stores a mapping from method signatures to permission attributes (e.g. whether
       the permission is "activated" for use, and additional attributes such as the
@@ -33,6 +36,18 @@ contract Regulator is Claimable, Migratable {
     */
     ValidatorStorage public validators;
 
+    /** 
+        Modifiers 
+    */
+    /**
+    * @notice Throws if called by any account that does not have access to set attributes
+    *
+    */
+    modifier onlyValidator() {
+        require (validators.isValidator(msg.sender));
+        _;
+    }
+
     function initialize() isInitializer("Regulator", "1.0") public {
         // Nothing to initialize!
     }
@@ -48,15 +63,6 @@ contract Regulator is Claimable, Migratable {
         setUserPermissionsStorage(address(oldRegulator.userPermissions()));
         setValidatorStorage(address(oldRegulator.validators()));
         claimStorageOwnership();
-    }
-
-    /**
-    * @notice Throws if called by any account that does not have access to set attributes
-    *
-    */
-    modifier onlyValidator() {
-        require (validators.isValidator(msg.sender));
-        _;
     }
 
     // Events

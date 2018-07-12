@@ -1,7 +1,7 @@
 pragma solidity ^0.4.23;
 
 import "openzeppelin-solidity/contracts/AddressUtils.sol";
-import "../permissions/PermissionedToken.sol";
+import "../permissionedToken/PermissionedToken.sol";
 import "../CarbonDollar.sol";
 
 contract WhitelistedToken is PermissionedToken {
