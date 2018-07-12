@@ -2,7 +2,7 @@ pragma solidity ^0.4.23;
 
 import "./Regulator.sol";
 import "./RegulatorProxy.sol";
-import "openzeppelin-solidity/contracts/ownership/Ownable.sol";
+import "openzeppelin-solidity/contracts/ownership/Claimable.sol";
 import "openzeppelin-solidity/contracts/AddressUtils.sol";
 import "zos-lib/contracts/migrations/Migratable.sol";
 import "../modularERC20/ModularBurnableToken.sol";
@@ -22,7 +22,7 @@ import "../modularERC20/ModularPausableToken.sol";
 *	Owner can mint, destroy blacklisted tokens
 *	Depositors can burn
 */
-contract PermissionedToken is Ownable, Migratable, ModularPausableToken {
+contract PermissionedToken is Claimable, Migratable, ModularPausableToken {
     /**
     * @notice Address of `RegulatorProxy` that points to the latest
     *         `Regulator` contract responsible for checking and applying trade
@@ -34,12 +34,34 @@ contract PermissionedToken is Ownable, Migratable, ModularPausableToken {
     * @notice Constructor sets the regulator that determines account permissions
     * @param _rProxy Address of `RegulatorProxy` contract
     */
-    function initialize() isInitializer("PermissionedToken", "0") public {
-        _transferOwnership(msg.sender);
+    constructor(address _rProxy) Ownable() public {
+        setRegulatorProxy(_rProxy);
     }
 
-    function migrate() isMigration("PermissionedToken", "0", "1.0") public {
-        
+    function initialize() isInitializer("PermissionedToken", "1.0") public {
+        // Nothing to initialize!
+    }
+
+    /** @dev Migrates data from an old token contract to a new one.
+        Precondition: the new contract has already been transferred ownership of the old contract.
+        @param _oldToken The address of the old token contract. */
+    function migrate(address _oldToken) isMigration("PermissionedToken", "1.0", "1.1") public {
+        PermissionedToken oldToken = PermissionedToken(_oldToken);
+        oldToken.claimOwnership(); // Take the proferred ownership of the old contract
+        oldToken.transferStorageOwnership();
+        setBalanceSheet(address(oldToken.balances()));
+        setAllowanceSheet(address(oldToken.allowances()));
+        claimStorageOwnership();
+    }
+
+    function transferStorageOwnership() onlyOwner public {
+        balances.transferOwnership(msg.sender);
+        allowances.transferOwnership(msg.sender);
+    }
+
+    function claimStorageOwnership() internal {
+        balances.claimOwnership();
+        allowances.claimOwnership();
     }
 
     modifier requiresPermission() {
@@ -48,7 +70,6 @@ contract PermissionedToken is Ownable, Migratable, ModularPausableToken {
     }
 
     event ChangedRegulatorProxy(address oldProxy, address newProxy);
-    
     /**
     * @notice Sets the address of the currently used regulator proxy
     * @param _rProxy Address of new `RegulatorProxy` contract
@@ -58,23 +79,6 @@ contract PermissionedToken is Ownable, Migratable, ModularPausableToken {
         address oldProxy = rProxy;
         rProxy = _rProxy;
         emit ChangedRegulatorProxy(oldProxy, _rProxy);
-    }
-
-    event ChangedRegulator(address oldRegulator, address newRegulator);
-    
-    /**
-    * @notice Sets the regulator that the regulator proxy points to
-    * @param _reg Address of new `Regulator` contract
-    * @param _migrateData Boolean indicating whether or not to migrate regulator data
-    *  from the old regulator to the new one
-    */
-    function setRegulator(address _reg, bool _migrateData) public onlyOwner {
-        require(AddressUtils.isContract(_reg));
-        RegulatorProxy proxy = RegulatorProxy(rProxy);
-        address oldRegulator = proxy.implementation();
-        proxy.upgradeTo(_reg);
-        if (_migrateData) proxy.migrateAllRegulatorData(oldRegulator);
-        emit ChangedRegulator(oldRegulator, _reg);
     }
 
     /**
@@ -106,7 +110,7 @@ contract PermissionedToken is Ownable, Migratable, ModularPausableToken {
     */
     function destroyBlacklistedTokens(address _who) requiresPermission public {
         require(Regulator(rProxy).hasPermission(_who, bytes4(keccak256("destroySelf()")))); // User must be blacklisted
-        uint256 balance = balances.getBalance(_who);
+        uint256 balance = balances.balanceOf(_who);
         balances.setBalance(_who, 0);
         totalSupply_ = totalSupply_.sub(balance);
         emit DestroyedBlacklistedTokens(_who, balance);
@@ -138,7 +142,7 @@ contract PermissionedToken is Ownable, Migratable, ModularPausableToken {
     * @return `true` if successful and `false` if unsuccessful
     */
     function transferFrom(address _from, address _to, uint256 _amount) public returns (bool) {
-        require(balances.getBalance(_from) < _amount);
+        require(balances.balanceOf(_from) < _amount);
         if (! Regulator(rProxy).hasPermission(_to, bytes4(keccak256("destroySelf()")))) {
             // If _to user is not blacklisted (doesn't have the ability to destroy themselves), then 
             // we allow the transaction to continue.

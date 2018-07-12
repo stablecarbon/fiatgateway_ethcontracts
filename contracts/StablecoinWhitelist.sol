@@ -25,6 +25,6 @@ contract StablecoinWhitelist is Claimable {
     }
 
     function isWhitelisted(address stablecoin) public view returns (bool) {
-        return isWhitelisted[stablecoin];
+        return whitelist[stablecoin];
     }
 }

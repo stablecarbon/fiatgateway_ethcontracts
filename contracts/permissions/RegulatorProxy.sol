@@ -1,6 +1,8 @@
 pragma solidity ^0.4.23;
 
+import "openzeppelin-solidity/contracts/ownership/Ownable.sol";
 import "zos-lib/contracts/upgradeability/AdminUpgradeabilityProxy.sol";
+import "./Regulator.sol";
 
 /**
 * @title RegulatorProxy
@@ -9,4 +11,8 @@ import "zos-lib/contracts/upgradeability/AdminUpgradeabilityProxy.sol";
 * service.
 *
 */
-contract RegulatorProxy is AdminUpgradeabilityProxy {}
+contract RegulatorProxy is Ownable, AdminUpgradeabilityProxy {
+    function claimOwnership(address _reg) public onlyOwner {
+        Regulator(_reg).claimOwnership();
+    }
+}

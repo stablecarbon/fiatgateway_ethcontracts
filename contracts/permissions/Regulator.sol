@@ -1,6 +1,7 @@
 pragma solidity ^0.4.23;
 
-import "openzeppelin-solidity/contracts/ownership/Ownable.sol";
+import "openzeppelin-solidity/contracts/ownership/Claimable.sol";
+import "zos-lib/contracts/migrations/Migratable.sol";
 import "./PermissionStorage.sol";
 import "./UserPermissionsStorage.sol";
 import "./ValidatorStorage.sol";
@@ -13,7 +14,7 @@ import "./ValidatorStorage.sol";
  * for regulatory compliance.
  *
  */
-contract Regulator is Ownable {
+contract Regulator is Claimable, Migratable {
     /** 
     * @notice Stores a mapping from method signatures to permission attributes (e.g. whether
       the permission is "activated" for use, and additional attributes such as the
@@ -30,7 +31,24 @@ contract Regulator is Ownable {
     * @notice accounts with ability to set attributes
     *
     */
-    ValidatorStorage validators;
+    ValidatorStorage public validators;
+
+    function initialize() isInitializer("Regulator", "1.0") public {
+        // Nothing to initialize!
+    }
+
+    /** @dev Migrates data from an old regulator contract to a new one.
+        Precondition: the new contract has already been transferred ownership of the old contract.
+        @param _oldRegulator The address of the old regulator. */
+    function migrate(address _oldRegulator) isMigration("Regulator", "1.0", "1.1") public {
+        Regulator oldRegulator = Regulator(_oldRegulator);
+        oldRegulator.claimOwnership(); // Take the proferred ownership of the old contract
+        oldRegulator.transferStorageOwnership();
+        setPermissionStorage(address(oldRegulator.availablePermissions()));
+        setUserPermissionsStorage(address(oldRegulator.userPermissions()));
+        setValidatorStorage(address(oldRegulator.validators()));
+        claimStorageOwnership();
+    }
 
     /**
     * @notice Throws if called by any account that does not have access to set attributes
@@ -54,6 +72,25 @@ contract Regulator is Ownable {
         address _oldStorage = address(userPermissions);
         userPermissions = UserPermissionsStorage(_newStorage);
         emit SetUserPermissionsStorage(_oldStorage, _newStorage);
+    }
+
+    event SetValidatorStorage(address oldStorage, address newStorage);
+    function setValidatorStorage(address _newStorage) public onlyOwner {
+        address _oldStorage = address(validators);
+        validators = ValidatorStorage(_newStorage);
+        emit SetValidatorStorage(_oldStorage, _newStorage);
+    }
+
+    function transferStorageOwnership() public onlyOwner {
+        userPermissions.transferOwnership(msg.sender);
+        availablePermissions.transferOwnership(msg.sender);
+        validators.transferOwnership(msg.sender);
+    }
+
+    function claimStorageOwnership() internal {
+        userPermissions.claimOwnership();
+        availablePermissions.claimOwnership();
+        validators.claimOwnership();
     }
 
     bytes4 MINT_SIG = bytes4(keccak256("mint(address,uint256)"));

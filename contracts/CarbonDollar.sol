@@ -1,11 +1,11 @@
 pragma solidity ^0.4.23;
 
-import "openzeppelin-solidity/contracts/ownership/Ownable.sol";
-import "./modularERC20/BalanceSheet.sol";
 import "./permissions/PermissionedToken.sol";
-import "./CarbonToken.sol";
+import "./whitelistedToken/WhitelistedToken.sol";
+import "./FeeSheet.sol";
+import "./StablecoinWhitelist.sol";
 
-contract CarbonDollar is Ownable, PermissionedToken {
+contract CarbonDollar is PermissionedToken {
 
     // TODO: Some sort of blacklist/whitelisting (similar to permissionedToken) @tanishq/@sam
     // Random Thought: GreyList (mark Dirty Money without prevent it from being transferred or receiving)
@@ -25,24 +25,58 @@ contract CarbonDollar is Ownable, PermissionedToken {
     // proxies to CarbonToken objects.
     StablecoinWhitelist public stablecoinWhitelist;
 
+    function initialize() isInitializer("CarbonDollar", "1.0") public {
+        // Nothing to initialize!
+    }
+
+    /** @dev Migrates data from an old CarbonDollar contract to a new one.
+        Precondition: the new contract has already been transferred ownership of the old contract.
+        @param _oldDollar The address of the old CarbonDollar contract. */
+    function migrate(address _oldDollar) isMigration("CarbonDollar", "1.0", "1.1") public {
+        CarbonDollar oldDollar = CarbonDollar(_oldDollar);
+        oldDollar.claimOwnership(); // Take the proferred ownership of the old contract
+        oldDollar.transferStorageOwnership();
+        setFeeSheet(address(oldDollar.stablecoinFees()));
+        setStablecoinWhitelist(address(oldDollar.stablecoinWhitelist()));
+        claimStorageOwnership();
+    }
+
+    function transferStorageOwnership() public onlyOwner {
+        stablecoinFees.transferOwnership(msg.sender);
+        stablecoinWhitelist.transferOwnership(msg.sender);
+    }
+
+    function claimStorageOwnership() internal {
+        stablecoinFees.claimOwnership();
+        stablecoinWhitelist.claimOwnership();
+    }
+
     /**
      * @notice add new stablecoin to whitelist
      */
     function whitelistToken(address _stablecoin) public onlyOwner {
-        stablecoinWhitelist.addStablecoin(stablecoin); // add new stablecoin in whitelist mapping
+        stablecoinWhitelist.addStablecoin(_stablecoin); // add new stablecoin in whitelist mapping
     }
 
     /**
      * @notice remove existing stablecoin from whitelist
      */
     function unlistToken(address _stablecoin) public onlyOwner {
-        stablecoinWhitelist.removeStablecoin(stablecoin);
+        stablecoinWhitelist.removeStablecoin(_stablecoin);
     }
 
     /** Ensures that the caller of the function is a whitelisted token. */
     modifier requiresWhitelistedToken() {
         require(stablecoinWhitelist.isWhitelisted(msg.sender));
         _;
+    }
+    
+    function setFeeSheet(address _sheet) public onlyOwner {
+        stablecoinFees = FeeSheet(_sheet);
+    }
+    
+    function setStablecoinWhitelist(address _whitelist) public onlyOwner {
+        stablecoinWhitelist = StablecoinWhitelist(_whitelist);
     }
 
     function mintCarbonDollar(address _to, uint256 _amount) public requiresWhitelistedToken returns (bool) {
@@ -52,37 +86,36 @@ contract CarbonDollar is Ownable, PermissionedToken {
     /**
      * @notice change fees associated with going from CarbonUSD -> Whitelisted Tokens
      */
-    function changeFee(address stablecoin, uint256 _newFee) public onlyOwner returns (bool) {
+    function changeFee(address stablecoin, uint16 _newFee) public onlyOwner returns (bool) {
         stablecoinFees.setFee(stablecoin, _newFee);
         return true;
     }
 
-    function changeDefaultFee(uint256 _newFee) public onlyOwner returns (bool) {
+    function changeDefaultFee(uint16 _newFee) public onlyOwner returns (bool) {
         defaultFee = _newFee;
         return true;
     }
 
-    function computeFee(uint256 amount, uint16 fee) pure returns (uint256) {
+    function computeFee(uint256 amount, uint16 fee) public pure returns (uint256) {
         return (amount * fee) / 1000;
     }
 
     /**
      * @notice user can convert CarbonUSD umbrella token into the underlying assets. This is potentially interchain (EOS, ETH, Hedera etc)
-     * @params _stablecoin represents the type of coin the users wishes to receive for burning carbonUSD
-     * @params _fee is deterrmined
-     * we credit the user's account at the _to address with the _amount minus the percentage fee we want to charge.
+     * @param stablecoin represents the type of coin the users wishes to receive for burning carbonUSD
+     * @param _amount Amount of CarbonUSD to burn.
+     * we credit the user's account at the sender address with the _amount minus the percentage fee we want to charge.
      */
     function burnCarbonDollar(address stablecoin, uint256 _amount) public returns (bool) {
-        require(stablecoinWhitelist.isWhitelisted(_stablecoin));
-        bool burned = burn(_to, _amount);
-        if (!burned)
-            return false;
+        require(stablecoinWhitelist.isWhitelisted(stablecoin));
+        burnAllArgs(msg.sender, _amount, "");
 
-        uint16 fee = feeSheet.getFee(stablecoin);
-        if (fee == 0) // Fee for coin is not set
+        // Remit back WhitelistedToken, but with a fee reduction
+        uint16 fee = stablecoinFees.fees(stablecoin);
+        if (fee == 0) // If fee for coin is not set
             fee = defaultFee;
         uint256 feedAmount = _amount.sub(computeFee(_amount, fee));
-        CarbonToken(stablecoin).mint(_to, feedAmount);
+        WhitelistedToken(stablecoin).transfer(msg.sender, feedAmount);
         return true;
     }
 }

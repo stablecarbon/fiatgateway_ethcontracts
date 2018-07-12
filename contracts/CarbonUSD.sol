@@ -1,6 +1,8 @@
 pragma solidity ^0.4.23;
 
+import "openzeppelin-solidity/contracts/ownership/Ownable.sol";
 import "zos-lib/contracts/upgradeability/AdminUpgradeabilityProxy.sol";
+import "./CarbonDollar.sol";
 
 /**
 * @title CarbonUSD
@@ -8,4 +10,8 @@ import "zos-lib/contracts/upgradeability/AdminUpgradeabilityProxy.sol";
 * pointer to the latest version.
 *
 */
-contract CarbonUSD is AdminUpgradeabilityProxy {}
+contract CarbonUSD is Ownable, AdminUpgradeabilityProxy {
+    function claimOwnership(address _reg) public onlyOwner {
+        CarbonDollar(_reg).claimOwnership();
+    }
+}
