@@ -9,10 +9,13 @@ import "openzeppelin-solidity/contracts/math/SafeMath.sol";
 contract FeeSheet is Claimable {
     using SafeMath for uint16;
 
+    /** @dev Units for fees are always in a tenth of a percent */
+    uint16 public defaultFee; // Default fee for conversions
+
     /** 
         Mappings
     */
-    // (stablecoin address => fee for withdrawing to stablecoin)
+    // (stablecoin address => fee for withdrawing to stablecoin, in tenths of a percent)
     mapping (address => uint16) public fees;
     // (stablecoin address => if fee is set for stablecoin)
     mapping (address => bool) public isFeeSet;
@@ -20,8 +23,18 @@ contract FeeSheet is Claimable {
     /** 
         Events
     */
-    event FeeChanged(address stablecoin, uint16 oldFee, uint16 fee);
+    event DefaultFeeChanged(uint16 oldFee, uint16 newFee);
+    event FeeChanged(address stablecoin, uint16 oldFee, uint16 newFee);
     event FeeRemoved(address stablecoin, uint16 oldFee);
+
+    /** @notice Sets the default fee for burning CarbonDollar into a stablecoin.
+        @param fee The default fee.
+    */
+    function setDefaultFee(uint16 fee) public onlyOwner {
+        uint16 oldFee = defaultFee;
+        defaultFee = fee;
+        emit DefaultFeeChanged(oldFee, fee);
+    }
     
     /** @notice Set a fee for burning CarbonDollar into a stablecoin.
         @param stablecoin Address of stablecoin.
