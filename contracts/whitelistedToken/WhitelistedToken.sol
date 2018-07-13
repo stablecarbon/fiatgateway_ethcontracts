@@ -25,7 +25,7 @@ contract WhitelistedToken is PermissionedToken {
     *
     * If deploying a new contract version, the version number must be changed as well. 
     */
-    function initialize(address _cusd) isInitializer("WhitelistedToken", "1.0") public {
+    function initialize() isInitializer("WhitelistedToken", "1.0") public {
         // Nothing to initialize!
     }
 

@@ -43,6 +43,7 @@ contract Regulator is Claimable, Migratable {
     bytes4 public BURN_SIG = bytes4(keccak256("burn(uint256)"));
     bytes4 public MINT_SIG = bytes4(keccak256("mint(address,uint256)"));
     bytes4 public DESTROYBLACKLIST_SIG = bytes4(keccak256("destroyBlacklistedTokens(address)"));
+    bytes4 public ADD_BLACKLISTED_SPENDER_SIG = bytes4(keccak256("addBlacklistedAddressSpender(address)"));
 
     /** 
         Modifiers 

@@ -17,6 +17,16 @@ const StandardTokenMock = artifacts.require("StandardTokenMock");
 const ModularMintableToken = artifacts.require("ModularMintableToken");
 const transfersToZeroBecomeBurns = false;
 
+// Storage classes for Regulator
+const PermissionStorage = artifacts.require("PermissionStorage");
+const UserPermissionsStorage = artifacts.require("UserPermissionsStorage");
+const ValidatorStorage = artifacts.require("ValidatorStorage");
+// Regulator
+const Regulator = artifacts.require("Regulator");
+const RegulatorProxy = artifacts.require("RegulatorProxy");
+// PermissionedToken
+const PermissionedToken = artifacts.require("PermissionedToken");
+const PermissionedTokenProxy = artifacts.require("PermissionedTokenProxy");
 // WT0
 const WhitelistedToken = artifacts.require("WhitelistedToken");
 const WhitelistedTokenRegulator = artifacts.require("WhitelistedTokenRegulator");
@@ -26,8 +36,6 @@ const FeeSheet = artifacts.require("FeeSheet");
 const StablecoinWhitelist = artifacts.require("StablecoinWhitelist");
 // CarbonUSD
 const CarbonDollar = artifacts.require("CarbonDollar");
-const Regulator = artifacts.require("Regulator");
-const RegulatorProxy = artifacts.require("RegulatorProxy");
 const CarbonUSD = artifacts.require("CarbonUSD");
 
 require('chai')
@@ -68,13 +76,18 @@ module.exports = {
     StandardTokenMock,
     ModularMintableToken,
     transfersToZeroBecomeBurns,
+    PermissionStorage,
+    UserPermissionsStorage,
+    ValidatorStorage,
+    Regulator,
+    RegulatorProxy,
+    PermissionedToken,
+    PermissionedTokenProxy,
     WhitelistedToken,
     WhitelistedTokenRegulator,
     WhitelistedTokenRegulatorProxy,
     FeeSheet,
     StablecoinWhitelist,
     CarbonDollar,
-    Regulator,
-    RegulatorProxy,
     CarbonUSD
 }
