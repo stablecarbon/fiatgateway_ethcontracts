@@ -1,6 +1,6 @@
 pragma solidity ^0.4.23;
 
-import "../modularERC20/ModularBasicToken.sol";
+import "../ModularBasicToken.sol";
 
 contract BasicTokenMock is ModularBasicToken {
     constructor(address initialAccount, uint256 initialBalance) public {

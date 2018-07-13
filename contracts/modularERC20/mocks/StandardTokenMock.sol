@@ -1,9 +1,9 @@
 pragma solidity ^0.4.23;
 
-import "../modularERC20/ModularPausableToken.sol";
+import "../ModularStandardToken.sol";
 
-contract PausableTokenMock is ModularPausableToken {
-    constructor(address initialAccount, uint initialBalance) public {
+contract StandardTokenMock is ModularStandardToken {
+    constructor(address initialAccount, uint256 initialBalance) public {
         balances = new BalanceSheet();
         allowances = new AllowanceSheet();
         balances.setBalance(initialAccount, initialBalance);

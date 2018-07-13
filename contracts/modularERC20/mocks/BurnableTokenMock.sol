@@ -1,6 +1,6 @@
 pragma solidity ^0.4.23;
 
-import "../modularERC20/ModularBurnableToken.sol";
+import "../ModularBurnableToken.sol";
 
 contract BurnableTokenMock is ModularBurnableToken {
     constructor(address initialAccount, uint initialBalance) public {
