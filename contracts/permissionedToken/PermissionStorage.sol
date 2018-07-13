@@ -11,10 +11,10 @@ contract PermissionStorage is Claimable {
     */
     /** Key is a method signature, value is a Permission struct, 
     which contains a description for the permission. **/
-    mapping (bytes4 => Permission) permissions; 
+    mapping (bytes4 => Permission) public permissions;
     /** Tracks whether or not a method signature is associated
     with an actual permission. **/
-    mapping (bytes4 => bool) isPermissionSet;
+    mapping (bytes4 => bool) public isPermission;
 
     /** 
         Structs 
@@ -29,7 +29,7 @@ contract PermissionStorage is Claimable {
     /** 
         Events 
     */
-    event PermissionSet(bytes4 methodsignature);
+    event PermissionAdded(bytes4 methodsignature);
     event PermissionRemoved(bytes4 methodsignature);
 
     /**
@@ -46,8 +46,8 @@ contract PermissionStorage is Claimable {
         string _contractName) 
     onlyOwner public {
         permissions[_methodsignature] = Permission(_permissionName, _permissionDescription, _contractName);
-        isPermissionSet[_methodsignature] = true;
-        emit PermissionSet(_methodsignature);
+        isPermission[_methodsignature] = true;
+        emit PermissionAdded(_methodsignature);
     }
 
     /**
@@ -55,16 +55,7 @@ contract PermissionStorage is Claimable {
     * @param _methodsignature Signature of the method that this permission controls.
     */
     function removePermission(bytes4 _methodsignature) onlyOwner public {
-        isPermissionSet[_methodsignature] = false;
+        isPermission[_methodsignature] = false;
         emit PermissionRemoved(_methodsignature);
-    }
-
-    /**
-    * @notice Checks if a permission exists within the list of permissions.
-    * @param _methodsignature Signature of the method that this permission controls.
-    * @return True if the permission data is set for the provided method signature, otherwise false.
-    */
-    function isPermission(bytes4 _methodsignature) public view returns (bool) {
-        return isPermissionSet[_methodsignature];
     }
 }

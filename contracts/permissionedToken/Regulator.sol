@@ -37,24 +37,47 @@ contract Regulator is Claimable, Migratable {
     ValidatorStorage public validators;
 
     /** 
+        Constants: stores method signatures 
+    */
+    bytes4 public DESTROYSELF_SIG = bytes4(keccak256("destroySelf()"));
+    bytes4 public BURN_SIG = bytes4(keccak256("burn(uint256)"));
+    bytes4 public MINT_SIG = bytes4(keccak256("mint(address,uint256)"));
+    bytes4 public DESTROYBLACKLIST_SIG = bytes4(keccak256("destroyBlacklistedTokens(address)"));
+    bytes4 public ADD_BLACKLISTED_SPENDER_SIG = bytes4(keccak256("addBlacklistedAddressSpender(address)"));
+
+    /** 
         Modifiers 
     */
     /**
     * @notice Throws if called by any account that does not have access to set attributes
-    *
     */
     modifier onlyValidator() {
         require (validators.isValidator(msg.sender));
         _;
     }
 
+    /** 
+        Events 
+    */
+    event SetPermissionStorage(address oldStorage, address newStorage);
+    event SetUserPermissionsStorage(address oldStorage, address newStorage);
+    event SetValidatorStorage(address oldStorage, address newStorage);
+
+    /**
+    * @notice Function used as part of Migratable interface. Must be called when
+    * a proxy is assigned to contract in order to correctly assign the contract's
+    * version number.
+    *
+    * If deploying a new contract version, the version number must be changed as well. 
+    */
     function initialize() isInitializer("Regulator", "1.0") public {
         // Nothing to initialize!
     }
 
-    /** @dev Migrates data from an old regulator contract to a new one.
-        Precondition: the new contract has already been transferred ownership of the old contract.
-        @param _oldRegulator The address of the old regulator. */
+    /** @notice Migrates data from an old regulator contract to a new one. Precondition: 
+    *  the new contract has already been transferred ownership of the old contract.
+    *   @param _oldRegulator The address of the old regulator. 
+    */
     function migrate(address _oldRegulator) isMigration("Regulator", "1.0", "1.1") public {
         Regulator oldRegulator = Regulator(_oldRegulator);
         oldRegulator.claimOwnership(); // Take the proferred ownership of the old contract
@@ -65,42 +88,58 @@ contract Regulator is Claimable, Migratable {
         claimStorageOwnership();
     }
 
-    // Events
-    event SetPermissionStorage(address oldStorage, address newStorage);
-    function setPermissionStorage(address _newStorage) public onlyOwner {
+    /**
+    * @notice Sets the internal permission storage to point to a new storage.
+    * @param _newStorage The address of a new PermissionStorage.
+    */
+    function setPermissionStorage(address _newStorage) internal {
         address _oldStorage = address(availablePermissions);
         availablePermissions = PermissionStorage(_newStorage);
         emit SetPermissionStorage(_oldStorage, _newStorage);
     }
 
-    event SetUserPermissionsStorage(address oldStorage, address newStorage);
-    function setUserPermissionsStorage(address _newStorage) public onlyOwner {
+    /**
+    * @notice Sets the internal user permissions storage to point to a new storage.
+    * @param _newStorage The address of a new UserPermissionsStorage.
+    */
+    function setUserPermissionsStorage(address _newStorage) internal {
         address _oldStorage = address(userPermissions);
         userPermissions = UserPermissionsStorage(_newStorage);
         emit SetUserPermissionsStorage(_oldStorage, _newStorage);
     }
 
-    event SetValidatorStorage(address oldStorage, address newStorage);
-    function setValidatorStorage(address _newStorage) public onlyOwner {
+    /**
+    * @notice Sets the internal validators storage to point to a new storage.
+    * @param _newStorage The address of a new ValidatorStorage.
+    */
+    function setValidatorStorage(address _newStorage) internal {
         address _oldStorage = address(validators);
         validators = ValidatorStorage(_newStorage);
         emit SetValidatorStorage(_oldStorage, _newStorage);
     }
 
+    /** @notice Transfers ownership of the storage contracts to the owner  of this token contract. 
+    * This is useful for migrations, since the new token contract is made the
+    * owner of the old token contract.
+    **/
     function transferStorageOwnership() public onlyOwner {
         userPermissions.transferOwnership(msg.sender);
         availablePermissions.transferOwnership(msg.sender);
         validators.transferOwnership(msg.sender);
     }
 
+    /** @notice Claims ownership of the storage contracts. Succeeds if the
+    * ownership of those contracts was transferred to this contract
+    * (which will happen in the case of a migration).
+    *
+    * This function is strictly used for migrations.
+    **/
     function claimStorageOwnership() internal {
         userPermissions.claimOwnership();
         availablePermissions.claimOwnership();
         validators.claimOwnership();
     }
 
-    bytes4 MINT_SIG = bytes4(keccak256("mint(address,uint256)"));
-    bytes4 DESTROYBLACKLIST_SIG = bytes4(keccak256("destroyBlacklistedTokens(address)"));
     /**
     * @notice Sets the necessary permissions for a user to mint tokens.
     * @param _who The address of the account that we are setting permissions for.
@@ -128,8 +167,6 @@ contract Regulator is Claimable, Migratable {
         return hasPermission(_who, MINT_SIG);
     }
 
-    bytes4 DESTROYSELF_SIG = bytes4(keccak256("destroySelf()"));
-    bytes4 BURN_SIG = bytes4(keccak256("burn(uint256)"));
     /**
     * @notice Sets the necessary permissions for a "whitelisted" user.
     * @param _who The address of the account that we are setting permissions for.

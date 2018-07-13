@@ -3,8 +3,15 @@ pragma solidity ^0.4.23;
 import "openzeppelin-solidity/contracts/ownership/Claimable.sol";
 
 contract UserPermissionsStorage is Claimable {
-    mapping (address => mapping(bytes4 => bool)) internal permissions;
+    /**
+     * Mappings
+     */
+    // (user address => (methodsignature => does user have permission to execute it?))
+    mapping (address => mapping(bytes4 => bool)) public permissions;
 
+    /**
+     * Events
+     */
     event SetUserPermission(address indexed who, bytes4 methodsignature);
     event RemovedUserPermission(address indexed who, bytes4 methodsignature);
     
