@@ -8,14 +8,14 @@
   },
   "scripts": {
     "compile": "truffle compile",
-    "test": "truffle test",
+    "test": "truffle test --network development",
     "test-token": "truffle test ./test/PermissionedToken.js",
     "test-regulator": "truffle test ./test/Regulator.js",
     "test-regulator-proxy": "truffle test ./test/RegulatorProxy.js",
     "migrate": "truffle migrate",
     "lint": "solium -d contracts --fix",
     "coverage": "solidity-coverage",
-    "testrpc": "ganache-cli"
+    "testrpc": "ganache-cli -a 20 -i development"
   },
   "author": "npai",
   "license": "ISC",

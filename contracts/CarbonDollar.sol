@@ -19,13 +19,10 @@ contract CarbonDollar is PermissionedToken {
     /**
         Global Variables
     */
-    uint16 public defaultFee; // this fee will be charged for users trying to convert CarbonUSD into the original tokens
-                               // units of this number: tenth of a percent
     FeeSheet public stablecoinFees;
     // Whitelist of stablecoins that can be traded into Carbon. The addresses stored in this list are actually
     // proxies to WhitelistedToken objects.
     StablecoinWhitelist public stablecoinWhitelist;
-
 
 
     /**
@@ -116,18 +113,16 @@ contract CarbonDollar is PermissionedToken {
     /**
      * @notice Change fees associated with going from CarbonUSD to a particular WhitelistedToken.
      */
-    function changeFee(address stablecoin, uint16 _newFee) public onlyOwner returns (bool) {
+    function changeFee(address stablecoin, uint16 _newFee) public onlyOwner {
         stablecoinFees.setFee(stablecoin, _newFee);
-        return true;
     }
 
     /**
      * @notice Change the default fee associated with going from CarbonUSD to a WhitelistedToken.
      * This fee amount is used if the fee for a WhitelistedToken is not specified.
      */
-    function changeDefaultFee(uint16 _newFee) public onlyOwner returns (bool) {
-        defaultFee = _newFee;
-        return true;
+    function changeDefaultFee(uint16 _newFee) public onlyOwner {
+        stablecoinFees.setDefaultFee(_newFee);
     }
 
     /**
@@ -145,7 +140,7 @@ contract CarbonDollar is PermissionedToken {
         if (stablecoinFees.isFeeSet(stablecoin)) // If fee for coin is not set
             fee = stablecoinFees.fees(stablecoin);
         else
-            fee = defaultFee;
+            fee = stablecoinFees.defaultFee();
         uint256 feedAmount = _amount.sub(stablecoinFees.computeFee(_amount, fee));
         WhitelistedToken(stablecoin).transfer(msg.sender, feedAmount);
         return true;
