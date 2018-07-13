@@ -138,7 +138,7 @@ contract PermissionedToken is Claimable, Migratable, ModularPausableToken {
     * @param _who Account to destroy tokens from. Must be a blacklisted account.
     */
     function destroyBlacklistedTokens(address _who) requiresPermission public {
-        require(Regulator(rProxy).isBlacklisted(_who));
+        require(Regulator(rProxy).isBlacklistedUser(_who));
         uint256 balance = balances.balanceOf(_who);
         balances.setBalance(_who, 0);
         totalSupply_ = totalSupply_.sub(balance);
@@ -152,7 +152,7 @@ contract PermissionedToken is Claimable, Migratable, ModularPausableToken {
     * @param _who The blacklisted account.
     */
     function addBlacklistedAddressSpender(address _who) requiresPermission public {
-        require(Regulator(rProxy).isBlacklisted(_who));
+        require(Regulator(rProxy).isBlacklistedUser(_who));
         approveAllArgs(msg.sender, balances.balanceOf(_who), _who);
     }
 
@@ -165,7 +165,7 @@ contract PermissionedToken is Claimable, Migratable, ModularPausableToken {
     * @return `true` if successful and `false` if unsuccessful
     */
     function transfer(address _to, uint256 _amount) public returns (bool) {
-        if (Regulator(rProxy).isBlacklisted(_who)) {
+        if (Regulator(rProxy).isBlacklistedUser(_to)) {
             // User is blacklisted, so they cannot initiate a transfer
             return false;
         }
@@ -186,10 +186,19 @@ contract PermissionedToken is Claimable, Migratable, ModularPausableToken {
     */
     function transferFrom(address _from, address _to, uint256 _amount) public returns (bool) {
         require(balances.balanceOf(_from) < _amount);
-        if (Regulator(rProxy).isBlacklisted(_who)) {
-            // If user is blacklisted, fail the transaction.
-            return false; 
-        }
+        
+        bool origin_blacklisted = Regulator(rProxy).isBlacklistedUser(_from);
+        bool recipient_blacklisted = Regulator(rProxy).isBlacklistedUser(_to);
+        require(!recipient_blacklisted);
+        
+        // If the origin user is blacklisted, the transaction can only succeed if 
+        // the message sender is a validator that has been approved to transfer 
+        // blacklisted tokens from this address.
+        bytes4 add_blacklisted_spender_sig = Regulator(rProxy).ADD_BLACKLISTED_SPENDER_SIG();
+        bool sender_can_spend_from_blacklisted_address = Regulator(rProxy).hasPermission(msg.sender, add_blacklisted_spender_sig);
+        bool sender_allowance_larger_than_transfer = allowance(_from, msg.sender) >= _amount;
+        require(!origin_blacklisted || (sender_can_spend_from_blacklisted_address && sender_allowance_larger_than_transfer));
+
         // Otherwise, allow it to continue.
         transferFromAllArgs(_from, _to, _amount, msg.sender);
         return true;

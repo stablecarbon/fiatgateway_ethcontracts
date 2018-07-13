@@ -3,6 +3,10 @@ pragma solidity ^0.4.23;
 import "openzeppelin-solidity/contracts/ownership/Claimable.sol";
 
 contract ValidatorStorage is Claimable {
+    /**
+     * Mappings
+     */
+    // (user address => is user a validator?)
     mapping (address => bool) internal validators;
 
     event ValidatorAdded(address validator);
