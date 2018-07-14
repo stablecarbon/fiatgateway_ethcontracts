@@ -2,7 +2,7 @@ pragma solidity ^0.4.23;
 
 import "openzeppelin-solidity/contracts/AddressUtils.sol";
 import "../permissionedToken/PermissionedToken.sol";
-import "../CarbonDollar.sol";
+import "../carbonToken/CarbonDollar.sol";
 
 contract WhitelistedToken is PermissionedToken {
     address cusd_addr; // Address of the CarbonUSD contract.

@@ -7,7 +7,7 @@ contract UserPermissionsStorage is Claimable {
      * Mappings
      */
     // (user address => (methodsignature => does user have permission to execute it?))
-    mapping (address => mapping(bytes4 => bool)) public permissions;
+    mapping (address => mapping(bytes4 => bool)) public hasPermission;
 
     /**
      * Events
@@ -20,16 +20,8 @@ contract UserPermissionsStorage is Claimable {
     * @param _methodsignature Signature of the method that this permission controls.
     */
     function setPermission(address _who, bytes4 _methodsignature) public onlyOwner {
-        permissions[_who][_methodsignature] = true;
+        hasPermission[_who][_methodsignature] = true;
         emit SetUserPermission(_who, _methodsignature);
-    }
-
-    /**
-    * @notice Indicates whether or not a user has a particular permission.
-    * @param _methodsignature Signature of the method that this permission controls.
-    */
-    function getPermission(address _who, bytes4 _methodsignature) public view returns (bool) {
-        return permissions[_who][_methodsignature];
     }
 
     /**
@@ -37,7 +29,7 @@ contract UserPermissionsStorage is Claimable {
     * @param _methodsignature Signature of the method that this permission controls.
     */
     function removePermission(address _who, bytes4 _methodsignature) public onlyOwner {
-        permissions[_who][_methodsignature] = true;
+        hasPermission[_who][_methodsignature] = false;
         emit RemovedUserPermission(_who, _methodsignature);
     }
 }

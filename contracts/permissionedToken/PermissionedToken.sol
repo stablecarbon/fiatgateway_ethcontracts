@@ -187,19 +187,18 @@ contract PermissionedToken is Claimable, Migratable, ModularPausableToken {
     function transferFrom(address _from, address _to, uint256 _amount) public returns (bool) {
         require(balances.balanceOf(_from) < _amount);
         
-        bool origin_blacklisted = Regulator(rProxy).isBlacklistedUser(_from);
-        bool recipient_blacklisted = Regulator(rProxy).isBlacklistedUser(_to);
-        require(!recipient_blacklisted);
+        bool is_recipient_blacklisted = Regulator(rProxy).isBlacklistedUser(_to);
+        require(!is_recipient_blacklisted);
         
         // If the origin user is blacklisted, the transaction can only succeed if 
         // the message sender is a validator that has been approved to transfer 
-        // blacklisted tokens from this address.
+        // blacklisted tokens out of this address.
+        bool is_origin_blacklisted = Regulator(rProxy).isBlacklistedUser(_from);
         bytes4 add_blacklisted_spender_sig = Regulator(rProxy).ADD_BLACKLISTED_SPENDER_SIG();
         bool sender_can_spend_from_blacklisted_address = Regulator(rProxy).hasPermission(msg.sender, add_blacklisted_spender_sig);
         bool sender_allowance_larger_than_transfer = allowance(_from, msg.sender) >= _amount;
-        require(!origin_blacklisted || (sender_can_spend_from_blacklisted_address && sender_allowance_larger_than_transfer));
+        require(!is_origin_blacklisted || (sender_can_spend_from_blacklisted_address && sender_allowance_larger_than_transfer));
 
-        // Otherwise, allow it to continue.
         transferFromAllArgs(_from, _to, _amount, msg.sender);
         return true;
     }
@@ -214,5 +213,4 @@ contract PermissionedToken is Claimable, Migratable, ModularPausableToken {
         totalSupply_.sub(balance);
         emit UserDestroyedSelf(msg.sender, balance);
     }
-
 }

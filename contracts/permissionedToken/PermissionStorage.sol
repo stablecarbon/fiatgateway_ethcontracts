@@ -45,7 +45,19 @@ contract PermissionStorage is Claimable {
         string _permissionDescription, 
         string _contractName) 
     onlyOwner public {
-        permissions[_methodsignature] = Permission(_permissionName, _permissionDescription, _contractName);
+        Permission memory p = Permission(_permissionName, _permissionDescription, _contractName);
+        addPermission(_methodsignature, p);
+    }
+
+     /**
+    * @notice Sets a permission within the list of permissions.
+    * @param _methodsignature Signature of the method that this permission controls.
+    * @param _permission A struct containing permission information.
+    */
+    function addPermission(
+        bytes4 _methodsignature, 
+        Permission _permission) internal {
+        permissions[_methodsignature] = _permission;
         isPermission[_methodsignature] = true;
         emit PermissionAdded(_methodsignature);
     }

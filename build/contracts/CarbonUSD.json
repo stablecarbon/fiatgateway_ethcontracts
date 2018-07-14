@@ -195,9 +195,9 @@
   "sourceMap": "",
   "deployedSourceMap": "",
   "source": "pragma solidity ^0.4.23;\n\nimport \"openzeppelin-solidity/contracts/ownership/Ownable.sol\";\nimport \"zos-lib/contracts/upgradeability/AdminUpgradeabilityProxy.sol\";\nimport \"./CarbonDollar.sol\";\n\n/**\n* @title CarbonUSD\n* @dev The CarbonDollar contract may change over time, so this proxy serves as a\n* pointer to the latest version.\n*\n*/\ncontract CarbonUSD is Ownable, AdminUpgradeabilityProxy {\n    /**\n     * @notice Claims ownership of a CarbonDollar contract. Precondition: the\n     * previous owner of the CarbonDollar contract already transferred ownership to \n     * this proxy.\n     * @param _reg The address of the CarbonDollar contract.\n     */\n    function claimOwnership(address _reg) public onlyOwner {\n        CarbonDollar(_reg).claimOwnership();\n    }\n}",
-  "sourcePath": "/Users/tanishqaggarwal/Documents/carbon/fiat_gateway/contracts/CarbonUSD.sol",
+  "sourcePath": "/Users/tanishqaggarwal/Documents/carbon/fiat_gateway/contracts/carbonToken/CarbonUSD.sol",
   "ast": {
-    "absolutePath": "/Users/tanishqaggarwal/Documents/carbon/fiat_gateway/contracts/CarbonUSD.sol",
+    "absolutePath": "/Users/tanishqaggarwal/Documents/carbon/fiat_gateway/contracts/carbonToken/CarbonUSD.sol",
     "exportedSymbols": {
       "CarbonUSD": [
         307
@@ -223,7 +223,7 @@
         "id": 286,
         "nodeType": "ImportDirective",
         "scope": 308,
-        "sourceUnit": 3035,
+        "sourceUnit": 3326,
         "src": "26:63:1",
         "symbolAliases": [],
         "unitAlias": ""
@@ -234,13 +234,13 @@
         "id": 287,
         "nodeType": "ImportDirective",
         "scope": 308,
-        "sourceUnit": 3384,
+        "sourceUnit": 3675,
         "src": "90:71:1",
         "symbolAliases": [],
         "unitAlias": ""
       },
       {
-        "absolutePath": "/Users/tanishqaggarwal/Documents/carbon/fiat_gateway/contracts/CarbonDollar.sol",
+        "absolutePath": "/Users/tanishqaggarwal/Documents/carbon/fiat_gateway/contracts/carbonToken/CarbonDollar.sol",
         "file": "./CarbonDollar.sol",
         "id": 288,
         "nodeType": "ImportDirective",
@@ -259,10 +259,10 @@
               "id": 289,
               "name": "Ownable",
               "nodeType": "UserDefinedTypeName",
-              "referencedDeclaration": 3034,
+              "referencedDeclaration": 3325,
               "src": "356:7:1",
               "typeDescriptions": {
-                "typeIdentifier": "t_contract$_Ownable_$3034",
+                "typeIdentifier": "t_contract$_Ownable_$3325",
                 "typeString": "contract Ownable"
               }
             },
@@ -277,10 +277,10 @@
               "id": 291,
               "name": "AdminUpgradeabilityProxy",
               "nodeType": "UserDefinedTypeName",
-              "referencedDeclaration": 3383,
+              "referencedDeclaration": 3674,
               "src": "365:24:1",
               "typeDescriptions": {
-                "typeIdentifier": "t_contract$_AdminUpgradeabilityProxy_$3383",
+                "typeIdentifier": "t_contract$_AdminUpgradeabilityProxy_$3674",
                 "typeString": "contract AdminUpgradeabilityProxy"
               }
             },
@@ -290,10 +290,10 @@
           }
         ],
         "contractDependencies": [
-          3034,
-          3383,
-          3421,
-          3496
+          3325,
+          3674,
+          3712,
+          3787
         ],
         "contractKind": "contract",
         "documentation": "@title CarbonUSD\n@dev The CarbonDollar contract may change over time, so this proxy serves as a\npointer to the latest version.\n",
@@ -301,10 +301,10 @@
         "id": 307,
         "linearizedBaseContracts": [
           307,
-          3383,
-          3496,
-          3421,
-          3034
+          3674,
+          3787,
+          3712,
+          3325
         ],
         "name": "CarbonUSD",
         "nodeType": "ContractDefinition",
@@ -377,7 +377,7 @@
                       "lValueRequested": false,
                       "memberName": "claimOwnership",
                       "nodeType": "MemberAccess",
-                      "referencedDeclaration": 2947,
+                      "referencedDeclaration": 3238,
                       "src": "720:33:1",
                       "typeDescriptions": {
                         "typeIdentifier": "t_function_external_nonpayable$__$returns$__$",
@@ -419,7 +419,7 @@
                   "name": "onlyOwner",
                   "nodeType": "Identifier",
                   "overloadedDeclarations": [],
-                  "referencedDeclaration": 2982,
+                  "referencedDeclaration": 3273,
                   "src": "700:9:1",
                   "typeDescriptions": {
                     "typeIdentifier": "t_modifier$__$",
@@ -486,7 +486,7 @@
     "src": "0:764:1"
   },
   "legacyAST": {
-    "absolutePath": "/Users/tanishqaggarwal/Documents/carbon/fiat_gateway/contracts/CarbonUSD.sol",
+    "absolutePath": "/Users/tanishqaggarwal/Documents/carbon/fiat_gateway/contracts/carbonToken/CarbonUSD.sol",
     "exportedSymbols": {
       "CarbonUSD": [
         307
@@ -512,7 +512,7 @@
         "id": 286,
         "nodeType": "ImportDirective",
         "scope": 308,
-        "sourceUnit": 3035,
+        "sourceUnit": 3326,
         "src": "26:63:1",
         "symbolAliases": [],
         "unitAlias": ""
@@ -523,13 +523,13 @@
         "id": 287,
         "nodeType": "ImportDirective",
         "scope": 308,
-        "sourceUnit": 3384,
+        "sourceUnit": 3675,
         "src": "90:71:1",
         "symbolAliases": [],
         "unitAlias": ""
       },
       {
-        "absolutePath": "/Users/tanishqaggarwal/Documents/carbon/fiat_gateway/contracts/CarbonDollar.sol",
+        "absolutePath": "/Users/tanishqaggarwal/Documents/carbon/fiat_gateway/contracts/carbonToken/CarbonDollar.sol",
         "file": "./CarbonDollar.sol",
         "id": 288,
         "nodeType": "ImportDirective",
@@ -548,10 +548,10 @@
               "id": 289,
               "name": "Ownable",
               "nodeType": "UserDefinedTypeName",
-              "referencedDeclaration": 3034,
+              "referencedDeclaration": 3325,
               "src": "356:7:1",
               "typeDescriptions": {
-                "typeIdentifier": "t_contract$_Ownable_$3034",
+                "typeIdentifier": "t_contract$_Ownable_$3325",
                 "typeString": "contract Ownable"
               }
             },
@@ -566,10 +566,10 @@
               "id": 291,
               "name": "AdminUpgradeabilityProxy",
               "nodeType": "UserDefinedTypeName",
-              "referencedDeclaration": 3383,
+              "referencedDeclaration": 3674,
               "src": "365:24:1",
               "typeDescriptions": {
-                "typeIdentifier": "t_contract$_AdminUpgradeabilityProxy_$3383",
+                "typeIdentifier": "t_contract$_AdminUpgradeabilityProxy_$3674",
                 "typeString": "contract AdminUpgradeabilityProxy"
               }
             },
@@ -579,10 +579,10 @@
           }
         ],
         "contractDependencies": [
-          3034,
-          3383,
-          3421,
-          3496
+          3325,
+          3674,
+          3712,
+          3787
         ],
         "contractKind": "contract",
         "documentation": "@title CarbonUSD\n@dev The CarbonDollar contract may change over time, so this proxy serves as a\npointer to the latest version.\n",
@@ -590,10 +590,10 @@
         "id": 307,
         "linearizedBaseContracts": [
           307,
-          3383,
-          3496,
-          3421,
-          3034
+          3674,
+          3787,
+          3712,
+          3325
         ],
         "name": "CarbonUSD",
         "nodeType": "ContractDefinition",
@@ -666,7 +666,7 @@
                       "lValueRequested": false,
                       "memberName": "claimOwnership",
                       "nodeType": "MemberAccess",
-                      "referencedDeclaration": 2947,
+                      "referencedDeclaration": 3238,
                       "src": "720:33:1",
                       "typeDescriptions": {
                         "typeIdentifier": "t_function_external_nonpayable$__$returns$__$",
@@ -708,7 +708,7 @@
                   "name": "onlyOwner",
                   "nodeType": "Identifier",
                   "overloadedDeclarations": [],
-                  "referencedDeclaration": 2982,
+                  "referencedDeclaration": 3273,
                   "src": "700:9:1",
                   "typeDescriptions": {
                     "typeIdentifier": "t_modifier$__$",
@@ -780,5 +780,5 @@
   },
   "networks": {},
   "schemaVersion": "2.0.0",
-  "updatedAt": "2018-07-13T20:46:08.126Z"
+  "updatedAt": "2018-07-14T04:29:11.148Z"
 }
