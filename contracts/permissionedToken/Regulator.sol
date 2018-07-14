@@ -253,6 +253,6 @@ contract Regulator is Claimable, Migratable {
     * @return A boolean indicating whether the user has permission or not
     */
     function hasPermission(address _who, bytes4 _methodsignature) public view returns (bool) {
-        return userPermissions.getPermission(_who, _methodsignature);
+        return userPermissions.hasPermission(_who, _methodsignature);
     }
 }

@@ -29,7 +29,7 @@ contract('PermissionStorage', _accounts => {
                                             testPermissionName, 
                                             testPermissionDescription, 
                                             testPermissionContract, { from });
-                assert(this.sheet.isPermission(testPermission));
+                assert(await this.sheet.isPermission(testPermission));
                 const permissions = await this.sheet.permissions(testPermission);
                 // TODO check if permission data was set.
             })
@@ -47,7 +47,8 @@ contract('PermissionStorage', _accounts => {
         describe('removePermission', function () {
             it("removes the permission", async function () {
                 await this.sheet.removePermission(testPermission, { from });
-                assert.equal(this.sheet.isPermission(testPermission), false);
+                const hasPermission = await this.sheet.isPermission(testPermission);
+                assert(!hasPermission);
             })
             it("emits a permission removed event", async function () {
                 const { logs } = await this.sheet.removePermission(testPermission, { from });
