@@ -19,10 +19,13 @@ const transfersToZeroBecomeBurns = false;
 
 // Storage classes for Regulator
 const PermissionStorage = artifacts.require("PermissionStorage");
+const PermissionStorageMock = artifacts.require("PermissionStorageMock");
 const UserPermissionsStorage = artifacts.require("UserPermissionsStorage");
 const ValidatorStorage = artifacts.require("ValidatorStorage");
+const ValidatorStorageMock = artifacts.require("ValidatorStorageMock");
 // Regulator
 const Regulator = artifacts.require("Regulator");
+const RegulatorMock = artifacts.require("RegulatorMock");
 const RegulatorProxy = artifacts.require("RegulatorProxy");
 // PermissionedToken
 const PermissionedToken = artifacts.require("PermissionedToken");
@@ -30,6 +33,7 @@ const PermissionedTokenProxy = artifacts.require("PermissionedTokenProxy");
 // WT0
 const WhitelistedToken = artifacts.require("WhitelistedToken");
 const WhitelistedTokenRegulator = artifacts.require("WhitelistedTokenRegulator");
+const WhitelistedTokenRegulatorMock = artifacts.require("WhitelistedTokenRegulatorMock");
 const WhitelistedTokenRegulatorProxy = artifacts.require("WhitelistedTokenRegulatorProxy");
 // Storage classes for CarbonDollar
 const FeeSheet = artifacts.require("FeeSheet");
@@ -51,9 +55,9 @@ class CommonVariables {
         this.tokenRegulatorProxyOwner = _accounts[1];
         this.tokenValidator = _accounts[2];
         this.tokenValidator2 = _accounts[3];
-        this.carbonUSDOwner = _accounts[4];
-        this.carbonUSDRegulatorProxyOwner = _accounts[5];
-        this.carbonUSDValidator = _accounts[6];
+        this.carbonDollarOwner = _accounts[4];
+        this.carbonDollarRegulatorProxyOwner = _accounts[5];
+        this.carbonDollarValidator = _accounts[6];
         this.attacker = _accounts[7];
         this.userSender = _accounts[8];
         this.userReceiver = _accounts[9];
@@ -77,14 +81,18 @@ module.exports = {
     ModularMintableToken,
     transfersToZeroBecomeBurns,
     PermissionStorage,
+    PermissionStorageMock,
     UserPermissionsStorage,
     ValidatorStorage,
+    ValidatorStorageMock,
     Regulator,
+    RegulatorMock,
     RegulatorProxy,
     PermissionedToken,
     PermissionedTokenProxy,
     WhitelistedToken,
     WhitelistedTokenRegulator,
+    WhitelistedTokenRegulatorMock,
     WhitelistedTokenRegulatorProxy,
     FeeSheet,
     StablecoinWhitelist,

@@ -50,7 +50,7 @@ contract PermissionedToken is Claimable, Migratable, ModularPausableToken {
     * @param _rProxy Address of `RegulatorProxy` contract
     */
     constructor(address _rProxy) Ownable() public {
-        setRegulatorProxy(_rProxy);
+        setRP(_rProxy);
     }
 
     /**
@@ -104,6 +104,11 @@ contract PermissionedToken is Claimable, Migratable, ModularPausableToken {
     * @param _rProxy Address of new `RegulatorProxy` contract
     */
     function setRegulatorProxy(address _rProxy) public onlyOwner {
+        setRP(_rProxy);
+    }
+
+    // Function so that constructor can also set the regulator proxy.
+    function setRP(address _rProxy) internal {
         require(AddressUtils.isContract(_rProxy));
         address oldProxy = rProxy;
         rProxy = _rProxy;

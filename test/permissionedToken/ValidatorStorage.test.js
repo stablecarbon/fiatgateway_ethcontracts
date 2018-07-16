@@ -1,6 +1,3 @@
-// Slightly modified from https://github.com/trusttoken/trueUSD
-
-/* Loading all libraries from common */
 const {
     CommonVariables,
     expectRevert,

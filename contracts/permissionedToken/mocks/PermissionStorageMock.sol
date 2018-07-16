@@ -3,6 +3,18 @@ pragma solidity ^0.4.23;
 import "../PermissionStorage.sol";
 
 contract PermissionStorageMock is PermissionStorage {
+    /**
+      Constants: method signatures.
+    **/
+    bytes4 public MINT = bytes4(keccak256("mint(address,uint256)"));
+    bytes4 public MINT_CUSD = bytes4(keccak256("mint(address,uint256,bool)"));
+    bytes4 public BURN = bytes4(keccak256("burn(uint256)"));
+    bytes4 public TRANSFER = bytes4(keccak256("transfer(address,uint256)"));
+    bytes4 public TRANSFER_FROM = bytes4(keccak256("transferFrom(address,address,uint256)"));
+    bytes4 public DESTROY_BLACKLISTED_TOKENS = bytes4(keccak256("destroyBlacklistedTokens(address)"));
+    bytes4 public ADD_BLACKLISTED_ADDRESS_SPENDER = bytes4(keccak256("addBlacklistedAddressSpender(address)"));
+    bytes4 public DESTROY_SELF = bytes4(keccak256("destroySelf()"));
+
     /** 
         @dev Creates permissions for all functions in WhitelistedToken.
      */
@@ -22,7 +34,6 @@ contract PermissionStorageMock is PermissionStorage {
     }
 
     function setMintPermission() internal {
-        bytes4 MINT = bytes4(keccak256("mint(address,uint256)"));
         Permission memory mint_permission = Permission(
             "Mint", 
             "Allows a trusted minter (e.g. a trust funds) to mint WT0 tokens for a user.", 
@@ -31,7 +42,6 @@ contract PermissionStorageMock is PermissionStorage {
     }
     
     function setMintCUSDPermission() internal {
-        bytes4 MINT_CUSD = bytes4(keccak256("mint(address,uint256,bool)"));
         Permission memory mint_cusd_permission = Permission(
             "Mint CUSD", 
             "Allows a trusted minter (e.g. a trust funds) to mint CUSD tokens for a user.", 
@@ -40,7 +50,6 @@ contract PermissionStorageMock is PermissionStorage {
     }
 
     function setBurnPermission() internal {
-        bytes4 BURN = bytes4(keccak256("burn(uint256)"));
         Permission memory burn_permission = Permission(
             "Burn", 
             "Allows a user to burn off their own tokens. They can then send this burn transaction as a receipt to a trust fund in order to withdraw collateral", 
@@ -49,7 +58,6 @@ contract PermissionStorageMock is PermissionStorage {
     }
 
     function setTransferPermission() internal {
-        bytes4 TRANSFER = bytes4(keccak256("transfer(address,uint256)"));
         Permission memory transfer_permission = Permission(
             "Transfer", 
             "Allows a user to transfer their tokens to another user.", 
@@ -58,7 +66,6 @@ contract PermissionStorageMock is PermissionStorage {
     }
 
     function setTransferFromPermission() internal {
-        bytes4 TRANSFER_FROM = bytes4(keccak256("transferFrom(address,address,uint256)"));
         Permission memory transfer_from_permission = Permission(
             "Transfer From", 
             "Allows a user to transfer tokens from one address to another.", 
@@ -67,7 +74,6 @@ contract PermissionStorageMock is PermissionStorage {
     }
 
     function setDestroyBlacklistedTokensPermission() internal {
-        bytes4 DESTROY_BLACKLISTED_TOKENS = bytes4(keccak256("destroyBlacklistedTokens(address)"));
         Permission memory destroy_tokens_permission = Permission(
             "Destroy User's Blacklisted Tokens", 
             "Allows a regulatory entity to destroy tokens contained within a blacklisted user's account.", 
@@ -76,7 +82,6 @@ contract PermissionStorageMock is PermissionStorage {
     }
 
     function setAddBlacklistedAddressSpenderPermission() internal {
-        bytes4 ADD_BLACKLISTED_ADDRESS_SPENDER = bytes4(keccak256("addBlacklistedAddressSpender(address)"));
         Permission memory add_blacklisted_spender_permission = Permission(
             "Add Self to Blacklisted Token as an Approved Spender", 
             "Allows a regulatory entity to add themselves as an approved spender on a blacklisted account, in order to transfer tokens out of it.", 
@@ -85,7 +90,6 @@ contract PermissionStorageMock is PermissionStorage {
     }
 
     function setDestroySelfPermission() internal {
-        bytes4 DESTROY_SELF = bytes4(keccak256("destroySelf()"));
         Permission memory destroy_self_permission = Permission(
             "Self Destroy", 
             "Allows a user to destroy themselves. While a user would probably never use this function, it is essentially used as a \"marker\" for a blacklisted user.", 
