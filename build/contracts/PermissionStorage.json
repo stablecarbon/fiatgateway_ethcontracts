@@ -1,0 +1,437 @@
+{
+  "contractName": "PermissionStorage",
+  "abi": [],
+  "bytecode": "0x6080604052348015600f57600080fd5b50603580601d6000396000f3006080604052600080fd00a165627a7a723058204717c3e8c5c45bac8e7b812eb438751bd91797bde1ac3e9115df22fcbc6a4d4f0029",
+  "deployedBytecode": "0x6080604052600080fd00a165627a7a723058204717c3e8c5c45bac8e7b812eb438751bd91797bde1ac3e9115df22fcbc6a4d4f0029",
+  "sourceMap": "81:529:6:-;;;;8:9:-1;5:2;;;30:1;27;20:12;5:2;81:529:6;;;;;;;",
+  "deployedSourceMap": "81:529:6:-;;;;;",
+  "source": "pragma solidity ^0.4.23;\r\n\r\nimport '../../eternalStorage/EternalStorage.sol';\r\n\r\ncontract PermissionStorage is EternalStorage {\r\n\t \r\n\t/** \r\n        Structs \r\n    */\r\n    \r\n    /** Contains metadata about a permission to execute a particular method signature. */\r\n    struct Permission {\r\n        string name; // A one-word description for the permission. e.g. \"canMint\"\r\n        string description; // A longer description for the permission. e.g. \"Allows user to mint tokens.\"\r\n        string contract_name; // e.g. \"PermissionedToken\"\r\n    }\r\n\r\n\tmapping(bytes4 => Permission) internal permissionStorage;\r\n\r\n}",
+  "sourcePath": "C:\\Users\\npain\\Projects\\Carbon\\fiat_gateway\\contracts\\permissionedToken\\regulator\\PermissionStorage.sol",
+  "ast": {
+    "absolutePath": "/C/Users/npain/Projects/Carbon/fiat_gateway/contracts/permissionedToken/regulator/PermissionStorage.sol",
+    "exportedSymbols": {
+      "PermissionStorage": [
+        912
+      ]
+    },
+    "id": 913,
+    "nodeType": "SourceUnit",
+    "nodes": [
+      {
+        "id": 897,
+        "literals": [
+          "solidity",
+          "^",
+          "0.4",
+          ".23"
+        ],
+        "nodeType": "PragmaDirective",
+        "src": "0:24:6"
+      },
+      {
+        "absolutePath": "/C/Users/npain/Projects/Carbon/fiat_gateway/contracts/eternalStorage/EternalStorage.sol",
+        "file": "../../eternalStorage/EternalStorage.sol",
+        "id": 898,
+        "nodeType": "ImportDirective",
+        "scope": 913,
+        "sourceUnit": 896,
+        "src": "28:49:6",
+        "symbolAliases": [],
+        "unitAlias": ""
+      },
+      {
+        "baseContracts": [
+          {
+            "arguments": null,
+            "baseName": {
+              "contractScope": null,
+              "id": 899,
+              "name": "EternalStorage",
+              "nodeType": "UserDefinedTypeName",
+              "referencedDeclaration": 895,
+              "src": "111:14:6",
+              "typeDescriptions": {
+                "typeIdentifier": "t_contract$_EternalStorage_$895",
+                "typeString": "contract EternalStorage"
+              }
+            },
+            "id": 900,
+            "nodeType": "InheritanceSpecifier",
+            "src": "111:14:6"
+          }
+        ],
+        "contractDependencies": [
+          895
+        ],
+        "contractKind": "contract",
+        "documentation": null,
+        "fullyImplemented": true,
+        "id": 912,
+        "linearizedBaseContracts": [
+          912,
+          895
+        ],
+        "name": "PermissionStorage",
+        "nodeType": "ContractDefinition",
+        "nodes": [
+          {
+            "canonicalName": "PermissionStorage.Permission",
+            "id": 907,
+            "members": [
+              {
+                "constant": false,
+                "id": 902,
+                "name": "name",
+                "nodeType": "VariableDeclaration",
+                "scope": 907,
+                "src": "296:11:6",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_string_storage_ptr",
+                  "typeString": "string"
+                },
+                "typeName": {
+                  "id": 901,
+                  "name": "string",
+                  "nodeType": "ElementaryTypeName",
+                  "src": "296:6:6",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_string_storage_ptr",
+                    "typeString": "string"
+                  }
+                },
+                "value": null,
+                "visibility": "internal"
+              },
+              {
+                "constant": false,
+                "id": 904,
+                "name": "description",
+                "nodeType": "VariableDeclaration",
+                "scope": 907,
+                "src": "379:18:6",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_string_storage_ptr",
+                  "typeString": "string"
+                },
+                "typeName": {
+                  "id": 903,
+                  "name": "string",
+                  "nodeType": "ElementaryTypeName",
+                  "src": "379:6:6",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_string_storage_ptr",
+                    "typeString": "string"
+                  }
+                },
+                "value": null,
+                "visibility": "internal"
+              },
+              {
+                "constant": false,
+                "id": 906,
+                "name": "contract_name",
+                "nodeType": "VariableDeclaration",
+                "scope": 907,
+                "src": "487:20:6",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_string_storage_ptr",
+                  "typeString": "string"
+                },
+                "typeName": {
+                  "id": 905,
+                  "name": "string",
+                  "nodeType": "ElementaryTypeName",
+                  "src": "487:6:6",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_string_storage_ptr",
+                    "typeString": "string"
+                  }
+                },
+                "value": null,
+                "visibility": "internal"
+              }
+            ],
+            "name": "Permission",
+            "nodeType": "StructDefinition",
+            "scope": 912,
+            "src": "267:276:6",
+            "visibility": "public"
+          },
+          {
+            "constant": false,
+            "id": 911,
+            "name": "permissionStorage",
+            "nodeType": "VariableDeclaration",
+            "scope": 912,
+            "src": "548:56:6",
+            "stateVariable": true,
+            "storageLocation": "default",
+            "typeDescriptions": {
+              "typeIdentifier": "t_mapping$_t_bytes4_$_t_struct$_Permission_$907_storage_$",
+              "typeString": "mapping(bytes4 => struct PermissionStorage.Permission)"
+            },
+            "typeName": {
+              "id": 910,
+              "keyType": {
+                "id": 908,
+                "name": "bytes4",
+                "nodeType": "ElementaryTypeName",
+                "src": "556:6:6",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_bytes4",
+                  "typeString": "bytes4"
+                }
+              },
+              "nodeType": "Mapping",
+              "src": "548:29:6",
+              "typeDescriptions": {
+                "typeIdentifier": "t_mapping$_t_bytes4_$_t_struct$_Permission_$907_storage_$",
+                "typeString": "mapping(bytes4 => struct PermissionStorage.Permission)"
+              },
+              "valueType": {
+                "contractScope": null,
+                "id": 909,
+                "name": "Permission",
+                "nodeType": "UserDefinedTypeName",
+                "referencedDeclaration": 907,
+                "src": "566:10:6",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_struct$_Permission_$907_storage_ptr",
+                  "typeString": "struct PermissionStorage.Permission"
+                }
+              }
+            },
+            "value": null,
+            "visibility": "internal"
+          }
+        ],
+        "scope": 913,
+        "src": "81:529:6"
+      }
+    ],
+    "src": "0:610:6"
+  },
+  "legacyAST": {
+    "absolutePath": "/C/Users/npain/Projects/Carbon/fiat_gateway/contracts/permissionedToken/regulator/PermissionStorage.sol",
+    "exportedSymbols": {
+      "PermissionStorage": [
+        912
+      ]
+    },
+    "id": 913,
+    "nodeType": "SourceUnit",
+    "nodes": [
+      {
+        "id": 897,
+        "literals": [
+          "solidity",
+          "^",
+          "0.4",
+          ".23"
+        ],
+        "nodeType": "PragmaDirective",
+        "src": "0:24:6"
+      },
+      {
+        "absolutePath": "/C/Users/npain/Projects/Carbon/fiat_gateway/contracts/eternalStorage/EternalStorage.sol",
+        "file": "../../eternalStorage/EternalStorage.sol",
+        "id": 898,
+        "nodeType": "ImportDirective",
+        "scope": 913,
+        "sourceUnit": 896,
+        "src": "28:49:6",
+        "symbolAliases": [],
+        "unitAlias": ""
+      },
+      {
+        "baseContracts": [
+          {
+            "arguments": null,
+            "baseName": {
+              "contractScope": null,
+              "id": 899,
+              "name": "EternalStorage",
+              "nodeType": "UserDefinedTypeName",
+              "referencedDeclaration": 895,
+              "src": "111:14:6",
+              "typeDescriptions": {
+                "typeIdentifier": "t_contract$_EternalStorage_$895",
+                "typeString": "contract EternalStorage"
+              }
+            },
+            "id": 900,
+            "nodeType": "InheritanceSpecifier",
+            "src": "111:14:6"
+          }
+        ],
+        "contractDependencies": [
+          895
+        ],
+        "contractKind": "contract",
+        "documentation": null,
+        "fullyImplemented": true,
+        "id": 912,
+        "linearizedBaseContracts": [
+          912,
+          895
+        ],
+        "name": "PermissionStorage",
+        "nodeType": "ContractDefinition",
+        "nodes": [
+          {
+            "canonicalName": "PermissionStorage.Permission",
+            "id": 907,
+            "members": [
+              {
+                "constant": false,
+                "id": 902,
+                "name": "name",
+                "nodeType": "VariableDeclaration",
+                "scope": 907,
+                "src": "296:11:6",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_string_storage_ptr",
+                  "typeString": "string"
+                },
+                "typeName": {
+                  "id": 901,
+                  "name": "string",
+                  "nodeType": "ElementaryTypeName",
+                  "src": "296:6:6",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_string_storage_ptr",
+                    "typeString": "string"
+                  }
+                },
+                "value": null,
+                "visibility": "internal"
+              },
+              {
+                "constant": false,
+                "id": 904,
+                "name": "description",
+                "nodeType": "VariableDeclaration",
+                "scope": 907,
+                "src": "379:18:6",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_string_storage_ptr",
+                  "typeString": "string"
+                },
+                "typeName": {
+                  "id": 903,
+                  "name": "string",
+                  "nodeType": "ElementaryTypeName",
+                  "src": "379:6:6",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_string_storage_ptr",
+                    "typeString": "string"
+                  }
+                },
+                "value": null,
+                "visibility": "internal"
+              },
+              {
+                "constant": false,
+                "id": 906,
+                "name": "contract_name",
+                "nodeType": "VariableDeclaration",
+                "scope": 907,
+                "src": "487:20:6",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_string_storage_ptr",
+                  "typeString": "string"
+                },
+                "typeName": {
+                  "id": 905,
+                  "name": "string",
+                  "nodeType": "ElementaryTypeName",
+                  "src": "487:6:6",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_string_storage_ptr",
+                    "typeString": "string"
+                  }
+                },
+                "value": null,
+                "visibility": "internal"
+              }
+            ],
+            "name": "Permission",
+            "nodeType": "StructDefinition",
+            "scope": 912,
+            "src": "267:276:6",
+            "visibility": "public"
+          },
+          {
+            "constant": false,
+            "id": 911,
+            "name": "permissionStorage",
+            "nodeType": "VariableDeclaration",
+            "scope": 912,
+            "src": "548:56:6",
+            "stateVariable": true,
+            "storageLocation": "default",
+            "typeDescriptions": {
+              "typeIdentifier": "t_mapping$_t_bytes4_$_t_struct$_Permission_$907_storage_$",
+              "typeString": "mapping(bytes4 => struct PermissionStorage.Permission)"
+            },
+            "typeName": {
+              "id": 910,
+              "keyType": {
+                "id": 908,
+                "name": "bytes4",
+                "nodeType": "ElementaryTypeName",
+                "src": "556:6:6",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_bytes4",
+                  "typeString": "bytes4"
+                }
+              },
+              "nodeType": "Mapping",
+              "src": "548:29:6",
+              "typeDescriptions": {
+                "typeIdentifier": "t_mapping$_t_bytes4_$_t_struct$_Permission_$907_storage_$",
+                "typeString": "mapping(bytes4 => struct PermissionStorage.Permission)"
+              },
+              "valueType": {
+                "contractScope": null,
+                "id": 909,
+                "name": "Permission",
+                "nodeType": "UserDefinedTypeName",
+                "referencedDeclaration": 907,
+                "src": "566:10:6",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_struct$_Permission_$907_storage_ptr",
+                  "typeString": "struct PermissionStorage.Permission"
+                }
+              }
+            },
+            "value": null,
+            "visibility": "internal"
+          }
+        ],
+        "scope": 913,
+        "src": "81:529:6"
+      }
+    ],
+    "src": "0:610:6"
+  },
+  "compiler": {
+    "name": "solc",
+    "version": "0.4.24+commit.e67f0147.Emscripten.clang"
+  },
+  "networks": {},
+  "schemaVersion": "2.0.1",
+  "updatedAt": "2018-07-16T23:39:37.828Z"
+}
