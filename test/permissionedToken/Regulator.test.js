@@ -1,62 +1,33 @@
-// Slightly modified from https://github.com/trusttoken/trueUSD
-
-/* Loading all libraries from common */
 const {
     CommonVariables,
-    expectRevert,
-    UserPermissionsStorage,
-    ValidatorStorage,
-    PermissionStorage
+    Regulator
 } = require('../helpers/common');
 
-contract('UserPermissionsStorage', _accounts => {
+const {
+    regulatorStorageTests
+} = require('./RegulatorStorage');
+
+const {
+    regulatorPermissionsTests
+} = require('./RegulatorPermissions');
+
+contract('Regulator', _accounts => {
     const commonVars = new CommonVariables(_accounts);
     const owner = commonVars.tokenOwner;
+    const validator = commonVars.tokenValidator;
     const user = commonVars.userSender;
-    const otherAccount = commonVars.userReceiver;
-    const testPermission = 0x12345678;
 
     beforeEach(async function () {
-        this.sheet = await UserPermissionsStorage.new({ from: owner })
+        this.sheet = await Regulator.new({ from: owner });
+        this.MINT_SIG = await this.sheet.MINT_SIG();
+        this.BURN_SIG = await this.sheet.BURN_SIG();
+        this.DESTROYSELF_SIG = await this.sheet.DESTROYSELF_SIG();
+        this.DESTROYBLACKLIST_SIG = await this.sheet.DESTROYBLACKLIST_SIG();
+        this.ADD_BLACKLISTED_SPENDER_SIG = await this.sheet.ADD_BLACKLISTED_SPENDER_SIG();
     })
 
-    describe('when the sender is the owner', function () {
-        const from = owner
-
-        describe('setPermission', function () {
-            it("adds permission for user", async function () {
-                await this.sheet.setPermission(user, testPermission, { from });
-                assert(await this.sheet.hasPermission(user, testPermission));
-            })
-            it("emits a permission added event", async function () {
-                const { logs } = await this.sheet.setPermission(user, testPermission, { from });
-                assert.equal(logs.length, 1);
-                assert.equal(logs[0].event, 'SetUserPermission');
-                assert.equal(logs[0].args.who, user);
-                assert.equal(logs[0].args.methodsignature, testPermission);
-            })
-        })
-
-        describe('removePermission', function () {
-            it("removes permission for user", async function () {
-                await this.sheet.removePermission(user, testPermission, { from });
-                assert(!(await this.sheet.hasPermission(user, testPermission)));
-            })
-            it("emits a permission removed event", async function () {
-                const { logs } = await this.sheet.removePermission(user, testPermission, { from });
-                assert.equal(logs.length, 1);
-                assert.equal(logs[0].event, 'RemovedUserPermission');
-                assert.equal(logs[0].args.who, user);
-                assert.equal(logs[0].args.methodsignature, testPermission);
-            })
-        })
-    })
-
-    describe('when the sender is not the owner', function () {
-        const from = otherAccount
-        it('reverts all calls', async function () {
-            await expectRevert(this.sheet.setPermission(user, testPermission, { from }));
-            await expectRevert(this.sheet.removePermission(user, testPermission, { from }));
-        })
+    describe("Regulator tests", function () {
+        regulatorStorageTests(owner);
+        regulatorPermissionsTests(owner, user, validator);
     })
 })

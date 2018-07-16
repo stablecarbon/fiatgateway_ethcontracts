@@ -66,7 +66,7 @@ contract PermissionStorage is Claimable {
     * @notice Removes a permission the list of permissions.
     * @param _methodsignature Signature of the method that this permission controls.
     */
-    function removePermission(bytes4 _methodsignature) onlyOwner public {
+    function removePermission(bytes4 _methodsignature) external onlyOwner {
         isPermission[_methodsignature] = false;
         emit PermissionRemoved(_methodsignature);
     }
