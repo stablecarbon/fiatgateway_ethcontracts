@@ -1,7 +1,6 @@
 pragma solidity ^0.4.23;
 
 import "./RegulatorProxy.sol";
-import "openzeppelin-solidity/contracts/ownership/Ownable.sol";
 import "openzeppelin-solidity/contracts/token/ERC20/PausableToken.sol";
 import "openzeppelin-solidity/contracts/token/ERC20/BurnableToken.sol";
 import "openzeppelin-solidity/contracts/token/ERC20/MintableToken.sol";
@@ -19,14 +18,10 @@ import "openzeppelin-solidity/contracts/token/ERC20/MintableToken.sol";
 *	Owner can mint, destroy blacklisted tokens
 *	Depositors can burn
 */
-contract PermissionedToken is Ownable, PausableToken, BurnableToken, MintableToken {
+contract PermissionedToken is PausableToken, BurnableToken, MintableToken {
 	
-	// ASSUMPTION: account can only have one status at any given time
-
-	// Passes KYC & AML and therefore can mint new tokens
+	// Can mint and burn
 	string constant WHITELISTED = "whitelisted";
-	// User has an ERC20 wallet and can transfer, but still needs to pass KYC & AML to burn or mint
-	string constant NONLISTED = "nonlisted";
 	// Cannot transfer, burn, or mint
 	string constant BLACKLISTED = "blacklisted";
 
@@ -110,8 +105,8 @@ contract PermissionedToken is Ownable, PausableToken, BurnableToken, MintableTok
 	*
 	* @return `true` if successful and `false` if unsuccessful
 	*/
-	function mint(address _to, uint256 _amount) public onlyOwner returns (bool) {
-		require(check(_to, WHITELISTED), "account is not allowed to mint");
+	function mint(address _to, uint256 _amount) public returns (bool) {
+		require(check(msg.sender, WHITELISTED), "account is unauthorized to mint");
 		super.mint(_to, _amount);
 	}
 
@@ -121,8 +116,8 @@ contract PermissionedToken is Ownable, PausableToken, BurnableToken, MintableTok
 	*
 	* @return `true` if successful and `false` if unsuccessful
 	*/
-	function _burn(uint256 _amount) public onlyDepositor returns (bool) {
-		// require(check(msg.sender, WHITELISTED), "account is not allowed to burn");
+	function _burn(uint256 _amount) public returns (bool) {
+		require(check(msg.sender, WHITELISTED), "account is unauthorized to burn");
 		super.burn(_amount);
 		return true;
 	}
