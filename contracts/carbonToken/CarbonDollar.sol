@@ -1,11 +1,13 @@
 pragma solidity ^0.4.23;
 
-import "./permissionedToken/PermissionedToken.sol";
-import "./whitelistedToken/WhitelistedToken.sol";
+import "../mutablePermissionedToken/MutablePermissionedToken.sol";
+import "../whitelistedToken/WhitelistedToken.sol";
 import "./FeeSheet.sol";
 import "./StablecoinWhitelist.sol";
 
-contract CarbonDollar is PermissionedToken {
+// TODO move to eternal storage pattern
+
+contract CarbonDollar is MutablePermissionedToken {
 
     // TODO: Some sort of blacklist/whitelisting (similar to permissionedToken) @tanishq/@sam
     // Random Thought: GreyList (mark Dirty Money without prevent it from being transferred or receiving)
@@ -135,13 +137,16 @@ contract CarbonDollar is PermissionedToken {
         require(stablecoinWhitelist.isWhitelisted(stablecoin));
         burnAllArgs(msg.sender, _amount, "");
 
-        // Remit back WhitelistedToken, but with a fee reduction
-        uint16 fee;
+        // Send back WhitelistedToken, but with a fee reduction
+        uint16 feeRate;
         if (stablecoinFees.isFeeSet(stablecoin)) // If fee for coin is not set
-            fee = stablecoinFees.fees(stablecoin);
+            feeRate = stablecoinFees.fees(stablecoin);
         else
-            fee = stablecoinFees.defaultFee();
-        uint256 feedAmount = _amount.sub(stablecoinFees.computeFee(_amount, fee));
+            feeRate = stablecoinFees.defaultFee();
+
+        uint256 chargedFee = stablecoinFees.computeFee(_amount, feeRate);
+        uint256 feedAmount = _amount.sub(chargedFee);
+        transfer(owner, chargedFee); // Transfer fee, sent to owner of this contract (Carbon-12 Labs).
         WhitelistedToken(stablecoin).transfer(msg.sender, feedAmount);
         return true;
     }

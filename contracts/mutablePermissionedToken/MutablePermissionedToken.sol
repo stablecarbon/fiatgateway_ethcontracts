@@ -1,28 +1,30 @@
 pragma solidity ^0.4.23;
 
-import "./Regulator.sol";
-import "./RegulatorProxy.sol";
+import "../regulator/Regulator.sol";
+import "../regulator/RegulatorProxy.sol";
+import "../modularERC20/ModularPausableToken.sol";
 import "openzeppelin-solidity/contracts/ownership/Claimable.sol";
 import "openzeppelin-solidity/contracts/AddressUtils.sol";
 import "zos-lib/contracts/migrations/Migratable.sol";
-import "../modularERC20/ModularBurnableToken.sol";
-import "../modularERC20/ModularMintableToken.sol";
-import "../modularERC20/ModularPausableToken.sol";
 
+
+// TODO Convert to EternalERC20.
 
 /**
-* @title Permissioned Token
+* @title MutablePermissionedToken
 * @notice A permissioned token that enables transfers, withdrawals, and deposits to occur 
 * if and only if it is approved by an on-chain Regulator service. PermissionedToken is an
 * ERC-20 smart contract representing ownership of securities and overrides the
 * transfer, burn, and mint methods to check with the Regulator
+*
+* This token is upgradeable, in contrast with ImmutablePermissionedToken.
 *
 * Current responsibilities: 
 * 	Anyone can transfer 
 *	Owner can mint, destroy blacklisted tokens
 *	Depositors can burn
 */
-contract PermissionedToken is Claimable, Migratable, ModularPausableToken {
+contract MutablePermissionedToken is Claimable, Migratable, ModularPausableToken {
     /**
     * @notice Address of `RegulatorProxy` that points to the latest
     *         `Regulator` contract responsible for checking and applying trade
@@ -50,7 +52,7 @@ contract PermissionedToken is Claimable, Migratable, ModularPausableToken {
     * @param _rProxy Address of `RegulatorProxy` contract
     */
     constructor(address _rProxy) Ownable() public {
-        setRegulatorProxy(_rProxy);
+        setRP(_rProxy);
     }
 
     /**
@@ -60,7 +62,7 @@ contract PermissionedToken is Claimable, Migratable, ModularPausableToken {
     *
     * If deploying a new contract version, the version number must be changed as well. 
     */
-    function initialize() isInitializer("PermissionedToken", "1.0") public {
+    function initialize() isInitializer("MutablePermissionedToken", "1.0") public {
         // Nothing to initialize!
     }
 
@@ -71,8 +73,8 @@ contract PermissionedToken is Claimable, Migratable, ModularPausableToken {
     * wish to run the migration.
     * @param _oldToken The address of the old token contract. 
     */
-    function migrate(address _oldToken) isMigration("PermissionedToken", "1.0", "1.1") public {
-        PermissionedToken oldToken = PermissionedToken(_oldToken);
+    function migrate(address _oldToken) isMigration("MutablePermissionedToken", "1.0", "1.1") public {
+        MutablePermissionedToken oldToken = MutablePermissionedToken(_oldToken);
         oldToken.claimOwnership(); // Take the proferred ownership of the old contract
         oldToken.transferStorageOwnership();
         setBalanceSheet(address(oldToken.balances()));
@@ -104,6 +106,11 @@ contract PermissionedToken is Claimable, Migratable, ModularPausableToken {
     * @param _rProxy Address of new `RegulatorProxy` contract
     */
     function setRegulatorProxy(address _rProxy) public onlyOwner {
+        setRP(_rProxy);
+    }
+
+    // Function so that constructor can also set the regulator proxy.
+    function setRP(address _rProxy) internal {
         require(AddressUtils.isContract(_rProxy));
         address oldProxy = rProxy;
         rProxy = _rProxy;
@@ -187,19 +194,18 @@ contract PermissionedToken is Claimable, Migratable, ModularPausableToken {
     function transferFrom(address _from, address _to, uint256 _amount) public returns (bool) {
         require(balances.balanceOf(_from) < _amount);
         
-        bool origin_blacklisted = Regulator(rProxy).isBlacklistedUser(_from);
-        bool recipient_blacklisted = Regulator(rProxy).isBlacklistedUser(_to);
-        require(!recipient_blacklisted);
+        bool is_recipient_blacklisted = Regulator(rProxy).isBlacklistedUser(_to);
+        require(!is_recipient_blacklisted);
         
         // If the origin user is blacklisted, the transaction can only succeed if 
         // the message sender is a validator that has been approved to transfer 
-        // blacklisted tokens from this address.
+        // blacklisted tokens out of this address.
+        bool is_origin_blacklisted = Regulator(rProxy).isBlacklistedUser(_from);
         bytes4 add_blacklisted_spender_sig = Regulator(rProxy).ADD_BLACKLISTED_SPENDER_SIG();
         bool sender_can_spend_from_blacklisted_address = Regulator(rProxy).hasPermission(msg.sender, add_blacklisted_spender_sig);
         bool sender_allowance_larger_than_transfer = allowance(_from, msg.sender) >= _amount;
-        require(!origin_blacklisted || (sender_can_spend_from_blacklisted_address && sender_allowance_larger_than_transfer));
+        require(!is_origin_blacklisted || (sender_can_spend_from_blacklisted_address && sender_allowance_larger_than_transfer));
 
-        // Otherwise, allow it to continue.
         transferFromAllArgs(_from, _to, _amount, msg.sender);
         return true;
     }
@@ -214,5 +220,4 @@ contract PermissionedToken is Claimable, Migratable, ModularPausableToken {
         totalSupply_.sub(balance);
         emit UserDestroyedSelf(msg.sender, balance);
     }
-
 }

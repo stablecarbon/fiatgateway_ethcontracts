@@ -1,10 +1,10 @@
 pragma solidity ^0.4.23;
 
 import "openzeppelin-solidity/contracts/AddressUtils.sol";
-import "../permissionedToken/PermissionedToken.sol";
-import "../CarbonDollar.sol";
+import "../immutablePermissionedToken/ImmutablePermissionedToken.sol";
+import "../carbonToken/CarbonDollar.sol";
 
-contract WhitelistedToken is PermissionedToken {
+contract WhitelistedToken is ImmutablePermissionedToken {
     address cusd_addr; // Address of the CarbonUSD contract.
 
     /**
@@ -13,20 +13,9 @@ contract WhitelistedToken is PermissionedToken {
     * with the CarbonDollar smart contract.
     * @param _rProxy Address of `RegulatorProxy` contract
     */
-    constructor(address _rProxy, address _cusd) PermissionedToken(_rProxy) public {
+    constructor(address _rProxy, address _cusd) ImmutablePermissionedToken(_rProxy) public {
         require(AddressUtils.isContract(_cusd));
         cusd_addr = _cusd;
-    }
-
-    /**
-    * @notice Function used as part of Migratable interface. Must be called when
-    * proxy is assigned to contract in order to correctly assign the contract's
-    * version number.
-    *
-    * If deploying a new contract version, the version number must be changed as well. 
-    */
-    function initialize() isInitializer("WhitelistedToken", "1.0") public {
-        // Nothing to initialize!
     }
 
     /**

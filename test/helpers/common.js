@@ -7,7 +7,7 @@ const BigNumber = web3.BigNumber;
 const ZERO_ADDRESS = '0x0000000000000000000000000000000000000000';
 
 /** Contract classes **/
-// ERC20 contracts
+// TrueUSD ERC20 contracts
 const BalanceSheet = artifacts.require("BalanceSheet");
 const AllowanceSheet = artifacts.require("AllowanceSheet");
 const BasicTokenMock = artifacts.require("BasicTokenMock");
@@ -17,19 +17,34 @@ const StandardTokenMock = artifacts.require("StandardTokenMock");
 const ModularMintableToken = artifacts.require("ModularMintableToken");
 const transfersToZeroBecomeBurns = false;
 
-// Storage classes for Regulator
+// Eternal ERC20 contracts
+const EternalMintableToken = artifacts.require("EternalMintableToken");
+const EternalBurnableToken = artifacts.require("EternalBurnableToken");
+const EternalStandardToken = artifacts.require("EternalStandardToken");
+const EternalPausableToken = artifacts.require("EternalPausableToken");
+// Eternal storage pattern contracts
+const EternalStorage = artifacts.require("EternalStorage");
+const EternalStorageProxy = artifacts.require("EternalStorageProxy");
+const Proxy = artifacts.require("Proxy");
+const UpgradeabilityProxy = artifacts.require("UpgradeabilityProxy");
+const UpgradeabilityStorage = artifacts.require("UpgradeabilityStorage");
+// Regulator and storage classes for regulator
 const PermissionStorage = artifacts.require("PermissionStorage");
+const PermissionStorageMock = artifacts.require("PermissionStorageMock");
 const UserPermissionsStorage = artifacts.require("UserPermissionsStorage");
 const ValidatorStorage = artifacts.require("ValidatorStorage");
-// Regulator
+const ValidatorStorageMock = artifacts.require("ValidatorStorageMock");
 const Regulator = artifacts.require("Regulator");
+const RegulatorMock = artifacts.require("RegulatorMock");
 const RegulatorProxy = artifacts.require("RegulatorProxy");
 // PermissionedToken
-const PermissionedToken = artifacts.require("PermissionedToken");
-const PermissionedTokenProxy = artifacts.require("PermissionedTokenProxy");
+const MutablePermissionedToken = artifacts.require("MutablePermissionedToken");
+const ImmutablePermissionedToken = artifacts.require("ImmutablePermissionedToken");
+const MutablePermissionedTokenProxy = artifacts.require("MutablePermissionedTokenProxy");
 // WT0
 const WhitelistedToken = artifacts.require("WhitelistedToken");
 const WhitelistedTokenRegulator = artifacts.require("WhitelistedTokenRegulator");
+const WhitelistedTokenRegulatorMock = artifacts.require("WhitelistedTokenRegulatorMock");
 const WhitelistedTokenRegulatorProxy = artifacts.require("WhitelistedTokenRegulatorProxy");
 // Storage classes for CarbonDollar
 const FeeSheet = artifacts.require("FeeSheet");
@@ -51,9 +66,9 @@ class CommonVariables {
         this.tokenRegulatorProxyOwner = _accounts[1];
         this.tokenValidator = _accounts[2];
         this.tokenValidator2 = _accounts[3];
-        this.carbonUSDOwner = _accounts[4];
-        this.carbonUSDRegulatorProxyOwner = _accounts[5];
-        this.carbonUSDValidator = _accounts[6];
+        this.carbonDollarOwner = _accounts[4];
+        this.carbonDollarRegulatorProxyOwner = _accounts[5];
+        this.carbonDollarValidator = _accounts[6];
         this.attacker = _accounts[7];
         this.userSender = _accounts[8];
         this.userReceiver = _accounts[9];
@@ -76,15 +91,29 @@ module.exports = {
     StandardTokenMock,
     ModularMintableToken,
     transfersToZeroBecomeBurns,
+    EternalBurnableToken,
+    EternalMintableToken,
+    EternalPausableToken,
+    EternalStandardToken,
+    EternalStorage,
+    EternalStorageProxy,
+    Proxy,
+    UpgradeabilityProxy,
+    UpgradeabilityStorage,
     PermissionStorage,
+    PermissionStorageMock,
     UserPermissionsStorage,
     ValidatorStorage,
+    ValidatorStorageMock,
     Regulator,
+    RegulatorMock,
     RegulatorProxy,
-    PermissionedToken,
-    PermissionedTokenProxy,
+    MutablePermissionedToken,
+    ImmutablePermissionedToken,
+    MutablePermissionedTokenProxy,
     WhitelistedToken,
     WhitelistedTokenRegulator,
+    WhitelistedTokenRegulatorMock,
     WhitelistedTokenRegulatorProxy,
     FeeSheet,
     StablecoinWhitelist,

@@ -1,12 +1,12 @@
 pragma solidity ^0.4.23;
 
+import '../eternalStorage/EternalStorage.sol';
 import "openzeppelin-solidity/contracts/ownership/Claimable.sol";
 
-/**
-* @notice Storage contract for list of permissions that a Regulator can set on users.
-*/
-contract PermissionStorage is Claimable {
-    /** 
+// TODO make compliant with eternalstorage
+
+contract PermissionStorage is EternalStorage, Claimable {
+	/** 
         Mappings 
     */
     /** Key is a method signature, value is a Permission struct, 
@@ -45,7 +45,19 @@ contract PermissionStorage is Claimable {
         string _permissionDescription, 
         string _contractName) 
     onlyOwner public {
-        permissions[_methodsignature] = Permission(_permissionName, _permissionDescription, _contractName);
+        Permission memory p = Permission(_permissionName, _permissionDescription, _contractName);
+        addPermission(_methodsignature, p);
+    }
+
+     /**
+    * @notice Sets a permission within the list of permissions.
+    * @param _methodsignature Signature of the method that this permission controls.
+    * @param _permission A struct containing permission information.
+    */
+    function addPermission(
+        bytes4 _methodsignature, 
+        Permission _permission) internal {
+        permissions[_methodsignature] = _permission;
         isPermission[_methodsignature] = true;
         emit PermissionAdded(_methodsignature);
     }
@@ -54,7 +66,7 @@ contract PermissionStorage is Claimable {
     * @notice Removes a permission the list of permissions.
     * @param _methodsignature Signature of the method that this permission controls.
     */
-    function removePermission(bytes4 _methodsignature) onlyOwner public {
+    function removePermission(bytes4 _methodsignature) external onlyOwner {
         isPermission[_methodsignature] = false;
         emit PermissionRemoved(_methodsignature);
     }
