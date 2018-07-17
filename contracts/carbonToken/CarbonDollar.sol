@@ -1,11 +1,13 @@
 pragma solidity ^0.4.23;
 
-import "../permissionedToken/PermissionedToken.sol";
+import "../mutablePermissionedToken/MutablePermissionedToken.sol";
 import "../whitelistedToken/WhitelistedToken.sol";
 import "./FeeSheet.sol";
 import "./StablecoinWhitelist.sol";
 
-contract CarbonDollar is PermissionedToken {
+// TODO move to eternal storage pattern
+
+contract CarbonDollar is MutablePermissionedToken {
 
     // TODO: Some sort of blacklist/whitelisting (similar to permissionedToken) @tanishq/@sam
     // Random Thought: GreyList (mark Dirty Money without prevent it from being transferred or receiving)
