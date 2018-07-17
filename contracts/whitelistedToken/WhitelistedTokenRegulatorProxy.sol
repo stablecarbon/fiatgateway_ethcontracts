@@ -1,6 +1,6 @@
 pragma solidity ^0.4.23;
 
-import "../permissionedToken/RegulatorProxy.sol";
+import "../permissionedToken/regulator/RegulatorProxy.sol";
 import "./WhitelistedTokenRegulator.sol";
 
 /**

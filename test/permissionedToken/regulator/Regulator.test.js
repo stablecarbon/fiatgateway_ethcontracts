@@ -1,7 +1,7 @@
 const {
     CommonVariables,
     Regulator
-} = require('../helpers/common');
+} = require('../../helpers/common');
 
 const {
     regulatorStorageTests

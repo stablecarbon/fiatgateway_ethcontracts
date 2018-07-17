@@ -1,6 +1,6 @@
 pragma solidity ^0.4.23;
 
-import "../ValidatorStorage.sol";
+import "../regulator/ValidatorStorage.sol";
 
 contract ValidatorStorageMock is ValidatorStorage {
     /** 
