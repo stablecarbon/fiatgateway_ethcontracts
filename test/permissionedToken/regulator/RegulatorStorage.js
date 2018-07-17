@@ -3,7 +3,7 @@ const {
     UserPermissionsStorage,
     ZERO_ADDRESS,
     ValidatorStorage,
-} = require('../helpers/common');
+} = require('../../helpers/common');
 
 function regulatorStorageTests(owner) {
     describe("REGULATOR STORAGE SETTER/GETTER TESTS", function() {

@@ -1,12 +1,10 @@
 pragma solidity ^0.4.23;
 
+import '../../eternalStorage/EternalStorage.sol';
 import "openzeppelin-solidity/contracts/ownership/Claimable.sol";
 
-/**
-* @notice Storage contract for list of permissions that a Regulator can set on users.
-*/
-contract PermissionStorage is Claimable {
-    /** 
+contract PermissionStorage is EternalStorage, Claimable {
+	/** 
         Mappings 
     */
     /** Key is a method signature, value is a Permission struct, 

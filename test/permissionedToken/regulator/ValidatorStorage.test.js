@@ -2,7 +2,7 @@ const {
     CommonVariables,
     expectRevert,
     ValidatorStorage,
-} = require('../helpers/common');
+} = require('../../helpers/common');
 
 contract('ValidatorStorage', _accounts => {
     const commonVars = new CommonVariables(_accounts);

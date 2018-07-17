@@ -3,7 +3,7 @@ const {
     ValidatorStorageMock,
     UserPermissionsStorage,
     expectRevert
-} = require('../helpers/common');
+} = require('../../helpers/common');
 
 function regulatorPermissionsTests(owner, user, validator) {
 
