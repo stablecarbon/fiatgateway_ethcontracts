@@ -9,15 +9,13 @@
   "scripts": {
     "compile": "truffle compile",
     "test": "truffle test",
-    "test-token": "truffle test ./test/PermissionedToken.js",
-    "test-regulator": "truffle test ./test/Regulator.js",
-    "test-regulator-proxy": "truffle test ./test/RegulatorProxy.js",
+    "test-regulator": "truffle test ./test/regulator/Regulator.test.js",
     "test-upgradeability-proxy": "truffle test ./test/OwnedUpgradeabilityProxy.js ./test/EternalStorageProxy.js",
-    "test-token-upgradeable": "truffle test ./test/Token_Pausable.js",
+    "test-token-upgradeable": "truffle test ./test/EternalPausableToken.js",
     "migrate": "truffle migrate",
     "lint": "solium -d contracts --fix",
     "coverage": "solidity-coverage",
-    "testrpc": "ganache-cli"
+    "testrpc": "ganache-cli -a 10 -i development"
   },
   "author": "npai",
   "license": "ISC",
@@ -25,7 +23,9 @@
     "dotenv": "^6.0.0",
     "openzeppelin-solidity": "^1.10.0",
     "truffle": "^4.1.12",
-    "web3": "^1.0.0-beta.34"
+    "web3": "^1.0.0-beta.34",
+    "zos": "^1.0.0",
+    "zos-lib": "^1.2.1"
   },
   "devDependencies": {
     "chai": "^4.1.2",
