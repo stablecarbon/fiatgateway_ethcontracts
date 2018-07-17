@@ -1,6 +1,6 @@
 pragma solidity ^0.4.23;
 
-import "../permissionedToken/Regulator.sol";
+import "../regulator/Regulator.sol";
 
 contract WhitelistedTokenRegulator is Regulator {
     /**

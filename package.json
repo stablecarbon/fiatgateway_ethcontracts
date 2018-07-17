@@ -8,11 +8,14 @@
   },
   "scripts": {
     "compile": "truffle compile",
-    "test": "truffle test --network development",
+    "test": "truffle test",
+    "test-regulator": "truffle test ./test/regulator/Regulator.test.js",
+    "test-upgradeability-proxy": "truffle test ./test/OwnedUpgradeabilityProxy.js ./test/EternalStorageProxy.js",
+    "test-token-upgradeable": "truffle test ./test/EternalPausableToken.js",
     "migrate": "truffle migrate",
     "lint": "solium -d contracts --fix",
     "coverage": "solidity-coverage",
-    "testrpc": "ganache-cli -a 20 -i development"
+    "testrpc": "ganache-cli -a 10 -i development"
   },
   "author": "npai",
   "license": "ISC",
@@ -28,6 +31,7 @@
     "chai": "^4.1.2",
     "chai-as-promised": "^7.1.1",
     "chai-bignumber": "^2.0.2",
+    "ethereumjs-abi": "^0.6.5",
     "ganache-cli": "^6.1.3",
     "solidity-coverage": "^0.5.4",
     "solium": "^1.1.7"
