@@ -18,7 +18,7 @@ contract RegulatorProxy is Ownable, AdminUpgradeabilityProxy {
      * this proxy.
      * @param _reg The address of the Regulator contract.
      */
-    function claimOwnership(address _reg) public onlyOwner {
-        Regulator(_reg).claimOwnership();
+    function claimRegulatorOwnership(address _reg) public onlyOwner {
+        _reg.call(bytes4(keccak256("claimOwnership()")));
     }
 }

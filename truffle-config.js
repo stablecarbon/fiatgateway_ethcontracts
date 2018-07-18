@@ -24,5 +24,17 @@ module.exports = {
       port: 8545,
       network_id: "*" //Listen to all networks
     }
+  },
+  mocha: {
+    reporter: 'eth-gas-reporter',
+    reporterOptions: {
+      gasPrice: 21
+    }
+  },
+  solc: {
+    optimizer: {
+      enabled: true,
+      runs: 20000
+    }
   }
 };

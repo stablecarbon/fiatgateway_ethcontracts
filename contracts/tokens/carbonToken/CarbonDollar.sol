@@ -4,9 +4,6 @@ import "../permissionedToken/MutablePermissionedToken.sol";
 import "../whitelistedToken/WhitelistedToken.sol";
 import "./FeeSheet.sol";
 import "./StablecoinWhitelist.sol";
-import "../../DataMigratable.sol";
-
-// TODO move to eternal storage pattern
 
 contract CarbonDollar is MutablePermissionedToken {
 

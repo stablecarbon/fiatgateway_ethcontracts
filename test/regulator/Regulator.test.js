@@ -9,12 +9,12 @@ const {
 } = require('./RegulatorStorage');
 
 const {
-    regulatorPermissionsTests
-} = require('./RegulatorPermissions');
+    regulatorStorageInteractionsTests
+} = require('./RegulatorStorageInteractions');
 
 const {
-    regulatorUserPermissionsTests
-} = require('./RegulatorUserPermissions');
+    regulatorPermissionsTests
+} = require('./RegulatorPermissions');
 
 contract('Regulator', _accounts => {
     const commonVars = new CommonVariables(_accounts);
@@ -38,7 +38,7 @@ contract('Regulator', _accounts => {
 
     describe("Regulator tests", function () {
         regulatorStorageTests(owner);
-        regulatorPermissionsTests(owner, user, validator);
-        regulatorUserPermissionsTests(owner, user, otherAccount, this.MINT_SIG);
+        regulatorStorageInteractionsTests(owner, user, validator, otherAccount);
+        regulatorPermissionsTests(owner, user, otherAccount);
     })
 })

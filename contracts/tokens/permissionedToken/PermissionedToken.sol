@@ -23,11 +23,11 @@ import "openzeppelin-solidity/contracts/AddressUtils.sol";
 */
 contract PermissionedToken is Claimable {
     /**
-    * @notice Address of `RegulatorProxy` that points to the latest
+    * @notice `RegulatorProxy` that points to the latest
     *         `Regulator` contract responsible for checking and applying trade
     *         permissions.
     */
-    address public rProxy;
+    Regulator public rProxy;
 
     /** Events */
     event ChangedRegulatorProxy(address oldProxy, address newProxy);
@@ -38,7 +38,7 @@ contract PermissionedToken is Claimable {
     * whether the regulator allows the message sender to execute that function.
     **/
     modifier requiresPermission() {
-        require (Regulator(rProxy).hasUserPermission(msg.sender, msg.sig));
+        require (rProxy.hasUserPermission(msg.sender, msg.sig));
         _;
     }
 
@@ -61,8 +61,8 @@ contract PermissionedToken is Claimable {
     // Function so that constructor can also set the regulator proxy.
     function setRP(address _rProxy) internal {
         require(AddressUtils.isContract(_rProxy));
-        address oldProxy = rProxy;
-        rProxy = _rProxy;
+        address oldProxy = address(rProxy);
+        rProxy = Regulator(_rProxy);
         emit ChangedRegulatorProxy(oldProxy, _rProxy);
     }
 

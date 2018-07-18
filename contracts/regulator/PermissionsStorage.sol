@@ -2,8 +2,6 @@ pragma solidity ^0.4.23;
 
 import "openzeppelin-solidity/contracts/ownership/Claimable.sol";
 
-// TODO make compliant with eternalstorage
-
 contract PermissionsStorage is Claimable {
 	/** 
         Mappings 
@@ -79,7 +77,7 @@ contract PermissionsStorage is Claimable {
     * @notice Removes a permission the list of permissions.
     * @param _methodsignature Signature of the method that this permission controls.
     */
-    function removePermission(bytes4 _methodsignature) external onlyOwner {
+    function removePermission(bytes4 _methodsignature) public onlyOwner {
         isPermission[_methodsignature] = false;
         emit PermissionRemoved(_methodsignature);
     }

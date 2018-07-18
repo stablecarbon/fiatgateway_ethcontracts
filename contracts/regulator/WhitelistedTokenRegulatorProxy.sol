@@ -12,14 +12,4 @@ import "./WhitelistedTokenRegulator.sol";
 * service.
 *
 */
-contract WhitelistedTokenRegulatorProxy is RegulatorProxy {
-    /**
-     * @notice Claims ownership of a WhitelistedToken. Precondition: the
-     * previous owner of the WhitelistedToken already transferred ownership to 
-     * this proxy.
-     * @param _reg The address of the WhitelistedToken contract.
-     */
-    function claimOwnership(address _reg) public onlyOwner {
-        WhitelistedTokenRegulator(_reg).claimOwnership();
-    }
-}
+contract WhitelistedTokenRegulatorProxy is RegulatorProxy {}
