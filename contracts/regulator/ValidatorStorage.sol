@@ -9,8 +9,8 @@ contract ValidatorStorage is Claimable {
     // (user address => is user a validator?)
     mapping (address => bool) public isValidator;
 
-    event ValidatorAdded(address validator);
-    event ValidatorRemoved(address validator);
+    event ValidatorAdded(address indexed validator);
+    event ValidatorRemoved(address indexed validator);
     
     /**
     * @notice add a Validator

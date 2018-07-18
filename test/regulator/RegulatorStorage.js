@@ -1,6 +1,5 @@
 const {
-    PermissionStorageMock,
-    UserPermissionsStorage,
+    PermissionsStorage,
     ZERO_ADDRESS,
     ValidatorStorage,
 } = require('../helpers/common');
@@ -8,35 +7,20 @@ const {
 function regulatorStorageTests(owner) {
     describe("REGULATOR STORAGE SETTER/GETTER TESTS", function() {
         const from = owner;
-        describe('setPermissionStorage', function () {
-            it("sets permission storage", async function () {
-                const testPermissionStorage = await PermissionStorageMock.new({ from });
-                await this.sheet.setPermissionStorage(testPermissionStorage.address, { from });
-                assert.equal(await this.sheet.availablePermissions(), testPermissionStorage.address);
-            })
-            it("emits a 'set permission storage' event", async function () {
-                const testPermissionStorage = await PermissionStorageMock.new({ from });
-                const { logs } = await this.sheet.setPermissionStorage(testPermissionStorage.address, { from });
-                assert.equal(logs.length, 1);
-                assert.equal(logs[0].event, 'SetPermissionStorage');
-                assert.equal(logs[0].args.oldStorage, ZERO_ADDRESS);
-                assert.equal(logs[0].args.newStorage, testPermissionStorage.address);
-            })
-        })
 
-        describe('setUserPermissionsStorage', function () {
-            it("sets user permission storage for user", async function () {
-                const testUserPermissionsStorage = await UserPermissionsStorage.new({ from });
-                await this.sheet.setUserPermissionsStorage(testUserPermissionsStorage.address, { from });
-                assert.equal(await this.sheet.userPermissions(), testUserPermissionsStorage.address);
+        describe('setPermissionsStorage', function () {
+            it("sets permissions storage for user", async function () {
+                const testPermissionsStorage = await PermissionsStorage.new({ from });
+                await this.sheet.setPermissionsStorage(testPermissionsStorage.address, { from });
+                assert.equal(await this.sheet.permissions(), testPermissionsStorage.address);
             })
-            it("emits a 'set user permission storage' event", async function () {
-                const testUserPermissionsStorage = await UserPermissionsStorage.new({ from });
-                const { logs } = await this.sheet.setUserPermissionsStorage(testUserPermissionsStorage.address, { from });
+            it("emits a 'set permissions storage' event", async function () {
+                const testPermissionsStorage = await PermissionsStorage.new({ from });
+                const { logs } = await this.sheet.setPermissionsStorage(testPermissionsStorage.address, { from });
                 assert.equal(logs.length, 1);
-                assert.equal(logs[0].event, 'SetUserPermissionsStorage');
+                assert.equal(logs[0].event, 'SetPermissionsStorage');
                 assert.equal(logs[0].args.oldStorage, ZERO_ADDRESS);
-                assert.equal(logs[0].args.newStorage, testUserPermissionsStorage.address);
+                assert.equal(logs[0].args.newStorage, testPermissionsStorage.address);
             })
         })
 

@@ -2,9 +2,9 @@ pragma solidity ^0.4.23;
 
 import "openzeppelin-solidity/contracts/ownership/Claimable.sol";
 import "zos-lib/contracts/migrations/Migratable.sol";
-import "./PermissionStorage.sol";
-import "./UserPermissionsStorage.sol";
+import "./PermissionsStorage.sol";
 import "./ValidatorStorage.sol";
+import "../DataMigratable.sol";
 
 /**
  * @title Regulator
@@ -14,36 +14,21 @@ import "./ValidatorStorage.sol";
  * for regulatory compliance.
  *
  */
-contract Regulator is Claimable, Migratable {
+contract Regulator is Claimable, Migratable, DataMigratable {
     /** STORAGES
     */
 
     /** 
-    * @notice Stores a mapping from method signatures to permission attributes (e.g. whether
-      the permission is "activated" for use, and additional attributes such as the
-      method's name and location in the code.)
+    * @notice The list of possible permissions, as well as which users
+    * have what permissions.
     */
-    PermissionStorage public availablePermissions;
-
-    /** 
-    * @notice Stores a mapping from users to execution permissions that they hold.
-    */
-    UserPermissionsStorage public userPermissions;
+    PermissionsStorage public permissions;
 
     /**
-    * @notice accounts with ability to set attributes
+    * @notice Accounts with ability to set permissions.
     *
     */
     ValidatorStorage public validators;
-
-    /** 
-        Constants: stores method signatures 
-    */
-    bytes4 public DESTROYSELF_SIG = bytes4(keccak256("destroySelf()"));
-    bytes4 public BURN_SIG = bytes4(keccak256("burn(uint256)"));
-    bytes4 public MINT_SIG = bytes4(keccak256("mint(address,uint256)"));
-    bytes4 public DESTROYBLACKLIST_SIG = bytes4(keccak256("destroyBlacklistedTokens(address)"));
-    bytes4 public ADD_BLACKLISTED_SPENDER_SIG = bytes4(keccak256("addBlacklistedAddressSpender(address)"));
 
     /** 
         Modifiers 
@@ -59,9 +44,8 @@ contract Regulator is Claimable, Migratable {
     /** 
         Events 
     */
-    event SetPermissionStorage(address oldStorage, address newStorage);
-    event SetUserPermissionsStorage(address oldStorage, address newStorage);
-    event SetValidatorStorage(address oldStorage, address newStorage);
+    event SetPermissionsStorage(address indexed oldStorage, address indexed newStorage);
+    event SetValidatorStorage(address indexed oldStorage, address indexed newStorage);
 
     /**
     * @notice Function used as part of Migratable interface. Must be called when
@@ -82,40 +66,24 @@ contract Regulator is Claimable, Migratable {
         Regulator oldRegulator = Regulator(_oldRegulator);
         oldRegulator.claimOwnership(); // Take the proferred ownership of the old contract
         oldRegulator.transferStorageOwnership();
-        setPS(address(oldRegulator.availablePermissions()));
-        setUPS(address(oldRegulator.userPermissions()));
+        setPS(address(oldRegulator.permissions()));
         setVS(address(oldRegulator.validators()));
         claimSO();
     }
 
     /**
     * @notice Sets the internal permission storage to point to a new storage.
-    * @param _newStorage The address of a new PermissionStorage.
+    * @param _newStorage The address of a new PermissionsStorage.
     */
-    function setPermissionStorage(address _newStorage) public onlyOwner {
+    function setPermissionsStorage(address _newStorage) public onlyOwner {
         setPS(_newStorage);
     }
 
     // Allows the migrate function to set the storage.
     function setPS(address _newStorage) internal {
-        address _oldStorage = address(availablePermissions);
-        availablePermissions = PermissionStorage(_newStorage);
-        emit SetPermissionStorage(_oldStorage, _newStorage);
-    }
-
-    /**
-    * @notice Sets the internal user permissions storage to point to a new storage.
-    * @param _newStorage The address of a new UserPermissionsStorage.
-    */
-    function setUserPermissionsStorage(address _newStorage) public onlyOwner {
-        setUPS(_newStorage);
-    }
-
-    // Allows the migrate function to set the storage.
-    function setUPS(address _newStorage) internal {
-        address _oldStorage = address(userPermissions);
-        userPermissions = UserPermissionsStorage(_newStorage);
-        emit SetUserPermissionsStorage(_oldStorage, _newStorage);
+        address _oldStorage = address(permissions);
+        permissions = PermissionsStorage(_newStorage);
+        emit SetPermissionsStorage(_oldStorage, _newStorage);
     }
 
     /**
@@ -137,23 +105,17 @@ contract Regulator is Claimable, Migratable {
     * This is useful for migrations, since the new token contract is made the
     * owner of the old token contract.
     **/
-    function transferStorageOwnership() public onlyOwner {
-        userPermissions.transferOwnership(msg.sender);
-        availablePermissions.transferOwnership(msg.sender);
-        validators.transferOwnership(msg.sender);
+    function transferSO(address owner) internal {
+        permissions.transferOwnership(owner);
+        validators.transferOwnership(owner);
     }
 
     /** @notice Claims ownership of the storage contracts. Succeeds if the
     * ownership of those contracts was transferred to this contract
     * (which will happen in the case of a migration).
     **/
-    function claimStorageOwnership() public onlyOwner {
-        claimSO();
-    }
-
     function claimSO() internal {
-        userPermissions.claimOwnership();
-        availablePermissions.claimOwnership();
+        permissions.claimOwnership();
         validators.claimOwnership();
     }
 
@@ -178,8 +140,8 @@ contract Regulator is Claimable, Migratable {
     * @param _who The address of the account that we are setting permissions for.
     */
     function setMinter(address _who) public onlyValidator {
-        require(availablePermissions.isPermission(MINT_SIG), "Minting not supported by token");
-        setPermission(_who, MINT_SIG);
+        require(permissions.isPermission(permissions.MINT_SIG()), "Minting not supported by token");
+        setUserPermission(_who, permissions.MINT_SIG());
     }
     
 
@@ -188,8 +150,8 @@ contract Regulator is Claimable, Migratable {
     * @param _who The address of the account that we are removing permissions for.
     */
     function removeMinter(address _who) public onlyValidator {
-        require(availablePermissions.isPermission(MINT_SIG), "Minting not supported by token");
-        removePermission(_who, MINT_SIG);
+        require(permissions.isPermission(permissions.MINT_SIG()), "Minting not supported by token");
+        removeUserPermission(_who, permissions.MINT_SIG());
     }
 
     /** Returns whether or not a user is a minter.
@@ -197,7 +159,7 @@ contract Regulator is Claimable, Migratable {
      * @return `true` if the user is a minter, `false` otherwise.
      */
     function isMinter(address _who) public view returns (bool) {
-        return hasPermission(_who, MINT_SIG);
+        return hasUserPermission(_who, permissions.MINT_SIG());
     }
 
     /**
@@ -205,18 +167,17 @@ contract Regulator is Claimable, Migratable {
     * @param _who The address of the account that we are setting permissions for.
     */
     function setBlacklistSpender(address _who) public onlyValidator {
-        require(availablePermissions.isPermission(MINT_SIG), "Blacklist spending not supported by token");
-        setPermission(_who, ADD_BLACKLISTED_SPENDER_SIG);
+        require(permissions.isPermission(permissions.ADD_BLACKLISTED_ADDRESS_SPENDER_SIG()), "Blacklist spending not supported by token");
+        setUserPermission(_who, permissions.ADD_BLACKLISTED_ADDRESS_SPENDER_SIG());
     }
     
-
     /**
     * @notice Removes the necessary permissions for a user to spend tokens from a blacklisted account.
     * @param _who The address of the account that we are removing permissions for.
     */
     function removeBlacklistSpender(address _who) public onlyValidator {
-        require(availablePermissions.isPermission(MINT_SIG), "Blacklist spending not supported by token");
-        removePermission(_who, ADD_BLACKLISTED_SPENDER_SIG);
+        require(permissions.isPermission(permissions.ADD_BLACKLISTED_ADDRESS_SPENDER_SIG()), "Blacklist spending not supported by token");
+        removeUserPermission(_who, permissions.ADD_BLACKLISTED_ADDRESS_SPENDER_SIG());
     }
 
     /** Returns whether or not a user is a blacklist spender.
@@ -224,7 +185,7 @@ contract Regulator is Claimable, Migratable {
      * @return `true` if the user is a blacklist spender, `false` otherwise.
      */
     function isBlacklistSpender(address _who) public view returns (bool) {
-        return hasPermission(_who, ADD_BLACKLISTED_SPENDER_SIG);
+        return hasUserPermission(_who, permissions.ADD_BLACKLISTED_ADDRESS_SPENDER_SIG());
     }
 
     /**
@@ -232,8 +193,8 @@ contract Regulator is Claimable, Migratable {
     * @param _who The address of the account that we are setting permissions for.
     */
     function setBlacklistDestroyer(address _who) public onlyValidator {
-        require(availablePermissions.isPermission(DESTROYBLACKLIST_SIG), "Blacklist token destruction not supported by token");
-        setPermission(_who, DESTROYBLACKLIST_SIG);
+        require(permissions.isPermission(permissions.DESTROY_BLACKLISTED_TOKENS_SIG()), "Blacklist token destruction not supported by token");
+        setUserPermission(_who, permissions.DESTROY_BLACKLISTED_TOKENS_SIG());
     }
     
 
@@ -242,8 +203,8 @@ contract Regulator is Claimable, Migratable {
     * @param _who The address of the account that we are removing permissions for.
     */
     function removeBlacklistDestroyer(address _who) public onlyValidator {
-        require(availablePermissions.isPermission(DESTROYBLACKLIST_SIG), "Blacklist token destruction not supported by token");
-        removePermission(_who, DESTROYBLACKLIST_SIG);
+        require(permissions.isPermission(permissions.DESTROY_BLACKLISTED_TOKENS_SIG()), "Blacklist token destruction not supported by token");
+        removeUserPermission(_who, permissions.DESTROY_BLACKLISTED_TOKENS_SIG());
     }
 
     /** Returns whether or not a user is a blacklist destroyer.
@@ -251,7 +212,7 @@ contract Regulator is Claimable, Migratable {
      * @return `true` if the user is a blacklist destroyer, `false` otherwise.
      */
     function isBlacklistDestroyer(address _who) public view returns (bool) {
-        return hasPermission(_who, DESTROYBLACKLIST_SIG);
+        return hasUserPermission(_who, permissions.DESTROY_BLACKLISTED_TOKENS_SIG());
     }
 
     /**
@@ -259,10 +220,10 @@ contract Regulator is Claimable, Migratable {
     * @param _who The address of the account that we are setting permissions for.
     */
     function setWhitelistedUser(address _who) public onlyValidator {
-        require(availablePermissions.isPermission(BURN_SIG), "Burn method not supported by token");
-        require(availablePermissions.isPermission(DESTROYSELF_SIG), "Self-destruct method not supported by token");
-        setPermission(_who, BURN_SIG);
-        removePermission(_who, DESTROYSELF_SIG);
+        require(permissions.isPermission(permissions.BURN_SIG()), "Burn method not supported by token");
+        require(permissions.isPermission(permissions.BLACKLISTED_SIG()), "Self-destruct method not supported by token");
+        setUserPermission(_who, permissions.BURN_SIG());
+        removeUserPermission(_who, permissions.BLACKLISTED_SIG());
     }
 
     /**
@@ -271,10 +232,10 @@ contract Regulator is Claimable, Migratable {
     * @param _who The address of the account that we are setting permissions for.
     */
     function setBlacklistedUser(address _who) public onlyValidator {
-        require(availablePermissions.isPermission(BURN_SIG), "Burn method not supported by token");
-        require(availablePermissions.isPermission(DESTROYSELF_SIG), "Self-destruct method not supported by token");
-        removePermission(_who, BURN_SIG);
-        setPermission(_who, DESTROYSELF_SIG);
+        require(permissions.isPermission(permissions.BURN_SIG()), "Burn method not supported by token");
+        require(permissions.isPermission(permissions.BLACKLISTED_SIG()), "Self-destruct method not supported by token");
+        removeUserPermission(_who, permissions.BURN_SIG());
+        setUserPermission(_who, permissions.BLACKLISTED_SIG());
     }
 
     /**
@@ -283,10 +244,10 @@ contract Regulator is Claimable, Migratable {
     * @param _who The address of the account that we are setting permissions for.
     */
     function setNonlistedUser(address _who) public onlyValidator {
-        require(availablePermissions.isPermission(BURN_SIG), "Burn method not supported by token");
-        require(availablePermissions.isPermission(DESTROYSELF_SIG), "Self-destruct method not supported by token");
-        removePermission(_who, BURN_SIG);
-        removePermission(_who, DESTROYSELF_SIG);
+        require(permissions.isPermission(permissions.BURN_SIG()), "Burn method not supported by token");
+        require(permissions.isPermission(permissions.BLACKLISTED_SIG()), "Self-destruct method not supported by token");
+        removeUserPermission(_who, permissions.BURN_SIG());
+        removeUserPermission(_who, permissions.BLACKLISTED_SIG());
     }
 
     /** Returns whether or not a user is whitelisted.
@@ -294,7 +255,7 @@ contract Regulator is Claimable, Migratable {
      * @return `true` if the user is whitelisted, `false` otherwise.
      */
     function isWhitelistedUser(address _who) public view returns (bool) {
-        return (hasPermission(_who, BURN_SIG) && !hasPermission(_who, DESTROYSELF_SIG));
+        return (hasUserPermission(_who, permissions.BURN_SIG()) && !hasUserPermission(_who, permissions.BLACKLISTED_SIG()));
     }
 
     /** Returns whether or not a user is blacklisted.
@@ -302,7 +263,7 @@ contract Regulator is Claimable, Migratable {
      * @return `true` if the user is blacklisted, `false` otherwise.
      */
     function isBlacklistedUser(address _who) public view returns (bool) {
-        return (!hasPermission(_who, BURN_SIG) && hasPermission(_who, DESTROYSELF_SIG));
+        return (!hasUserPermission(_who, permissions.BURN_SIG()) && hasUserPermission(_who, permissions.BLACKLISTED_SIG()));
     }
 
     /** Returns whether or not a user is nonlisted.
@@ -310,7 +271,7 @@ contract Regulator is Claimable, Migratable {
      * @return `true` if the user is nonlisted, `false` otherwise.
      */
     function isNonlistedUser(address _who) public view returns (bool) {
-        return (!hasPermission(_who, BURN_SIG) && !hasPermission(_who, DESTROYSELF_SIG));
+        return (!hasUserPermission(_who, permissions.BURN_SIG()) && !hasUserPermission(_who, permissions.BLACKLISTED_SIG()));
     }
         
     /**
@@ -318,9 +279,8 @@ contract Regulator is Claimable, Migratable {
     * @param _who The address of the account that we are setting the value of an attribute for
     * @param _methodsignature The signature of the method that the user is getting permission to run.
     */
-    function setPermission(address _who, bytes4 _methodsignature) public onlyValidator {
-        require(availablePermissions.isPermission(_methodsignature));
-        userPermissions.setPermission(_who, _methodsignature);
+    function setUserPermission(address _who, bytes4 _methodsignature) public onlyValidator {
+        permissions.setUserPermission(_who, _methodsignature);
     }
  
     /**
@@ -328,9 +288,8 @@ contract Regulator is Claimable, Migratable {
     * @param _who The address of the account that we are setting the value of an attribute for
     * @param _methodsignature The signature of the method that the user will no longer be able to execute.
     */
-    function removePermission(address _who, bytes4 _methodsignature) public onlyValidator {
-        require(availablePermissions.isPermission(_methodsignature));
-        userPermissions.removePermission(_who, _methodsignature);
+    function removeUserPermission(address _who, bytes4 _methodsignature) public onlyValidator {
+        permissions.removeUserPermission(_who, _methodsignature);
     }
 
     /**
@@ -339,7 +298,7 @@ contract Regulator is Claimable, Migratable {
     * @param _methodsignature The signature of the method in question
     * @return A boolean indicating whether the user has permission or not
     */
-    function hasPermission(address _who, bytes4 _methodsignature) public view returns (bool) {
-        return userPermissions.hasPermission(_who, _methodsignature);
+    function hasUserPermission(address _who, bytes4 _methodsignature) public view returns (bool) {
+        return permissions.hasUserPermission(_who, _methodsignature);
     }
 }

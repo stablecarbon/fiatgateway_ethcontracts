@@ -1,7 +1,7 @@
 const {
     CommonVariables,
     expectRevert,
-    PermissionStorage,
+    PermissionsStorage,
 } = require('../helpers/common');
 
 contract('PermissionStorage', _accounts => {
@@ -14,7 +14,7 @@ contract('PermissionStorage', _accounts => {
     const testPermissionContract = "No Contract";
 
     beforeEach(async function () {
-        this.sheet = await PermissionStorage.new({ from: owner })
+        this.sheet = await PermissionsStorage.new({ from: owner })
     })
 
     describe('when the sender is the owner', function () {
