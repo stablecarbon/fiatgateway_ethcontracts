@@ -1,1 +1,0 @@
-These contracts were created by [TrueUSD](https://github.com/trusttoken/trueUSD).

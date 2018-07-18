@@ -7,37 +7,20 @@ const BigNumber = web3.BigNumber;
 const ZERO_ADDRESS = '0x0000000000000000000000000000000000000000';
 
 /** Contract classes **/
-// TrueUSD ERC20 contracts
-const BalanceSheet = artifacts.require("BalanceSheet");
-const AllowanceSheet = artifacts.require("AllowanceSheet");
-const BasicTokenMock = artifacts.require("BasicTokenMock");
-const BurnableTokenMock = artifacts.require("BurnableTokenMock");
-const PausableTokenMock = artifacts.require("PausableTokenMock");
-const StandardTokenMock = artifacts.require("StandardTokenMock");
-const ModularMintableToken = artifacts.require("ModularMintableToken");
+// TrueUSD ERC20 contract tests
 const transfersToZeroBecomeBurns = false;
 
-// Eternal ERC20 contracts
-const EternalMintableToken = artifacts.require("EternalMintableToken");
-const EternalBurnableToken = artifacts.require("EternalBurnableToken");
-const EternalStandardToken = artifacts.require("EternalStandardToken");
-const EternalPausableToken = artifacts.require("EternalPausableToken");
-// Eternal storage pattern contracts
-const EternalStorage = artifacts.require("EternalStorage");
-const EternalStorageProxy = artifacts.require("EternalStorageProxy");
-const Proxy = artifacts.require("Proxy");
-const UpgradeabilityProxy = artifacts.require("UpgradeabilityProxy");
-const UpgradeabilityStorage = artifacts.require("UpgradeabilityStorage");
 // Regulator and storage classes for regulator
-const PermissionStorage = artifacts.require("PermissionStorage");
-const PermissionStorageMock = artifacts.require("PermissionStorageMock");
-const UserPermissionsStorage = artifacts.require("UserPermissionsStorage");
+const PermissionsStorage = artifacts.require("PermissionsStorage");
+const PermissionsStorageMock = artifacts.require("PermissionsStorageMock");
 const ValidatorStorage = artifacts.require("ValidatorStorage");
 const ValidatorStorageMock = artifacts.require("ValidatorStorageMock");
 const Regulator = artifacts.require("Regulator");
 const RegulatorMock = artifacts.require("RegulatorMock");
 const RegulatorProxy = artifacts.require("RegulatorProxy");
 // PermissionedToken
+const BalanceSheet = artifacts.require("BalanceSheet");
+const AllowanceSheet = artifacts.require("AllowanceSheet");
 const MutablePermissionedToken = artifacts.require("MutablePermissionedToken");
 const ImmutablePermissionedToken = artifacts.require("ImmutablePermissionedToken");
 const MutablePermissionedTokenProxy = artifacts.require("MutablePermissionedTokenProxy");
@@ -83,31 +66,16 @@ module.exports = {
     assertBalance,
     CommonVariables,
     ZERO_ADDRESS,
-    BalanceSheet,
-    AllowanceSheet,
-    BasicTokenMock,
-    BurnableTokenMock,
-    PausableTokenMock,
-    StandardTokenMock,
-    ModularMintableToken,
     transfersToZeroBecomeBurns,
-    EternalBurnableToken,
-    EternalMintableToken,
-    EternalPausableToken,
-    EternalStandardToken,
-    EternalStorage,
-    EternalStorageProxy,
-    Proxy,
-    UpgradeabilityProxy,
-    UpgradeabilityStorage,
-    PermissionStorage,
-    PermissionStorageMock,
-    UserPermissionsStorage,
+    PermissionsStorage,
+    PermissionsStorageMock,
     ValidatorStorage,
     ValidatorStorageMock,
     Regulator,
     RegulatorMock,
     RegulatorProxy,
+    BalanceSheet,
+    AllowanceSheet,
     MutablePermissionedToken,
     ImmutablePermissionedToken,
     MutablePermissionedTokenProxy,
