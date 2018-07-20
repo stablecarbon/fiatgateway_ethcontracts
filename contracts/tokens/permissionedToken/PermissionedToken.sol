@@ -42,12 +42,32 @@ contract PermissionedToken is Claimable {
         _;
     }
 
-    /**
-    * @notice Constructor sets the regulator proxy contract.
-    * @param _rProxy Address of `RegulatorProxy` contract
-    */
-    constructor(address _rProxy) Ownable() public {
-        setRP(_rProxy);
+    /** @notice Modifier that checks whether or not a transfer operation can
+     * succeed with the given _from and _to address. See transfer()'s documentation for
+     * more details.
+    **/
+    modifier transferConditionsRequired(address _to) {
+        require(!rProxy.isBlacklistedUser(_to));
+        _;
+    }
+
+     /** @notice Modifier that checks whether or not a transferFrom operation can
+     * succeed with the given _from and _to address. See transferFrom()'s documentation for
+     * more details.
+    **/
+    modifier transferFromConditionsRequired(address _from, address _to) {
+        bool is_recipient_blacklisted = rProxy.isBlacklistedUser(_to);
+        require(!is_recipient_blacklisted);
+        
+        // If the origin user is blacklisted, the transaction can only succeed if 
+        // the message sender is a user that has been approved to transfer 
+        // blacklisted tokens out of this address.
+        bool is_origin_blacklisted = rProxy.isBlacklistedUser(_from);
+        bytes4 add_blacklisted_spender_sig = rProxy.permissions().ADD_BLACKLISTED_ADDRESS_SPENDER_SIG();
+        bool sender_can_spend_from_blacklisted_address = 
+            rProxy.hasUserPermission(msg.sender, add_blacklisted_spender_sig); // Is the message sender a person with the ability to transfer tokens out of a blacklisted account?
+        require(!is_origin_blacklisted || sender_can_spend_from_blacklisted_address);
+        _;
     }
 
     /**
@@ -82,14 +102,14 @@ contract PermissionedToken is Claimable {
     *
     * @return `true` if successful and `false` if unsuccessful
     */
-    function burn(uint256 _amount) public requiresPermission {}
+    function burn(uint256 _amount) public requiresPermission;
 
     /**
     * @notice Destroy the tokens owned by a blacklisted account. This function can generally
     * only be called by a central authority.
     * @param _who Account to destroy tokens from. Must be a blacklisted account.
     */
-    function destroyBlacklistedTokens(address _who) public requiresPermission {}
+    function destroyBlacklistedTokens(address _who) public requiresPermission;
 
     /**
     * @notice Allows a central authority to add themselves as a spender on a blacklisted account.
@@ -97,7 +117,7 @@ contract PermissionedToken is Claimable {
     * authority has full control over the account balance.
     * @param _who The blacklisted account.
     */
-    function addBlacklistedAddressSpender(address _who) public requiresPermission {}
+    function addBlacklistedAddressSpender(address _who) public requiresPermission;
 
     /**
     * @notice Initiates a "send" operation towards another user. See `transferFrom` for details.
@@ -107,7 +127,7 @@ contract PermissionedToken is Claimable {
     *
     * @return `true` if successful and `false` if unsuccessful
     */
-    function transfer(address _to, uint256 _amount) public returns (bool) {}
+    function transfer(address _to, uint256 _amount) public transferConditionsRequired(_to) returns (bool) {}
 
     /**
     * @notice Initiates a transfer operation between address `_from` and `_to`. Requires that the
@@ -122,11 +142,11 @@ contract PermissionedToken is Claimable {
     *
     * @return `true` if successful and `false` if unsuccessful
     */
-    function transferFrom(address _from, address _to, uint256 _amount) public returns (bool) {}
+    function transferFrom(address _from, address _to, uint256 _amount) public transferFromConditionsRequired(_from, _to) returns (bool) {}
 
     /**
     * @notice If a user is blacklisted, then they will have the ability to 
     * destroy their own tokens. This function provides that ability.
     */
-    function blacklisted() requiresPermission public returns (bool) {}
+    function blacklisted() requiresPermission public returns (bool);
 }

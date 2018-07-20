@@ -1,6 +1,6 @@
 pragma solidity ^0.4.23;
 
-import "openzeppelin-solidity/contracts/ownership/Ownable.sol";
+import "openzeppelin-solidity/contracts/ownership/Claimable.sol";
 import "zos-lib/contracts/upgradeability/AdminUpgradeabilityProxy.sol";
 import "./Regulator.sol";
 
@@ -11,7 +11,9 @@ import "./Regulator.sol";
 * service.
 *
 */
-contract RegulatorProxy is Ownable, AdminUpgradeabilityProxy {
+contract RegulatorProxy is Claimable, AdminUpgradeabilityProxy {
+    constructor(address _implementation) AdminUpgradeabilityProxy(_implementation) public {}
+    
     /**
      * @notice Claims ownership of a Regulator. Precondition: the
      * previous owner of the Regulator already transferred ownership to 
@@ -19,6 +21,8 @@ contract RegulatorProxy is Ownable, AdminUpgradeabilityProxy {
      * @param _reg The address of the Regulator contract.
      */
     function claimRegulatorOwnership(address _reg) public onlyOwner {
+        // We use a low-level call here so that RegulatorProxy doesn't have to 
+        // load regulator's bytecode.
         _reg.call(bytes4(keccak256("claimOwnership()")));
     }
 }

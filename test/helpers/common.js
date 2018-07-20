@@ -1,4 +1,4 @@
-/* Loading all imports */
+k/* Loading all imports */
 const _ = require('lodash');
 const expectRevert = require('./expectRevert');
 const expectThrow = require('./expectThrow');
@@ -22,7 +22,9 @@ const RegulatorProxy = artifacts.require("RegulatorProxy");
 const BalanceSheet = artifacts.require("BalanceSheet");
 const AllowanceSheet = artifacts.require("AllowanceSheet");
 const MutablePermissionedToken = artifacts.require("MutablePermissionedToken");
+const MutablePermissionedTokenMock = artifacts.require("MutablePermissionedToken");
 const ImmutablePermissionedToken = artifacts.require("ImmutablePermissionedToken");
+const ImmutablePermissionedTokenMock = artifacts.require("ImmutablePermissionedToken");
 const MutablePermissionedTokenProxy = artifacts.require("MutablePermissionedTokenProxy");
 // WT0
 const WhitelistedToken = artifacts.require("WhitelistedToken");
@@ -77,7 +79,9 @@ module.exports = {
     BalanceSheet,
     AllowanceSheet,
     MutablePermissionedToken,
+    MutablePermissionedTokenMock,
     ImmutablePermissionedToken,
+    ImmutablePermissionedTokenMock,
     MutablePermissionedTokenProxy,
     WhitelistedToken,
     WhitelistedTokenRegulator,

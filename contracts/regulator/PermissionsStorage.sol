@@ -34,14 +34,14 @@ contract PermissionsStorage is Claimable {
     /** 
         Constants: stores method signatures 
     */
-    bytes4 public MINT_SIG = bytes4(keccak256("mint(address,uint256)"));
-    bytes4 public MINT_CUSD_SIG = bytes4(keccak256("mint(address,uint256,bool)"));
-    bytes4 public BURN_SIG = bytes4(keccak256("burn(uint256)"));
-    bytes4 public TRANSFER_SIG = bytes4(keccak256("transfer(address,uint256)"));
-    bytes4 public TRANSFER_FROM_SIG = bytes4(keccak256("transferFrom(address,address,uint256)"));
-    bytes4 public DESTROY_BLACKLISTED_TOKENS_SIG = bytes4(keccak256("destroyBlacklistedTokens(address)"));
-    bytes4 public ADD_BLACKLISTED_ADDRESS_SPENDER_SIG = bytes4(keccak256("addBlacklistedAddressSpender(address)"));
-    bytes4 public BLACKLISTED_SIG = bytes4(keccak256("blacklisted()"));
+    bytes4 public constant MINT_SIG = bytes4(keccak256("mint(address,uint256)"));
+    bytes4 public constant MINT_CUSD_SIG = bytes4(keccak256("mint(address,uint256,bool)"));
+    bytes4 public constant BURN_SIG = bytes4(keccak256("burn(uint256)"));
+    bytes4 public constant TRANSFER_SIG = bytes4(keccak256("transfer(address,uint256)"));
+    bytes4 public constant TRANSFER_FROM_SIG = bytes4(keccak256("transferFrom(address,address,uint256)"));
+    bytes4 public constant DESTROY_BLACKLISTED_TOKENS_SIG = bytes4(keccak256("destroyBlacklistedTokens(address)"));
+    bytes4 public constant ADD_BLACKLISTED_ADDRESS_SPENDER_SIG = bytes4(keccak256("addBlacklistedAddressSpender(address)"));
+    bytes4 public constant BLACKLISTED_SIG = bytes4(keccak256("blacklisted()"));
 
     /**
     * @notice Sets a permission within the list of permissions.

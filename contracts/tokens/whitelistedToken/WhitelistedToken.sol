@@ -1,7 +1,7 @@
 pragma solidity ^0.4.23;
 
 import "openzeppelin-solidity/contracts/AddressUtils.sol";
-import "../permissionedToken/ImmutablePermissionedToken.sol";
+import "../permissionedToken/immutablePermissionedToken/ImmutablePermissionedToken.sol";
 import "../carbonToken/CarbonDollar.sol";
 
 contract WhitelistedToken is ImmutablePermissionedToken {
@@ -28,12 +28,12 @@ contract WhitelistedToken is ImmutablePermissionedToken {
     */
     function mint(address _to, uint256 _amount, bool toCUSD) public requiresPermission returns (bool) {
         if (toCUSD) {
-            bool successful = CarbonDollar(cusd_addr).mintCarbonDollar(_to, _amount);
-            successful = successful && super.mint(cusd_addr, _amount);
+            bool successful = CarbonDollar(cusd_addr).mint(_to, _amount);
+            successful = successful && _mint(cusd_addr, _amount);
             return successful;
         }
         else {
-            return super.mint(_to, _amount);
+            return _mint(_to, _amount);
         }
     }
 }

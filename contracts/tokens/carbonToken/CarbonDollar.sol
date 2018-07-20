@@ -1,11 +1,14 @@
 pragma solidity ^0.4.23;
 
-import "../permissionedToken/MutablePermissionedToken.sol";
+import "openzeppelin-solidity/contracts/AddressUtils.sol";
+import "openzeppelin-solidity/contracts/ownership/HasNoTokens.sol";
+import "../permissionedToken/mutablePermissionedToken/MutablePermissionedToken.sol";
 import "../whitelistedToken/WhitelistedToken.sol";
-import "./FeeSheet.sol";
-import "./StablecoinWhitelist.sol";
+import "./helpers/FeeSheet.sol";
+import "./helpers/StablecoinWhitelist.sol";
+import "../../DataMigratable.sol";
 
-contract CarbonDollar is MutablePermissionedToken {
+contract CarbonDollar is DataMigratable, MutablePermissionedToken, HasNoTokens {
 
     // TODO: Some sort of blacklist/whitelisting (similar to permissionedToken) @tanishq/@sam
     // Random Thought: GreyList (mark Dirty Money without prevent it from being transferred or receiving)
@@ -35,7 +38,8 @@ contract CarbonDollar is MutablePermissionedToken {
     */
     /** Ensures that the caller of the function is a whitelisted token. */
     modifier requiresWhitelistedToken() {
-        require(stablecoinWhitelist.isWhitelisted(msg.sender));
+        require(AddressUtils.isContract(msg.sender)); // Must be a contract
+        require(stablecoinWhitelist.isWhitelisted(msg.sender)); // Must be a whitelisted token
         _;
     }
 
@@ -62,47 +66,51 @@ contract CarbonDollar is MutablePermissionedToken {
         claimSO();
     }
 
-    /** @notice Transfers ownership of the stablecoin whitelist and fee sheets to the owner
-    * of this token contract. This is useful for migrations, since the new token contract is made the
-    * owner of the old token contract.
-    **/
-    function transferStorageOwnership() public onlyOwner {
-        super.transferSO(msg.sender);
-        transferSO(msg.sender);
-    }
-
     function transferSO(address owner) internal {
+        super.transferSO(owner);
         stablecoinFees.transferOwnership(owner);
         stablecoinWhitelist.transferOwnership(owner);
     }
 
-    /** @notice Claims ownership of the stablecoin whitelist and fee sheets. Succeeds if the
-    * ownership of those contracts was transferred to this contract.
-    *
-    * This function is strictly used for migrations.
-    **/
-    function claimStorageOwnership() public onlyOwner {
-        super.claimSO();
-        claimSO();
-    }
-
     function claimSO() internal {
+        super.claimSO();
         stablecoinFees.claimOwnership();
         stablecoinWhitelist.claimOwnership();
     }
 
     /**
-     * @notice add new stablecoin to whitelist
+     * @notice Set the stablecoin whitelist contract.
+     * @param _whitelist Address of the stablecoin whitelist contract.
      */
-    function whitelistToken(address _stablecoin) public onlyOwner {
+    function setStablecoinWhitelist(address _whitelist) public onlyOwner {
+        address oldWhitelist = address(stablecoinWhitelist);
+        stablecoinWhitelist = StablecoinWhitelist(_whitelist);
+        emit StablecoinWhitelistChanged(oldWhitelist, _whitelist);
+    }
+
+    /**
+     * @notice Add new stablecoin to whitelist.
+     * @param _stablecoin Address of stablecoin contract.
+     */
+    function listToken(address _stablecoin) public onlyOwner {
         stablecoinWhitelist.addStablecoin(_stablecoin); // add new stablecoin in whitelist mapping
     }
 
     /**
-     * @notice remove existing stablecoin from whitelist
+     * @notice Remove existing stablecoin from whitelist.
+     * @param _stablecoin Address of stablecoin contract.
      */
     function unlistToken(address _stablecoin) public onlyOwner {
         stablecoinWhitelist.removeStablecoin(_stablecoin);
+    }
+
+    /**
+     * @notice Indicate if stablecoin is whitelisted or not.
+     * @param _stablecoin Address of stablecoin contract.
+     * @return Whether or not the stablecoin is on the whitelist.
+     */
+    function isWhitelisted(address _stablecoin) public view returns (bool) {
+        return stablecoinWhitelist.isWhitelisted(_stablecoin);
     }
     
     /**
@@ -114,34 +122,37 @@ contract CarbonDollar is MutablePermissionedToken {
         stablecoinFees = FeeSheet(_sheet);
         emit FeeSheetChanged(oldSheet, _sheet);
     }
-    
-    /**
-     * @notice Set the stablecoin whitelist contract.
-     * @param _whitelist Address of the stablecoin whitelist contract.
-     */
-    function setStablecoinWhitelist(address _whitelist) public onlyOwner {
-        address oldWhitelist = address(stablecoinWhitelist);
-        stablecoinWhitelist = StablecoinWhitelist(_whitelist);
-        emit StablecoinWhitelistChanged(oldWhitelist, _whitelist);
-    }
-
-    function mintCarbonDollar(address _to, uint256 _amount) public requiresWhitelistedToken returns (bool) {
-        return mint(_to, _amount);
-    }
 
     /**
-     * @notice Change fees associated with going from CarbonUSD to a particular WhitelistedToken.
+     * @notice Change fees associated with going from CarbonUSD to a particular stablecoin.
+     * @param stablecoin Address of the stablecoin contract.
+     * @param _newFee The new fee rate to set, in tenths of a percent. 
      */
-    function changeFee(address stablecoin, uint16 _newFee) public onlyOwner {
+    function setFee(address stablecoin, uint16 _newFee) public onlyOwner {
+        require(stablecoinWhitelist.isWhitelisted(stablecoin));
         stablecoinFees.setFee(stablecoin, _newFee);
     }
 
     /**
      * @notice Change the default fee associated with going from CarbonUSD to a WhitelistedToken.
      * This fee amount is used if the fee for a WhitelistedToken is not specified.
+     * @param _newFee The new fee rate to set, in tenths of a percent.
      */
-    function changeDefaultFee(uint16 _newFee) public onlyOwner {
+    function setDefaultFee(uint16 _newFee) public onlyOwner {
         stablecoinFees.setDefaultFee(_newFee);
+    }
+
+    /**
+     * @notice A whitelisted token can issue CUSD on behalf of a user.
+     * @param _to User to send CUSD to
+     * @param _amount Amount of CarbonUSD to burn.
+     */
+    function mint(address _to, uint256 _amount) public requiresWhitelistedToken returns (bool) {
+        return _mint(_to, _amount);
+    }
+
+    function _mint(address _to, uint256 _amount) internal returns (bool) {
+        return super.mint(_to, _amount);
     }
 
     /**
@@ -150,11 +161,13 @@ contract CarbonDollar is MutablePermissionedToken {
      * @param _amount Amount of CarbonUSD to burn.
      * we credit the user's account at the sender address with the _amount minus the percentage fee we want to charge.
      */
-    function burnCarbonDollar(address stablecoin, uint256 _amount) public returns (bool) {
+    function burn(address stablecoin, uint256 _amount) public requiresPermission returns (bool) {
         require(stablecoinWhitelist.isWhitelisted(stablecoin));
-        balances.subBalance(msg.sender, _amount);
-
-        // Send back WhitelistedToken, but with a fee reduction
+        WhitelistedToken w = WhitelistedToken(stablecoin);
+        require(w.balanceOf(address(this)) >= _amount); // Need enough WT0 in Carbon escrow account in order for transfer to succeed!
+ 
+        // Send back WT0 to calling user, but with a fee reduction.
+        // Transfer this fee into this Carbon account (this contract's address)
         uint16 feeRate;
         if (stablecoinFees.isFeeSet(stablecoin)) // If fee for coin is not set
             feeRate = stablecoinFees.fees(stablecoin);
@@ -163,8 +176,10 @@ contract CarbonDollar is MutablePermissionedToken {
 
         uint256 chargedFee = stablecoinFees.computeFee(_amount, feeRate);
         uint256 feedAmount = _amount.sub(chargedFee);
-        transfer(owner, chargedFee); // Transfer fee, sent to owner of this contract (Carbon-12 Labs).
-        WhitelistedToken(stablecoin).transfer(msg.sender, feedAmount);
+        _burn(msg.sender, _amount);
+        w.transfer(msg.sender, feedAmount);
+        w.burn(chargedFee);
+        _mint(address(this), chargedFee);
         return true;
     }
 }

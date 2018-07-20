@@ -1,5 +1,3 @@
-// Used from TrueUSD
-
 pragma solidity ^0.4.23;
 
 import "openzeppelin-solidity/contracts/ownership/Claimable.sol";
@@ -33,7 +31,8 @@ contract FeeSheet is Claimable {
     function setDefaultFee(uint16 fee) public onlyOwner {
         uint16 oldFee = defaultFee;
         defaultFee = fee;
-        emit DefaultFeeChanged(oldFee, fee);
+        if (fee != defaultFee)
+            emit DefaultFeeChanged(oldFee, fee);
     }
     
     /** @notice Set a fee for burning CarbonDollar into a stablecoin.
@@ -44,7 +43,8 @@ contract FeeSheet is Claimable {
         uint16 oldFee = fees[stablecoin];
         fees[stablecoin] = fee;
         isFeeSet[stablecoin] = true;
-        emit FeeChanged(stablecoin, oldFee, fee);
+        if (oldFee != fee)
+            emit DefaultFeeChanged(oldFee, fee);
     }
 
     /** @notice Remove the fee for burning CarbonDollar into a particular kind of stablecoin.
@@ -54,7 +54,18 @@ contract FeeSheet is Claimable {
         uint16 oldFee = fees[stablecoin];
         fees[stablecoin] = 0;
         isFeeSet[stablecoin] = false;
-        emit FeeRemoved(stablecoin, oldFee);
+        if (oldFee != 0)
+            emit FeeRemoved(stablecoin, oldFee);
+    }
+
+    /**
+     * @notice Compute the fee that will be charged on a "burn" operation.
+     * @param amount The amount that will be traded.
+     * @param stablecoin The stablecoin whose fee will be used.
+     */
+    function computeStablecoinFee(uint256 amount, address stablecoin) public view returns (uint256) {
+        uint16 fee = fees[stablecoin];
+        return computeFee(amount, fee);
     }
 
     /**
