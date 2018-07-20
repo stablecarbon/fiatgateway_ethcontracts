@@ -3,6 +3,7 @@ const _ = require('lodash');
 const expectRevert = require('./expectRevert');
 const expectThrow = require('./expectThrow');
 const assertBalance = require('./assertBalance');
+const depositFunds = require('./depositFunds');
 const BigNumber = web3.BigNumber;
 const ZERO_ADDRESS = '0x0000000000000000000000000000000000000000';
 
@@ -65,6 +66,7 @@ module.exports = {
     BigNumber,
     expectRevert,
     expectThrow,
+    depositFunds,
     assertBalance,
     CommonVariables,
     ZERO_ADDRESS,

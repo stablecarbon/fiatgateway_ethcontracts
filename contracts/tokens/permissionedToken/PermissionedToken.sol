@@ -32,6 +32,7 @@ contract PermissionedToken is Claimable {
     /** Events */
     event ChangedRegulatorProxy(address oldProxy, address newProxy);
     event DestroyedBlacklistedTokens(address indexed account, uint256 amount);
+    event AddedBlacklistedAddressSpender(address indexed account, address indexed spender);
 
     /** Modifiers */
     /** @notice Modifier that allows function access to be restricted based on
@@ -89,38 +90,42 @@ contract PermissionedToken is Claimable {
     /**
     * @notice Allows user to mint if they have the appropriate permissions. User generally
     * has to be some sort of centralized authority, e.g. PrimeTrust.
+    * @dev Should be access-restricted with the 'requiresPermission' modifier when implementing.
     * @param _to The address of the receiver
     * @param _amount The number of tokens to withdraw
     * @return `true` if successful and `false` if unsuccessful
     */
-    function mint(address _to, uint256 _amount) public requiresPermission returns (bool);
+    function mint(address _to, uint256 _amount) public returns (bool);
 
     /**
     * @notice Allows user to mint if they have the appropriate permissions. User generally
     * is just a "whitelisted" user (i.e. a user registered with the fiat gateway.)
+    * @dev Should be access-restricted with the 'requiresPermission' modifier when implementing.
     * @param _amount The number of tokens to burn
-    *
     * @return `true` if successful and `false` if unsuccessful
     */
-    function burn(uint256 _amount) public requiresPermission;
+    function burn(uint256 _amount) public;
 
     /**
     * @notice Destroy the tokens owned by a blacklisted account. This function can generally
     * only be called by a central authority.
+    * @dev Should be access-restricted with the 'requiresPermission' modifier when implementing.
     * @param _who Account to destroy tokens from. Must be a blacklisted account.
     */
-    function destroyBlacklistedTokens(address _who) public requiresPermission;
+    function destroyBlacklistedTokens(address _who) public;
 
     /**
     * @notice Allows a central authority to add themselves as a spender on a blacklisted account.
     * By default, the allowance is set to the balance of the blacklisted account, so that the
     * authority has full control over the account balance.
+    * @dev Should be access-restricted with the 'requiresPermission' modifier when implementing.
     * @param _who The blacklisted account.
     */
-    function addBlacklistedAddressSpender(address _who) public requiresPermission;
+    function addBlacklistedAddressSpender(address _who) public;
 
     /**
     * @notice Initiates a "send" operation towards another user. See `transferFrom` for details.
+    * @dev When implemented, it should use the transferConditionsRequired() modifier.
     * @param _to The address of the receiver. This user must not be blacklisted, or else the tranfer
     * will fail.
     * @param _amount The number of tokens to transfer
@@ -132,14 +137,13 @@ contract PermissionedToken is Claimable {
     /**
     * @notice Initiates a transfer operation between address `_from` and `_to`. Requires that the
     * message sender is an approved spender on the _from account.
-    *
+    * @dev When implemented, it should use the transferFromConditionsRequired() modifier.
     * @param _to The address of the recipient. This address must not be blacklisted.
     * @param _from The address of the origin of funds. This address _could_ be blacklisted, because
     * a regulator may want to transfer tokens out of a blacklisted account, for example.
     * In order to do so, the regulator would have to add themselves as an approved spender
     * on the account via `addBlacklistAddressSpender()`, and would then be able to transfer tokens out of it.
     * @param _amount The number of tokens to transfer
-    *
     * @return `true` if successful and `false` if unsuccessful
     */
     function transferFrom(address _from, address _to, uint256 _amount) public transferFromConditionsRequired(_from, _to) returns (bool) {}
@@ -148,5 +152,7 @@ contract PermissionedToken is Claimable {
     * @notice If a user is blacklisted, then they will have the ability to 
     * destroy their own tokens. This function provides that ability.
     */
-    function blacklisted() requiresPermission public returns (bool);
+    function blacklisted() requiresPermission public view returns (bool) {
+        return true;
+    }
 }

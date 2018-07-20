@@ -152,7 +152,7 @@ contract CarbonDollar is DataMigratable, MutablePermissionedToken, HasNoTokens {
     }
 
     function _mint(address _to, uint256 _amount) internal returns (bool) {
-        return super.mint(_to, _amount);
+        return super._mint(_to, _amount);
     }
 
     /**
@@ -161,7 +161,7 @@ contract CarbonDollar is DataMigratable, MutablePermissionedToken, HasNoTokens {
      * @param _amount Amount of CarbonUSD to burn.
      * we credit the user's account at the sender address with the _amount minus the percentage fee we want to charge.
      */
-    function burn(address stablecoin, uint256 _amount) public requiresPermission returns (bool) {
+    function burnCarbonDollar(address stablecoin, uint256 _amount) public requiresPermission returns (bool) {
         require(stablecoinWhitelist.isWhitelisted(stablecoin));
         WhitelistedToken w = WhitelistedToken(stablecoin);
         require(w.balanceOf(address(this)) >= _amount); // Need enough WT0 in Carbon escrow account in order for transfer to succeed!
@@ -181,5 +181,9 @@ contract CarbonDollar is DataMigratable, MutablePermissionedToken, HasNoTokens {
         w.burn(chargedFee);
         _mint(address(this), chargedFee);
         return true;
+    }
+
+    function computeStablecoinFee(uint256 amount, address stablecoin) public view returns (uint256) {
+        return stablecoinFees.computeStablecoinFee(amount, stablecoin);
     }
 }

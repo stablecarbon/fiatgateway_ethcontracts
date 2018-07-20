@@ -38,6 +38,7 @@ contract MutablePermissionedToken is PermissionedToken, Migratable, DataMigratab
     event Mint(address indexed to, uint256 value);
     event Burn(address indexed burner, uint256 value);
     event Transfer(address indexed from, address indexed to, uint256 value);
+    event Approval(address indexed owner, address indexed spender, uint256 value);
 
     // Permissioned-Token specific
     event BalanceSheetSet(address indexed sheet);
@@ -112,6 +113,20 @@ contract MutablePermissionedToken is PermissionedToken, Migratable, DataMigratab
     }
 
     /**
+    * @notice Implements balanceOf() as specified in the ERC20 standard.
+    */
+    function balanceOf(address _of) public view returns (uint256) {
+        return balances.balanceOf(_of);
+    }
+
+    /**
+    * @notice Implements allowance() as specified in the ERC20 standard.
+    */
+    function allowance(address owner, address spender) public view returns (uint256) {
+        return allowances.allowanceOf(owner, spender);
+    }
+
+    /**
     * @notice Overrides mint() from `PermissionedToken`.
     */
     function mint(address _to, uint256 _amount) public requiresPermission returns (bool) {
@@ -119,6 +134,7 @@ contract MutablePermissionedToken is PermissionedToken, Migratable, DataMigratab
     }
     
     function _mint(address _to, uint256 _amount) internal returns (bool) {
+        require(rProxy.isWhitelistedUser(_to));
         totalSupply = totalSupply.add(_amount);
         balances.addBalance(_to, _amount);
         emit Mint(_to, _amount);
@@ -134,7 +150,7 @@ contract MutablePermissionedToken is PermissionedToken, Migratable, DataMigratab
     }
 
     function _burn(address _tokensOf, uint256 _amount) internal {
-        require(_amount <= balances.balanceOf(_tokensOf),"not enough balance to burn");
+        require(_amount <= balanceOf(_tokensOf),"not enough balance to burn");
         // no need to require value <= totalSupply, since that would imply the
         // sender's balance is greater than the totalSupply, which *should* be an assertion failure
         /* uint burnAmount = _value / (10 **16) * (10 **16); */
@@ -145,11 +161,21 @@ contract MutablePermissionedToken is PermissionedToken, Migratable, DataMigratab
     }
 
     /**
+    * @notice Implements approve() as specified in the ERC20 standard.
+    */
+    function approve(address _spender, uint256 _value) public returns (bool) {
+        require(!rProxy.isBlacklistedUser(_spender));
+        allowances.setAllowance(msg.sender, _spender, _value);
+        emit Approval(msg.sender, _spender, _value);
+        return true;
+    }
+
+    /**
     * @notice Overrides destroyBlacklistedTokens() from `PermissionedToken`.
     */
     function destroyBlacklistedTokens(address _who) requiresPermission public {
         require(rProxy.isBlacklistedUser(_who));
-        uint256 balance = balances.balanceOf(_who);
+        uint256 balance = balanceOf(_who);
         balances.setBalance(_who, 0);
         totalSupply = totalSupply.sub(balance);
         emit DestroyedBlacklistedTokens(_who, balance);
@@ -160,7 +186,8 @@ contract MutablePermissionedToken is PermissionedToken, Migratable, DataMigratab
     */
     function addBlacklistedAddressSpender(address _who) requiresPermission public {
         require(rProxy.isBlacklistedUser(_who));
-        allowances.setAllowance(_who, msg.sender, balances.balanceOf(_who));
+        allowances.setAllowance(_who, msg.sender, balanceOf(_who));
+        emit AddedBlacklistedAddressSpender(_who, msg.sender);
     }
 
     /**
@@ -168,7 +195,7 @@ contract MutablePermissionedToken is PermissionedToken, Migratable, DataMigratab
     */
     function transfer(address _to, uint256 _amount) transferConditionsRequired(_to) public returns (bool) {
         require(_to != address(0),"to address cannot be 0x0");
-        require(_amount <= balances.balanceOf(msg.sender),"not enough balance to transfer");
+        require(_amount <= balanceOf(msg.sender),"not enough balance to transfer");
 
         balances.subBalance(msg.sender, _amount);
         balances.addBalance(_to, _amount);
@@ -180,10 +207,10 @@ contract MutablePermissionedToken is PermissionedToken, Migratable, DataMigratab
     * @notice Overrides transferFrom() from `PermissionedToken`.
     */
     function transferFrom(address _from, address _to, uint256 _amount) public transferFromConditionsRequired(_from, _to) returns (bool) {
-        require(_amount <= allowances.allowanceOf(_from, msg.sender),"not enough allowance to transfer");
+        require(_amount <= allowance(_from, msg.sender),"not enough allowance to transfer");
         require(_to != address(0),"to address cannot be 0x0");
         require(_from != address(0),"from address cannot be 0x0");
-        require(_amount <= balances.balanceOf(_from),"not enough balance to transfer");
+        require(_amount <= balanceOf(_from),"not enough balance to transfer");
         
         allowances.subAllowance(_from, msg.sender, _amount);
         balances.addBalance(_to, _amount);

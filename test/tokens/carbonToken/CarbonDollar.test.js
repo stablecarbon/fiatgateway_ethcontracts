@@ -2,7 +2,9 @@ const { modularTokenTests } = require('../permissionedToken/ModularTokenTests');
 const { permissionedTokenTests } = require('../permissionedToken/PermissionedTokenTests');
 const { carbonDollarTests } = require('./CarbonDollarTests');
 const {
-    CarbonDollarMock,
+    CarbonDollar,
+    FeeSheet,
+    StablecoinWhitelist,
     CommonVariables
 } = require('../helpers/common');
 
@@ -17,9 +19,10 @@ contract('CarbonDollar', _accounts => {
     describe("CarbonDollar tests", function () {
         beforeEach(async function () {
             this.token = await CarbonDollarMock.new({ from: owner })
+            this.wtToken = await WhitelistedTokenMock.new({ from: owner })
         });
         modularTokenTests();
         permissionedTokenTests();
-        carbonDollarTests();
+        carbonDollarTests(minter);
     });
 })

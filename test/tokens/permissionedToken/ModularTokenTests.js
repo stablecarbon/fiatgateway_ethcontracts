@@ -1,4 +1,4 @@
-// Tests inspired by/taken from TrueUSD contracts.
+// Tests inspired by from TrueUSD contracts.
 
 const {
     assertBalance,

@@ -5,17 +5,17 @@ import "../permissionedToken/immutablePermissionedToken/ImmutablePermissionedTok
 import "../carbonToken/CarbonDollar.sol";
 
 contract WhitelistedToken is ImmutablePermissionedToken {
-    address cusd_addr; // Address of the CarbonUSD contract.
+    address public cusdAddress; // Address of the CarbonUSD contract.
 
     /**
     * @notice Constructor sets the regulator proxy contract and the address of the
     * CarbonUSD contract. The latter is necessary in order to make transactions
     * with the CarbonDollar smart contract.
-    * @param _rProxy Address of `RegulatorProxy` contract
+    * @param _cusd Address of `CarbonDollar` contract
     */
-    constructor(address _rProxy, address _cusd) ImmutablePermissionedToken(_rProxy) public {
+    constructor(address _cusd) public {
         require(AddressUtils.isContract(_cusd));
-        cusd_addr = _cusd;
+        cusdAddress = _cusd;
     }
 
     /**
@@ -28,8 +28,9 @@ contract WhitelistedToken is ImmutablePermissionedToken {
     */
     function mint(address _to, uint256 _amount, bool toCUSD) public requiresPermission returns (bool) {
         if (toCUSD) {
+            require(_to != cusdAddress); // This is to prevent Carbon Labs from printing money out of thin air!
             bool successful = CarbonDollar(cusd_addr).mint(_to, _amount);
-            successful = successful && _mint(cusd_addr, _amount);
+            successful = successful && _mint(cusdAddress, _amount);
             return successful;
         }
         else {
