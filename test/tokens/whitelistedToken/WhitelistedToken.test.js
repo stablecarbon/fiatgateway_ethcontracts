@@ -1,18 +1,19 @@
 const { permissionedTokenTests } = require('../permissionedToken/PermissionedTokenTests');
+const { whitelistedTokenTests } = require('./WhitelistedTokenTests');
 const {
     WhitelistedTokenMock,
     CommonVariables
-} = require('../helpers/common');
+} = require('../../helpers/common');
 
 contract('WhitelistedToken', _accounts => {
     const commonVars = new CommonVariables(_accounts);
-    this.minter = commonVars.tokenOwner;
-    this.validator = commonVars.tokenValidator;
-    this.blacklisted = commonVars.attacker;
-    this.whitelisted = commonVars.userSender;
-    this.nonlisted = commonVars.userReceiver;
+    this.minter = commonVars.accounts[0];
+    this.validator = commonVars.accounts[1];
+    this.blacklisted = commonVars.accounts[2];
+    this.whitelisted = commonVars.accounts[3];
+    this.nonlisted = commonVars.accounts[4];
 
-    describe("WhitelistedTokens tests", function () {
+    describe("WhitelistedToken tests", function () {
         beforeEach(async function () {
             this.token = await WhitelistedTokenMock.new(
                 this.validator,
@@ -23,5 +24,6 @@ contract('WhitelistedToken', _accounts => {
                 { from: owner })
         });
         permissionedTokenTests();
+        whitelistedTokenTests();
     });
 })

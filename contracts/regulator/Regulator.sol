@@ -2,8 +2,8 @@ pragma solidity ^0.4.23;
 
 import "openzeppelin-solidity/contracts/ownership/Claimable.sol";
 import "zos-lib/contracts/migrations/Migratable.sol";
-import "./PermissionsStorage.sol";
-import "./ValidatorStorage.sol";
+import "./helpers/PermissionsStorage.sol";
+import "./helpers/ValidatorStorage.sol";
 import "../DataMigratable.sol";
 
 /**

@@ -18,10 +18,10 @@ const {
 
 contract('Regulator', _accounts => {
     const commonVars = new CommonVariables(_accounts);
-    const owner = commonVars.tokenOwner;
-    const validator = commonVars.tokenValidator;
-    const user = commonVars.userSender;
-    const otherAccount = commonVars.userReceiver;
+    const owner = commonVars.accounts[0];
+    const validator = commonVars.accounts[1];
+    const user = commonVars.accounts[2];
+    const otherAccount = commonVars.accounts[3];
 
     beforeEach(async function () {
         this.sheet = await Regulator.new({ from: owner });

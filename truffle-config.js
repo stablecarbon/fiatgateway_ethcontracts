@@ -17,7 +17,6 @@ module.exports = {
   // to customize your Truffle configuration!
 
   networks: {
-
     // Test RPC environment
     development: {
       host: "localhost",
@@ -25,12 +24,12 @@ module.exports = {
       network_id: "*" //Listen to all networks
     }
   },
-  mocha: {
-    reporter: 'eth-gas-reporter',
-    reporterOptions: {
-      gasPrice: 21
-    }
-  },
+  // mocha: {
+  //   reporter: 'eth-gas-reporter',
+  //   reporterOptions: {
+  //     gasPrice: 21
+  //   }
+  // },
   solc: {
     optimizer: {
       enabled: true,

@@ -3,25 +3,31 @@ const { permissionedTokenTests } = require('./PermissionedTokenTests');
 const {
     MutablePermissionedTokenMock,
     CommonVariables
-} = require('../helpers/common');
+} = require('../../helpers/common');
 
-contract('PermissionedToken', _accounts => {
+contract('MutablePermissionedToken', _accounts => {
     const commonVars = new CommonVariables(_accounts);
-    this.minter = commonVars.tokenOwner;
-    this.validator = commonVars.tokenValidator;
-    this.blacklisted = commonVars.attacker;
-    this.whitelisted = commonVars.userSender;
-    this.nonlisted = commonVars.userReceiver;
+    this.minter = commonVars.accounts[0]; // Token owner, as well
+    this.validator = commonVars.accounts[1];
+    this.blacklisted = commonVars.accounts[2];
+    this.whitelisted = commonVars.accounts[3]; // Account will be loaded with one hundred tokens for modularTokenTests
+    this.nonlisted = commonVars.accounts[4]; // otherAccount
     
     beforeEach(async function () {
         this.token = await MutablePermissionedTokenMock.new(
             this.validator,
             this.minter,
-            this.whitelisted,
             this.blacklisted,
+            this.whitelisted,
             this.nonlisted,
             { from: this.minter })
+        console.log("HI");
     });
-    modularTokenTests(this.minter, this.whitelisted, this.nonlisted);
-    permissionedTokenTests();
+    describe("Modular token tests", function () {
+        modularTokenTests(this.minter, this.whitelisted, this.nonlisted);
+    })
+    describe("Permissioned token tests", function () {
+        permissionedTokenTests(this.minter, this.whitelisted, this.nonlisted, this.blacklisted, this.user);
+    })
+    
 })

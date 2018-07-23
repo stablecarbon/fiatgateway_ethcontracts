@@ -2,15 +2,17 @@ const { permissionedTokenTests } = require('./PermissionedTokenTests');
 const {
     ImmutablePermissionedTokenMock,
     CommonVariables
-} = require('../helpers/common');
+} = require('../../helpers/common');
 
-contract('PermissionedToken', _accounts => {
+contract('ImmutablePermissionedToken', _accounts => {
     const commonVars = new CommonVariables(_accounts);
-    this.minter = commonVars.tokenOwner;
-    this.validator = commonVars.tokenValidator;
-    this.blacklisted = commonVars.attacker;
-    this.whitelisted = commonVars.userSender;
-    this.nonlisted = commonVars.userReceiver;
+    this.owner = commonVars.accounts[0];
+    this.minter = commonVars.accounts[1];
+    this.validator = commonVars.accounts[2];
+    this.blacklisted = commonVars.accounts[3];
+    this.whitelisted = commonVars.accounts[4];
+    this.nonlisted = commonVars.accounts[5];
+    this.user = commonVars.accounts[6];
     
     beforeEach(async function () {
         this.token = await ImmutablePermissionedTokenMock.new(
@@ -19,7 +21,7 @@ contract('PermissionedToken', _accounts => {
             this.whitelisted,
             this.blacklisted,
             this.nonlisted,
-            { from: owner })
+            { from: this.owner })
     });
-    permissionedTokenTests();
+    permissionedTokenTests(this.minter, this.whitelisted, this.nonlisted, this.blacklisted, this.user);
 })

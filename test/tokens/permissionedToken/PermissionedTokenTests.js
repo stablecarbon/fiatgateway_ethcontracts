@@ -6,13 +6,13 @@ const {
 } = require("../../helpers/common");
 
 // TODO add froms
-function permissionedTokenTests() {
+function permissionedTokenTests(minter, whitelisted, nonlisted, blacklisted, user) {
     describe("Permissioned Token Tests", function () {
         describe('mint', function () {
             describe('when sender is minter', function () {
                 from = minter
-                describe('when user is whitelisted', async function () {
-                    it('mints to user', function () {
+                describe('when user is whitelisted', function () {
+                    it('mints to user', async function () {
                         await this.token.mint(whitelisted, 100 * 10 ** 18, { from: minter })
                         assertBalance(this.token, whitelisted, 100 * 10 ** 18);
                     });
@@ -149,7 +149,7 @@ function permissionedTokenTests() {
             describe('sender and recipient are not blacklisted', function () {
                 describe('transfer initiator is approved', function () {
                     describe('funds are plenty', function () {
-                        it('transfer succeeds', function () {
+                        it('transfer succeeds', async function () {
                             await this.token.mint(whitelisted, 50 * 10**18, {from:minter});
                             await this.token.approve(whitelisted, minter, 25 * 10 ** 18);
                             await this.token.transferFrom(whitelisted, nonlisted, 20 * 10 ** 18, { from: minter });
@@ -251,12 +251,12 @@ function permissionedTokenTests() {
         });
         describe('blacklisted', function () {
             describe('user that is blacklisted calls function', function () {
-                it('call succeeds', function () {
+                it('call succeeds', async function () {
                     assert(await this.token.blacklisted({from : blacklisted}));
                 });
             });
             describe('user that is not blacklisted calls function', function () {
-                it('call reverts', function () {
+                it('call reverts', async function () {
                     await expectRevert(this.token.blacklisted({ from: nonlisted }));
                     await expectRevert(this.token.blacklisted({ from: whitelisted }));
                 });

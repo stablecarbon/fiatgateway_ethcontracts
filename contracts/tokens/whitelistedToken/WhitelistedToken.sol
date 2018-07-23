@@ -29,7 +29,7 @@ contract WhitelistedToken is ImmutablePermissionedToken {
     function mint(address _to, uint256 _amount, bool toCUSD) public requiresPermission returns (bool) {
         if (toCUSD) {
             require(_to != cusdAddress); // This is to prevent Carbon Labs from printing money out of thin air!
-            bool successful = CarbonDollar(cusd_addr).mint(_to, _amount);
+            bool successful = CarbonDollar(cusdAddress).mint(_to, _amount);
             successful = successful && _mint(cusdAddress, _amount);
             return successful;
         }

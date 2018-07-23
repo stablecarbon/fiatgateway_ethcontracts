@@ -1,6 +1,6 @@
 pragma solidity ^0.4.23;
 
-import "./RegulatorProxy.sol";
+import "../RegulatorProxy.sol";
 import "./WhitelistedTokenRegulator.sol";
 
 // TODO switch to eternal proxy?

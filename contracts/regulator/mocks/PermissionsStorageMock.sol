@@ -1,6 +1,6 @@
 pragma solidity ^0.4.23;
 
-import "../PermissionsStorage.sol";
+import "../helpers/PermissionsStorage.sol";
 
 contract PermissionsStorageMock is PermissionsStorage {
     /** 

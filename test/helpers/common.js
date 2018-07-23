@@ -1,11 +1,12 @@
-k/* Loading all imports */
+/* Loading all imports */
 const _ = require('lodash');
 const expectRevert = require('./expectRevert');
 const expectThrow = require('./expectThrow');
 const assertBalance = require('./assertBalance');
 const depositFunds = require('./depositFunds');
 const BigNumber = web3.BigNumber;
-const ZERO_ADDRESS = '0x0000000000000000000000000000000000000000';
+const ZERO_ADDRESS = 0x0000000000000000000000000000000000000000;
+const RANDOM_ADDRESS = 0x3b5855bAEF50EBFdFC89c5E5463f92BCe194EAc9; // Just a random address
 
 /** Contract classes **/
 // TrueUSD ERC20 contract tests
@@ -23,9 +24,9 @@ const RegulatorProxy = artifacts.require("RegulatorProxy");
 const BalanceSheet = artifacts.require("BalanceSheet");
 const AllowanceSheet = artifacts.require("AllowanceSheet");
 const MutablePermissionedToken = artifacts.require("MutablePermissionedToken");
-const MutablePermissionedTokenMock = artifacts.require("MutablePermissionedToken");
+const MutablePermissionedTokenMock = artifacts.require("MutablePermissionedTokenMock");
 const ImmutablePermissionedToken = artifacts.require("ImmutablePermissionedToken");
-const ImmutablePermissionedTokenMock = artifacts.require("ImmutablePermissionedToken");
+const ImmutablePermissionedTokenMock = artifacts.require("ImmutablePermissionedTokenMock");
 const MutablePermissionedTokenProxy = artifacts.require("MutablePermissionedTokenProxy");
 // WT0
 const WhitelistedToken = artifacts.require("WhitelistedToken");
@@ -48,16 +49,6 @@ require('chai')
 class CommonVariables {
     constructor(_accounts) {
         this.accounts = _accounts;
-        this.tokenOwner = _accounts[0];
-        this.tokenRegulatorProxyOwner = _accounts[1];
-        this.tokenValidator = _accounts[2];
-        this.tokenValidator2 = _accounts[3];
-        this.carbonDollarOwner = _accounts[4];
-        this.carbonDollarRegulatorProxyOwner = _accounts[5];
-        this.carbonDollarValidator = _accounts[6];
-        this.attacker = _accounts[7];
-        this.userSender = _accounts[8];
-        this.userReceiver = _accounts[9];
     }
 }
 
@@ -70,6 +61,7 @@ module.exports = {
     assertBalance,
     CommonVariables,
     ZERO_ADDRESS,
+    RANDOM_ADDRESS,
     transfersToZeroBecomeBurns,
     PermissionsStorage,
     PermissionsStorageMock,

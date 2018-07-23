@@ -5,9 +5,13 @@ const {
     expectRevert,
     ZERO_ADDRESS,
     transfersToZeroBecomeBurns
-} = require('../helpers/common');
+} = require('../../helpers/common');
 
-function modularTokenTests([owner, oneHundred, anotherAccount]) {
+function modularTokenTests(owner, oneHundred, anotherAccount) {
+    beforeEach(async function() {
+        await this.token.mint(oneHundred, 100 * 10 ** 18, { from: this.minter });
+    });
+
     describe('--BasicToken Tests--', function () {
         describe('total supply', function () {
             it('returns the total amount of tokens', async function () {
