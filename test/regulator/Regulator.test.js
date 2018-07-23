@@ -9,19 +9,19 @@ const {
 } = require('./RegulatorStorage');
 
 const {
+    regulatorStorageInteractionsTests
+} = require('./RegulatorStorageInteractions');
+
+const {
     regulatorPermissionsTests
 } = require('./RegulatorPermissions');
 
-const {
-    regulatorUserPermissionsTests
-} = require('./RegulatorUserPermissions');
-
 contract('Regulator', _accounts => {
     const commonVars = new CommonVariables(_accounts);
-    const owner = commonVars.tokenOwner;
-    const validator = commonVars.tokenValidator;
-    const user = commonVars.userSender;
-    const otherAccount = commonVars.userReceiver;
+    const owner = commonVars.accounts[0];
+    const validator = commonVars.accounts[1];
+    const user = commonVars.accounts[2];
+    const otherAccount = commonVars.accounts[3];
 
     beforeEach(async function () {
         this.sheet = await Regulator.new({ from: owner });
@@ -38,7 +38,7 @@ contract('Regulator', _accounts => {
 
     describe("Regulator tests", function () {
         regulatorStorageTests(owner);
-        regulatorPermissionsTests(owner, user, validator);
-        regulatorUserPermissionsTests(owner, user, otherAccount, this.MINT_SIG);
+        regulatorStorageInteractionsTests(owner, user, validator, otherAccount);
+        regulatorPermissionsTests(owner, user, otherAccount);
     })
 })

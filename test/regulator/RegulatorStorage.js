@@ -5,7 +5,7 @@ const {
 } = require('../helpers/common');
 
 function regulatorStorageTests(owner) {
-    describe("REGULATOR STORAGE SETTER/GETTER TESTS", function() {
+    describe("PERMISSIONSTORAGE SETTER/GETTER TESTS", function() {
         const from = owner;
 
         describe('setPermissionsStorage', function () {

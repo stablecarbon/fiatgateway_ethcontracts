@@ -4,8 +4,6 @@ import "openzeppelin-solidity/contracts/ownership/Ownable.sol";
 import "zos-lib/contracts/upgradeability/AdminUpgradeabilityProxy.sol";
 import "./MutablePermissionedToken.sol";
 
-// TODO switch to eternal proxy?
-
 /**
 * @title MutablePermissionedTokenProxy
 * @notice Token contracts may change over time, so this proxy serves as a
@@ -19,7 +17,7 @@ contract MutablePermissionedTokenProxy is Ownable, AdminUpgradeabilityProxy {
      * this proxy.
      * @param _pToken The address of the PermissionToken contract.
      */
-    function claimOwnership(address _pToken) public onlyOwner {
-        MutablePermissionedToken(_pToken).claimOwnership();
+    function claimTokenOwnership(address _pToken) public onlyOwner {
+        _pToken.call(bytes4(keccak256("claimOwnership()")));
     }
 }

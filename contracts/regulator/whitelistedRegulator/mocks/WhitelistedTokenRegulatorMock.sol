@@ -1,6 +1,6 @@
 pragma solidity ^0.4.23;
 
-import "./RegulatorMock.sol";
+import "../../mocks/RegulatorMock.sol";
 
 contract WhitelistedTokenRegulatorMock is RegulatorMock {
     /** @dev Inherits constructor from RegulatorMock. **/

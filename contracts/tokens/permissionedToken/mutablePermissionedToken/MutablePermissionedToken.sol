@@ -3,14 +3,12 @@ pragma solidity ^0.4.23;
 import "openzeppelin-solidity/contracts/ownership/Claimable.sol";
 import "openzeppelin-solidity/contracts/AddressUtils.sol";
 import "zos-lib/contracts/migrations/Migratable.sol";
-import "../permissionedToken/PermissionedToken.sol";
-import "../../regulator/Regulator.sol";
-import "../../regulator/RegulatorProxy.sol";
-import "./AllowanceSheet.sol";
-import "./BalanceSheet.sol";
-import "../../DataMigratable.sol";
-
-// TODO Convert to EternalERC20.
+import "../../permissionedToken/PermissionedToken.sol";
+import "../../../regulator/Regulator.sol";
+import "../../../regulator/RegulatorProxy.sol";
+import "./helpers/AllowanceSheet.sol";
+import "./helpers/BalanceSheet.sol";
+import "../../../DataMigratable.sol";
 
 /**
 * @title MutablePermissionedToken
@@ -26,7 +24,7 @@ import "../../DataMigratable.sol";
 *	Owner can mint, destroy blacklisted tokens
 *	Depositors can burn
 */
-contract MutablePermissionedToken is Migratable, DataMigratable, PermissionedToken {
+contract MutablePermissionedToken is PermissionedToken, Migratable, DataMigratable {
     using SafeMath for uint256;
 
     /** Variables */
@@ -40,16 +38,11 @@ contract MutablePermissionedToken is Migratable, DataMigratable, PermissionedTok
     event Mint(address indexed to, uint256 value);
     event Burn(address indexed burner, uint256 value);
     event Transfer(address indexed from, address indexed to, uint256 value);
+    event Approval(address indexed owner, address indexed spender, uint256 value);
 
     // Permissioned-Token specific
     event BalanceSheetSet(address indexed sheet);
     event AllowanceSheetSet(address indexed sheet);
-
-    /**
-    * @notice Constructor sets the regulator proxy contract.
-    * @param _rProxy Address of `RegulatorProxy` contract
-    */
-    constructor(address _rProxy) PermissionedToken(_rProxy) public {}
 
     /**
     * @notice Function used as part of Migratable interface. Must be called when
@@ -120,9 +113,28 @@ contract MutablePermissionedToken is Migratable, DataMigratable, PermissionedTok
     }
 
     /**
+    * @notice Implements balanceOf() as specified in the ERC20 standard.
+    */
+    function balanceOf(address _of) public view returns (uint256) {
+        return balances.balanceOf(_of);
+    }
+
+    /**
+    * @notice Implements allowance() as specified in the ERC20 standard.
+    */
+    function allowance(address owner, address spender) public view returns (uint256) {
+        return allowances.allowanceOf(owner, spender);
+    }
+
+    /**
     * @notice Overrides mint() from `PermissionedToken`.
     */
     function mint(address _to, uint256 _amount) public requiresPermission returns (bool) {
+        return _mint(_to, _amount);
+    }
+    
+    function _mint(address _to, uint256 _amount) internal returns (bool) {
+        require(rProxy.isWhitelistedUser(_to));
         totalSupply = totalSupply.add(_amount);
         balances.addBalance(_to, _amount);
         emit Mint(_to, _amount);
@@ -134,22 +146,36 @@ contract MutablePermissionedToken is Migratable, DataMigratable, PermissionedTok
     * @notice Overrides burn() from `PermissionedToken`.
     */
     function burn(uint256 _amount) public requiresPermission {
-        require(_amount <= balances.balanceOf(msg.sender),"not enough balance to burn");
+        _burn(msg.sender, _amount);
+    }
+
+    function _burn(address _tokensOf, uint256 _amount) internal {
+        require(_amount <= balanceOf(_tokensOf),"not enough balance to burn");
         // no need to require value <= totalSupply, since that would imply the
         // sender's balance is greater than the totalSupply, which *should* be an assertion failure
         /* uint burnAmount = _value / (10 **16) * (10 **16); */
-        balances.subBalance(msg.sender, _amount);
+        balances.subBalance(_tokensOf, _amount);
         totalSupply = totalSupply.sub(_amount);
-        emit Burn(msg.sender, _amount);
-        emit Transfer(msg.sender, address(0), _amount);
+        emit Burn(_tokensOf, _amount);
+        emit Transfer(_tokensOf, address(0), _amount);
+    }
+
+    /**
+    * @notice Implements approve() as specified in the ERC20 standard.
+    */
+    function approve(address _spender, uint256 _value) public returns (bool) {
+        require(!rProxy.isBlacklistedUser(_spender));
+        allowances.setAllowance(msg.sender, _spender, _value);
+        emit Approval(msg.sender, _spender, _value);
+        return true;
     }
 
     /**
     * @notice Overrides destroyBlacklistedTokens() from `PermissionedToken`.
     */
     function destroyBlacklistedTokens(address _who) requiresPermission public {
-        require(Regulator(rProxy).isBlacklistedUser(_who));
-        uint256 balance = balances.balanceOf(_who);
+        require(rProxy.isBlacklistedUser(_who));
+        uint256 balance = balanceOf(_who);
         balances.setBalance(_who, 0);
         totalSupply = totalSupply.sub(balance);
         emit DestroyedBlacklistedTokens(_who, balance);
@@ -159,18 +185,18 @@ contract MutablePermissionedToken is Migratable, DataMigratable, PermissionedTok
     * @notice Overrides addBlacklistedAddressSpender() from `PermissionedToken`.
     */
     function addBlacklistedAddressSpender(address _who) requiresPermission public {
-        require(Regulator(rProxy).isBlacklistedUser(_who));
-        allowances.setAllowance(_who, msg.sender, balances.balanceOf(_who));
+        require(rProxy.isBlacklistedUser(_who));
+        allowances.setAllowance(_who, msg.sender, balanceOf(_who));
+        emit AddedBlacklistedAddressSpender(_who, msg.sender);
     }
 
     /**
     * @notice Overrides transfer() from `PermissionedToken`.
     */
-    function transfer(address _to, uint256 _amount) public returns (bool) {
-        if (Regulator(rProxy).isBlacklistedUser(_to)) {
-            // User is blacklisted, so they cannot initiate a transfer
-            return false;
-        }
+    function transfer(address _to, uint256 _amount) transferConditionsRequired(_to) public returns (bool) {
+        require(_to != address(0),"to address cannot be 0x0");
+        require(_amount <= balanceOf(msg.sender),"not enough balance to transfer");
+
         balances.subBalance(msg.sender, _amount);
         balances.addBalance(_to, _amount);
         emit Transfer(msg.sender, _to, _amount);
@@ -180,24 +206,12 @@ contract MutablePermissionedToken is Migratable, DataMigratable, PermissionedTok
     /**
     * @notice Overrides transferFrom() from `PermissionedToken`.
     */
-    function transferFrom(address _from, address _to, uint256 _amount) public returns (bool) {
-        require(_amount <= allowances.allowanceOf(_from, msg.sender),"not enough allowance to transfer");
+    function transferFrom(address _from, address _to, uint256 _amount) public transferFromConditionsRequired(_from, _to) returns (bool) {
+        require(_amount <= allowance(_from, msg.sender),"not enough allowance to transfer");
         require(_to != address(0),"to address cannot be 0x0");
         require(_from != address(0),"from address cannot be 0x0");
-        require(_amount <= balances.balanceOf(_from),"not enough balance to transfer");
+        require(_amount <= balanceOf(_from),"not enough balance to transfer");
         
-        bool is_recipient_blacklisted = Regulator(rProxy).isBlacklistedUser(_to);
-        require(!is_recipient_blacklisted);
-        
-        // If the origin user is blacklisted, the transaction can only succeed if 
-        // the message sender is a validator that has been approved to transfer 
-        // blacklisted tokens out of this address.
-        bool is_origin_blacklisted = Regulator(rProxy).isBlacklistedUser(_from);
-        bytes4 add_blacklisted_spender_sig = Regulator(rProxy).permissions().ADD_BLACKLISTED_ADDRESS_SPENDER_SIG();
-        bool sender_can_spend_from_blacklisted_address = Regulator(rProxy).hasUserPermission(msg.sender, add_blacklisted_spender_sig);
-        bool sender_allowance_larger_than_transfer = allowances.allowanceOf(_from, msg.sender) >= _amount;
-        require(!is_origin_blacklisted || (sender_can_spend_from_blacklisted_address && sender_allowance_larger_than_transfer));
-
         allowances.subAllowance(_from, msg.sender, _amount);
         balances.addBalance(_to, _amount);
         balances.subBalance(_from, _amount);

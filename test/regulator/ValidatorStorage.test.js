@@ -6,10 +6,10 @@ const {
 
 contract('ValidatorStorage', _accounts => {
     const commonVars = new CommonVariables(_accounts);
-    const owner = commonVars.tokenOwner;
-    const account2 = commonVars.userSender;
-    const validator = commonVars.tokenValidator;
-    const validator2 = commonVars.tokenValidator2;
+    const owner = commonVars.accounts[0];
+    const account2 = commonVars.accounts[1];
+    const validator = commonVars.accounts[2];
+    const validator2 = commonVars.accounts[3];
 
     beforeEach(async function () {
         this.sheet = await ValidatorStorage.new({ from: owner })

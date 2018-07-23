@@ -4,7 +4,7 @@ const {
     PermissionsStorage,
 } = require('../helpers/common');
 
-contract('PermissionStorage', _accounts => {
+contract('PermissionsStorage', _accounts => {
     const commonVars = new CommonVariables(_accounts);
     const owner = commonVars.tokenOwner;
     const account2 = commonVars.userSender;
