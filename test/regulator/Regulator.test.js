@@ -37,7 +37,7 @@ contract('Regulator', _accounts => {
     })
 
     describe("Regulator tests", function () {
-        regulatorStorageTests(owner);
+        regulatorStorageTests(owner, user);
         regulatorStorageInteractionsTests(owner, user, validator, otherAccount);
         regulatorPermissionsTests(owner, user, otherAccount);
     })

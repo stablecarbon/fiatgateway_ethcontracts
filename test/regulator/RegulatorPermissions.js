@@ -6,14 +6,18 @@ const {
 
 function regulatorPermissionsTests(owner, user, validator) {
 
-    describe("REGULATOR USER PERMISSION SETTING/GETTING", async function () {
+    describe("Regulator user permissions setting and getting", async function () {
         beforeEach(async function() {
+
+            // Instantiate PermissionsStorage and ValidatorStorage with one validator
             this.testPermissionsStorage = await PermissionsStorageMock.new({ from:owner });
             this.testValidatorStorage = await ValidatorStorageMock.new(validator, { from:owner });
             
+            // Give owner mint permission
             this.testPermission = await this.testPermissionsStorage.MINT_SIG();
             await this.testPermissionsStorage.setUserPermission(owner, this.testPermission, { from:owner});
 
+            // Make Regulator the owner of the storage contracts 
             await this.testValidatorStorage.transferOwnership(this.sheet.address, { from:owner });
             await this.testPermissionsStorage.transferOwnership(this.sheet.address, { from:owner });
             await this.sheet.setPermissionsStorage(this.testPermissionsStorage.address, { from:owner });
