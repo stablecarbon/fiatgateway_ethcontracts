@@ -2,7 +2,7 @@ const { modularTokenTests } = require('../permissionedToken/ModularTokenTests');
 const { permissionedTokenTests } = require('../permissionedToken/PermissionedTokenTests');
 const { carbonDollarTests } = require('./CarbonDollarTests');
 const {
-    CarbonDollar,
+    CarbonDollarMock,
     FeeSheet,
     StablecoinWhitelist,
     CommonVariables
@@ -10,19 +10,32 @@ const {
 
 contract('CarbonDollar', _accounts => {
     const commonVars = new CommonVariables(_accounts);
-    this.minter = commonVars.accounts[0];
-    this.validator = commonVars.accounts[1];
-    this.blacklisted = commonVars.accounts[2];
-    this.whitelisted = commonVars.accounts[3];
-    this.nonlisted = commonVars.accounts[4];
+    this.owner = commonVars.accounts[0];
+    this.minter = commonVars.accounts[1];
+    this.validator = commonVars.accounts[2];
+    this.blacklisted = commonVars.accounts[3];
+    this.whitelisted = commonVars.accounts[4];
+    this.nonlisted = commonVars.accounts[5];
 
     describe("CarbonDollar tests", function () {
         beforeEach(async function () {
-            this.token = await CarbonDollarMock.new({ from: owner })
-            this.wtToken = await WhitelistedTokenMock.new({ from: owner })
+            this.token = await CarbonDollarMock.new(
+                this.validator,
+                this.minter,
+                this.blacklisted,
+                this.whitelisted,
+                this.nonlisted,
+                { from: this.owner })
+            this.wtToken = await WhitelistedTokenMock.new(
+                this.validator,
+                this.minter,
+                this.blacklisted,
+                this.whitelisted,
+                this.nonlisted,
+                { from: this.owner })
         });
-        modularTokenTests();
-        permissionedTokenTests();
-        carbonDollarTests(minter);
+        modularTokenTests(this.minter, this.whitelisted, this.nonlisted);
+        permissionedTokenTests(this.minter, this.whitelisted, this.nonlisted, this.blacklisted, this.user);
+        carbonDollarTests(this.owner);
     });
 })

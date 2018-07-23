@@ -6,14 +6,13 @@ import "../../../regulator/RegulatorProxy.sol";
 
 /**
 * @title MutablePermissionedTokenMock
+*
+* @dev Should not be instantiated. Use MutablePermissionedTokenMock
+* or ImmutablePermissionedTokenMock instead.
 */
 contract PermissionedTokenMock is PermissionedToken {
-    constructor(address validator, 
-                address minter, 
-                address whitelisted, 
-                address blacklisted, 
-                address nonlisted) internal {
-        RegulatorMock r = new RegulatorMock(validator, minter, whitelisted, blacklisted, nonlisted);
+    constructor(address v, address m, address w, address b, address n) internal {
+        RegulatorMock r = new RegulatorMock(v, m, w, b, n);
         RegulatorProxy rp = new RegulatorProxy(address(r));
         rp.upgradeTo(r);
         rp.transferOwnership(address(this));

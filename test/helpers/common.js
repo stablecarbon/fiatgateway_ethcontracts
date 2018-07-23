@@ -38,6 +38,7 @@ const FeeSheet = artifacts.require("FeeSheet");
 const StablecoinWhitelist = artifacts.require("StablecoinWhitelist");
 // CarbonUSD
 const CarbonDollar = artifacts.require("CarbonDollar");
+const CarbonDollarMock = artifacts.require("CarbonDollarMock");
 const CarbonUSD = artifacts.require("CarbonUSD");
 
 require('chai')
@@ -84,5 +85,6 @@ module.exports = {
     FeeSheet,
     StablecoinWhitelist,
     CarbonDollar,
+    CarbonDollarMock,
     CarbonUSD
 }
