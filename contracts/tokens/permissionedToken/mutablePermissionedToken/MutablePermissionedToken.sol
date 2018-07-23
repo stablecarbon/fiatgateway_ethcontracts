@@ -181,41 +181,41 @@ contract MutablePermissionedToken is PermissionedToken, Migratable, DataMigratab
         emit DestroyedBlacklistedTokens(_who, balance);
     }
 
-    /**
-    * @notice Overrides addBlacklistedAddressSpender() from `PermissionedToken`.
-    */
-    function addBlacklistedAddressSpender(address _who) requiresPermission public {
-        require(rProxy.isBlacklistedUser(_who));
-        allowances.setAllowance(_who, msg.sender, balanceOf(_who));
-        emit AddedBlacklistedAddressSpender(_who, msg.sender);
-    }
+    // /**
+    // * @notice Overrides addBlacklistedAddressSpender() from `PermissionedToken`.
+    // */
+    // function addBlacklistedAddressSpender(address _who) requiresPermission public {
+    //     require(rProxy.isBlacklistedUser(_who));
+    //     allowances.setAllowance(_who, msg.sender, balanceOf(_who));
+    //     emit AddedBlacklistedAddressSpender(_who, msg.sender);
+    // }
 
-    /**
-    * @notice Overrides transfer() from `PermissionedToken`.
-    */
-    function transfer(address _to, uint256 _amount) transferConditionsRequired(_to) public returns (bool) {
-        require(_to != address(0),"to address cannot be 0x0");
-        require(_amount <= balanceOf(msg.sender),"not enough balance to transfer");
+    // /**
+    // * @notice Overrides transfer() from `PermissionedToken`.
+    // */
+    // function transfer(address _to, uint256 _amount) transferConditionsRequired(_to) public returns (bool) {
+    //     require(_to != address(0),"to address cannot be 0x0");
+    //     require(_amount <= balanceOf(msg.sender),"not enough balance to transfer");
 
-        balances.subBalance(msg.sender, _amount);
-        balances.addBalance(_to, _amount);
-        emit Transfer(msg.sender, _to, _amount);
-        return true;
-    }
+    //     balances.subBalance(msg.sender, _amount);
+    //     balances.addBalance(_to, _amount);
+    //     emit Transfer(msg.sender, _to, _amount);
+    //     return true;
+    // }
 
-    /**
-    * @notice Overrides transferFrom() from `PermissionedToken`.
-    */
-    function transferFrom(address _from, address _to, uint256 _amount) public transferFromConditionsRequired(_from, _to) returns (bool) {
-        require(_amount <= allowance(_from, msg.sender),"not enough allowance to transfer");
-        require(_to != address(0),"to address cannot be 0x0");
-        require(_from != address(0),"from address cannot be 0x0");
-        require(_amount <= balanceOf(_from),"not enough balance to transfer");
+    // /**
+    // * @notice Overrides transferFrom() from `PermissionedToken`.
+    // */
+    // function transferFrom(address _from, address _to, uint256 _amount) public transferFromConditionsRequired(_from, _to) returns (bool) {
+    //     require(_amount <= allowance(_from, msg.sender),"not enough allowance to transfer");
+    //     require(_to != address(0),"to address cannot be 0x0");
+    //     require(_from != address(0),"from address cannot be 0x0");
+    //     require(_amount <= balanceOf(_from),"not enough balance to transfer");
         
-        allowances.subAllowance(_from, msg.sender, _amount);
-        balances.addBalance(_to, _amount);
-        balances.subBalance(_from, _amount);
-        emit Transfer(_from, _to, _amount);
-        return true;
-    }
+    //     allowances.subAllowance(_from, msg.sender, _amount);
+    //     balances.addBalance(_to, _amount);
+    //     balances.subBalance(_from, _amount);
+    //     emit Transfer(_from, _to, _amount);
+    //     return true;
+    // }
 }

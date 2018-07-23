@@ -12,7 +12,7 @@ contract RegulatorMock is Regulator {
         @param blacklisted Address of account to make a blacklisted user.
         @param nonlisted Address of account to make a nonlisted user.
      */
-    constructor(address validator, address minter, address whitelisted, address blacklisted, address nonlisted) Regulator() public {
+    constructor(address validator, address minter, address whitelisted, address blacklisted, address nonlisted) public {
         validators = new ValidatorStorageMock(validator);
         permissions = new PermissionsStorageMock();
         

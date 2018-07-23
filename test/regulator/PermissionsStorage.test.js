@@ -6,8 +6,8 @@ const {
 
 contract('PermissionsStorage', _accounts => {
     const commonVars = new CommonVariables(_accounts);
-    const owner = commonVars.tokenOwner;
-    const account2 = commonVars.userSender;
+    const owner = commonVars.accounts[0];
+    const account2 = commonVars.accounts[1];
     const testPermission = 0x12345678;
     const testPermissionName = "Test Permission";
     const testPermissionDescription = "A test permission description.";
