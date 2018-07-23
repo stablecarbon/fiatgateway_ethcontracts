@@ -130,7 +130,7 @@ function carbonDollarTests(owner) {
                     assertBalance(this.token, whitelisted, 50*10**18); // User's remaining CUSD balance
 
                 });
-                it('deposits fee into CarbonDollar contract address as CUSD', function () {
+                it('deposits fee into CarbonDollar contract address as CUSD', async function () {
                     // Whitelist the WT0 contract and add a fee
                     await this.token.listToken(this.wtToken.address, { from: owner });
                     await this.token.setFee(this.wtToken.address, 100, { from: owner });  // 10% fee
@@ -140,7 +140,7 @@ function carbonDollarTests(owner) {
 
                     assertBalance(this.token, this.token.address, 10 * 10 ** 18); // Fee deposited into Carbon account for transaction                    
                 });
-                it('diminishes amount in CUSD WT0 escrow account', function () {
+                it('diminishes amount in CUSD WT0 escrow account', async function () {
                     // Whitelist the WT0 contract and add a fee
                     await this.token.listToken(this.wtToken.address, { from: owner });
                     await this.token.setFee(this.wtToken.address, 100, { from: owner });  // 10% fee
@@ -152,7 +152,7 @@ function carbonDollarTests(owner) {
                 });
             });
             describe('when CUSD escrow account within stablecoin does not hold enough funds', function () {
-                it('reverts call', function () {
+                it('reverts call', async function () {
                     await this.token.listToken(this.wtToken.address, { from: owner });
                     await this.token.setFee(this.wtToken.address, 100, { from: owner });  // 10% fee
                     // Mint CarbonUSD for user
@@ -163,7 +163,7 @@ function carbonDollarTests(owner) {
             });
         });
         describe('when desired stablecoin is not whitelisted', function () {
-            it('reverts call', function () {
+            it('reverts call', async function () {
                 await this.token.listToken(this.wtToken.address, { from: owner });
                 await this.token.setFee(this.wtToken.address, 100, { from: owner });
                 // Mint CarbonUSD for user

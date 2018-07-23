@@ -7,7 +7,7 @@ const {
 
 contract('MutablePermissionedToken', _accounts => {
     const commonVars = new CommonVariables(_accounts);
-    this.minter = commonVars.accounts[0]; // Token owner, as well
+    this.minter = commonVars.accounts[0]; // Also the token owner (in order to make ModularTokenTest compatible)
     this.validator = commonVars.accounts[1];
     this.blacklisted = commonVars.accounts[2];
     this.whitelisted = commonVars.accounts[3]; // Account will be loaded with one hundred tokens for modularTokenTests
