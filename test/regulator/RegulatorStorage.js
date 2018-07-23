@@ -5,8 +5,10 @@ const {
     ValidatorStorage,
 } = require('../helpers/common');
 
+
+// Test the setting of PermissionsStorage and ValidatorsStorage that Regulator points to and uses for storage
 function regulatorStorageTests(owner, user) {
-    describe("PermissionsStorage and ValidatorStorage", function() {
+    describe("setting addresses of PermissionsStorage and ValidatorStorage", function() {
         const from = owner;
         const attacker = user;
 
