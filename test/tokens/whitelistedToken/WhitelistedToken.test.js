@@ -1,5 +1,4 @@
 const { permissionedTokenTests } = require('../permissionedToken/PermissionedTokenTests');
-const { whitelistedTokenTests } = require('./WhitelistedTokenTests');
 const {
     WhitelistedTokenMock,
     CommonVariables
@@ -23,7 +22,28 @@ contract('WhitelistedToken', _accounts => {
                 this.nonlisted,
                 { from: owner })
         });
-        permissionedTokenTests();
-        whitelistedTokenTests();
+        describe("Passes permissioned token tests",
+            function () { 
+                permissionedTokenTests(this.minter, this.whitelisted, this.nonlisted, this.blacklisted, this.user) 
+            });
+        describe("Whitelisted token tests", function () {
+            describe('mint', function () {
+                describe('user has mint CUSD permission', function () {
+                    it('appropriate number of funds end up in Carbon\'s WT0 escrow account', async function () {
+                        await this.token.mint(whitelisted, 100 * 10 ** 18, true, { from: minter });
+                        assertBalance(this.token, this.token.cusdAddress(), 100 * 10 ** 18);
+                    });
+                    it('user has appropriate amount of CUSD', async function () {
+                        await this.token.mint(whitelisted, 100 * 10 ** 18, true, { from: minter });
+                        assertBalance(this.carbonToken, whitelisted, 100 * 10 ** 18);
+                    });
+                });
+                describe('user does not have mint CUSD permission', function () {
+                    it('call reverts', async function () {
+                        await expectRevert(this.token.mint(whitelisted, 100 * 10 ** 18, true, { from: whitelisted }));
+                    });
+                });
+            });
+        });
     });
 })

@@ -52,15 +52,11 @@ function regulatorPermissionsTests(owner, user, validator) {
                 })
             });
             describe("when sender is not validator but is owner", function () {
-                const from = owner;
-                it('reverts all calls', async function () {
-                    await expectRevert(this.sheet.removeUserPermission(user, this.testPermission, { from }));
+                it('reverts all calls if sender is owner', async function () {
+                    await expectRevert(this.sheet.removeUserPermission(user, this.testPermission, { from: owner }));
                 })
-            });
-            describe("when sender is not validator and is not owner", function () {
-                const from = user;
-                it('reverts all calls', async function () {
-                    await expectRevert(this.sheet.removeUserPermission(user, this.testPermission, { from }));
+                it('reverts all calls if sender is not owner', async function () {
+                    await expectRevert(this.sheet.removeUserPermission(user, this.testPermission, { from: user }));
                 })
             });
         })

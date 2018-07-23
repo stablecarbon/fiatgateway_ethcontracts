@@ -21,13 +21,9 @@ contract('MutablePermissionedToken', _accounts => {
             this.whitelisted,
             this.nonlisted,
             { from: this.minter })
-        console.log("HI");
     });
-    describe("Modular token tests", function () {
-        modularTokenTests(this.minter, this.whitelisted, this.nonlisted);
-    })
-    describe("Permissioned token tests", function () {
-        permissionedTokenTests(this.minter, this.whitelisted, this.nonlisted, this.blacklisted, this.user);
-    })
+    describe("Modular token tests", function() {modularTokenTests(this.minter, this.whitelisted, this.nonlisted)});
+    describe("Permissioned token tests", 
+        function() {permissionedTokenTests(this.minter, this.whitelisted, this.nonlisted, this.blacklisted, this.user)});
     
 })

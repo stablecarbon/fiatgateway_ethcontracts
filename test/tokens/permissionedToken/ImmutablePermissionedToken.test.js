@@ -23,5 +23,6 @@ contract('ImmutablePermissionedToken', _accounts => {
             this.nonlisted,
             { from: this.owner })
     });
-    permissionedTokenTests(this.minter, this.whitelisted, this.nonlisted, this.blacklisted, this.user);
+    describe("Passes permissioned token tests", 
+        function (){permissionedTokenTests(this.minter, this.whitelisted, this.nonlisted, this.blacklisted, this.user)});
 })

@@ -12,10 +12,12 @@ contract('CarbonDollar', _accounts => {
     const commonVars = new CommonVariables(_accounts);
     this.owner = commonVars.accounts[0];
     this.minter = commonVars.accounts[1];
-    this.validator = commonVars.accounts[2];
-    this.blacklisted = commonVars.accounts[3];
-    this.whitelisted = commonVars.accounts[4];
-    this.nonlisted = commonVars.accounts[5];
+    this.wtMinter = commonVars.accounts[2];
+    this.validator = commonVars.accounts[3];
+    this.wtValidator = commonVars.accounts[4];
+    this.blacklisted = commonVars.accounts[5];
+    this.whitelisted = commonVars.accounts[6];
+    this.nonlisted = commonVars.accounts[7];
 
     describe("CarbonDollar tests", function () {
         beforeEach(async function () {
@@ -27,15 +29,16 @@ contract('CarbonDollar', _accounts => {
                 this.nonlisted,
                 { from: this.owner })
             this.wtToken = await WhitelistedTokenMock.new(
-                this.validator,
-                this.minter,
+                this.wtValidator,
+                this.wtMinter,
                 this.blacklisted,
                 this.whitelisted,
                 this.nonlisted,
                 { from: this.owner })
         });
-        modularTokenTests(this.minter, this.whitelisted, this.nonlisted);
-        permissionedTokenTests(this.minter, this.whitelisted, this.nonlisted, this.blacklisted, this.user);
-        carbonDollarTests(this.owner);
+        describe("Modular token tests", function (){modularTokenTests(this.minter, this.whitelisted, this.nonlisted)});
+        describe("Permissioned token tests",
+            function (){permissionedTokenTests(this.minter, this.whitelisted, this.nonlisted, this.blacklisted, this.user)});
+        describe("Carbon dollar tests", function (){carbonDollarTests(this.owner)});
     });
 })
