@@ -16,7 +16,7 @@ contract RegulatorProxy is Claimable, AdminUpgradeabilityProxy {
     
     /**
      * @notice Claims ownership of a Regulator. Precondition: the
-     * previous owner of the Regulator already transferred ownership to 
+     * previous owner of the RegulatorProxy already transferred ownership to 
      * this proxy.
      * @param _reg The address of the Regulator contract.
      */

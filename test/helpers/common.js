@@ -17,8 +17,6 @@ const Regulator = artifacts.require("Regulator");
 const RegulatorMock = artifacts.require("RegulatorMock");
 const RegulatorProxy = artifacts.require("RegulatorProxy");
 // PermissionedToken
-const BalanceSheet = artifacts.require("BalanceSheet");
-const AllowanceSheet = artifacts.require("AllowanceSheet");
 const MutablePermissionedToken = artifacts.require("MutablePermissionedToken");
 const MutablePermissionedTokenMock = artifacts.require("MutablePermissionedTokenMock");
 const ImmutablePermissionedToken = artifacts.require("ImmutablePermissionedToken");
@@ -70,8 +68,6 @@ module.exports = {
     Regulator,
     RegulatorMock,
     RegulatorProxy,
-    BalanceSheet,
-    AllowanceSheet,
     MutablePermissionedToken,
     MutablePermissionedTokenMock,
     ImmutablePermissionedToken,
