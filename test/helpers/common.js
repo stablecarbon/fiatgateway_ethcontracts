@@ -52,6 +52,10 @@ class CommonVariables {
         this.owner = _accounts[0];
         this.user = _accounts[1];
         this.attacker = _accounts[2];
+        this.user2 = _accounts[3];
+        this.user3 = _accounts[4];
+        this.validator = _accounts[5];
+        this.validator2 = _accounts[6];
     }
 }
 

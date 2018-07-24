@@ -10,7 +10,7 @@ contract('PermissionsStorage', _accounts => {
     const attacker = commonVars.attacker;
     const user = commonVars.user;
 
-    const testPermission = 0x1234;
+    const testPermission = 0x12345678;
     const testPermissionName = "Test Permission";
     const testPermissionDescription = "A test permission description.";
     const testPermissionContract = "TestContract.sol";
