@@ -1,16 +1,13 @@
-const {
-    PermissionsStorage,
-    ZERO_ADDRESS,
-    expectRevert,
-    ValidatorStorage,
-} = require('../helpers/common');
+const { ZERO_ADDRESS, expectRevert } = require('../helpers/common');
+
+const { PermissionsStorage, ValidatorStorage } = require('../helpers/artifacts');
 
 
-// Test the setting of PermissionsStorage and ValidatorsStorage that Regulator points to and uses for storage
+/* Test the setting of PermissionsStorage and ValidatorsStorage that Regulator points to and uses for storage */
 function regulatorStorageTests(owner, user) {
     describe("setting addresses of PermissionsStorage and ValidatorStorage", function() {
-        const from = owner;
-        const attacker = user;
+
+        const from = owner
 
         beforeEach(async function () {
             this.testPermissionsStorage = await PermissionsStorage.new({ from });
@@ -36,7 +33,7 @@ function regulatorStorageTests(owner, user) {
         describe('setPermissionsStorage as non-owner', function () {
             
             it("reverts", async function () {
-                await expectRevert(this.sheet.setPermissionsStorage(this.testPermissionsStorage.address, { from: attacker }));
+                await expectRevert(this.sheet.setPermissionsStorage(this.testPermissionsStorage.address, { from: user }));
             })
         })
 
@@ -59,7 +56,7 @@ function regulatorStorageTests(owner, user) {
         describe('setValidatorStorage as non-owner', function () {
             
             it("reverts", async function () {
-                await expectRevert(this.sheet.setValidatorStorage(this.testValidatorStorage.address, { from: attacker }));
+                await expectRevert(this.sheet.setValidatorStorage(this.testValidatorStorage.address, { from: user }));
             })
         })
     })

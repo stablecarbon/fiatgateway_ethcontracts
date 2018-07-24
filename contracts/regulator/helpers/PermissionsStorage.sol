@@ -46,8 +46,6 @@ contract PermissionsStorage is Claimable {
     bytes4 public constant MINT_SIG = bytes4(keccak256("mint(address,uint256)"));
     bytes4 public constant MINT_CUSD_SIG = bytes4(keccak256("mint(address,uint256,bool)"));
     bytes4 public constant BURN_SIG = bytes4(keccak256("burn(uint256)"));
-    bytes4 public constant TRANSFER_SIG = bytes4(keccak256("transfer(address,uint256)"));
-    bytes4 public constant TRANSFER_FROM_SIG = bytes4(keccak256("transferFrom(address,address,uint256)"));
     bytes4 public constant DESTROY_BLACKLISTED_TOKENS_SIG = bytes4(keccak256("destroyBlacklistedTokens(address)"));
     bytes4 public constant ADD_BLACKLISTED_ADDRESS_SPENDER_SIG = bytes4(keccak256("addBlacklistedAddressSpender(address)"));
     bytes4 public constant BLACKLISTED_SIG = bytes4(keccak256("blacklisted()"));

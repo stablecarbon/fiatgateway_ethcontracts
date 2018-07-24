@@ -13,9 +13,6 @@ const RANDOM_ADDRESS = 0x3b5855bAEF50EBFdFC89c5E5463f92BCe194EAc9;
 const transfersToZeroBecomeBurns = false;
 
 // Regulator and storage classes for regulator
-const PermissionsStorageMock = artifacts.require("PermissionsStorageMock");
-const ValidatorStorage = artifacts.require("ValidatorStorage");
-const ValidatorStorageMock = artifacts.require("ValidatorStorageMock");
 const Regulator = artifacts.require("Regulator");
 const RegulatorMock = artifacts.require("RegulatorMock");
 const RegulatorProxy = artifacts.require("RegulatorProxy");
@@ -70,9 +67,6 @@ module.exports = {
     ZERO_ADDRESS,
     RANDOM_ADDRESS,
     transfersToZeroBecomeBurns,
-    PermissionsStorageMock,
-    ValidatorStorage,
-    ValidatorStorageMock,
     Regulator,
     RegulatorMock,
     RegulatorProxy,
