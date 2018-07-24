@@ -24,12 +24,12 @@ module.exports = {
       network_id: "*" //Listen to all networks
     }
   },
-  mocha: {
-    reporter: 'eth-gas-reporter',
-    reporterOptions: {
-      gasPrice: 21
-    }
-  },
+  // mocha: {
+  //   reporter: 'eth-gas-reporter',
+  //   reporterOptions: {
+  //     gasPrice: 21
+  //   }
+  // },
   solc: {
     optimizer: {
       enabled: true,
