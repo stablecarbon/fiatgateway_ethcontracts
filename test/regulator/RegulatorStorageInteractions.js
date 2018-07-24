@@ -1,10 +1,9 @@
-const {
-    PermissionsStorage,
-    ValidatorStorage,
-    expectRevert
-} = require('../helpers/common');
+const { expectRevert } = require('../helpers/common');
 
-function regulatorStorageInteractionsTests(owner, account2, validator, validator2) {
+const { PermissionsStorage, ValidatorStorage } = require('../helpers/artifacts');
+
+/* Testing Regulator ability to set/remove/get Permissions (permissions and userPermissions) and Validators */
+function regulatorStorageInteractionsTests(owner, user, validator, attacker) {
     describe("Regulator Storage Interactions Tests", function () {
         beforeEach(async function () {
             this.testPermissionsStorage = await PermissionsStorage.new({ from: owner });
@@ -13,8 +12,9 @@ function regulatorStorageInteractionsTests(owner, account2, validator, validator
             this.testPermission = 0x12345678;
             this.testPermissionName = "Test Permission";
             this.testPermissionDescription = "A test permission description.";
-            this.testPermissionContract = "No Contract";
+            this.testPermissionContract = "A Contract.sol";
 
+            // Make Regulator the owner of the storage contracts for testing convenience
             await this.testValidatorStorage.transferOwnership(this.sheet.address, { from: owner });
             await this.testPermissionsStorage.transferOwnership(this.sheet.address, { from: owner });
             await this.sheet.setPermissionsStorage(this.testPermissionsStorage.address, { from: owner });
@@ -26,19 +26,34 @@ function regulatorStorageInteractionsTests(owner, account2, validator, validator
             describe('when the sender is a validator', function () {
                 const from = validator;
 
-                beforeEach(function () {
-                    this.sheet.addValidator(validator, {from : owner});
-                })
+                beforeEach(async function () {
+                    
+                    // test that validator isn't added initially
+                    const validatorAdded = await this.sheet.isValidator(validator);
+                    assert(!validatorAdded);
 
-                describe('addPermission', function () {
-                    it("adds the permission", async function () {
-                        await this.sheet.addPermission(this.testPermission,
+                    // add the validator
+                    await this.sheet.addValidator(validator, {from : owner});
+                    assert(await this.sheet.isValidator(validator));
+
+                    // check that test permission isn't added initially
+                    const testPermissionAdded = await this.sheet.isPermission(this.testPermission);
+                    assert(!testPermissionAdded);
+
+                    // add the test permission
+                    await this.sheet.addPermission(this.testPermission,
                             this.testPermissionName,
                             this.testPermissionDescription,
                             this.testPermissionContract, { from });
-                        assert(await this.sheet.isPermission(this.testPermission));
+                    assert(await this.sheet.isPermission(this.testPermission));
+                })
+
+                describe('addPermission', function () {
+                    it("adds the permission with correct metadata", async function () {
                         const permissions = await this.sheet.getPermission(this.testPermission);
-                        // TODO check if permission data was set.
+                        assert.equal(permissions[0], this.testPermissionName);
+                        assert.equal(permissions[1], this.testPermissionDescription);
+                        assert.equal(permissions[2], this.testPermissionContract);
                     })
                 })
 
@@ -49,6 +64,22 @@ function regulatorStorageInteractionsTests(owner, account2, validator, validator
                         assert(!hasPermission);
                     })
                 })
+
+                describe('setUserPermission', function () {
+                    it("adds permission for user", async function () {
+                        await this.sheet.setUserPermission(user, this.testPermission, { from });
+                        assert(await this.sheet.hasUserPermission(user, this.testPermission));
+                    })
+                })
+
+                describe('removeUserPermission', function () {
+                    it('removes the permission for the user', async function () {
+                        await this.sheet.setUserPermission(user, this.testPermission, { from });
+                        assert(await this.sheet.hasUserPermission(user, this.testPermission));
+                        await this.sheet.removeUserPermission(user, this.testPermission, { from });
+                        assert(!(await this.sheet.hasUserPermission(user, this.testPermission)));
+                    })
+                })
             })
 
             describe('when the sender is not a validator but is owner', function () {
@@ -56,14 +87,18 @@ function regulatorStorageInteractionsTests(owner, account2, validator, validator
                 it('reverts all calls', async function () {
                     await expectRevert(this.sheet.addPermission(this.testPermission, "", "", "", { from }));
                     await expectRevert(this.sheet.removePermission(this.testPermission, { from }));
+                    await expectRevert(this.sheet.setUserPermission(user, this.testPermission, { from }));
+                    await expectRevert(this.sheet.removeUserPermission(user, this.testPermission, { from }));
                 })
             })
 
             describe('when the sender is not a validator and is not owner', function () {
-                const from = account2
+                const from = attacker
                 it('reverts all calls', async function () {
                     await expectRevert(this.sheet.addPermission(this.testPermission, "", "", "", { from }));
                     await expectRevert(this.sheet.removePermission(this.testPermission, { from }));
+                    await expectRevert(this.sheet.setUserPermission(user, this.testPermission, { from }));
+                    await expectRevert(this.sheet.removeUserPermission(user, this.testPermission, { from }));
                 })
             })
         });
@@ -72,17 +107,16 @@ function regulatorStorageInteractionsTests(owner, account2, validator, validator
             describe('when the sender is the owner', function () {
                 const from = owner
 
+                beforeEach( async function () {
+                    const validatorAdded = await this.sheet.isValidator(validator);
+                    assert(!validatorAdded);
+                    await this.sheet.addValidator(validator, { from });
+                })
                 describe('addValidator', function () {
-                    it("adds one validator", async function () {
-                        await this.sheet.addValidator(validator, { from });
+                    it("adds a validator", async function () {
                         assert(await this.sheet.isValidator(validator));
                     })
-                    it("adds two validators", async function () {
-                        await this.sheet.addValidator(validator, { from });
-                        await this.sheet.addValidator(validator2, { from });
-                        assert(await this.sheet.isValidator(validator));
-                        assert(await this.sheet.isValidator(validator2));
-                    })
+
                 })
 
                 describe('removeValidator', function () {
@@ -95,7 +129,7 @@ function regulatorStorageInteractionsTests(owner, account2, validator, validator
             })
 
             describe('when the sender is not the owner', function () {
-                const from = account2
+                const from = attacker
                 it('reverts all calls', async function () {
                     await expectRevert(this.sheet.addValidator(validator, { from }));
                     await expectRevert(this.sheet.removeValidator(validator, { from }));

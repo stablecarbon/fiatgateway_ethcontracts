@@ -14,8 +14,6 @@ contract PermissionsStorageMock is PermissionsStorage {
         setMintPermission();
         setMintCUSDPermission();
         setBurnPermission();
-        setTransferPermission();
-        setTransferFromPermission();
         setDestroyBlacklistedTokensPermission();
         setAddBlacklistedAddressSpenderPermission();
         setDestroySelfPermission();
@@ -43,22 +41,6 @@ contract PermissionsStorageMock is PermissionsStorage {
             "Allows a user to burn off their own tokens. They can then send this burn transaction as a receipt to a trust fund in order to withdraw collateral", 
             "PermissionedToken");
         addPermission(BURN_SIG, burn_permission);
-    }
-
-    function setTransferPermission() internal {
-        Permission memory transfer_permission = Permission(
-            "Transfer", 
-            "Allows a user to transfer their tokens to another user.", 
-            "PermissionedToken");
-        addPermission(TRANSFER_SIG, transfer_permission);
-    }
-
-    function setTransferFromPermission() internal {
-        Permission memory transfer_from_permission = Permission(
-            "Transfer From", 
-            "Allows a user to transfer tokens from one address to another.", 
-            "PermissionedToken");
-        addPermission(TRANSFER_FROM_SIG, transfer_from_permission);
     }
 
     function setDestroyBlacklistedTokensPermission() internal {
