@@ -2,21 +2,30 @@ pragma solidity ^0.4.23;
 
 import "openzeppelin-solidity/contracts/ownership/Claimable.sol";
 
+/**
+ * @title PermissionsStorage
+ * @dev Stores all of the possible token-level permissions that a user can have access to. For example,
+ * a user can potentially burn or mint a token. Subsequently, PermissionsStorage also maps the permissions
+ * to each user.
+ *
+ */
 contract PermissionsStorage is Claimable {
 	/** 
         Mappings 
     */
-    // method signature => Permission struct containing details about that permission
+
+    /* method signature => Permission struct containing details about that permission */
     mapping (bytes4 => Permission) public permissions;
-    // method signature => is this signature used as a permission?
+    /* method signature => is this signature currently used as a permission? */
     mapping (bytes4 => bool) public isPermission;
-    // (user address => (methodsignature => does user have permission to execute it?))
+    /* (user address => (methodsignature => does user have permission to execute it?)) */
     mapping (address => mapping(bytes4 => bool)) public hasUserPermission;
 
     /** 
         Structs 
     */
-    /** Contains metadata about a permission to execute a particular method signature. */
+
+    /* Contains metadata about a permission to execute a particular method signature. */
     struct Permission {
         string name; // A one-word description for the permission. e.g. "canMint"
         string description; // A longer description for the permission. e.g. "Allows user to mint tokens."
@@ -71,6 +80,7 @@ contract PermissionsStorage is Claimable {
         permissions[_methodsignature] = _permission;
         isPermission[_methodsignature] = true;
         emit PermissionAdded(_methodsignature);
+
     }
 
     /**

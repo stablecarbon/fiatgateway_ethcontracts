@@ -1,20 +1,19 @@
-const {
-    CommonVariables,
-    expectRevert,
-    PermissionsStorage,
-} = require('../helpers/common');
+const { expectRevert, CommonVariables } = require('../helpers/common');
 
+const { PermissionsStorage } = require('../helpers/artifacts');
 
-// Add token-level permissions to PermissionsStorage
 contract('PermissionsStorage', _accounts => {
+    
+    // Initialize common variables
     const commonVars = new CommonVariables(_accounts);
-    const owner = commonVars.accounts[0];
-    const otherAccount = commonVars.accounts[1];
-    const user = commonVars.accounts[2];
-    const testPermission = 0x12345678;
+    const owner = commonVars.owner;
+    const attacker = commonVars.attacker;
+    const user = commonVars.user;
+
+    const testPermission = 0x1234;
     const testPermissionName = "Test Permission";
     const testPermissionDescription = "A test permission description.";
-    const testPermissionContract = "No Contract";
+    const testPermissionContract = "TestContract.sol";
 
     beforeEach(async function () {
         this.sheet = await PermissionsStorage.new({ from: owner });
@@ -73,6 +72,8 @@ contract('PermissionsStorage', _accounts => {
             describe('adds permission first', function () {
                 
                 beforeEach(async function () {
+                    
+                    // Add as possible permission before setting any user permissions
                     await this.sheet.addPermission(testPermission, 
                         testPermissionName, 
                         testPermissionDescription, 
@@ -120,11 +121,14 @@ contract('PermissionsStorage', _accounts => {
         describe('removeUserPermission', function () {
             
             beforeEach(async function () {
+                
+                // add as possible permission
                 await this.sheet.addPermission(testPermission, 
                     testPermissionName, 
                     testPermissionDescription, 
                     testPermissionContract, { from });
 
+                // set user permission
                 await this.sheet.setUserPermission(user, testPermission, { from });
             })
 
@@ -153,17 +157,19 @@ contract('PermissionsStorage', _accounts => {
     })
 
     describe('when the sender is not the owner', function () {
-        const from = otherAccount
+        
+        const from = attacker
+
         it('reverts all calls', async function () {
             await expectRevert(this.sheet.addPermission(testPermission, "", "", "", { from }));
 
-            // add permission from owner
+            // add permission from owner to be removed
             await this.sheet.addPermission(testPermission, "", "", "", { from: owner });
             await expectRevert(this.sheet.removePermission(testPermission, { from }));
 
             await expectRevert(this.sheet.setUserPermission(user, testPermission, { from }));
 
-            // set user permission from owner
+            // set user permission from owner to be removed
             await this.sheet.setUserPermission(user, testPermission, { from: owner });
             await expectRevert(this.sheet.removeUserPermission(user, testPermission, { from }));
         })
