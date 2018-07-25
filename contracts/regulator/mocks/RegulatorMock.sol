@@ -15,10 +15,10 @@ contract RegulatorMock is Regulator {
     constructor(address validator, address minter, address whitelisted, address blacklisted, address nonlisted) public {
         validators = new ValidatorStorageMock(validator);
         permissions = new PermissionsStorageMock();
-        
-        // setMinter(minter);
-        // setWhitelistedUser(whitelisted);
-        // setBlacklistedUser(blacklisted);
-        // setNonlistedUser(nonlisted);
+
+        setMinter(minter);
+        setWhitelistedUser(whitelisted);
+        setBlacklistedUser(blacklisted);
+        setNonlistedUser(nonlisted);
     }
 }

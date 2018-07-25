@@ -4,6 +4,7 @@ const expectRevert = require('./utils/expectRevert');
 const expectThrow = require('./utils/expectThrow');
 const assertBalance = require('./utils/assertBalance');
 const depositFunds = require('./utils/depositFunds');
+const printTitle = require('./utils/printTitle');
 const BigNumber = web3.BigNumber;
 const ZERO_ADDRESS = 0x0000000000000000000000000000000000000000;
 const RANDOM_ADDRESS = 0x3b5855bAEF50EBFdFC89c5E5463f92BCe194EAc9; 
@@ -16,8 +17,6 @@ const transfersToZeroBecomeBurns = false;
 // PermissionedToken
 const MutablePermissionedToken = artifacts.require("MutablePermissionedToken");
 const MutablePermissionedTokenMock = artifacts.require("MutablePermissionedTokenMock");
-const ImmutablePermissionedToken = artifacts.require("ImmutablePermissionedToken");
-const ImmutablePermissionedTokenMock = artifacts.require("ImmutablePermissionedTokenMock");
 const MutablePermissionedTokenProxy = artifacts.require("MutablePermissionedTokenProxy");
 // WT0
 const WhitelistedToken = artifacts.require("WhitelistedToken");
@@ -54,6 +53,7 @@ class CommonVariables {
 /* Exporting the module */
 module.exports = {
     BigNumber,
+    printTitle,
     expectRevert,
     expectThrow,
     depositFunds,
@@ -64,8 +64,6 @@ module.exports = {
     transfersToZeroBecomeBurns,
     MutablePermissionedToken,
     MutablePermissionedTokenMock,
-    ImmutablePermissionedToken,
-    ImmutablePermissionedTokenMock,
     MutablePermissionedTokenProxy,
     WhitelistedToken,
     WhitelistedTokenRegulator,

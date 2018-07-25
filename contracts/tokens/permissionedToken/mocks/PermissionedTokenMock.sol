@@ -15,7 +15,7 @@ contract PermissionedTokenMock is PermissionedToken {
     constructor(address v, address m, address w, address b, address n) public {
         allowances = new AllowanceSheet();
         balances = new BalanceSheet();
-        RegulatorMock r = new RegulatorMock(v, m, w, b, n);
-        setRP(r);
+        // RegulatorMock r = new RegulatorMock(v, m, w, b, n);
+        // setRP(r);
     }
 }

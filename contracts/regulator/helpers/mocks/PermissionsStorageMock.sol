@@ -6,7 +6,7 @@ contract PermissionsStorageMock is PermissionsStorage {
     /** 
         @dev Creates permissions for all functions in WhitelistedToken.
      */
-    constructor() PermissionsStorage() public {
+    constructor() public {
         // Each of these permission-setting procedures are separated into functions.
         // Because otherwise, Solidity complains about the size that the permission structs
         // take up on the stack if all of the structs are declared in memory within the

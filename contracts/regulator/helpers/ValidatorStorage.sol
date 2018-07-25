@@ -17,6 +17,10 @@ contract ValidatorStorage is Claimable{
     * @param _validator Address of validator to add
     */
     function addValidator(address _validator) public onlyOwner {
+        _addValidator(_validator);
+    }
+
+    function _addValidator(address _validator) internal {
         isValidator[_validator] = true;
         emit ValidatorAdded(_validator);
     }
