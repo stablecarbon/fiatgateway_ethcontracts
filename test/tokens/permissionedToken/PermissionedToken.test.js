@@ -1,6 +1,6 @@
 const { permissionedTokenBehavior } = require('./PermissionedTokenBehavior');
 const { PermissionedTokenMock, RegulatorMock } = require('../../helpers/mocks');
-const { PermissionedToken, Regulator, PermissionsStorage, ValidatorStorage } = require('../../helpers/artifacts');
+const { PermissionedToken, Regulator, PermissionsStorage, ValidatorStorage, BalanceSheet, AllowanceSheet, MutablePermissionedToken } = require('../../helpers/artifacts');
 
 const { CommonVariables, ZERO_ADDRESS } = require('../../helpers/common');
 
@@ -16,8 +16,8 @@ contract('PermissionedToken', _accounts => {
     
     beforeEach(async function () {
         const from = owner
-        // this.token = await PermissionedTokenMock.new( validator, minter, whitelisted, blacklisted, nonlisted, { from } )
-        // this.regulator = await RegulatorMock.new( validator, minter, whitelisted, blacklisted, nonlisted, { from });
+
+        // Set up regulator data storage contracts and connect to regulator
         this.regulator = await Regulator.new({ from });
         this.permissionsStorage = await PermissionsStorage.new({ from });
         this.validatorStorage = await ValidatorStorage.new({ from });
@@ -28,9 +28,19 @@ contract('PermissionedToken', _accounts => {
         assert.equal(await this.regulator.permissions(), this.permissionsStorage.address);
         assert.equal(await this.regulator.validators(), this.validatorStorage.address);
 
+        // Set up token data storage contracts and connect to token
+        this.allowance = await AllowanceSheet.new({ from });
+        this.balance = await BalanceSheet.new({ from });
+        // this.token = await MutablePermissionedToken.new(this.allowance.address, this.balance.address, { from });
+        this.token = await PermissionedToken.new(this.allowance.address, this.balance.address, { from });
+        await this.allowance.transferOwnership(this.token.address, { from });
+        await this.balance.transferOwnership(this.token.address, { from });
 
-        this.token = await PermissionedToken.new({ from });
-        // await this.token.setRegulatorProxy(this.regulator.address, { from });
+        // Modify regulator and connect to permissioned token
+        await this.regulator.addValidator(validator, { from });
+        await this.token.setRegulatorProxy(this.regulator.address, { from });
+
+
         // assert.equal(await this.token.rProxy(), this.regulator.address);
         // assert.equal(this.token.owner(), owner);
     });

@@ -2,7 +2,7 @@ pragma solidity ^0.4.23;
 
 import "./helpers/PermissionsStorage.sol";
 import "./helpers/ValidatorStorage.sol";
-import "openzeppelin-solidity/contracts/ownership/Claimable.sol";
+import "openzeppelin-solidity/contracts/ownership/Ownable.sol";
 
 
 /**
@@ -13,7 +13,7 @@ import "openzeppelin-solidity/contracts/ownership/Claimable.sol";
  * for regulatory compliance.
  *
  */
-contract Regulator is Claimable {
+contract Regulator is Ownable {
     /** STORAGES
     */
 
@@ -68,7 +68,6 @@ contract Regulator is Claimable {
     function setPS(address _newStorage) internal {
         address _oldStorage = address(permissions);
         permissions = PermissionsStorage(_newStorage);
-        permissions.claimOwnership();
         emit SetPermissionsStorage(_oldStorage, _newStorage);
     }
 
@@ -85,7 +84,6 @@ contract Regulator is Claimable {
     function setVS(address _newStorage) internal {
         address _oldStorage = address(validators);
         validators = ValidatorStorage(_newStorage);
-        validators.claimOwnership();
         emit SetValidatorStorage(_oldStorage, _newStorage);
     }
 

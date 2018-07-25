@@ -23,9 +23,9 @@ contract MutablePermissionedToken is PermissionedToken {
     event BalanceSheetChanged(address indexed oldSheet, address indexed newSheet);
     event AllowanceSheetChanged(address indexed oldSheet, address indexed newSheet);
 
-    constructor(address a, address b) public {
-        setAllowanceSheet(a);
-        setBalanceSheet(b);
+    /* Constructor */
+    constructor(address a, address b) PermissionedToken(a,b) public  {
+
     }
 
     /**
@@ -35,7 +35,6 @@ contract MutablePermissionedToken is PermissionedToken {
     function setAllowanceSheet(address _sheet) public onlyOwner returns(bool){
         address oldAllowances = address(allowances);
         allowances = AllowanceSheet(_sheet);
-        allowances.claimOwnership();
         emit AllowanceSheetChanged(oldAllowances, _sheet);
         return true;
     }
@@ -47,7 +46,6 @@ contract MutablePermissionedToken is PermissionedToken {
     function setBalanceSheet(address _sheet) public onlyOwner returns(bool){
         address oldBalances = address(balances);
         balances = BalanceSheet(_sheet);
-        balances.claimOwnership();
         emit BalanceSheetChanged(oldBalances, _sheet);
         return true;
     }

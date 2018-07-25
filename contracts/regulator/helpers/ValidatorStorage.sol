@@ -1,8 +1,8 @@
 pragma solidity ^0.4.23;
 
-import "openzeppelin-solidity/contracts/ownership/Claimable.sol";
+import "openzeppelin-solidity/contracts/ownership/Ownable.sol";
 
-contract ValidatorStorage is Claimable{
+contract ValidatorStorage is Ownable{
     /**
      * Mappings
      */

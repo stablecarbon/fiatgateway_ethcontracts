@@ -1,10 +1,10 @@
 pragma solidity ^0.4.23;
 
-import "openzeppelin-solidity/contracts/ownership/Claimable.sol";
+import "openzeppelin-solidity/contracts/ownership/Ownable.sol";
 import "openzeppelin-solidity/contracts/math/SafeMath.sol";
 
 // A wrapper around the allowanceOf mapping.
-contract AllowanceSheet is Claimable {
+contract AllowanceSheet is Ownable {
     using SafeMath for uint256;
 
     mapping (address => mapping (address => uint256)) public allowanceOf;

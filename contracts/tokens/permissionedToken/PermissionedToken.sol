@@ -3,7 +3,7 @@ pragma solidity ^0.4.23;
 import "../../regulator/Regulator.sol";
 import "./helpers/AllowanceSheet.sol";
 import "./helpers/BalanceSheet.sol";
-import "openzeppelin-solidity/contracts/ownership/Claimable.sol";
+import "openzeppelin-solidity/contracts/ownership/Ownable.sol";
 import "openzeppelin-solidity/contracts/AddressUtils.sol";
 import "openzeppelin-solidity/contracts/math/SafeMath.sol";
 
@@ -18,7 +18,7 @@ import "openzeppelin-solidity/contracts/math/SafeMath.sol";
 * `ImmutablePermissionedToken` or `MutablePermissionedToken` instead.
 *
 */
-contract PermissionedToken is Claimable {
+contract PermissionedToken is Ownable {
     using SafeMath for uint256;
 
     /** Variables */
@@ -43,6 +43,13 @@ contract PermissionedToken is Claimable {
     event Burn(address indexed burner, uint256 value);
     event Transfer(address indexed from, address indexed to, uint256 value);
     event Approval(address indexed owner, address indexed spender, uint256 value);
+
+
+    /* Constructor */
+    constructor(address a, address b) public {
+        allowances = AllowanceSheet(a);
+        balances = BalanceSheet(b);
+    }
 
     /** Modifiers */
     /** @notice Modifier that allows function access to be restricted based on
