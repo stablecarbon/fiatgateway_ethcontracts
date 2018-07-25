@@ -1,11 +1,6 @@
 const { permissionedTokenBehavior } = require('./PermissionedTokenBehavior');
-<<<<<<< HEAD
 const { PermissionsStorageMock, ValidatorStorageMock } = require('../../helpers/mocks');
 const { PermissionedToken, Regulator, AllowanceSheet, BalanceSheet } = require('../../helpers/artifacts');
-=======
-const { PermissionedTokenMock, RegulatorMock } = require('../../helpers/mocks');
-const { PermissionedToken, Regulator, PermissionsStorage, ValidatorStorage, BalanceSheet, AllowanceSheet, MutablePermissionedToken } = require('../../helpers/artifacts');
->>>>>>> pai_v0
 
 const { CommonVariables, ZERO_ADDRESS } = require('../../helpers/common');
 

@@ -3,12 +3,6 @@ const { assertBalance, expectRevert, depositFunds, ZERO_ADDRESS } = require("../
 function permissionedTokenBehavior(minter, whitelisted, nonlisted, blacklisted, user) {
     describe("Permissioned Token Tests", function () {
         describe('mint', function () {
-
-            beforeEach(async function () {
-                const from = validator
-                await this.regulator.setMinter(minter, { from })
-            })
-            
             describe('when sender is minter', function () {
                 const from = minter
 
@@ -70,7 +64,7 @@ function permissionedTokenBehavior(minter, whitelisted, nonlisted, blacklisted, 
                 });
                 it('emits burn and transfer events', async function () {
                     await this.token.mint(whitelisted, 100 * 10 ** 18, { from: minter })
-                    const { logs } = await this.token.burn(50 * 10 ** 18, { from: minter })
+                    const { logs } = await this.token.burn(50 * 10 ** 18, { from: whitelisted })
                     assert.equal(logs.length, 2)
                     assert.equal(logs[0].event, 'Burn')
                     assert.equal(logs[0].args.to, whitelisted)
@@ -84,12 +78,12 @@ function permissionedTokenBehavior(minter, whitelisted, nonlisted, blacklisted, 
             describe('when sender is not whitelisted', function () {
                 it('reverts call', async function () {
                     user = blacklisted
-                    await this.token.mint(user, 100 * 10 ** 18, { from: minter })
+                    depositFunds(this.token, user, 100 * 10 ** 18, true);
                     await expectRevert(this.token.burn(50 * 10 ** 18, { from: user }));
                 });
                 it('reverts call', async function () {
                     user = nonlisted
-                    await this.token.mint(user, 100 * 10 ** 18, { from: minter })
+                    depositFunds(this.token, user, 100 * 10 ** 18, false);
                     await expectRevert(this.token.burn(50 * 10 ** 18, { from: user }));
                 });
             });
