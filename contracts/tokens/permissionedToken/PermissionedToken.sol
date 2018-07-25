@@ -71,6 +71,37 @@ contract PermissionedToken is Claimable {
         _;
     }
 
+    /** @notice Modifier that checks whether a user is whitelisted.
+     * @param _user The address of the user to check.
+    **/
+    modifier userWhitelisted(address _user) {
+        require(rProxy.isWhitelistedUser(_user));
+        _;
+    }
+
+    /** @notice Modifier that checks whether a user is blacklisted.
+     * @param _user The address of the user to check.
+    **/
+    modifier userBlacklisted(address _user) {
+        require(rProxy.isBlacklistedUser(_user));
+        _;
+    }
+
+    /** @notice Modifier that checks whether a user is not blacklisted.
+     * @param _user The address of the user to check.
+    **/
+    modifier userNotBlacklisted(address _user) {
+        require(!rProxy.isBlacklistedUser(_user));
+        _;
+    }
+
+    /** @notice Modifier that checks whether the caller of a function is not blacklisted.
+    **/
+    modifier senderNotBlacklisted() {
+        require(!rProxy.isBlacklistedUser(msg.sender));
+        _;
+    }
+
     /**
     * @notice Sets the address of the currently used regulator proxy
     * @param _rProxy Address of new `RegulatorProxy` contract

@@ -23,11 +23,7 @@ function regulatorPermissionsTests(owner, user, validator) {
             await this.testPermissionsStorage.transferOwnership(this.sheet.address, { from:owner });
             await this.sheet.setPermissionsStorage(this.testPermissionsStorage.address, { from:owner });
             await this.sheet.setValidatorStorage(this.testValidatorStorage.address, { from:owner });
-            await this.sheet.claimStorageOwnership({ from:owner });
 
-        });
-
-        describe("assert permission invariants", function () {
             // Assert invariants
             assert(await this.sheet.isValidator(validator));
             assert(await this.sheet.isPermission(this.MINT_SIG));
@@ -35,7 +31,7 @@ function regulatorPermissionsTests(owner, user, validator) {
             assert(await this.sheet.isPermission(this.ADD_BLACKLISTED_ADDRESS_SPENDER_SIG));
             assert(await this.sheet.isPermission(this.BURN_SIG));
             assert(await this.sheet.isPermission(this.BLACKLISTED_SIG));
-        })
+        });
 
         describe('setUserPermission', function () {
             describe("when sender is validator", function () {
