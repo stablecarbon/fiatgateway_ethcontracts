@@ -19,8 +19,8 @@ function regulatorPermissionsTests(owner, user, validator) {
             this.BLACKLISTED_SIG = await this.testPermissionsStorage.BLACKLISTED_SIG();
             
             // Make Regulator the owner of the storage contracts 
-            await this.testValidatorStorage.transferOwnership(this.sheet.address, { from:owner });
             await this.testPermissionsStorage.transferOwnership(this.sheet.address, { from:owner });
+            await this.testValidatorStorage.transferOwnership(this.sheet.address, { from:owner });
             await this.sheet.setPermissionsStorage(this.testPermissionsStorage.address, { from:owner });
             await this.sheet.setValidatorStorage(this.testValidatorStorage.address, { from:owner });
 

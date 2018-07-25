@@ -3,9 +3,14 @@ const { assertBalance, expectRevert, depositFunds, ZERO_ADDRESS } = require("../
 function permissionedTokenBehavior(minter, whitelisted, nonlisted, blacklisted, user) {
     describe("Permissioned Token Tests", function () {
         describe('mint', function () {
+
+            beforeEach(async function () {
+                const from = validator
+                await this.regulator.setMinter(minter, { from })
+            })
             
             describe('when sender is minter', function () {
-                from = minter
+                const from = minter
 
                 describe('when user is whitelisted', function () {
                     

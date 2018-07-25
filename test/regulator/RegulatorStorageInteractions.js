@@ -14,8 +14,8 @@ function regulatorStorageInteractionsTests(owner, user, validator, attacker) {
             this.testPermissionDescription = "A test permission description.";
             this.testPermissionContract = "A Contract.sol";
 
-            await this.testValidatorStorage.transferOwnership(this.sheet.address, { from: owner });
-            await this.testPermissionsStorage.transferOwnership(this.sheet.address, { from: owner });
+            await this.testPermissionsStorage.transferOwnership(this.sheet.address, { from:owner });
+            await this.testValidatorStorage.transferOwnership(this.sheet.address, { from:owner });
             await this.sheet.setPermissionsStorage(this.testPermissionsStorage.address, { from: owner });
             await this.sheet.setValidatorStorage(this.testValidatorStorage.address, { from: owner });
         });

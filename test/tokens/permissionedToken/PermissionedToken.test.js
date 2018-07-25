@@ -1,6 +1,11 @@
 const { permissionedTokenBehavior } = require('./PermissionedTokenBehavior');
+<<<<<<< HEAD
 const { PermissionsStorageMock, ValidatorStorageMock } = require('../../helpers/mocks');
 const { PermissionedToken, Regulator, AllowanceSheet, BalanceSheet } = require('../../helpers/artifacts');
+=======
+const { PermissionedTokenMock, RegulatorMock } = require('../../helpers/mocks');
+const { PermissionedToken, Regulator, PermissionsStorage, ValidatorStorage, BalanceSheet, AllowanceSheet, MutablePermissionedToken } = require('../../helpers/artifacts');
+>>>>>>> pai_v0
 
 const { CommonVariables, ZERO_ADDRESS } = require('../../helpers/common');
 
@@ -16,8 +21,8 @@ contract('PermissionedToken', _accounts => {
     
     beforeEach(async function () {
         const from = owner
-        // this.token = await PermissionedTokenMock.new( validator, minter, whitelisted, blacklisted, nonlisted, { from } )
-        // this.regulator = await RegulatorMock.new( validator, minter, whitelisted, blacklisted, nonlisted, { from });
+
+        // Set up regulator data storage contracts and connect to regulator
         this.regulator = await Regulator.new({ from });
         this.permissionsStorage = await PermissionsStorageMock.new({ from });
         this.validatorStorage = await ValidatorStorageMock.new(validator, { from });

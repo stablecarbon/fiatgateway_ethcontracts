@@ -12,8 +12,6 @@ function regulatorStorageTests(owner, user) {
         beforeEach(async function () {
             this.testPermissionsStorage = await PermissionsStorage.new({ from });
             this.testValidatorStorage = await ValidatorStorage.new({ from });
-            await this.testValidatorStorage.transferOwnership(this.sheet.address, { from });
-            await this.testPermissionsStorage.transferOwnership(this.sheet.address, { from });
         })
 
         describe('setPermissionsStorage as owner', function () {
