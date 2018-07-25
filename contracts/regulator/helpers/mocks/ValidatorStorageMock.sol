@@ -6,7 +6,7 @@ contract ValidatorStorageMock is ValidatorStorage {
     /** 
         @dev Creates a validator.
      */
-    constructor(address validator) ValidatorStorage() public {
-        addValidator(validator);
+    constructor(address validator) public {
+        _addValidator(validator);
     }
 }

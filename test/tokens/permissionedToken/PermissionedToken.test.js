@@ -16,7 +16,6 @@ contract('PermissionedToken', _accounts => {
     
     beforeEach(async function () {
         const from = owner
-        // this.token = await PermissionedTokenMock.new( validator, minter, whitelisted, blacklisted, nonlisted, { from } )
         this.token = await PermissionedToken.new({ from });
     });
 

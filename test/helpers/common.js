@@ -16,14 +16,11 @@ const transfersToZeroBecomeBurns = false;
 // PermissionedToken
 const MutablePermissionedToken = artifacts.require("MutablePermissionedToken");
 const MutablePermissionedTokenMock = artifacts.require("MutablePermissionedTokenMock");
-const ImmutablePermissionedToken = artifacts.require("ImmutablePermissionedToken");
-const ImmutablePermissionedTokenMock = artifacts.require("ImmutablePermissionedTokenMock");
-const MutablePermissionedTokenProxy = artifacts.require("MutablePermissionedTokenProxy");
+//const MutablePermissionedTokenProxy = artifacts.require("MutablePermissionedTokenProxy");
 // WT0
 const WhitelistedToken = artifacts.require("WhitelistedToken");
 const WhitelistedTokenRegulator = artifacts.require("WhitelistedTokenRegulator");
 const WhitelistedTokenRegulatorMock = artifacts.require("WhitelistedTokenRegulatorMock");
-const WhitelistedTokenRegulatorProxy = artifacts.require("WhitelistedTokenRegulatorProxy");
 // Storage classes for CarbonDollar
 const FeeSheet = artifacts.require("FeeSheet");
 const StablecoinWhitelist = artifacts.require("StablecoinWhitelist");
@@ -64,13 +61,10 @@ module.exports = {
     transfersToZeroBecomeBurns,
     MutablePermissionedToken,
     MutablePermissionedTokenMock,
-    ImmutablePermissionedToken,
-    ImmutablePermissionedTokenMock,
-    MutablePermissionedTokenProxy,
+    //MutablePermissionedTokenProxy,
     WhitelistedToken,
     WhitelistedTokenRegulator,
     WhitelistedTokenRegulatorMock,
-    WhitelistedTokenRegulatorProxy,
     FeeSheet,
     StablecoinWhitelist,
     CarbonDollar,

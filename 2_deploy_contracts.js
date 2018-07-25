@@ -11,7 +11,7 @@ var FeeSheet = artifacts.require("FeeSheet");
 var CarbonDollar = artifacts.require("CarbonDollar");
 var CarbonUSD = artifacts.require("CarbonUSD");
 
-function deployDevelopmentContracts(deployer, accounts) {
+function deployLiveContracts(deployer, accounts) {
     // Setup CarbonUSD regulator
     let cusdRegulator = accounts[1];
     deployer.deploy([
@@ -95,7 +95,7 @@ function deployDevelopmentContracts(deployer, accounts) {
 }
 
 module.exports = function (deployer, network, accounts) {
-    if (network == "development") {
+    if (network == "live") {
         deployDevelopmentContracts(deployer, accounts);
     }
 };

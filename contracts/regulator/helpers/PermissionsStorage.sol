@@ -64,7 +64,7 @@ contract PermissionsStorage is Claimable{
         string _contractName) 
     onlyOwner public {
         Permission memory p = Permission(_permissionName, _permissionDescription, _contractName);
-        addPermission(_methodsignature, p);
+        _addPermission(_methodsignature, p);
     }
 
      /**
@@ -72,7 +72,7 @@ contract PermissionsStorage is Claimable{
     * @param _methodsignature Signature of the method that this permission controls.
     * @param _permission A struct containing permission information.
     */
-    function addPermission(
+    function _addPermission(
         bytes4 _methodsignature, 
         Permission _permission) internal {
         permissions[_methodsignature] = _permission;

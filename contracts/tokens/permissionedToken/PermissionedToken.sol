@@ -73,8 +73,8 @@ contract PermissionedToken is Claimable {
         // If the origin user is blacklisted, the transaction can only succeed if 
         // the message sender is a user that has been approved to transfer 
         // blacklisted tokens out of this address.
-        bool is_origin_blacklisted = rProxy.isBlacklistedUser(_from);
-        bool sender_can_spend_from_blacklisted_address = rProxy.isBlacklistSpender(msg.sender); // Is the message sender a person with the ability to transfer tokens out of a blacklisted account?
+        bool is_origin_blacklisted = regulator.isBlacklistedUser(_from);
+        bool sender_can_spend_from_blacklisted_address = regulator.isBlacklistSpender(msg.sender); // Is the message sender a person with the ability to transfer tokens out of a blacklisted account?
         require(!is_origin_blacklisted || sender_can_spend_from_blacklisted_address);
         _;
     }
