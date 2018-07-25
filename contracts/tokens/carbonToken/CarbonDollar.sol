@@ -49,7 +49,6 @@ contract CarbonDollar is MutablePermissionedToken, HasNoTokens {
     function setStablecoinWhitelist(address _whitelist) public onlyOwner {
         address oldWhitelist = address(stablecoinWhitelist);
         stablecoinWhitelist = StablecoinWhitelist(_whitelist);
-        stablecoinWhitelist.claimOwnership();
         emit StablecoinWhitelistChanged(oldWhitelist, _whitelist);
     }
 
@@ -85,7 +84,6 @@ contract CarbonDollar is MutablePermissionedToken, HasNoTokens {
     function setFeeSheet(address _sheet) public onlyOwner {
         address oldSheet = address(stablecoinFees);
         stablecoinFees = FeeSheet(_sheet);
-        stablecoinFees.claimOwnership();
         emit FeeSheetChanged(oldSheet, _sheet);
     }
 

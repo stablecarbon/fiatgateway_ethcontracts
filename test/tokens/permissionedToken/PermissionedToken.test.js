@@ -1,6 +1,6 @@
 const { permissionedTokenBehavior } = require('./PermissionedTokenBehavior');
-const { PermissionedTokenMock, RegulatorMock } = require('../../helpers/mocks');
-const { PermissionedToken, Regulator, PermissionsStorage, ValidatorStorage } = require('../../helpers/artifacts');
+const { PermissionsStorageMock, ValidatorStorageMock } = require('../../helpers/mocks');
+const { PermissionedToken, Regulator, AllowanceSheet, BalanceSheet } = require('../../helpers/artifacts');
 
 const { CommonVariables, ZERO_ADDRESS } = require('../../helpers/common');
 
@@ -16,29 +16,40 @@ contract('PermissionedToken', _accounts => {
     
     beforeEach(async function () {
         const from = owner
-<<<<<<< HEAD
-=======
         // this.token = await PermissionedTokenMock.new( validator, minter, whitelisted, blacklisted, nonlisted, { from } )
         // this.regulator = await RegulatorMock.new( validator, minter, whitelisted, blacklisted, nonlisted, { from });
         this.regulator = await Regulator.new({ from });
-        this.permissionsStorage = await PermissionsStorage.new({ from });
-        this.validatorStorage = await ValidatorStorage.new({ from });
+        this.permissionsStorage = await PermissionsStorageMock.new({ from });
+        this.validatorStorage = await ValidatorStorageMock.new(validator, { from });
         await this.permissionsStorage.transferOwnership(this.regulator.address, { from });
         await this.validatorStorage.transferOwnership(this.regulator.address, { from });
         await this.regulator.setPermissionsStorage(this.permissionsStorage.address, { from });
         await this.regulator.setValidatorStorage(this.validatorStorage.address, { from });
         assert.equal(await this.regulator.permissions(), this.permissionsStorage.address);
         assert.equal(await this.regulator.validators(), this.validatorStorage.address);
+        assert(await this.regulator.isValidator(validator));
 
+        await this.regulator.setWhitelistedUser(whitelisted, {from: validator});
+        await this.regulator.setBlacklistedUser(blacklisted, {from: validator});
+        await this.regulator.setNonlistedUser(nonlisted, {from: validator});
+        await this.regulator.setMinter(minter, {from: validator});
+        assert(await this.regulator.isWhitelistedUser(whitelisted));
+        assert(await this.regulator.isBlacklistedUser(blacklisted));
+        assert(await this.regulator.isNonlistedUser(nonlisted));
+        assert(await this.regulator.isMinter(minter));
 
->>>>>>> pai_v0
-        this.token = await PermissionedToken.new({ from });
-        // await this.token.setRegulatorProxy(this.regulator.address, { from });
-        // assert.equal(await this.token.rProxy(), this.regulator.address);
-        // assert.equal(this.token.owner(), owner);
+        this.allowances = await AllowanceSheet.new({ from });
+        this.balances = await BalanceSheet.new({ from });
+        this.token = await PermissionedToken.new(this.allowances.address, this.balances.address, { from });
+        await this.allowances.transferOwnership(this.token.address, {from});
+        await this.balances.transferOwnership(this.token.address, {from});
+        assert(await this.allowances.owner(), this.token.address);
+        await this.token.setRegulator(this.regulator.address, { from });
+        assert.equal(await this.token.regulator(), this.regulator.address);
+        assert.equal(await this.token.owner(), owner);
     });
 
     describe("Permissioned Token tests", function () {
-        permissionedTokenBehavior( validator, minter, whitelisted, blacklisted, nonlisted )
+        permissionedTokenBehavior( minter, whitelisted, blacklisted, nonlisted, user )
     });
 })

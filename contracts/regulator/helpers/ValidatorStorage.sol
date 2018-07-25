@@ -1,8 +1,8 @@
 pragma solidity ^0.4.23;
 
-import "openzeppelin-solidity/contracts/ownership/Claimable.sol";
+import "openzeppelin-solidity/contracts/ownership/Ownable.sol";
 
-contract ValidatorStorage is Claimable{
+contract ValidatorStorage is Ownable {
     /**
      * Mappings
      */
@@ -19,11 +19,7 @@ contract ValidatorStorage is Claimable{
     function addValidator(address _validator) public onlyOwner {
         _addValidator(_validator);
     }
-<<<<<<< HEAD
     
-=======
-
->>>>>>> pai_v0
     function _addValidator(address _validator) internal {
         isValidator[_validator] = true;
         emit ValidatorAdded(_validator);

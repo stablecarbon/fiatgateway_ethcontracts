@@ -25,10 +25,10 @@ function regulatorStorageTests(owner, user) {
 
             it("emits a 'set permissions storage' event", async function () {
                 const { logs } = await this.sheet.setPermissionsStorage(this.testPermissionsStorage.address, { from });
-                assert.equal(logs.length, 2); // 2 events, one for claiming ownership, one for setting PS
-                assert.equal(logs[1].event, 'SetPermissionsStorage');
-                assert.equal(logs[1].args.oldStorage, ZERO_ADDRESS);
-                assert.equal(logs[1].args.newStorage, this.testPermissionsStorage.address);
+                assert.equal(logs.length, 1);
+                assert.equal(logs[0].event, 'SetPermissionsStorage');
+                assert.equal(logs[0].args.oldStorage, ZERO_ADDRESS);
+                assert.equal(logs[0].args.newStorage, this.testPermissionsStorage.address);
             })
         })
 
@@ -48,10 +48,10 @@ function regulatorStorageTests(owner, user) {
 
             it("emits a 'set validator storage' event", async function () {
                 const { logs } = await this.sheet.setValidatorStorage(this.testValidatorStorage.address, { from });
-                assert.equal(logs.length, 2); // see similar event catcher above
-                assert.equal(logs[1].event, 'SetValidatorStorage');
-                assert.equal(logs[1].args.oldStorage, ZERO_ADDRESS);
-                assert.equal(logs[1].args.newStorage, this.testValidatorStorage.address);
+                assert.equal(logs.length, 1);
+                assert.equal(logs[0].event, 'SetValidatorStorage');
+                assert.equal(logs[0].args.oldStorage, ZERO_ADDRESS);
+                assert.equal(logs[0].args.newStorage, this.testValidatorStorage.address);
             })
         })
 

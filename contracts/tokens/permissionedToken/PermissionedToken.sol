@@ -3,7 +3,7 @@ pragma solidity ^0.4.23;
 import "../../regulator/Regulator.sol";
 import "./helpers/AllowanceSheet.sol";
 import "./helpers/BalanceSheet.sol";
-import "openzeppelin-solidity/contracts/ownership/Claimable.sol";
+import "openzeppelin-solidity/contracts/ownership/Ownable.sol";
 import "openzeppelin-solidity/contracts/AddressUtils.sol";
 import "openzeppelin-solidity/contracts/math/SafeMath.sol";
 
@@ -18,7 +18,7 @@ import "openzeppelin-solidity/contracts/math/SafeMath.sol";
 * `ImmutablePermissionedToken` or `MutablePermissionedToken` instead.
 *
 */
-contract PermissionedToken is Claimable {
+contract PermissionedToken is Ownable {
     using SafeMath for uint256;
 
     /** Variables */
@@ -108,6 +108,15 @@ contract PermissionedToken is Claimable {
     modifier senderNotBlacklisted() {
         require(!regulator.isBlacklistedUser(msg.sender));
         _;
+    }
+
+    /** CONSTRUCTOR
+    * @param allowanceSheet Address of the allowances sheet to set for this token.
+    * @param balanceSheet Address of the balances sheet to set for this token.
+    */
+    constructor(address allowanceSheet, address balanceSheet) public {
+        allowances = AllowanceSheet(allowanceSheet);
+        balances = BalanceSheet(balanceSheet);
     }
 
     /**

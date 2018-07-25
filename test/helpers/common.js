@@ -16,22 +16,14 @@ const transfersToZeroBecomeBurns = false;
 
 // PermissionedToken
 const MutablePermissionedToken = artifacts.require("MutablePermissionedToken");
-const MutablePermissionedTokenMock = artifacts.require("MutablePermissionedTokenMock");
-<<<<<<< HEAD
-//const MutablePermissionedTokenProxy = artifacts.require("MutablePermissionedTokenProxy");
-=======
-const MutablePermissionedTokenProxy = artifacts.require("MutablePermissionedTokenProxy");
->>>>>>> pai_v0
 // WT0
 const WhitelistedToken = artifacts.require("WhitelistedToken");
 const WhitelistedTokenRegulator = artifacts.require("WhitelistedTokenRegulator");
-const WhitelistedTokenRegulatorMock = artifacts.require("WhitelistedTokenRegulatorMock");
 // Storage classes for CarbonDollar
 const FeeSheet = artifacts.require("FeeSheet");
 const StablecoinWhitelist = artifacts.require("StablecoinWhitelist");
 // CarbonUSD
 const CarbonDollar = artifacts.require("CarbonDollar");
-const CarbonDollarMock = artifacts.require("CarbonDollarMock");
 const CarbonUSD = artifacts.require("CarbonUSD");
 
 require('chai')
@@ -66,18 +58,10 @@ module.exports = {
     RANDOM_ADDRESS,
     transfersToZeroBecomeBurns,
     MutablePermissionedToken,
-    MutablePermissionedTokenMock,
-<<<<<<< HEAD
-    //MutablePermissionedTokenProxy,
-=======
-    MutablePermissionedTokenProxy,
->>>>>>> pai_v0
     WhitelistedToken,
     WhitelistedTokenRegulator,
-    WhitelistedTokenRegulatorMock,
     FeeSheet,
     StablecoinWhitelist,
     CarbonDollar,
-    CarbonDollarMock,
     CarbonUSD
 }

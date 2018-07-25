@@ -1,10 +1,10 @@
 pragma solidity ^0.4.23;
 
-import "openzeppelin-solidity/contracts/ownership/Claimable.sol";
+import "openzeppelin-solidity/contracts/ownership/Ownable.sol";
 import "openzeppelin-solidity/contracts/math/SafeMath.sol";
 
 // A wrapper around the balanceOf mapping.
-contract FeeSheet is Claimable {
+contract FeeSheet is Ownable {
     using SafeMath for uint16;
 
     /** @dev Units for fees are always in a tenth of a percent */
