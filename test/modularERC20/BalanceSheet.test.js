@@ -1,6 +1,6 @@
 // Slightly modified from https://github.com/trusttoken/trueUSD
 
-const { CommonVariables, expectThrow, expectRevert, assertBalance } = require('../helpers/common');
+const { CommonVariables, expectThrow, expectRevert } = require('../helpers/common');
 
 const { BalanceSheet } = require('../helpers/artifacts');
 
@@ -19,17 +19,20 @@ contract('BalanceSheet', _accounts => {
 
         it('addBalance', async function () {
             await this.sheet.addBalance(user, 70 * 10 ** 18, { from })
-            await assertBalance(this.sheet, user, (100 + 70) * 10 ** 18)
+            const balance = await this.sheet.balanceOf(user)
+            assert.equal(balance, (100 + 70) * 10 ** 18)
         })
 
         it('subBalance', async function () {
             await this.sheet.subBalance(user, 70 * 10 ** 18, { from })
-            await assertBalance(this.sheet, user, (100 - 70) * 10 ** 18)
+            const balance = await this.sheet.balanceOf(user)
+            assert.equal(balance, (100 - 70) * 10 ** 18)
         })
 
         it('setBalance', async function () {
             await this.sheet.setBalance(user, 70 * 10 ** 18, { from })
-            await assertBalance(this.sheet, user, 70 * 10 ** 18)
+            const balance = await this.sheet.balanceOf(user)
+            assert.equal(balance, 70 * 10 ** 18)
         })
 
         it('reverts subBalance if insufficient funds', async function () {

@@ -6,9 +6,8 @@ import "../permissionedToken/mutablePermissionedToken/MutablePermissionedToken.s
 import "../whitelistedToken/WhitelistedToken.sol";
 import "./helpers/FeeSheet.sol";
 import "./helpers/StablecoinWhitelist.sol";
-import "../../DataMigratable.sol";
 
-contract CarbonDollar is DataMigratable, MutablePermissionedToken, HasNoTokens {
+contract CarbonDollar is MutablePermissionedToken, HasNoTokens {
 
     // TODO: Some sort of blacklist/whitelisting (similar to permissionedToken) @tanishq/@sam
     // Random Thought: GreyList (mark Dirty Money without prevent it from being transferred or receiving)
@@ -41,29 +40,6 @@ contract CarbonDollar is DataMigratable, MutablePermissionedToken, HasNoTokens {
         require(AddressUtils.isContract(msg.sender)); // Must be a contract
         require(stablecoinWhitelist.isWhitelisted(msg.sender)); // Must be a whitelisted token
         _;
-    }
-
-    /**
-    * @notice Function used as part of Migratable interface. Must be called when
-    * proxy is assigned to contract in order to correctly assign the contract's
-    * version number.
-    *
-    * If deploying a new contract version, the version number must be changed as well. 
-    */
-    function initialize() isInitializer("CarbonDollar", "1.0") public {
-        // Nothing to initialize!
-    }
-
-    /** @dev Migrates data from an old CarbonDollar contract to a new one.
-        Precondition: the new contract has already been transferred ownership of the old contract.
-        @param _oldDollar The address of the old CarbonDollar contract. */
-    function migrate(address _oldDollar) isMigration("CarbonDollar", "1.0", "1.1") public {
-        CarbonDollar oldDollar = CarbonDollar(_oldDollar);
-        oldDollar.claimOwnership(); // Take the proferred ownership of the old contract
-        oldDollar.transferStorageOwnership();
-        setFeeSheet(address(oldDollar.stablecoinFees()));
-        setStablecoinWhitelist(address(oldDollar.stablecoinWhitelist()));
-        claimSO();
     }
 
     function transferSO(address owner) internal {

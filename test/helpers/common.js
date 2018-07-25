@@ -8,14 +8,11 @@ const BigNumber = web3.BigNumber;
 const ZERO_ADDRESS = 0x0000000000000000000000000000000000000000;
 const RANDOM_ADDRESS = 0x3b5855bAEF50EBFdFC89c5E5463f92BCe194EAc9; 
 
+
 /** Contract classes **/
 // TrueUSD ERC20 contract tests
 const transfersToZeroBecomeBurns = false;
 
-// Regulator and storage classes for regulator
-const Regulator = artifacts.require("Regulator");
-const RegulatorMock = artifacts.require("RegulatorMock");
-const RegulatorProxy = artifacts.require("RegulatorProxy");
 // PermissionedToken
 const MutablePermissionedToken = artifacts.require("MutablePermissionedToken");
 const MutablePermissionedTokenMock = artifacts.require("MutablePermissionedTokenMock");
@@ -65,9 +62,6 @@ module.exports = {
     ZERO_ADDRESS,
     RANDOM_ADDRESS,
     transfersToZeroBecomeBurns,
-    Regulator,
-    RegulatorMock,
-    RegulatorProxy,
     MutablePermissionedToken,
     MutablePermissionedTokenMock,
     ImmutablePermissionedToken,

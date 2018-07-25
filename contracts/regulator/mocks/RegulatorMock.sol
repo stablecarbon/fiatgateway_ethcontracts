@@ -1,8 +1,6 @@
 pragma solidity ^0.4.23;
 
 import "../Regulator.sol";
-import "./ValidatorStorageMock.sol";
-import "./PermissionsStorageMock.sol";
 
 contract RegulatorMock is Regulator {
     /** 
@@ -16,7 +14,6 @@ contract RegulatorMock is Regulator {
         validators = new ValidatorStorageMock(validator);
         permissions = new PermissionsStorageMock();
         
-        validators.addValidator(validator);
         setMinter(minter);
         setWhitelistedUser(whitelisted);
         setBlacklistedUser(blacklisted);

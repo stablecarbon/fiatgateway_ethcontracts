@@ -1,10 +1,9 @@
 pragma solidity ^0.4.23;
 
-import "openzeppelin-solidity/contracts/ownership/Claimable.sol";
-import "zos-lib/contracts/migrations/Migratable.sol";
 import "./helpers/PermissionsStorage.sol";
 import "./helpers/ValidatorStorage.sol";
-import "../DataMigratable.sol";
+import "openzeppelin-solidity/contracts/ownership/Claimable.sol";
+
 
 /**
  * @title Regulator
@@ -14,7 +13,7 @@ import "../DataMigratable.sol";
  * for regulatory compliance.
  *
  */
-contract Regulator is Claimable, Migratable, DataMigratable {
+contract Regulator is Claimable {
     /** STORAGES
     */
 
@@ -57,30 +56,6 @@ contract Regulator is Claimable, Migratable, DataMigratable {
     event SetNonlistedUser(address indexed who);
 
     /**
-    * @notice Function used as part of Migratable interface. Must be called when
-    * a proxy is assigned to contract in order to correctly assign the contract's
-    * version number.
-    *
-    * If deploying a new contract version, the version number must be changed as well. 
-    */
-    function initialize() isInitializer("Regulator", "1.0") public {
-        // Nothing to initialize!
-    }
-
-    /** @notice Migrates data from an old regulator contract to a new one. Precondition: 
-    *  the new contract has already been transferred ownership of the old contract.
-    *   @param _oldRegulator The address of the old regulator. 
-    */
-    function migrate(address _oldRegulator) isMigration("Regulator", "1.0", "1.1") public {
-        Regulator r = Regulator(_oldRegulator);
-        r.claimOwnership(); // Take the proferred ownership of the old contract
-        r.transferStorageOwnership();
-        setPS(r.permissions());
-        setVS(r.validators());
-        claimSO();
-    }
-
-    /**
     * @notice Sets the internal permission storage to point to a new storage.
     * @param _newStorage The address of a new PermissionsStorage.
     */
@@ -92,6 +67,7 @@ contract Regulator is Claimable, Migratable, DataMigratable {
     function setPS(address _newStorage) internal {
         address _oldStorage = address(permissions);
         permissions = PermissionsStorage(_newStorage);
+        permissions.claimOwnership();
         emit SetPermissionsStorage(_oldStorage, _newStorage);
     }
 
@@ -107,25 +83,8 @@ contract Regulator is Claimable, Migratable, DataMigratable {
     function setVS(address _newStorage) internal {
         address _oldStorage = address(validators);
         validators = ValidatorStorage(_newStorage);
-        emit SetValidatorStorage(_oldStorage, _newStorage);
-    }
-
-    /** @notice Transfers ownership of the storage contracts to the owner  of this token contract. 
-    * This is useful for migrations, since the new token contract is made the
-    * owner of the old token contract.
-    **/
-    function transferSO(address owner) internal {
-        permissions.transferOwnership(owner);
-        validators.transferOwnership(owner);
-    }
-
-    /** @notice Claims ownership of the storage contracts. Succeeds if the
-    * ownership of those contracts was transferred to this contract
-    * (which will happen in the case of a migration).
-    **/
-    function claimSO() internal {
-        permissions.claimOwnership();
         validators.claimOwnership();
+        emit SetValidatorStorage(_oldStorage, _newStorage);
     }
 
     /**
