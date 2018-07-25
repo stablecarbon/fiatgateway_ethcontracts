@@ -1,6 +1,6 @@
 pragma solidity ^0.4.23;
 
-import "../../permissionedToken/PermissionedToken.sol";
+import "../PermissionedToken.sol";
 import "../helpers/AllowanceSheet.sol";
 import "../helpers/BalanceSheet.sol";
 

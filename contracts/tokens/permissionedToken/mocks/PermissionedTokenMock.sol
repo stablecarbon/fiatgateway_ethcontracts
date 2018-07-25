@@ -12,9 +12,9 @@ import "../helpers/BalanceSheet.sol";
 * or ImmutablePermissionedTokenMock instead.
 */
 contract PermissionedTokenMock is PermissionedToken {
-    constructor(address asheet, address bsheet, address v, address m, address w, address b, address n) public {
-        allowances = AllowanceSheet(asheet);
-        balances = BalanceSheet(bsheet);
+    constructor(address v, address m, address w, address b, address n) public {
+        allowances = new AllowanceSheet();
+        balances = new BalanceSheet();
         RegulatorMock r = new RegulatorMock(v, m, w, b, n);
         _setRegulator(r);
     }

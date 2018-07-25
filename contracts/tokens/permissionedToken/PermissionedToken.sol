@@ -26,6 +26,7 @@ contract PermissionedToken is Claimable {
     uint256 public totalSupply;
     AllowanceSheet public allowances;
     BalanceSheet public balances;
+    
     /**
     * @notice `Regulatoregulator` that points to the latest
     *         `Regulator` contract responsible for checking and applying trade
@@ -72,10 +73,8 @@ contract PermissionedToken is Claimable {
         // If the origin user is blacklisted, the transaction can only succeed if 
         // the message sender is a user that has been approved to transfer 
         // blacklisted tokens out of this address.
-        bool is_origin_blacklisted = regulator.isBlacklistedUser(_from);
-        bytes4 add_blacklisted_spender_sig = regulator.permissions().ADD_BLACKLISTED_ADDRESS_SPENDER_SIG();
-        bool sender_can_spend_from_blacklisted_address = 
-            regulator.hasUserPermission(msg.sender, add_blacklisted_spender_sig); // Is the message sender a person with the ability to transfer tokens out of a blacklisted account?
+        bool is_origin_blacklisted = rProxy.isBlacklistedUser(_from);
+        bool sender_can_spend_from_blacklisted_address = rProxy.isBlacklistSpender(msg.sender); // Is the message sender a person with the ability to transfer tokens out of a blacklisted account?
         require(!is_origin_blacklisted || sender_can_spend_from_blacklisted_address);
         _;
     }
