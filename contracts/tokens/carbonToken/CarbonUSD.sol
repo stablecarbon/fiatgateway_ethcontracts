@@ -17,7 +17,7 @@ contract CarbonUSD is Ownable, AdminUpgradeabilityProxy {
      * this proxy.
      * @param _reg The address of the CarbonDollar contract.
      */
-    function claimOwnership(address _reg) public onlyOwner {
+    function claimDollarOwnership(address _reg) public onlyOwner {
         CarbonDollar(_reg).claimOwnership();
     }
 }

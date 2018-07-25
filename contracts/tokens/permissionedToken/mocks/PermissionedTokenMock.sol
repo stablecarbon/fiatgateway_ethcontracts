@@ -16,6 +16,6 @@ contract PermissionedTokenMock is PermissionedToken {
         allowances = AllowanceSheet(asheet);
         balances = BalanceSheet(bsheet);
         RegulatorMock r = new RegulatorMock(v, m, w, b, n);
-        setRP(r);
+        _setRegulator(r);
     }
 }

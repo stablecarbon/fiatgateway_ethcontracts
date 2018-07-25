@@ -27,14 +27,14 @@ contract PermissionedToken is Claimable {
     AllowanceSheet public allowances;
     BalanceSheet public balances;
     /**
-    * @notice `RegulatorProxy` that points to the latest
+    * @notice `Regulatoregulator` that points to the latest
     *         `Regulator` contract responsible for checking and applying trade
     *         permissions.
     */
-    Regulator public rProxy;
+    Regulator public regulator;
 
     /** Events */
-    event ChangedRegulatorProxy(address oldProxy, address newProxy);
+    event ChangedRegulatoregulator(address oldProxy, address newProxy);
     event DestroyedBlacklistedTokens(address indexed account, uint256 amount);
     event AddedBlacklistedAddressSpender(address indexed account, address indexed spender);
     // ERC20
@@ -48,7 +48,7 @@ contract PermissionedToken is Claimable {
     * whether the regulator allows the message sender to execute that function.
     **/
     modifier requiresPermission() {
-        require (rProxy.hasUserPermission(msg.sender, msg.sig));
+        require (regulator.hasUserPermission(msg.sender, msg.sig));
         _;
     }
 
@@ -57,7 +57,7 @@ contract PermissionedToken is Claimable {
      * more details.
     **/
     modifier transferConditionsRequired(address _to) {
-        require(!rProxy.isBlacklistedUser(_to));
+        require(!regulator.isBlacklistedUser(_to));
         _;
     }
 
@@ -66,16 +66,16 @@ contract PermissionedToken is Claimable {
      * more details.
     **/
     modifier transferFromConditionsRequired(address _from, address _to) {
-        bool is_recipient_blacklisted = rProxy.isBlacklistedUser(_to);
+        bool is_recipient_blacklisted = regulator.isBlacklistedUser(_to);
         require(!is_recipient_blacklisted);
         
         // If the origin user is blacklisted, the transaction can only succeed if 
         // the message sender is a user that has been approved to transfer 
         // blacklisted tokens out of this address.
-        bool is_origin_blacklisted = rProxy.isBlacklistedUser(_from);
-        bytes4 add_blacklisted_spender_sig = rProxy.permissions().ADD_BLACKLISTED_ADDRESS_SPENDER_SIG();
+        bool is_origin_blacklisted = regulator.isBlacklistedUser(_from);
+        bytes4 add_blacklisted_spender_sig = regulator.permissions().ADD_BLACKLISTED_ADDRESS_SPENDER_SIG();
         bool sender_can_spend_from_blacklisted_address = 
-            rProxy.hasUserPermission(msg.sender, add_blacklisted_spender_sig); // Is the message sender a person with the ability to transfer tokens out of a blacklisted account?
+            regulator.hasUserPermission(msg.sender, add_blacklisted_spender_sig); // Is the message sender a person with the ability to transfer tokens out of a blacklisted account?
         require(!is_origin_blacklisted || sender_can_spend_from_blacklisted_address);
         _;
     }
@@ -84,7 +84,7 @@ contract PermissionedToken is Claimable {
      * @param _user The address of the user to check.
     **/
     modifier userWhitelisted(address _user) {
-        require(rProxy.isWhitelistedUser(_user));
+        require(regulator.isWhitelistedUser(_user));
         _;
     }
 
@@ -92,7 +92,7 @@ contract PermissionedToken is Claimable {
      * @param _user The address of the user to check.
     **/
     modifier userBlacklisted(address _user) {
-        require(rProxy.isBlacklistedUser(_user));
+        require(regulator.isBlacklistedUser(_user));
         _;
     }
 
@@ -100,14 +100,14 @@ contract PermissionedToken is Claimable {
      * @param _user The address of the user to check.
     **/
     modifier userNotBlacklisted(address _user) {
-        require(!rProxy.isBlacklistedUser(_user));
+        require(!regulator.isBlacklistedUser(_user));
         _;
     }
 
     /** @notice Modifier that checks whether the caller of a function is not blacklisted.
     **/
     modifier senderNotBlacklisted() {
-        require(!rProxy.isBlacklistedUser(msg.sender));
+        require(!regulator.isBlacklistedUser(msg.sender));
         _;
     }
 
@@ -127,18 +127,18 @@ contract PermissionedToken is Claimable {
 
     /**
     * @notice Sets the address of the currently used regulator proxy
-    * @param _rProxy Address of new `RegulatorProxy` contract
+    * @param _regulator Address of new `Regulator` contract
     */
-    function setRegulatorProxy(address _rProxy) public onlyOwner {
-        setRP(_rProxy);
+    function setRegulator(address _regulator) public onlyOwner {
+        _setRegulator(_regulator);
     }
 
     // Function so that constructor can also set the regulator proxy.
-    function setRP(address _rProxy) internal {
-        require(AddressUtils.isContract(_rProxy));
-        address oldProxy = address(rProxy);
-        rProxy = Regulator(_rProxy);
-        emit ChangedRegulatorProxy(oldProxy, _rProxy);
+    function _setRegulator(address _regulator) internal {
+        require(AddressUtils.isContract(_regulator));
+        address oldRegulator = address(regulator);
+        regulator = Regulator(_regulator);
+        emit ChangedRegulatoregulator(oldRegulator, _regulator);
     }
 
     /**
@@ -262,8 +262,9 @@ contract PermissionedToken is Claimable {
     }
 
     /**
-    * @notice If a user is blacklisted, then they will have the ability to 
-    * destroy their own tokens. This function provides that ability.
+    * @notice Iff a user is blacklisted, they will have the permission to 
+    * execute this dummy function. This function effectively acts as a marker 
+    * to indicate that a user is blacklisted.
     */
     function blacklisted() requiresPermission public view returns (bool) {
         return true;

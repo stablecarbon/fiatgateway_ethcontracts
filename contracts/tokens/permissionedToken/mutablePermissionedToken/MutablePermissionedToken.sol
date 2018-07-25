@@ -24,8 +24,8 @@ contract MutablePermissionedToken is PermissionedToken {
     event AllowanceSheetChanged(address indexed oldSheet, address indexed newSheet);
 
     constructor(address a, address b) public {
-        setAllowanceSheet(a);
-        setBalanceSheet(b);
+        allowances = AllowanceSheet(a);
+        balances = BalanceSheet(b);
     }
 
     /**

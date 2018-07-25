@@ -15,13 +15,21 @@ contract('MutablePermissionedToken', _accounts => {
     this.nonlisted = commonVars.accounts[4]; // otherAccount
     
     beforeEach(async function () {
+        const allowanceSheet = AllowanceSheet.new({ from: this.minter });
+        const balanceSheet = BalanceSheet.new({ from: this.minter });
         this.token = await MutablePermissionedTokenMock.new(
+            this.allowanceSheet.address,
+            this.balanceSheet.address,
             this.validator,
             this.minter,
             this.blacklisted,
             this.whitelisted,
             this.nonlisted,
             { from: this.minter })
+        await allowanceSheet.transferOwnership(this.token.address, { from: this.minter });
+        await balance.transferOwnership(this.token.address, { from: this.minter });
+        await this.token.setAllowanceSheet(allowanceSheet.address, { from: this.minter });
+        await this.token.setBalanceSheet(balanceSheet.address, { from: this.minter });
     });
     describe("Modular token tests", function() {modularTokenTests(this.minter, this.whitelisted, this.nonlisted)});
     describe("Permissioned token tests", 
