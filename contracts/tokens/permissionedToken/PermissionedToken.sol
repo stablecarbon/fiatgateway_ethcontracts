@@ -44,7 +44,6 @@ contract PermissionedToken is Ownable {
     event Transfer(address indexed from, address indexed to, uint256 value);
     event Approval(address indexed owner, address indexed spender, uint256 value);
 
-
     /** Modifiers */
     /** @notice Modifier that allows function access to be restricted based on
     * whether the regulator allows the message sender to execute that function.

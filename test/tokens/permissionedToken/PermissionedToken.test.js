@@ -1,6 +1,6 @@
 const { permissionedTokenBehavior } = require('./PermissionedTokenBehavior');
 const { PermissionsStorageMock, ValidatorStorageMock } = require('../../helpers/mocks');
-const { PermissionedToken, Regulator, BalanceSheet, AllowanceSheet } = require('../../helpers/artifacts');
+const { PermissionedToken, Regulator, AllowanceSheet, BalanceSheet } = require('../../helpers/artifacts');
 
 const { CommonVariables, ZERO_ADDRESS } = require('../../helpers/common');
 
@@ -29,24 +29,21 @@ contract('PermissionedToken', _accounts => {
         assert.equal(await this.regulator.validators(), this.validatorStorage.address);
         assert(await this.regulator.isValidator(validator));
 
-        // Set initial user permissions in regulator
-        await this.regulator.setWhitelistedUser(whitelisted, {from: validator}); // can burn, can transfer
-        await this.regulator.setBlacklistedUser(blacklisted, {from: validator}); // cannot burn, can't transfer
-        await this.regulator.setNonlistedUser(nonlisted, {from: validator}); // cannot burn, can transfer
-        await this.regulator.setMinter(minter, {from: validator}); // can mint
+        await this.regulator.setWhitelistedUser(whitelisted, {from: validator});
+        await this.regulator.setBlacklistedUser(blacklisted, {from: validator});
+        await this.regulator.setNonlistedUser(nonlisted, {from: validator});
+        await this.regulator.setMinter(minter, {from: validator});
         assert(await this.regulator.isWhitelistedUser(whitelisted));
         assert(await this.regulator.isBlacklistedUser(blacklisted));
         assert(await this.regulator.isNonlistedUser(nonlisted));
         assert(await this.regulator.isMinter(minter));
 
-        // Set up token and connect to data storage
         this.allowances = await AllowanceSheet.new({ from });
         this.balances = await BalanceSheet.new({ from });
         this.token = await PermissionedToken.new(this.allowances.address, this.balances.address, { from });
         await this.allowances.transferOwnership(this.token.address, {from});
         await this.balances.transferOwnership(this.token.address, {from});
         assert(await this.allowances.owner(), this.token.address);
-        assert(await this.balances.owner(), this.token.address);
         await this.token.setRegulator(this.regulator.address, { from });
         assert.equal(await this.token.regulator(), this.regulator.address);
         assert.equal(await this.token.owner(), owner);
