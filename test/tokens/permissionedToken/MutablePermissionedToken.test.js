@@ -1,6 +1,7 @@
 const { modularTokenTests } = require('./ModularTokenTests');
 const { permissionedTokenTests } = require('./PermissionedTokenTests');
 const {
+    MutablePermissionedToken,
     MutablePermissionedTokenMock,
     CommonVariables
 } = require('../../helpers/common');

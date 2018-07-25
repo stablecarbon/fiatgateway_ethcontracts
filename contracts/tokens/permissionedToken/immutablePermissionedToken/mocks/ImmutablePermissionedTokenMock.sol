@@ -1,12 +1,18 @@
 pragma solidity ^0.4.23;
 
-import "../ImmutablePermissionedToken.sol";
 import "../../mocks/PermissionedTokenMock.sol";
+import "../../../../regulator/mocks/RegulatorMock.sol";
+import "../../helpers/AllowanceSheet.sol";
+import "../../helpers/BalanceSheet.sol";
 
 /**
 * @title ImmutablePermissionedTokenMock
 */
-contract ImmutablePermissionedTokenMock is PermissionedTokenMock, ImmutablePermissionedToken {
-    constructor(address v, address m, address b, address w, address n) 
-        PermissionedTokenMock(v, m, b, w, n) public {}
+contract ImmutablePermissionedTokenMock is PermissionedTokenMock {
+    constructor(address asheet, address bsheet, address v, address m, address w, address b, address n) public {
+        allowances = AllowanceSheet(asheet);
+        balances = BalanceSheet(bsheet);
+        RegulatorMock r = new RegulatorMock(v, m, w, b, n);
+        setRP(r);
+    }
 }
