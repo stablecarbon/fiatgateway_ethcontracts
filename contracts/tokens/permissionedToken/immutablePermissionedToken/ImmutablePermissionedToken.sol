@@ -1,7 +1,6 @@
 pragma solidity ^0.4.23;
 
 import "../../../regulator/Regulator.sol";
-import "../../../regulator/RegulatorProxy.sol";
 import "openzeppelin-solidity/contracts/ownership/Claimable.sol";
 import "openzeppelin-solidity/contracts/AddressUtils.sol";
 import "../PermissionedToken.sol";

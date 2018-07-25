@@ -23,7 +23,6 @@ function regulatorPermissionsTests(owner, user, validator) {
             await this.testPermissionsStorage.transferOwnership(this.sheet.address, { from:owner });
             await this.sheet.setPermissionsStorage(this.testPermissionsStorage.address, { from:owner });
             await this.sheet.setValidatorStorage(this.testValidatorStorage.address, { from:owner });
-            await this.sheet.claimStorageOwnership({ from:owner });
 
             // Assert invariants
             assert(await this.sheet.isValidator(validator));

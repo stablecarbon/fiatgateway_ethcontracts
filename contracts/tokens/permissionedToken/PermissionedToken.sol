@@ -1,7 +1,6 @@
 pragma solidity ^0.4.23;
 
 import "../../regulator/Regulator.sol";
-import "../../regulator/RegulatorProxy.sol";
 import "openzeppelin-solidity/contracts/ownership/Claimable.sol";
 import "openzeppelin-solidity/contracts/AddressUtils.sol";
 
@@ -16,10 +15,6 @@ import "openzeppelin-solidity/contracts/AddressUtils.sol";
 * @dev This token is not meant to be instantiated. Instantiate the derived contracts
 * `ImmutablePermissionedToken` or `MutablePermissionedToken` instead.
 *
-* Current responsibilities: 
-* 	Anyone can transfer 
-*	Owner can mint, destroy blacklisted tokens
-*	Depositors can burn
 */
 contract PermissionedToken is Claimable {
     /**
@@ -43,8 +38,8 @@ contract PermissionedToken is Claimable {
         _;
     }
 
-    /** @notice Modifier that checks whether or not a transfer operation can
-     * succeed with the given _from and _to address. See transfer()'s documentation for
+    /** @notice Modifier that checks whether or not a transfer operation can send tokens to the
+     * _to address. See transfer()'s documentation for
      * more details.
     **/
     modifier transferConditionsRequired(address _to) {

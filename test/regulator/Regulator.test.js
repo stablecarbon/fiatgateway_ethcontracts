@@ -2,17 +2,17 @@ const { CommonVariables } = require('../helpers/common');
 
 const { Regulator } = require('../helpers/artifacts');
 
-const { regulatorStorageTests } = require('./RegulatorStorage');
+const { regulatorStorageTests } = require('./RegulatorStorage.js');
 
-const { regulatorStorageInteractionsTests } = require('./RegulatorStorageInteractions');
+const { regulatorStorageInteractionsTests } = require('./RegulatorStorageInteractions.js');
 
-const { regulatorPermissionsTests } = require('./RegulatorPermissions');
+const { regulatorPermissionsTests } = require('./RegulatorPermissions.js');
 
 contract('Regulator', _accounts => {
     const commonVars = new CommonVariables(_accounts);
     const owner = commonVars.owner;
-    const validator = commonVars.validator;
     const user = commonVars.user;
+    const validator = commonVars.validator;
     const attacker = commonVars.attacker;
 
     beforeEach(async function () {

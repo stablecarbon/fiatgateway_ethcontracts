@@ -2,13 +2,10 @@ pragma solidity ^0.4.23;
 
 import "openzeppelin-solidity/contracts/ownership/Claimable.sol";
 import "openzeppelin-solidity/contracts/AddressUtils.sol";
-import "zos-lib/contracts/migrations/Migratable.sol";
 import "../../permissionedToken/PermissionedToken.sol";
 import "../../../regulator/Regulator.sol";
-import "../../../regulator/RegulatorProxy.sol";
 import "./helpers/AllowanceSheet.sol";
 import "./helpers/BalanceSheet.sol";
-import "../../../DataMigratable.sol";
 
 /**
 * @title MutablePermissionedToken
@@ -24,7 +21,7 @@ import "../../../DataMigratable.sol";
 *	Owner can mint, destroy blacklisted tokens
 *	Depositors can burn
 */
-contract MutablePermissionedToken is PermissionedToken, Migratable, DataMigratable {
+contract MutablePermissionedToken is PermissionedToken {
     using SafeMath for uint256;
 
     /** Variables */
@@ -43,33 +40,6 @@ contract MutablePermissionedToken is PermissionedToken, Migratable, DataMigratab
     // Permissioned-Token specific
     event BalanceSheetSet(address indexed sheet);
     event AllowanceSheetSet(address indexed sheet);
-
-    /**
-    * @notice Function used as part of Migratable interface. Must be called when
-    * proxy is assigned to contract in order to correctly assign the contract's
-    * version number.
-    *
-    * If deploying a new contract version, the version number must be changed as well. 
-    */
-    function initialize() isInitializer("MutablePermissionedToken", "1.0") public {
-        // Nothing to initialize!
-    }
-
-    /** @notice Migrates data from an old token contract to a new one.
-    * Precondition: the new contract has already been transferred ownership of the old contract.
-    *
-    * If deploying a new contract version, updating the version numbers is necessary if you
-    * wish to run the migration.
-    * @param _oldToken The address of the old token contract. 
-    */
-    function migrate(address _oldToken) isMigration("MutablePermissionedToken", "1.0", "1.1") public {
-        MutablePermissionedToken oldToken = MutablePermissionedToken(_oldToken);
-        oldToken.claimOwnership(); // Take the proferred ownership of the old contract
-        oldToken.transferStorageOwnership();
-        setBalanceSheet(address(oldToken.balances()));
-        setAllowanceSheet(address(oldToken.allowances()));
-        claimSO();
-    }
 
     /** @notice Transfers ownership of the balance and allowance sheets to the owner
     * of this token contract. This is useful for migrations, since the new token contract is made the

@@ -9,7 +9,7 @@ import "openzeppelin-solidity/contracts/ownership/Claimable.sol";
  * to each user.
  *
  */
-contract PermissionsStorage is Claimable {
+contract PermissionsStorage is Claimable{
 	/** 
         Mappings 
     */
