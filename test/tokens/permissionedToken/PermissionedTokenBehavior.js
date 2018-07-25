@@ -10,8 +10,14 @@ function permissionedTokenBehavior(minter, whitelisted, nonlisted, blacklisted, 
 
                 describe('when user is whitelisted', function () {
                     
+<<<<<<< HEAD
                     it('mints to user', async function () {
                         //await this.token.mint(whitelisted, 100 * 10 ** 18, { from: minter })
+=======
+                    it('mints to whitelisted', async function () {
+                        // await this.token.mint(whitelisted, 100 * 10 ** 18, { from: minter })
+                        // assertBalance(this.token, whitelisted, 0);
+>>>>>>> pai_v0
                         assertBalance(this.token, whitelisted, 0);
                     });
                     

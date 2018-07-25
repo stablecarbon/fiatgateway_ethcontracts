@@ -15,6 +15,7 @@ contract PermissionedTokenMock is PermissionedToken {
     constructor(address v, address m, address w, address b, address n) public {
         allowances = new AllowanceSheet();
         balances = new BalanceSheet();
+<<<<<<< HEAD
         regulator = new Regulator();
         //_setRegulator(address(new Regulator()));
         // regulator.addValidator(this);
@@ -23,5 +24,9 @@ contract PermissionedTokenMock is PermissionedToken {
         // regulator.setWhitelistedUser(w);
         // regulator.setBlacklistedUser(b);
         // regulator.setNonlistedUser(n);
+=======
+        // RegulatorMock r = new RegulatorMock(v, m, w, b, n);
+        // setRP(r);
+>>>>>>> pai_v0
     }
 }
