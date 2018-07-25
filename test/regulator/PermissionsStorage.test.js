@@ -6,8 +6,9 @@ contract('PermissionsStorage', _accounts => {
     
     // Initialize common variables
     const commonVars = new CommonVariables(_accounts);
-    const owner = commonVars.accounts[0];
-    const account2 = commonVars.accounts[1];
+    const owner = commonVars.owner;
+    const user = commonVars.user;
+    const attacker = commonVars.attacker;
     const testPermission = 0x12345678;
     const testPermissionName = "Test Permission";
     const testPermissionDescription = "A test permission description.";

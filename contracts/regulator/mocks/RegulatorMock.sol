@@ -1,6 +1,8 @@
 pragma solidity ^0.4.23;
 
 import "../Regulator.sol";
+import "../helpers/mocks/PermissionsStorageMock.sol";
+import "../helpers/mocks/ValidatorStorageMock.sol";
 
 contract RegulatorMock is Regulator {
     /** 

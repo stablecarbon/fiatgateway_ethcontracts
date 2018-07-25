@@ -8,12 +8,35 @@ module.exports = function (deployer, network, accounts) {
     
     if (network == "development") {
         // Setup token regulator
-        let regulator = accounts[0];
-        deployer.deploy(
-            [PermissionsStorage, {from: regulator}], 
-            [ValidatorStorage, {from: regulator}],
-            [WhitelistedTokenRegulator, { from: regulator }],
-            [WhitelistedTokenRegulatorProxy, { from: regulator }]);
+        let tokenRegulator = accounts[0];
+        deployer.deploy([
+            [PermissionsStorage, { from: tokenRegulator}], 
+            [ValidatorStorage, { from: tokenRegulator}],
+            [WhitelistedTokenRegulator, { from: tokenRegulator }]
+        ]).then(function() {
+            ps = PermissionsStorage.deployed();
+            vs = ValidatorStorage.deployed();
+            r = WhitelistedTokenRegulator.deployed();
+            ps.transferOwnership(r.address, { from: tokenRegulator});
+            vs.transferOwnership(r.address, { from: tokenRegulator});
+            r.setPermissionsStorage(ps, { from: tokenRegulator});
+            r.setValidatorStorage(vs, { from: tokenRegulator });
+        });
+
+        // Setup CarbonUSD regulator
+        let cusdRegulator = accounts[0];
+        deployer.deploy([
+            [PermissionsStorage, { from: cusdRegulator }],
+            [ValidatorStorage, { from: cusdRegulator }],
+            [Regulator, { from: cusdRegulator }]
+        ]).then(function () {
+            ps = PermissionsStorage.deployed();
+            vs = ValidatorStorage.deployed();
+            r = Regulator.deployed();
+            ps.transferOwnership(r.address, { from: cusdRegulator });
+            vs.transferOwnership(r.address, { from: cusdRegulator });
+            r.setPermissionsStorage(ps, { from: cusdRegulator });
+            r.setValidatorStorage(vs, { from: cusdRegulator });
+        });
     }
-    
 };

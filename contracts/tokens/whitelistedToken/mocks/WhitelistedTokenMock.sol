@@ -1,12 +1,19 @@
 pragma solidity ^0.4.23;
 
-import "../../permissionedToken/immutablePermissionedToken/mocks/ImmutablePermissionedTokenMock.sol";
+import "../../permissionedToken/mocks/PermissionedTokenMock.sol";
 import "../WhitelistedToken.sol";
 
 /**
 * @title WhitelistedTokenMock
 */
-contract WhitelistedTokenMock is ImmutablePermissionedTokenMock, WhitelistedToken {
-    constructor(address v, address m, address b, address w, address n, address cusd) 
-        ImmutablePermissionedTokenMock(v, m, b, w, n) WhitelistedToken(cusd) public {}
+contract WhitelistedTokenMock is PermissionedTokenMock, WhitelistedToken {
+    constructor(address asheet, 
+                address bsheet, 
+                address v, 
+                address m, 
+                address b, 
+                address w, 
+                address n, 
+                address cusd) 
+        PermissionedTokenMock(asheet, bsheet, v, m, b, w, n) WhitelistedToken(cusd) public {}
 }

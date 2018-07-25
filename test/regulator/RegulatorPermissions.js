@@ -33,58 +33,6 @@ function regulatorPermissionsTests(owner, user, validator) {
             assert(await this.sheet.isPermission(this.BLACKLISTED_SIG));
         });
 
-        describe('setUserPermission', function () {
-            describe("when sender is validator", function () {
-                const from = validator;
-                it("adds permission for user", async function () {
-                    await this.sheet.setUserPermission(user, this.testPermission, { from });
-                    assert(await this.sheet.hasUserPermission(user, this.testPermission));
-                })
-            });
-            describe("when sender is not validator but is owner", function () {
-                const from = owner;
-                it('reverts all calls', async function () {
-                    await expectRevert(this.sheet.setUserPermission(user, this.testPermission, { from }));
-                })
-            });
-            describe("when sender is not validator and is not owner", function () {
-                const from = user;
-                it('reverts all calls', async function () {
-                    await expectRevert(this.sheet.setUserPermission(user, this.testPermission, { from }));
-                })
-            });
-        })
-
-        describe('removeUserPermission', function () {
-            describe("when sender is validator", function () {
-                const from = validator;
-                it('removes user permission', async function () {
-                    await this.sheet.removeUserPermission(user, this.testPermission, { from });
-                    assert(!(await this.sheet.hasUserPermission(user, this.testPermission)));
-                })
-            });
-            describe("when sender is not validator but is owner", function () {
-                it('reverts all calls if sender is owner', async function () {
-                    await expectRevert(this.sheet.removeUserPermission(user, this.testPermission, { from: owner }));
-                })
-                it('reverts all calls if sender is not owner', async function () {
-                    await expectRevert(this.sheet.removeUserPermission(user, this.testPermission, { from: user }));
-                })
-            });
-        })
-
-        describe('hasUserPermission', function () {
-            const from = validator;
-            it('reports if user has permission, correctly', async function () {
-                await this.sheet.setUserPermission(user, this.testPermission, { from });
-                assert(await this.sheet.hasUserPermission(user, this.testPermission));
-            })
-            it('reports if user doesn\'t have permission, correctly', async function () {
-                await this.sheet.removeUserPermission(user, this.testPermission, { from });
-                assert(!(await this.sheet.hasUserPermission(user, this.testPermission)));
-            })
-        })
-
         describe('setMinter', function () {
             describe("when sender is validator", function () {
                 const from = validator;

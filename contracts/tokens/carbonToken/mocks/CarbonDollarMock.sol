@@ -9,12 +9,14 @@ import "../CarbonDollar.sol";
 * @title CarbonDollarMock
 */
 contract CarbonDollarMock is MutablePermissionedTokenMock, CarbonDollar {
-    constructor(address v,
+    constructor(address asheet,
+                address bsheet,
+                address v,
                 address m,
                 address b,
                 address w, 
                 address n)
-            MutablePermissionedTokenMock(v, m, b, w, n)
+            MutablePermissionedTokenMock(asheet, bsheet, v, m, b, w, n)
             public {
         stablecoinWhitelist = new StablecoinWhitelist();
         stablecoinFees = new FeeSheet();

@@ -42,18 +42,6 @@ contract CarbonDollar is MutablePermissionedToken, HasNoTokens {
         _;
     }
 
-    function transferSO(address owner) internal {
-        super.transferSO(owner);
-        stablecoinFees.transferOwnership(owner);
-        stablecoinWhitelist.transferOwnership(owner);
-    }
-
-    function claimSO() internal {
-        super.claimSO();
-        stablecoinFees.claimOwnership();
-        stablecoinWhitelist.claimOwnership();
-    }
-
     /**
      * @notice Set the stablecoin whitelist contract.
      * @param _whitelist Address of the stablecoin whitelist contract.

@@ -57,7 +57,8 @@ contract Regulator is Claimable {
 
     /**
     * @notice Sets the internal permission storage to point to a new storage.
-    * @param _newStorage The address of a new PermissionsStorage.
+    * @param _newStorage The address of a new PermissionsStorage. Precondition: pending
+    * owner of the storage is this regulator contract.
     */
     function setPermissionsStorage(address _newStorage) external onlyOwner {
         setPS(_newStorage);
@@ -73,7 +74,8 @@ contract Regulator is Claimable {
 
     /**
     * @notice Sets the internal validators storage to point to a new storage.
-    * @param _newStorage The address of a new ValidatorStorage.
+    * @param _newStorage The address of a new ValidatorStorage. Precondition: pending
+    * owner of the storage is this regulator contract.
     */
     function setValidatorStorage(address _newStorage) external onlyOwner {
         setVS(_newStorage);
