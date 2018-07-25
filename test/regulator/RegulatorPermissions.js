@@ -31,7 +31,7 @@ function regulatorPermissionsTests(owner, user, validator) {
             assert(await this.sheet.isPermission(this.ADD_BLACKLISTED_ADDRESS_SPENDER_SIG));
             assert(await this.sheet.isPermission(this.BURN_SIG));
             assert(await this.sheet.isPermission(this.BLACKLISTED_SIG));
-        })
+        });
 
         describe('setMinter', function () {
             describe("when sender is validator", function () {
