@@ -16,9 +16,9 @@ contract RegulatorMock is Regulator {
         validators = new ValidatorStorageMock(validator);
         permissions = new PermissionsStorageMock();
         
-        setMinter(minter);
-        setWhitelistedUser(whitelisted);
-        setBlacklistedUser(blacklisted);
-        setNonlistedUser(nonlisted);
+        // setMinter(minter);
+        // setWhitelistedUser(whitelisted);
+        // setBlacklistedUser(blacklisted);
+        // setNonlistedUser(nonlisted);
     }
 }

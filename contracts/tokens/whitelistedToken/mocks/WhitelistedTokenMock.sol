@@ -15,5 +15,5 @@ contract WhitelistedTokenMock is PermissionedTokenMock, WhitelistedToken {
                 address w, 
                 address n, 
                 address cusd) 
-        PermissionedTokenMock(asheet, bsheet, v, m, b, w, n) WhitelistedToken(cusd) public {}
+        PermissionedTokenMock(v, m, b, w, n) WhitelistedToken(cusd) public {}
 }

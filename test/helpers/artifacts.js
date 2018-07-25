@@ -4,6 +4,7 @@ const Regulator = artifacts.require("Regulator");
 const AllowanceSheet = artifacts.require("AllowanceSheet");
 const BalanceSheet = artifacts.require("BalanceSheet");
 const AdminUpgradeabilityProxy = artifacts.require("zos-lib/contracts/upgradeability/AdminUpgradeabilityProxy")
+const PermissionedToken = artifacts.require("PermissionedToken");
 
 
 module.exports = {
@@ -12,5 +13,6 @@ module.exports = {
 	Regulator,
 	AllowanceSheet,
 	BalanceSheet,
-	AdminUpgradeabilityProxy
+	AdminUpgradeabilityProxy,
+	PermissionedToken
 }

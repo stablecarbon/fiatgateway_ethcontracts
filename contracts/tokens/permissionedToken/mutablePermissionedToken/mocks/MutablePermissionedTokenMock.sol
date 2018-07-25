@@ -14,5 +14,5 @@ contract MutablePermissionedTokenMock is MutablePermissionedToken, PermissionedT
                 address b,
                 address w, 
                 address n)
-        MutablePermissionedToken(asheet, bsheet) PermissionedTokenMock(asheet, bsheet, v, m, b, w, n) public {}
+        MutablePermissionedToken(asheet, bsheet) PermissionedTokenMock(v, m, b, w, n) public {}
 }
