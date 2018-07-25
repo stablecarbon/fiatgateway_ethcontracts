@@ -45,12 +45,6 @@ contract PermissionedToken is Ownable {
     event Approval(address indexed owner, address indexed spender, uint256 value);
 
 
-    /* Constructor */
-    constructor(address a, address b) public {
-        allowances = AllowanceSheet(a);
-        balances = BalanceSheet(b);
-    }
-
     /** Modifiers */
     /** @notice Modifier that allows function access to be restricted based on
     * whether the regulator allows the message sender to execute that function.
