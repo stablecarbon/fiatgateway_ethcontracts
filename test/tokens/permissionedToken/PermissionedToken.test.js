@@ -44,10 +44,14 @@ contract('PermissionedToken', _accounts => {
     });
 
     describe("Permissioned Token tests", function () {
-        // describe("Behaves properly like a modular token", function () {
-        //     modularTokenTests(minter, whitelisted, nonlisted);
-        // });
-        permissionedTokenStorage(owner, user)
-        permissionedTokenBehavior( minter, whitelisted, blacklisted, nonlisted, user, validator )
+        describe("Behaves properly like a modular token", function () {
+            modularTokenTests(owner, whitelisted, nonlisted, minter);
+        });
+        describe("PermissionedToken set Regulator properly", function () {
+            permissionedTokenStorage(owner, user)
+        })
+        describe("PermissionedToken abides by regulator", function () {
+            permissionedTokenBehavior( minter, whitelisted, blacklisted, nonlisted, user, validator, owner );
+        });
     });
 })

@@ -30,7 +30,7 @@ function regulatorStorageTests(owner, user) {
                 })
             })
             describe("permissions storage is not an actual contract", function () {
-                it("reverts", function () {
+                it("reverts", async function () {
                     await expectRevert(this.sheet.setPermissionsStorage(from, { from }));
                     assert.equal(await this.sheet.permissions(), ZERO_ADDRESS);
                 })
@@ -59,7 +59,7 @@ function regulatorStorageTests(owner, user) {
                 })
             })
             describe("validator storage is not an actual contract", function () {
-               it("reverts", function () {
+               it("reverts", async function () {
                    await expectRevert(this.sheet.setValidatorStorage(from, { from }));
                    assert.equal(await this.sheet.validators(), ZERO_ADDRESS);
                }) 

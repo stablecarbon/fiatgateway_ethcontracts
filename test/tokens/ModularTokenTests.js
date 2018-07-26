@@ -3,15 +3,14 @@
 const {
     assertBalance,
     expectRevert,
-    ZERO_ADDRESS,
-    transfersToZeroBecomeBurns
+    ZERO_ADDRESS
 } = require('../helpers/common');
 var BigNumber = require('bignumber.js');
 
-function modularTokenTests(owner, oneHundred, anotherAccount) {
+function modularTokenTests(owner, oneHundred, anotherAccount, minter) {
     describe("Modular Token Tests", function () {
         beforeEach(async function () {
-            await this.token.mint(oneHundred, new BigNumber("100000000000000000000"), { from: owner });
+            await this.token.mint(oneHundred, new BigNumber("100000000000000000000"), { from: minter });
         });
 
         describe('--BasicToken Tests--', function () {
@@ -68,18 +67,6 @@ function modularTokenTests(owner, oneHundred, anotherAccount) {
                         })
                     })
                 })
-
-                // This test is skipped for contracts that inherit from WithdrawalToken
-                // because they treat such transfers as burns instead
-                if (!transfersToZeroBecomeBurns) {
-                    describe('when the anotherAccount is the zero address', function () {
-                        const to = ZERO_ADDRESS
-
-                        it('reverts', async function () {
-                            await expectRevert(this.token.transfer(to, new BigNumber("100000000000000000000"), { from: oneHundred }))
-                        })
-                    })
-                }
             })
         })
 
@@ -94,6 +81,7 @@ function modularTokenTests(owner, oneHundred, anotherAccount) {
                     await this.token.burn(amount, { from })
                     const balance = await this.token.balanceOf(from)
                     assert(balance.eq(new BigNumber("90000000000000000000")))
+                    assert((await this.token.totalSupply()).eq(new BigNumber("90000000000000000000")))
                 })
 
                 it('emits a burn event', async function () {
@@ -110,48 +98,6 @@ function modularTokenTests(owner, oneHundred, anotherAccount) {
                 })
             })
 
-            describe('when the given amount is greater than the balance of the sender', function () {
-                const amount = new BigNumber("101000000000000000000")
-                it('reverts', async function () {
-                    await expectRevert(this.token.burn(amount, { from }))
-                })
-            })
-
-
-
-            if (transfersToZeroBecomeBurns) {
-                describe('transfers to 0x0 become burns', function () {
-                    describe('when the given amount is not greater than balance of the sender', function () {
-                        const amount = new BigNumber("10000000000000000000")
-
-                        it('burns the requested amount', async function () {
-                            await this.token.transfer(ZERO_ADDRESS, amount, { from })
-                            assertBalance(this.token, from, new BigNumber("90000000000000000000"))
-                        })
-
-                        it('emits a burn event', async function () {
-                            const { logs } = await this.token.transfer(ZERO_ADDRESS, amount, { from })
-                            assert.equal(logs.length, 2)
-                            assert.equal(logs[0].event, 'Burn')
-                            assert.equal(logs[0].args.burner, oneHundred)
-                            assert(logs[0].args.value.eq(amount))
-
-                            assert.equal(logs[1].event, 'Transfer')
-                            assert.equal(logs[1].args.from, oneHundred)
-                            assert.equal(logs[1].args.to, ZERO_ADDRESS)
-                            assert(logs[1].args.value.eq(amount))
-                        })
-                    })
-
-                    describe('when the given amount is greater than the balance of the sender', function () {
-                        const amount = new BigNumber("101000000000000000000")
-
-                        it('reverts', async function () {
-                            await expectRevert(this.token.transfer(ZERO_ADDRESS, amount, { from }))
-                        })
-                    })
-                })
-            }
         })
 
         describe('-MintableToken Tests-', function () {
@@ -161,18 +107,22 @@ function modularTokenTests(owner, oneHundred, anotherAccount) {
                 const from = owner
 
                 it('mints the requested amount', async function () {
-                    await this.token.mint(oneHundred, amount, { from })
+                    await this.token.mint(oneHundred, amount, { from:minter })
                     assertBalance(this.token, oneHundred, new BigNumber("200000000000000000000"))
+                    assert((await this.token.totalSupply()).eq(new BigNumber("200000000000000000000")))
                 })
 
-                it('emits a mint finished event', async function () {
-                    const { logs } = await this.token.mint(oneHundred, amount, { from })
+                it('emits a mint and transfer event', async function () {
+                    const { logs } = await this.token.mint(oneHundred, amount, { from:minter })
 
                     assert.equal(logs.length, 2)
                     assert.equal(logs[0].event, 'Mint')
                     assert.equal(logs[0].args.to, oneHundred)
                     assert(logs[0].args.value.eq(amount))
                     assert.equal(logs[1].event, 'Transfer')
+                    assert.equal(logs[1].args.from, ZERO_ADDRESS)
+                    assert.equal(logs[1].args.to, oneHundred)
+                    assert(logs[1].args.value.eq(amount))
                 })
             })
 
@@ -180,7 +130,7 @@ function modularTokenTests(owner, oneHundred, anotherAccount) {
                 const from = anotherAccount
 
                 it('reverts', async function () {
-                    await expectRevert(this.token.mint(anotherAccount, amount, { from }))
+                    await expectRevert(this.token.mint(anotherAccount, amount, { from:minter }))
                 })
             })
         })
@@ -570,6 +520,90 @@ function modularTokenTests(owner, oneHundred, anotherAccount) {
                     })
                 })
             })
+        })
+
+        describe('--PausableToken Tests--', function () {
+
+            describe('pause', function () {
+                    describe('when the sender is the token owner', function () {
+                        const from = owner
+
+                        describe('when the token is unpaused', function () {
+                            it('pauses the token', async function () {
+                                await this.token.pause({ from })
+
+                                const paused = await this.token.paused()
+                                assert.equal(paused, true)
+                            })
+
+                            it('emits a paused event', async function () {
+                                const { logs } = await this.token.pause({ from })
+
+                                assert.equal(logs.length, 1)
+                                assert.equal(logs[0].event, 'Pause')
+                            })
+                        })
+
+                        describe('when the token is paused', function () {
+                            beforeEach(async function () {
+                                await this.token.pause({ from })
+                            })
+
+                            it('reverts', async function () {
+                                await expectRevert(this.token.pause({ from }))
+                            })
+                        })
+                    })
+
+                    describe('when the sender is not the token owner', function () {
+                        const from = anotherAccount
+
+                        it('reverts', async function () {
+                            await expectRevert(this.token.pause({ from }))
+                        })
+                    })
+                })
+
+                describe('unpause', function () {
+                    describe('when the sender is the token owner', function () {
+                        const from = owner
+
+                        describe('when the token is paused', function () {
+                            beforeEach(async function () {
+                                await this.token.pause({ from })
+                            })
+
+                            it('unpauses the token', async function () {
+                                await this.token.unpause({ from })
+
+                                const paused = await this.token.paused()
+                                assert.equal(paused, false)
+                            })
+
+                            it('emits an unpaused event', async function () {
+                                const { logs } = await this.token.unpause({ from })
+
+                                assert.equal(logs.length, 1)
+                                assert.equal(logs[0].event, 'Unpause')
+                            })
+                        })
+
+                        describe('when the token is unpaused', function () {
+                            it('reverts', async function () {
+                                await expectRevert(this.token.unpause({ from }))
+                            })
+                        })
+                    })
+
+                    describe('when the sender is not the token owner', function () {
+                        const from = anotherAccount
+
+                        it('reverts', async function () {
+                            await expectRevert(this.token.unpause({ from }))
+                        })
+                    })
+                })
+            
         })
     })
 }

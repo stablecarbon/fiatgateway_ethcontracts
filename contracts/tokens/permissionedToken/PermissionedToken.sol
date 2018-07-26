@@ -3,9 +3,10 @@ pragma solidity ^0.4.23;
 import "../../regulator/Regulator.sol";
 import "./helpers/AllowanceSheet.sol";
 import "./helpers/BalanceSheet.sol";
-import "openzeppelin-solidity/contracts/ownership/Ownable.sol";
 import "openzeppelin-solidity/contracts/AddressUtils.sol";
 import "openzeppelin-solidity/contracts/math/SafeMath.sol";
+import "openzeppelin-solidity/contracts/AddressUtils.sol";
+import "openzeppelin-solidity/contracts/lifecycle/Pausable.sol";
 
 /**
 * @title PermissionedToken
@@ -18,7 +19,7 @@ import "openzeppelin-solidity/contracts/math/SafeMath.sol";
 * `ImmutablePermissionedToken` or `MutablePermissionedToken` instead.
 *
 */
-contract PermissionedToken is Ownable {
+contract PermissionedToken is Pausable {
     using SafeMath for uint256;
 
     /** Variables */
@@ -180,7 +181,7 @@ contract PermissionedToken is Ownable {
     * @param _amount The number of tokens to burn
     * @return `true` if successful and `false` if unsuccessful
     */
-    function burn(uint256 _amount) public requiresPermission {
+    function burn(uint256 _amount) public requiresPermission whenNotPaused {
         _burn(msg.sender, _amount);
     }
 
@@ -198,7 +199,7 @@ contract PermissionedToken is Ownable {
     /**
     * @notice Implements approve() as specified in the ERC20 standard.
     */
-    function approve(address _spender, uint256 _value) userNotBlacklisted(_spender) senderNotBlacklisted public returns (bool) {
+    function approve(address _spender, uint256 _value) userNotBlacklisted(_spender) senderNotBlacklisted whenNotPaused public returns (bool) {
         allowances.setAllowance(msg.sender, _spender, _value);
         emit Approval(msg.sender, _spender, _value);
         return true;
@@ -214,7 +215,7 @@ contract PermissionedToken is Ownable {
      * @param _spender The address which will spend the funds.
      * @param _addedValue The amount of tokens to increase the allowance by.
      */
-    function increaseApproval(address _spender, uint _addedValue) public returns (bool) {
+    function increaseApproval(address _spender, uint _addedValue) userNotBlacklisted(_spender) senderNotBlacklisted whenNotPaused public returns (bool) {
         increaseApprovalAllArgs(_spender, _addedValue, msg.sender);
         return true;
     }
@@ -234,7 +235,7 @@ contract PermissionedToken is Ownable {
      * @param _spender The address which will spend the funds.
      * @param _subtractedValue The amount of tokens to decrease the allowance by.
      */
-    function decreaseApproval(address _spender, uint _subtractedValue) public returns (bool) {
+    function decreaseApproval(address _spender, uint _subtractedValue) userNotBlacklisted(_spender) senderNotBlacklisted whenNotPaused public returns (bool) {
         decreaseApprovalAllArgs(_spender, _subtractedValue, msg.sender);
         return true;
     }
@@ -255,7 +256,7 @@ contract PermissionedToken is Ownable {
     * @dev Should be access-restricted with the 'requiresPermission' modifier when implementing.
     * @param _who Account to destroy tokens from. Must be a blacklisted account.
     */
-    function destroyBlacklistedTokens(address _who) userBlacklisted(_who) requiresPermission public {
+    function destroyBlacklistedTokens(address _who) userBlacklisted(_who) whenNotPaused requiresPermission public {
         uint256 balance = balanceOf(_who);
         balances.setBalance(_who, 0);
         totalSupply = totalSupply.sub(balance);
@@ -269,7 +270,7 @@ contract PermissionedToken is Ownable {
     * @dev Should be access-restricted with the 'requiresPermission' modifier when implementing.
     * @param _blacklistedAccount The blacklisted account.
     */
-    function approveBlacklistedAddressSpender(address _blacklistedAccount) userBlacklisted(_blacklistedAccount) requiresPermission public {
+    function approveBlacklistedAddressSpender(address _blacklistedAccount) whenNotPaused userBlacklisted(_blacklistedAccount) requiresPermission public {
         allowances.setAllowance(_blacklistedAccount, msg.sender, balanceOf(_blacklistedAccount));
         emit ApprovedBlacklistedAddressSpender(_blacklistedAccount, msg.sender, balanceOf(_blacklistedAccount));
     }
@@ -283,7 +284,7 @@ contract PermissionedToken is Ownable {
     *
     * @return `true` if successful and `false` if unsuccessful
     */
-    function transfer(address _to, uint256 _amount) transferConditionsRequired(_to) public returns (bool) {
+    function transfer(address _to, uint256 _amount) transferConditionsRequired(_to) whenNotPaused public returns (bool) {
         require(_to != address(0),"to address cannot be 0x0");
         require(_amount <= balanceOf(msg.sender),"not enough balance to transfer");
 
@@ -305,7 +306,7 @@ contract PermissionedToken is Ownable {
     * @param _amount The number of tokens to transfer
     * @return `true` if successful and `false` if unsuccessful
     */
-    function transferFrom(address _from, address _to, uint256 _amount) public transferFromConditionsRequired(_from, _to) returns (bool) {
+    function transferFrom(address _from, address _to, uint256 _amount) public whenNotPaused transferFromConditionsRequired(_from, _to) returns (bool) {
         require(_amount <= allowance(_from, msg.sender),"not enough allowance to transfer");
         require(_to != address(0),"to address cannot be 0x0");
         require(_from != address(0),"from address cannot be 0x0");

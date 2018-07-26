@@ -2,7 +2,7 @@ const { assertBalance, expectRevert, ZERO_ADDRESS } = require("../../helpers/com
 const { PermissionedToken, Regulator } = require('../../helpers/artifacts');
 var BigNumber = require('bignumber.js');
 
-function permissionedTokenBehavior(minter, whitelisted, blacklisted, nonlisted, user, validator) {
+function permissionedTokenBehavior(minter, whitelisted, blacklisted, nonlisted, user, validator, owner) {
     describe("Permissioned Token Behavior Tests", function () {
         
         describe('mint', function () {
@@ -17,23 +17,7 @@ function permissionedTokenBehavior(minter, whitelisted, blacklisted, nonlisted, 
                         await this.token.mint(to, amountToMint, { from })
                         assertBalance(this.token, to, amountToMint);
                     });
-                    
-                    it('correctly changes total supply', async function () {
-                        await this.token.mint(to, amountToMint, { from })
-                        assert((await this.token.totalSupply()).eq(amountToMint));
-                    });
-
-                    it('emits Mint and Transfer events', async function () {
-                        const { logs } = await this.token.mint(to, amountToMint, { from })
-                        assert.equal(logs.length, 2)
-                        assert.equal(logs[0].event, 'Mint')
-                        assert.equal(logs[0].args.to, whitelisted)
-                        assert(logs[0].args.value.eq(amountToMint))
-                        assert.equal(logs[1].event, 'Transfer')
-                        assert.equal(logs[1].args.from, ZERO_ADDRESS)
-                        assert.equal(logs[1].args.to, whitelisted)
-                        assert(logs[1].args.value.eq(amountToMint))
-                    });
+                      
                 });
                 describe('when user is not whitelisted', function () {
                     afterEach(async function () {
@@ -86,22 +70,12 @@ function permissionedTokenBehavior(minter, whitelisted, blacklisted, nonlisted, 
                     assertBalance(this.token, from, amountToMint.minus(amountToBurn));
                 });
 
-                it('correctly changes total supply', async function () {
+                it('burns user funds when paused and then unpaused', async function () {
+                    await this.token.pause({from:owner})
+                    await this.token.unpause({from:owner})
                     await this.token.burn(amountToBurn, { from })
-                    assert((await this.token.totalSupply()).eq(amountToMint.minus(amountToBurn)));
-                });
-
-                it('emits Burn and Transfer events', async function () {
-                    const { logs } = await this.token.burn(amountToBurn, { from })
-                    assert.equal(logs.length, 2)
-                    assert.equal(logs[0].event, 'Burn')
-                    assert.equal(logs[0].args.burner, whitelisted)
-                    assert(logs[0].args.value.eq(amountToBurn))
-                    assert.equal(logs[1].event, 'Transfer')
-                    assert.equal(logs[1].args.from, whitelisted)
-                    assert.equal(logs[1].args.to, ZERO_ADDRESS)
-                    assert(logs[1].args.value.eq(amountToBurn))
-                });
+                    assertBalance(this.token, from, amountToMint.minus(amountToBurn));
+                })
 
                 describe('when the amount is more than the users balance', function () {
                     it('reverts', async function () {
@@ -109,6 +83,18 @@ function permissionedTokenBehavior(minter, whitelisted, blacklisted, nonlisted, 
                         assertBalance(this.token, from, amountToMint);
                     });
                 })
+
+                describe('when paused', function () {
+
+                    const from = whitelisted
+
+                    it('reverts', async function () {
+                        await this.token.pause( { from:owner } )
+                        await expectRevert( this.token.burn( amountToBurn, { from } ) )
+                    })
+
+                })
+
             });
 
             describe('when sender is not whitelisted', function () {
@@ -132,6 +118,8 @@ function permissionedTokenBehavior(minter, whitelisted, blacklisted, nonlisted, 
 
                 });
             });
+
+
         });
 
         describe('transfer', function () {
@@ -177,31 +165,27 @@ function permissionedTokenBehavior(minter, whitelisted, blacklisted, nonlisted, 
                             await this.token.transfer(to, amountToTransfer, { from });
                             assertBalance(this.token, from, amountToMint.minus(amountToTransfer));
                             assertBalance(this.token, to, amountToMint.plus(amountToTransfer));
-                            assert((await this.token.totalSupply()).eq(amountToMint.times(2)));
                         })
 
                         it('transfer succeeds from whitelisted to nonlisted', async function () {
                             await this.token.transfer(from, amountToTransfer, { from:to });
                             assertBalance(this.token, to, amountToMint.minus(amountToTransfer));
                             assertBalance(this.token, from, amountToMint.plus(amountToTransfer));
-                            assert((await this.token.totalSupply()).eq(amountToMint.times(2)));
                         })
-                        it('emits a Transfer event', async function () {
-                            const { logs } = await this.token.transfer(to, amountToTransfer, { from })
-                            assert.equal(logs.length, 1)
-                            assert.equal(logs[0].event, 'Transfer')
-                            assert.equal(logs[0].args.from, from)
-                            assert.equal(logs[0].args.to, to)
-                            assert(logs[0].args.value.eq(amountToTransfer))
+                        it('transfer succeeds when paused and then unpaused', async function () {
+                            await this.token.pause( { from:owner })
+                            await this.token.unpause( { from:owner })
+                            await this.token.transfer(to, amountToTransfer, { from });
+                            assertBalance(this.token, from, amountToMint.minus(amountToTransfer));
+                            assertBalance(this.token, to, amountToMint.plus(amountToTransfer));
                         })
                     })
 
-                    describe('when sender does not have enough balance', function () {
-                        const tooMuchToTransfer = amountToTransfer.times(2).plus(1)
+                    describe('when paused', function () {
+
                         it('reverts', async function () {
-                            await expectRevert(this.token.transfer(from, tooMuchToTransfer, { from }));
-                            await expectRevert(this.token.transfer(to, tooMuchToTransfer, { from }));
-                            assert((await this.token.totalSupply()).eq(amountToMint.times(2)));
+                            await this.token.pause( { from:owner })
+                            await expectRevert(this.token.transfer(from, amountToTransfer, { from }))
                         })
                     })
 
@@ -213,7 +197,6 @@ function permissionedTokenBehavior(minter, whitelisted, blacklisted, nonlisted, 
                     it('reverts', async function () {
                         await expectRevert(this.token.transfer(to, amountToTransfer, { from: nonlisted }))
                         await expectRevert(this.token.transfer(to, amountToTransfer, { from: whitelisted }))
-                        assert((await this.token.totalSupply()).eq(amountToMint.times(2)));
                     });
                 });
 
@@ -223,7 +206,6 @@ function permissionedTokenBehavior(minter, whitelisted, blacklisted, nonlisted, 
                     it('reverts', async function () {
                         await expectRevert(this.token.transfer(to, amountToTransfer, { from: nonlisted }))
                         await expectRevert(this.token.transfer(to, amountToTransfer, { from: whitelisted }))
-                        assert((await this.token.totalSupply()).eq(amountToMint.times(2)));
                     })
                 })
             });
@@ -243,13 +225,20 @@ function permissionedTokenBehavior(minter, whitelisted, blacklisted, nonlisted, 
                         assert((await this.token.allowance(holder, spender)).eq(amountToTransferFrom));
                     })
 
-                    it('emits an Approval event', async function () {
-                        const { logs } = await this.token.approve(spender, amountToTransferFrom, {from:holder})
-                        assert.equal(logs.length, 1)
-                        assert.equal(logs[0].event, "Approval")
-                        assert.equal(logs[0].args.owner, holder)
-                        assert.equal(logs[0].args.spender, spender)
-                        assert(logs[0].args.value.eq(amountToTransferFrom))
+                    it('approves when paused and then paused', async function () {
+                        await this.token.pause( { from:owner })
+                        await this.token.unpause( { from:owner })
+                        assert(await this.token.approve(spender, amountToTransferFrom, {from:holder}))
+                        assert((await this.token.allowance(holder, spender)).eq(amountToTransferFrom));
+                    })
+
+                    describe('tries to approve when paused', function () {
+
+                        it('reverts', async function () {
+
+                            await this.token.pause( { from:owner })
+                            await expectRevert(this.token.approve(spender, amountToTransferFrom, {from:holder}))
+                        })
                     })
                 })
 
@@ -264,8 +253,9 @@ function permissionedTokenBehavior(minter, whitelisted, blacklisted, nonlisted, 
 
             describe('token holder is blacklisted', function () {
 
+                const holder = blacklisted
+
                 describe('spender is not blacklisted', function () {
-                    const holder = blacklisted
 
                     it('reverts', async function () {
                         await expectRevert(this.token.approve(whitelisted, amountToTransferFrom, {from:holder}));
@@ -273,6 +263,112 @@ function permissionedTokenBehavior(minter, whitelisted, blacklisted, nonlisted, 
                 })
             })
         })
+
+        describe('increaseApproval', function () {
+            const amountToTransferFrom = new BigNumber("100000000000000000000") //100e18
+
+            describe('token holder is not blacklisted', function () {
+                const holder = whitelisted
+
+                describe('spender is not blacklisted', function () {
+                    const spender = nonlisted
+
+                    it('increases senders allowance', async function () {
+                        assert(await this.token.increaseApproval(spender, amountToTransferFrom, {from:holder}))
+                        assert((await this.token.allowance(holder, spender)).eq(amountToTransferFrom));
+                    })
+
+                    it('approves when paused and then paused', async function () {
+                        await this.token.pause( { from:owner })
+                        await this.token.unpause( { from:owner })
+                        assert(await this.token.increaseApproval(spender, amountToTransferFrom, {from:holder}))
+                        assert((await this.token.allowance(holder, spender)).eq(amountToTransferFrom));
+                    })
+
+                    describe('when paused', function () {
+                        it('reverts', async function () {
+                            await this.token.pause( { from:owner })
+                            await expectRevert(this.token.increaseApproval(spender, amountToTransferFrom, {from:holder}))
+                        })
+                    })
+                })
+
+                describe('spender is blacklisted', function () {
+                    
+                    const spender = blacklisted
+
+                    it('reverts', async function () {
+                        await expectRevert(this.token.increaseApproval(spender, amountToTransferFrom, {from:holder}))
+                        assert((await this.token.allowance(holder, spender)).eq(0));
+                    })
+                })
+            })
+
+            describe('token holder is blacklisted', function () {
+
+                const holder = blacklisted
+
+                it('reverts', async function () {
+                    await expectRevert(this.token.increaseApproval(whitelisted, amountToTransferFrom, {from:holder}));
+                })
+            })
+        })
+
+        describe('decreaseApproval', function () {
+            const amountToTransferFrom = new BigNumber("100000000000000000000") //100e18
+
+            describe('token holder is not blacklisted', function () {
+                const holder = whitelisted
+
+                describe('spender is not blacklisted', function () {
+                    const spender = nonlisted
+
+                    beforeEach(async function () {
+                        await this.token.approve(spender, amountToTransferFrom, {from:holder})
+                    })
+
+                    it('decreases senders allowance', async function () {
+                        assert(await this.token.decreaseApproval(spender, amountToTransferFrom, {from:holder}))
+                        assert((await this.token.allowance(holder, spender)).eq(0));
+                    })
+
+                    it('approves when paused and then paused', async function () {
+                        await this.token.pause( { from:owner })
+                        await this.token.unpause( { from:owner })
+                        assert(await this.token.decreaseApproval(spender, amountToTransferFrom, {from:holder}))
+                        assert((await this.token.allowance(holder, spender)).eq(0));
+                    })
+
+                    describe('when paused', function () {
+                        it('reverts', async function () {
+                            await this.token.pause( { from:owner })
+                            await expectRevert(this.token.decreaseApproval(spender, amountToTransferFrom, {from:holder}))
+                        })
+                    })
+                })
+
+                describe('spender is blacklisted', function () {
+                    
+                    const spender = blacklisted
+
+                    it('reverts', async function () {
+                        await expectRevert(this.token.decreaseApproval(spender, amountToTransferFrom, {from:holder}))
+                        assert((await this.token.allowance(holder, spender)).eq(0));
+                    })
+                })
+            })
+
+            describe('token holder is blacklisted', function () {
+
+                const holder = blacklisted
+
+                it('reverts', async function () {
+                    await expectRevert(this.token.decreaseApproval(whitelisted, amountToTransferFrom, {from:holder}));
+                })
+            })   
+
+        })
+
 
         describe('approveBlacklistedAddressSpender', function () {
             
@@ -288,12 +384,6 @@ function permissionedTokenBehavior(minter, whitelisted, blacklisted, nonlisted, 
 
                 // set validator as blacklist spender
                 await this.regulator.setBlacklistSpender(from, { from: validator })
-                assert(await this.regulator.isBlacklistSpender(from));
-
-            })
-
-            afterEach(async function () {
-                assert((await this.token.totalSupply()).eq(amountToMint));
             })
 
             describe('message sender is a blacklist spender', function () {
@@ -313,6 +403,18 @@ function permissionedTokenBehavior(minter, whitelisted, blacklisted, nonlisted, 
                         assert.equal(logs[0].args.owner, blacklisted);
                         assert.equal(logs[0].args.spender, from);
                         assert(logs[0].args.value.eq(amountToMint));
+                    })
+                    it('sets allowance when paused and then unpaused', async function () {
+                        await this.token.pause( { from:owner } )
+                        await this.token.unpause( { from:owner })
+                        await this.token.approveBlacklistedAddressSpender(blacklisted, { from });
+                        assert((await this.token.allowance(blacklisted, from)).eq(amountToMint));
+                    })
+                    describe('when paused', function () {
+                        it('reverts', async function () {
+                            await this.token.pause( { from:owner })
+                            await expectRevert(this.token.approveBlacklistedAddressSpender(blacklisted, { from }))
+                        })
                     })
                 })
 
@@ -374,9 +476,6 @@ function permissionedTokenBehavior(minter, whitelisted, blacklisted, nonlisted, 
 
                     })
 
-                    afterEach(async function () {
-                        assert((await this.token.totalSupply()).eq(amountToMint));
-                    })
 
                     describe('token holder has enough funds', function () {
                         it('transfer succeeds', async function () {
@@ -385,23 +484,24 @@ function permissionedTokenBehavior(minter, whitelisted, blacklisted, nonlisted, 
                             assertBalance(this.token, from, amountToMint.minus(amountToTransferFrom));
                             assertBalance(this.token, to, amountToTransferFrom);
                         });
-                        it('emits a Transfer event', async function () {
-                            const { logs } = await this.token.transferFrom(from, to, amountToTransferFrom, { from: spender})
-                            assert.equal(logs.length, 1)
-                            assert.equal(logs[0].event, 'Transfer')
-                            assert.equal(logs[0].args.from, from)
-                            assert.equal(logs[0].args.to, to)
-                            assert(logs[0].args.value.eq(amountToTransferFrom))
-                        });
+ 
+                        it('transfer succeeds when paused and then unpaused', async function () {
+                            await this.token.pause({ from:owner })
+                            await this.token.unpause({ from:owner })
+                            await this.token.transferFrom(from, to, amountToTransferFrom, { from: spender });
+
+                            assertBalance(this.token, from, amountToMint.minus(amountToTransferFrom));
+                            assertBalance(this.token, to, amountToTransferFrom);
+                        })
+
+                        describe('when paused', function () {
+                            it('reverts', async function () {
+                                await this.token.pause({ from:owner })
+                                await expectRevert(this.token.transferFrom(from, to, amountToTransferFrom, { from:spender }))
+                            })
+                        })
                     });
 
-                    describe('spender does not have enough allowance', function () {
-                       
-                        it('reverts', async function () {
-                            await expectRevert(this.token.transferFrom(whitelisted, nonlisted, amountToTransferFrom.plus(1), { from: spender }));
-                        });
-
-                    });
                 });
 
                 describe('function caller is NOT approved to transferFrom token holder account', function () {
@@ -439,8 +539,6 @@ function permissionedTokenBehavior(minter, whitelisted, blacklisted, nonlisted, 
 
                     // approve sender for moving blacklisted tokens
                     await this.regulator.setBlacklistSpender(blacklistedSpender, {from:validator});
-                    assert(await this.regulator.isBlacklistSpender(blacklistedSpender))
-
                 })
 
                 afterEach(async function () {
@@ -482,9 +580,6 @@ function permissionedTokenBehavior(minter, whitelisted, blacklisted, nonlisted, 
                 // give validator ability to destroy blacklisted tokens
                 await this.regulator.setBlacklistDestroyer(validator, {from:validator})
 
-                assert((await this.token.balanceOf(blacklisted)).eq(amountToMint))
-                assert((await this.token.totalSupply()).eq(amountToMint))
-
             })
             describe('function caller has permission to destroy blacklisted tokens', function () {
 
@@ -508,6 +603,20 @@ function permissionedTokenBehavior(minter, whitelisted, blacklisted, nonlisted, 
                         assert.equal(logs[0].args.account, blacklisted);
                         assert(logs[0].args.amount.eq(amountToMint));
                     });
+
+                    it('tokens are destroyed when paused and then unpaused', async function () {
+                        await this.token.pause({ from:owner })
+                        await this.token.unpause({ from:owner })
+                        await this.token.destroyBlacklistedTokens(from, { from:destroyer })
+                        assert((await this.token.balanceOf(blacklisted)).eq(0))
+                        assert((await this.token.totalSupply()).eq(0))
+                    })
+                    describe('when paused', function () {
+                        it('reverts', async function () {
+                            await this.token.pause({ from:owner })
+                            await expectRevert(this.token.destroyBlacklistedTokens(from, { from:destroyer }))
+                        })
+                    })
                 })
 
                 describe('account is not blacklisted', function () {
