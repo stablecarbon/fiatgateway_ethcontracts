@@ -15,46 +15,58 @@ function regulatorStorageTests(owner, user) {
         })
 
         describe('setPermissionsStorage as owner', function () {
-            
-            it("sets permissions storage for user", async function () {
-                await this.sheet.setPermissionsStorage(this.testPermissionsStorage.address, { from });
-                assert.equal(await this.sheet.permissions(), this.testPermissionsStorage.address);
-            })
+            describe("permissions storage is an actual contract", function () {
+                it("sets permissions storage for user", async function () {
+                    await this.sheet.setPermissionsStorage(this.testPermissionsStorage.address, { from });
+                    assert.equal(await this.sheet.permissions(), this.testPermissionsStorage.address);
+                })
 
-            it("emits a 'set permissions storage' event", async function () {
-                const { logs } = await this.sheet.setPermissionsStorage(this.testPermissionsStorage.address, { from });
-                assert.equal(logs.length, 1);
-                assert.equal(logs[0].event, 'SetPermissionsStorage');
-                assert.equal(logs[0].args.oldStorage, ZERO_ADDRESS);
-                assert.equal(logs[0].args.newStorage, this.testPermissionsStorage.address);
+                it("emits a 'set permissions storage' event", async function () {
+                    const { logs } = await this.sheet.setPermissionsStorage(this.testPermissionsStorage.address, { from });
+                    assert.equal(logs.length, 1);
+                    assert.equal(logs[0].event, 'SetPermissionsStorage');
+                    assert.equal(logs[0].args.oldStorage, ZERO_ADDRESS);
+                    assert.equal(logs[0].args.newStorage, this.testPermissionsStorage.address);
+                })
+            })
+            describe("permissions storage is not an actual contract", function () {
+                it("reverts", function () {
+                    await expectRevert(this.sheet.setPermissionsStorage(from, { from }));
+                    assert.equal(await this.sheet.permissions(), ZERO_ADDRESS);
+                })
             })
         })
 
         describe('setPermissionsStorage as non-owner', function () {
-            
             it("reverts", async function () {
                 await expectRevert(this.sheet.setPermissionsStorage(this.testPermissionsStorage.address, { from: user }));
             })
         })
 
         describe('setValidatorStorage as owner', function () {
-            
-            it("sets validator storage for user", async function () {
-                await this.sheet.setValidatorStorage(this.testValidatorStorage.address, { from });
-                assert.equal(await this.sheet.validators(), this.testValidatorStorage.address);
-            })
+            describe("validator storage is an actual contract", function() {
+                it("sets validator storage for user", async function () {
+                    await this.sheet.setValidatorStorage(this.testValidatorStorage.address, { from });
+                    assert.equal(await this.sheet.validators(), this.testValidatorStorage.address);
+                })
 
-            it("emits a 'set validator storage' event", async function () {
-                const { logs } = await this.sheet.setValidatorStorage(this.testValidatorStorage.address, { from });
-                assert.equal(logs.length, 1);
-                assert.equal(logs[0].event, 'SetValidatorStorage');
-                assert.equal(logs[0].args.oldStorage, ZERO_ADDRESS);
-                assert.equal(logs[0].args.newStorage, this.testValidatorStorage.address);
+                it("emits a 'set validator storage' event", async function () {
+                    const { logs } = await this.sheet.setValidatorStorage(this.testValidatorStorage.address, { from });
+                    assert.equal(logs.length, 1);
+                    assert.equal(logs[0].event, 'SetValidatorStorage');
+                    assert.equal(logs[0].args.oldStorage, ZERO_ADDRESS);
+                    assert.equal(logs[0].args.newStorage, this.testValidatorStorage.address);
+                })
+            })
+            describe("validator storage is not an actual contract", function () {
+               it("reverts", function () {
+                   await expectRevert(this.sheet.setValidatorStorage(from, { from }));
+                   assert.equal(await this.sheet.validators(), ZERO_ADDRESS);
+               }) 
             })
         })
 
         describe('setValidatorStorage as non-owner', function () {
-            
             it("reverts", async function () {
                 await expectRevert(this.sheet.setValidatorStorage(this.testValidatorStorage.address, { from: user }));
             })

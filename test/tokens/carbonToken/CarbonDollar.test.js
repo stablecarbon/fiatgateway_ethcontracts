@@ -4,10 +4,10 @@ const { permissionedTokenBehavior } = require('./PermissionedTokenBehavior');
 const { permissionedTokenStorage } = require('./PermissionedTokenStorage');
 const { mutablePermissionedTokenStorage } = require('./MutablePermissionedTokenStorage');
 const { PermissionsStorageMock, ValidatorStorageMock } = require('../../helpers/mocks');
-const { MutablePermissionedToken, Regulator, AllowanceSheet, BalanceSheet } = require('../../helpers/artifacts');
+const { WhitelistedToken, CarbonDollar, Regulator, AllowanceSheet, BalanceSheet } = require('../../helpers/artifacts');
+const { CommonVariables } = require('../../helpers/common');
 
-const { CommonVariables, ZERO_ADDRESS } = require('../../helpers/common');
-contract('MutablePermissionedToken', _accounts => {
+contract('CarbonDollar', _accounts => {
     const commonVars = new CommonVariables(_accounts);
     const owner = commonVars.owner
     const minter = commonVars.user
@@ -16,10 +16,9 @@ contract('MutablePermissionedToken', _accounts => {
     const whitelisted = commonVars.user2
     const nonlisted = commonVars.user3
     const user = commonVars.validator2
-    
+
     beforeEach(async function () {
         const from = owner
-
         // Set up regulator data storage contracts and connect to regulator
         this.regulator = await Regulator.new({ from });
         this.permissionsStorage = await PermissionsStorageMock.new({ from });
@@ -35,20 +34,30 @@ contract('MutablePermissionedToken', _accounts => {
         await this.regulator.setNonlistedUser(nonlisted, { from: validator }); // can't burn can transfer
         await this.regulator.setMinter(minter, { from: validator }); // can mint
 
-        // Set up token data storage
-        this.allowances = await AllowanceSheet.new({ from });
-        this.balances = await BalanceSheet.new({ from });
-        this.token = await MutablePermissionedToken.new(this.allowances.address, this.balances.address, { from });
-        await this.allowances.transferOwnership(this.token.address, { from });
-        await this.balances.transferOwnership(this.token.address, { from });
+        // Set up WhitelistedToken
+        this.wtAllowances = await AllowanceSheet.new({ from });
+        this.wtBalances = await BalanceSheet.new({ from });
+        this.wtToken = await WhitelistedToken.new(this.wtAllowances.address, this.wtBalances.address, { from });
+        await this.wtAllowances.transferOwnership(this.wtToken.address, { from });
+        await this.wtBalances.transferOwnership(this.wtToken.address, { from });
+        await this.wtToken.setRegulator(this.regulator.address, { from });
+
+        // Set up CarbonDollar
+        this.cdAllowances = await AllowanceSheet.new({ from });
+        this.cdBalances = await BalanceSheet.new({ from });
+        this.cdToken = await CarbonDollar.new(this.cdAllowances.address, this.cdBalances.address, { from });
+        this.token = this.cdToken
+        await this.cdAllowances.transferOwnership(this.cdToken.address, { from });
+        await this.cdBalances.transferOwnership(this.cdToken.address, { from });
         await this.token.setRegulator(this.regulator.address, { from });
     });
-    describe("Permissioned Token tests", function () {
-        describe("Behaves properly like a modular token", function () {
-            modularTokenTests(minter, whitelisted, nonlisted);
-        });
+    describe("Behaves properly like a mutable permissioned token", function () {
+        modularTokenTests(minter, whitelisted, nonlisted);
         permissionedTokenStorage(owner, user);
         mutablePermissionedTokenStorage(owner, user);
         permissionedTokenBehavior(minter, whitelisted, blacklisted, nonlisted, user, validator);
+    });
+    describe("Carbon Dollar tests", function () {
+        carbonDollarTests(owner, minter);
     });
 })

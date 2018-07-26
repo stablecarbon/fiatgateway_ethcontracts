@@ -27,19 +27,12 @@ contract('PermissionedToken', _accounts => {
         await this.validatorStorage.transferOwnership(this.regulator.address, { from });
         await this.regulator.setPermissionsStorage(this.permissionsStorage.address, { from });
         await this.regulator.setValidatorStorage(this.validatorStorage.address, { from });
-        assert.equal(await this.regulator.permissions(), this.permissionsStorage.address);
-        assert.equal(await this.regulator.validators(), this.validatorStorage.address);
-        assert(await this.regulator.isValidator(validator));
 
         // Set up user permissions
         await this.regulator.setWhitelistedUser(whitelisted, {from: validator}); // can burn, can transfer
         await this.regulator.setBlacklistedUser(blacklisted, {from: validator}); // can't burn, can't transfer
         await this.regulator.setNonlistedUser(nonlisted, {from: validator}); // can't burn can transfer
         await this.regulator.setMinter(minter, {from: validator}); // can mint
-        assert(await this.regulator.isWhitelistedUser(whitelisted));
-        assert(await this.regulator.isBlacklistedUser(blacklisted));
-        assert(await this.regulator.isNonlistedUser(nonlisted));
-        assert(await this.regulator.isMinter(minter));
         
         // Set up token data storage
         this.allowances = await AllowanceSheet.new({ from });
@@ -47,11 +40,7 @@ contract('PermissionedToken', _accounts => {
         this.token = await PermissionedToken.new(this.allowances.address, this.balances.address, { from });
         await this.allowances.transferOwnership(this.token.address, {from});
         await this.balances.transferOwnership(this.token.address, {from});
-        assert(await this.allowances.owner(), this.token.address);
-        assert(await this.balances.owner(), this.token.address);
         await this.token.setRegulator(this.regulator.address, { from });
-        assert.equal(await this.token.regulator(), this.regulator.address);
-        assert.equal(await this.token.owner(), owner);
     });
 
     describe("Permissioned Token tests", function () {
