@@ -1,4 +1,5 @@
-const { permissionedTokenTests } = require('../permissionedToken/PermissionedTokenTests');
+const { permissionedTokenBehavior } = require('../permissionedToken/PermissionedTokenBehavior');
+const { permissionedTokenStorage } = require('../permissionedToken/PermissionedTokenStorage');
 const {
     WhitelistedTokenMock,
     CommonVariables

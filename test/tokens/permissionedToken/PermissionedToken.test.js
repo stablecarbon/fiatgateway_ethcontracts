@@ -1,3 +1,4 @@
+const { modularTokenTests } = require('../ModularTokenTests');
 const { permissionedTokenBehavior } = require('./PermissionedTokenBehavior');
 const { permissionedTokenStorage } = require('./PermissionedTokenStorage');
 const { PermissionsStorageMock, ValidatorStorageMock } = require('../../helpers/mocks');
@@ -39,7 +40,7 @@ contract('PermissionedToken', _accounts => {
         assert(await this.regulator.isBlacklistedUser(blacklisted));
         assert(await this.regulator.isNonlistedUser(nonlisted));
         assert(await this.regulator.isMinter(minter));
-
+        
         // Set up token data storage
         this.allowances = await AllowanceSheet.new({ from });
         this.balances = await BalanceSheet.new({ from });
@@ -54,7 +55,10 @@ contract('PermissionedToken', _accounts => {
     });
 
     describe("Permissioned Token tests", function () {
+        // describe("Behaves properly like a modular token", function () {
+        //     modularTokenTests(minter, whitelisted, nonlisted);
+        // });
+        // permissionedTokenStorage(owner, user)
         permissionedTokenBehavior( minter, whitelisted, blacklisted, nonlisted, user, validator )
-        permissionedTokenStorage( owner, user )
     });
 })

@@ -116,6 +116,8 @@ contract PermissionedToken is Ownable {
     * @param balanceSheet Address of the balances sheet to set for this token.
     */
     constructor(address allowanceSheet, address balanceSheet) public {
+        require(AddressUtils.isContract(allowanceSheet));
+        require(AddressUtils.isContract(balanceSheet));
         allowances = AllowanceSheet(allowanceSheet);
         balances = BalanceSheet(balanceSheet);
     }
@@ -199,6 +201,51 @@ contract PermissionedToken is Ownable {
         allowances.setAllowance(msg.sender, _spender, _value);
         emit Approval(msg.sender, _spender, _value);
         return true;
+    }
+
+    /**
+     * @dev Increase the amount of tokens that an owner allowed to a spender.
+     *
+     * approve should be called when allowed[_spender] == 0. To increment
+     * allowed value is better to use this function to avoid 2 calls (and wait until
+     * the first transaction is mined)
+     * From MonolithDAO Token.sol
+     * @param _spender The address which will spend the funds.
+     * @param _addedValue The amount of tokens to increase the allowance by.
+     */
+    function increaseApproval(address _spender, uint _addedValue) public returns (bool) {
+        increaseApprovalAllArgs(_spender, _addedValue, msg.sender);
+        return true;
+    }
+
+    function increaseApprovalAllArgs(address _spender, uint256 _addedValue, address _tokenHolder) internal {
+        allowances.addAllowance(_tokenHolder, _spender, _addedValue);
+        emit Approval(_tokenHolder, _spender, allowances.allowanceOf(_tokenHolder, _spender));
+    }
+
+    /**
+     * @dev Decrease the amount of tokens that an owner allowed to a spender.
+     *
+     * approve should be called when allowed[_spender] == 0. To decrement
+     * allowed value is better to use this function to avoid 2 calls (and wait until
+     * the first transaction is mined)
+     * From MonolithDAO Token.sol
+     * @param _spender The address which will spend the funds.
+     * @param _subtractedValue The amount of tokens to decrease the allowance by.
+     */
+    function decreaseApproval(address _spender, uint _subtractedValue) public returns (bool) {
+        decreaseApprovalAllArgs(_spender, _subtractedValue, msg.sender);
+        return true;
+    }
+
+    function decreaseApprovalAllArgs(address _spender, uint256 _subtractedValue, address _tokenHolder) internal {
+        uint256 oldValue = allowances.allowanceOf(_tokenHolder, _spender);
+        if (_subtractedValue > oldValue) {
+            allowances.setAllowance(_tokenHolder, _spender, 0);
+        } else {
+            allowances.subAllowance(_tokenHolder, _spender, _subtractedValue);
+        }
+        emit Approval(_tokenHolder, _spender, allowances.allowanceOf(_tokenHolder, _spender));
     }
 
     /**

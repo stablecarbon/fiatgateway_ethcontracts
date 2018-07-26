@@ -1,5 +1,6 @@
 const { modularTokenTests } = require('../permissionedToken/ModularTokenTests');
-const { permissionedTokenTests } = require('../permissionedToken/PermissionedTokenTests');
+const { permissionedTokenBehavior } = require('../permissionedToken/PermissionedTokenBehavior');
+const { permissionedTokenStorage } = require('../permissionedToken/PermissionedTokenStorage');
 const { carbonDollarTests } = require('./CarbonDollarTests');
 const {
     CarbonDollarMock,
