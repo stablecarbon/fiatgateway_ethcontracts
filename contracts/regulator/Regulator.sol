@@ -66,6 +66,7 @@ contract Regulator is Ownable {
 
     // Allows the migrate function to set the storage.
     function setPS(address _newStorage) internal {
+        require(AddressUtils.isContract(_newStorage));
         address _oldStorage = address(permissions);
         permissions = PermissionsStorage(_newStorage);
         emit SetPermissionsStorage(_oldStorage, _newStorage);
@@ -82,6 +83,7 @@ contract Regulator is Ownable {
 
     // Allows the migrate function to set the storage.
     function setVS(address _newStorage) internal {
+        require(AddressUtils.isContract(_newStorage));
         address _oldStorage = address(validators);
         validators = ValidatorStorage(_newStorage);
         emit SetValidatorStorage(_oldStorage, _newStorage);

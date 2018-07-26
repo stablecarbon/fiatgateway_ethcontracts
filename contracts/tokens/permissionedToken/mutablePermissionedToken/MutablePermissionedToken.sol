@@ -30,6 +30,7 @@ contract MutablePermissionedToken is PermissionedToken {
     * @param _sheet The address to of the AllowanceSheet to claim.
     */
     function setAllowanceSheet(address _sheet) public onlyOwner returns(bool){
+        require(AddressUtils.isContract(_sheet));
         address oldAllowances = address(allowances);
         allowances = AllowanceSheet(_sheet);
         emit AllowanceSheetChanged(oldAllowances, _sheet);
@@ -41,6 +42,7 @@ contract MutablePermissionedToken is PermissionedToken {
     * @param _sheet The address to of the BalanceSheet to claim.
     */
     function setBalanceSheet(address _sheet) public onlyOwner returns(bool){
+        require(AddressUtils.isContract(_sheet));
         address oldBalances = address(balances);
         balances = BalanceSheet(_sheet);
         emit BalanceSheetChanged(oldBalances, _sheet);
