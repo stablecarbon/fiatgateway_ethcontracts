@@ -141,6 +141,7 @@ contract PermissionedToken is Ownable {
     * @param _regulator Address of new `Regulator` contract
     */
     function setRegulator(address _regulator) public onlyOwner {
+        require(AddressUtils.isContract(_regulator));
         _setRegulator(_regulator);
     }
 

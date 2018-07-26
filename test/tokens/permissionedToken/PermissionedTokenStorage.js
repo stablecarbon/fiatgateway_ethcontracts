@@ -1,4 +1,4 @@
-const { expectRevert, ZERO_ADDRESS } = require("../../helpers/common");
+const { expectRevert } = require("../../helpers/common");
 
 const { Regulator } = require("../../helpers/artifacts")
 
@@ -29,10 +29,9 @@ function permissionedTokenStorage(owner, nonOwner) {
     				assert.equal(logs[0].args.newProxy, this.newRegulator)
     			})
 
-   				describe('new regulator is the zero address', function () {
+   				describe('new regulator is a non-contract address', function () {
    					it('reverts', async function() {
-   						
-   						await expectRevert(this.token.setRegulator(ZERO_ADDRESS, { from }));
+   						await expectRevert(this.token.setRegulator(owner, { from }));
    						assert.equal(await this.token.regulator(), this.oldRegulator)
 
    					})

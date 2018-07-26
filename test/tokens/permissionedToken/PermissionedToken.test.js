@@ -58,7 +58,7 @@ contract('PermissionedToken', _accounts => {
         // describe("Behaves properly like a modular token", function () {
         //     modularTokenTests(minter, whitelisted, nonlisted);
         // });
-        // permissionedTokenStorage(owner, user)
+        permissionedTokenStorage(owner, user)
         permissionedTokenBehavior( minter, whitelisted, blacklisted, nonlisted, user, validator )
     });
 })
