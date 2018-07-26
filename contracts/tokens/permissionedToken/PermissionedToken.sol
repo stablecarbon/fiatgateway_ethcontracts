@@ -195,7 +195,7 @@ contract PermissionedToken is Ownable {
     /**
     * @notice Implements approve() as specified in the ERC20 standard.
     */
-    function approve(address _spender, uint256 _value) userNotBlacklisted(_spender) public returns (bool) {
+    function approve(address _spender, uint256 _value) userNotBlacklisted(_spender) userNotBlacklisted(msg.sender) public returns (bool) {
         allowances.setAllowance(msg.sender, _spender, _value);
         emit Approval(msg.sender, _spender, _value);
         return true;

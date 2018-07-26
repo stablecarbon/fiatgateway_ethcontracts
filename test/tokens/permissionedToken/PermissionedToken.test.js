@@ -1,4 +1,5 @@
 const { permissionedTokenBehavior } = require('./PermissionedTokenBehavior');
+const { permissionedTokenStorage } = require('./PermissionedTokenStorage');
 const { PermissionsStorageMock, ValidatorStorageMock } = require('../../helpers/mocks');
 const { PermissionedToken, Regulator, AllowanceSheet, BalanceSheet } = require('../../helpers/artifacts');
 
@@ -54,5 +55,6 @@ contract('PermissionedToken', _accounts => {
 
     describe("Permissioned Token tests", function () {
         permissionedTokenBehavior( minter, whitelisted, blacklisted, nonlisted, user, validator )
+        permissionedTokenStorage( owner, user )
     });
 })
