@@ -145,8 +145,8 @@ contract Regulator is Ownable {
     * @param _who The address of the account that we are setting permissions for.
     */
     function setBlacklistSpender(address _who) public onlyValidator {
-        require(permissions.isPermission(permissions.ADD_BLACKLISTED_ADDRESS_SPENDER_SIG()), "Blacklist spending not supported by token");
-        setUserPermission(_who, permissions.ADD_BLACKLISTED_ADDRESS_SPENDER_SIG());
+        require(permissions.isPermission(permissions.APPROVE_BLACKLISTED_ADDRESS_SPENDER_SIG()), "Blacklist spending not supported by token");
+        setUserPermission(_who, permissions.APPROVE_BLACKLISTED_ADDRESS_SPENDER_SIG());
         emit SetBlacklistSpender(_who);
     }
     
@@ -155,8 +155,8 @@ contract Regulator is Ownable {
     * @param _who The address of the account that we are removing permissions for.
     */
     function removeBlacklistSpender(address _who) public onlyValidator {
-        require(permissions.isPermission(permissions.ADD_BLACKLISTED_ADDRESS_SPENDER_SIG()), "Blacklist spending not supported by token");
-        removeUserPermission(_who, permissions.ADD_BLACKLISTED_ADDRESS_SPENDER_SIG());
+        require(permissions.isPermission(permissions.APPROVE_BLACKLISTED_ADDRESS_SPENDER_SIG()), "Blacklist spending not supported by token");
+        removeUserPermission(_who, permissions.APPROVE_BLACKLISTED_ADDRESS_SPENDER_SIG());
         emit RemovedBlacklistSpender(_who);
     }
 
@@ -165,7 +165,7 @@ contract Regulator is Ownable {
      * @return `true` if the user is a blacklist spender, `false` otherwise.
      */
     function isBlacklistSpender(address _who) public view returns (bool) {
-        return hasUserPermission(_who, permissions.ADD_BLACKLISTED_ADDRESS_SPENDER_SIG());
+        return hasUserPermission(_who, permissions.APPROVE_BLACKLISTED_ADDRESS_SPENDER_SIG());
     }
 
     /**

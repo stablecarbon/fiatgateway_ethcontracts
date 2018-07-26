@@ -29,27 +29,30 @@ contract('PermissionedToken', _accounts => {
         assert.equal(await this.regulator.validators(), this.validatorStorage.address);
         assert(await this.regulator.isValidator(validator));
 
-        await this.regulator.setWhitelistedUser(whitelisted, {from: validator});
-        await this.regulator.setBlacklistedUser(blacklisted, {from: validator});
-        await this.regulator.setNonlistedUser(nonlisted, {from: validator});
-        await this.regulator.setMinter(minter, {from: validator});
+        // Set up user permissions
+        await this.regulator.setWhitelistedUser(whitelisted, {from: validator}); // can burn, can transfer
+        await this.regulator.setBlacklistedUser(blacklisted, {from: validator}); // can't burn, can't transfer
+        await this.regulator.setNonlistedUser(nonlisted, {from: validator}); // can't burn can transfer
+        await this.regulator.setMinter(minter, {from: validator}); // can mint
         assert(await this.regulator.isWhitelistedUser(whitelisted));
         assert(await this.regulator.isBlacklistedUser(blacklisted));
         assert(await this.regulator.isNonlistedUser(nonlisted));
         assert(await this.regulator.isMinter(minter));
 
+        // Set up token data storage
         this.allowances = await AllowanceSheet.new({ from });
         this.balances = await BalanceSheet.new({ from });
         this.token = await PermissionedToken.new(this.allowances.address, this.balances.address, { from });
         await this.allowances.transferOwnership(this.token.address, {from});
         await this.balances.transferOwnership(this.token.address, {from});
         assert(await this.allowances.owner(), this.token.address);
+        assert(await this.balances.owner(), this.token.address);
         await this.token.setRegulator(this.regulator.address, { from });
         assert.equal(await this.token.regulator(), this.regulator.address);
         assert.equal(await this.token.owner(), owner);
     });
 
     describe("Permissioned Token tests", function () {
-        permissionedTokenBehavior( minter, whitelisted, blacklisted, nonlisted, user )
+        permissionedTokenBehavior( minter, whitelisted, blacklisted, nonlisted, user, validator )
     });
 })

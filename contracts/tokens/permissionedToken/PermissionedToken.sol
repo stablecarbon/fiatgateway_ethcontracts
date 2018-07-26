@@ -35,9 +35,9 @@ contract PermissionedToken is Ownable {
     Regulator public regulator;
 
     /** Events */
-    event ChangedRegulatoregulator(address oldProxy, address newProxy);
+    event ChangedRegulator(address oldProxy, address newProxy);
     event DestroyedBlacklistedTokens(address indexed account, uint256 amount);
-    event AddedBlacklistedAddressSpender(address indexed account, address indexed spender);
+    event ApprovedBlacklistedAddressSpender(address indexed owner, address indexed spender, uint256 value);
     // ERC20
     event Mint(address indexed to, uint256 value);
     event Burn(address indexed burner, uint256 value);
@@ -57,8 +57,9 @@ contract PermissionedToken is Ownable {
      * _to address. See transfer()'s documentation for
      * more details.
     **/
-    modifier transferConditionsRequired(address _to) {
+    modifier transferConditionsRequired(address _to, address _from) {
         require(!regulator.isBlacklistedUser(_to));
+        require(!regulator.isBlacklistedUser(_from));
         _;
     }
 
@@ -146,7 +147,7 @@ contract PermissionedToken is Ownable {
         require(AddressUtils.isContract(_regulator));
         address oldRegulator = address(regulator);
         regulator = Regulator(_regulator);
-        emit ChangedRegulatoregulator(oldRegulator, _regulator);
+        emit ChangedRegulator(oldRegulator, _regulator);
     }
 
     /**
@@ -214,15 +215,15 @@ contract PermissionedToken is Ownable {
     }
 
     /**
-    * @notice Allows a central authority to add themselves as a spender on a blacklisted account.
+    * @notice Allows a central authority to approve themselves as a spender on a blacklisted account.
     * By default, the allowance is set to the balance of the blacklisted account, so that the
     * authority has full control over the account balance.
     * @dev Should be access-restricted with the 'requiresPermission' modifier when implementing.
-    * @param _who The blacklisted account.
+    * @param _blacklistedAccount The blacklisted account.
     */
-    function addBlacklistedAddressSpender(address _who, address _spender) userBlacklisted(_who) requiresPermission public {
-        allowances.setAllowance(_who, _spender, balanceOf(_who));
-        emit AddedBlacklistedAddressSpender(_who, _spender);
+    function approveBlacklistedAddressSpender(address _blacklistedAccount) userBlacklisted(_blacklistedAccount) requiresPermission public {
+        allowances.setAllowance(_blacklistedAccount, msg.sender, balanceOf(_blacklistedAccount));
+        emit ApprovedBlacklistedAddressSpender(_blacklistedAccount, msg.sender, balanceOf(_blacklistedAccount));
     }
 
     /**
@@ -234,7 +235,7 @@ contract PermissionedToken is Ownable {
     *
     * @return `true` if successful and `false` if unsuccessful
     */
-    function transfer(address _to, uint256 _amount) transferConditionsRequired(_to) public returns (bool) {
+    function transfer(address _to, uint256 _amount) transferConditionsRequired(_to, msg.sender) public returns (bool) {
         require(_to != address(0),"to address cannot be 0x0");
         require(_amount <= balanceOf(msg.sender),"not enough balance to transfer");
 

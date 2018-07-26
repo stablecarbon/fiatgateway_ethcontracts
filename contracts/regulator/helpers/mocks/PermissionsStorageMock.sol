@@ -15,7 +15,7 @@ contract PermissionsStorageMock is PermissionsStorage {
         setMintCUSDPermission();
         setBurnPermission();
         setDestroyBlacklistedTokensPermission();
-        setAddBlacklistedAddressSpenderPermission();
+        setApproveBlacklistedAddressSpenderPermission();
         setDestroySelfPermission();
     }
 
@@ -51,12 +51,12 @@ contract PermissionsStorageMock is PermissionsStorage {
         _addPermission(DESTROY_BLACKLISTED_TOKENS_SIG, destroy_tokens_permission);
     }
 
-    function setAddBlacklistedAddressSpenderPermission() internal {
-        Permission memory add_blacklisted_spender_permission = Permission(
+    function setApproveBlacklistedAddressSpenderPermission() internal {
+        Permission memory approve_blacklisted_spender_permission = Permission(
             "Add Self to Blacklisted Token as an Approved Spender", 
             "Allows a regulatory entity to add themselves as an approved spender on a blacklisted account, in order to transfer tokens out of it.", 
             "PermissionedToken");
-        _addPermission(ADD_BLACKLISTED_ADDRESS_SPENDER_SIG, add_blacklisted_spender_permission);
+        _addPermission(APPROVE_BLACKLISTED_ADDRESS_SPENDER_SIG, approve_blacklisted_spender_permission);
     }
 
     function setDestroySelfPermission() internal {

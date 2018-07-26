@@ -14,7 +14,7 @@ function regulatorPermissionsTests(owner, user, validator) {
             // storing method signatures for testing convenience
             this.MINT_SIG = await this.testPermissionsStorage.MINT_SIG();
             this.DESTROY_BLACKLISTED_TOKENS_SIG = await this.testPermissionsStorage.DESTROY_BLACKLISTED_TOKENS_SIG();
-            this.ADD_BLACKLISTED_ADDRESS_SPENDER_SIG = await this.testPermissionsStorage.ADD_BLACKLISTED_ADDRESS_SPENDER_SIG();
+            this.APPROVE_BLACKLISTED_ADDRESS_SPENDER_SIG = await this.testPermissionsStorage.APPROVE_BLACKLISTED_ADDRESS_SPENDER_SIG();
             this.BURN_SIG = await this.testPermissionsStorage.BURN_SIG();
             this.BLACKLISTED_SIG = await this.testPermissionsStorage.BLACKLISTED_SIG();
             
@@ -28,7 +28,7 @@ function regulatorPermissionsTests(owner, user, validator) {
             assert(await this.sheet.isValidator(validator));
             assert(await this.sheet.isPermission(this.MINT_SIG));
             assert(await this.sheet.isPermission(this.DESTROY_BLACKLISTED_TOKENS_SIG));
-            assert(await this.sheet.isPermission(this.ADD_BLACKLISTED_ADDRESS_SPENDER_SIG));
+            assert(await this.sheet.isPermission(this.APPROVE_BLACKLISTED_ADDRESS_SPENDER_SIG));
             assert(await this.sheet.isPermission(this.BURN_SIG));
             assert(await this.sheet.isPermission(this.BLACKLISTED_SIG));
         });
