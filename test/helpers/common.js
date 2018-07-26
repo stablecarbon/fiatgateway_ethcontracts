@@ -10,8 +10,6 @@ const RANDOM_ADDRESS = 0x3b5855bAEF50EBFdFC89c5E5463f92BCe194EAc9;
 
 
 /** Contract classes **/
-// PermissionedToken
-const MutablePermissionedToken = artifacts.require("MutablePermissionedToken");
 // WT0
 const WhitelistedToken = artifacts.require("WhitelistedToken");
 const WhitelistedTokenRegulator = artifacts.require("WhitelistedTokenRegulator");
@@ -51,7 +49,6 @@ module.exports = {
     CommonVariables,
     ZERO_ADDRESS,
     RANDOM_ADDRESS,
-    MutablePermissionedToken,
     WhitelistedToken,
     WhitelistedTokenRegulator,
     FeeSheet,
