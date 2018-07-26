@@ -57,9 +57,9 @@ contract PermissionedToken is Ownable {
      * _to address. See transfer()'s documentation for
      * more details.
     **/
-    modifier transferConditionsRequired(address _to, address _from) {
+    modifier transferConditionsRequired(address _to) {
         require(!regulator.isBlacklistedUser(_to));
-        require(!regulator.isBlacklistedUser(_from));
+        require(!regulator.isBlacklistedUser(msg.sender));
         _;
     }
 
@@ -198,7 +198,7 @@ contract PermissionedToken is Ownable {
     /**
     * @notice Implements approve() as specified in the ERC20 standard.
     */
-    function approve(address _spender, uint256 _value) userNotBlacklisted(_spender) userNotBlacklisted(msg.sender) public returns (bool) {
+    function approve(address _spender, uint256 _value) userNotBlacklisted(_spender) senderNotBlacklisted public returns (bool) {
         allowances.setAllowance(msg.sender, _spender, _value);
         emit Approval(msg.sender, _spender, _value);
         return true;
@@ -283,7 +283,7 @@ contract PermissionedToken is Ownable {
     *
     * @return `true` if successful and `false` if unsuccessful
     */
-    function transfer(address _to, uint256 _amount) transferConditionsRequired(_to, msg.sender) public returns (bool) {
+    function transfer(address _to, uint256 _amount) transferConditionsRequired(_to) public returns (bool) {
         require(_to != address(0),"to address cannot be 0x0");
         require(_amount <= balanceOf(msg.sender),"not enough balance to transfer");
 

@@ -7,7 +7,7 @@ function mutablePermissionedTokenStorage(owner, nonOwner) {
     	describe('setAllowanceSheet', function () {
     		const from = owner
     		beforeEach(async function () {
-        		assert.equal(await this.token.allowances(), this.allowanceSheet.address);
+        		assert.equal(await this.token.allowances(), this.allowances.address);
         		this.oldAllowanceSheet = await this.token.allowances()
         		this.newAllowanceSheet = (await AllowanceSheet.new({ from })).address
     		})
@@ -44,7 +44,7 @@ function mutablePermissionedTokenStorage(owner, nonOwner) {
 		describe('setBalanceSheet', function () {
 			const from = owner
 			beforeEach(async function () {
-				assert.equal(await this.token.balances(), this.balanceSheet.address);
+				assert.equal(await this.token.balances(), this.balances.address);
 				this.oldBalanceSheet = await this.token.balances()
 				this.newBalanceSheet = (await BalanceSheet.new({ from })).address
 			})
