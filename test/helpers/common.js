@@ -12,13 +12,11 @@ const RANDOM_ADDRESS = 0x3b5855bAEF50EBFdFC89c5E5463f92BCe194EAc9;
 /** Contract classes **/
 // WT0
 const WhitelistedToken = artifacts.require("WhitelistedToken");
-const WhitelistedTokenRegulator = artifacts.require("WhitelistedTokenRegulator");
 // Storage classes for CarbonDollar
 const FeeSheet = artifacts.require("FeeSheet");
 const StablecoinWhitelist = artifacts.require("StablecoinWhitelist");
 // CarbonUSD
 const CarbonDollar = artifacts.require("CarbonDollar");
-const CarbonUSD = artifacts.require("CarbonUSD");
 
 require('chai')
     .use(require('chai-bignumber')(BigNumber))
@@ -50,9 +48,7 @@ module.exports = {
     ZERO_ADDRESS,
     RANDOM_ADDRESS,
     WhitelistedToken,
-    WhitelistedTokenRegulator,
     FeeSheet,
     StablecoinWhitelist,
     CarbonDollar,
-    CarbonUSD
 }

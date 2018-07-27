@@ -1,6 +1,6 @@
 const { expectRevert } = require('../../helpers/common');
 
-const { RegulatorStorage } = require('../../helpers/artifacts')
+const { RegulatorStorage } = require('../../helpers/artifacts');
 
 function regulatorStorageInteractionsTests(owner, user, validator, attacker) {
     
@@ -8,9 +8,10 @@ function regulatorStorageInteractionsTests(owner, user, validator, attacker) {
     describe("Regulator Storage Interactions Tests", function () {
         
         beforeEach(async function () {
+            
             this.testRegulatorStorage = await RegulatorStorage.new({ from:owner })
             await this.sheet.setStorage(this.testRegulatorStorage.address, { from:owner });
-
+            
             // Test Permission
             this.testPermission = 0x12345678;
             this.testPermissionName = "Test Permission";

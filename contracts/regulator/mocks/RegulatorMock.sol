@@ -9,7 +9,6 @@ contract RegulatorMock is Regulator {
     constructor(address regulatorStorage) public {
 
         setStorage(regulatorStorage);
-
     }
 
 }

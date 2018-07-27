@@ -16,7 +16,7 @@ contract('Regulator', _accounts => {
     const attacker = commonVars.attacker;
 
     beforeEach(async function () {
-        this.sheet = await Regulator.new({ from: owner });
+        this.sheet = await Regulator.new({ from:owner });
     })
 
     describe("Regulator tests", function () {

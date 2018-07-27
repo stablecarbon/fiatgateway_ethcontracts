@@ -35,7 +35,6 @@ contract Regulator is MutableRegulatorStorageConsumer, Ownable {
     event SetBlacklistedUser(address indexed who);
     event SetNonlistedUser(address indexed who);
 
-
     /**
     * @notice Adds a validator to the regulator entity.
     * @param _who New validator.
