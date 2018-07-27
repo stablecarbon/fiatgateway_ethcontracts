@@ -1,18 +1,8 @@
 const { CommonVariables, ZERO_ADDRESS } = require('../helpers/common')
 
-const { AdminUpgradeabilityProxy, Regulator, PermissionsStorage, ValidatorStorage } = require('../helpers/artifacts');
+const { RegulatorProxy, Regulator, RegulatorStorage } = require('../helpers/artifacts');
 
 const { RegulatorMock } = require('../helpers/mocks');
-
-async function RegulatorFactory ( owner ) {
-    const regulator = await Regulator.new({ from:owner })
-    const permissions = await PermissionsStorage.new({ from:owner })
-    const validators = await ValidatorStorage.new({ from:owner })
-
-    await regulator.setPermissionsStorage(permissions, { from:owner })
-    // regulator.setValidatorStorage(validators, { from:owner })
-    return regulator
-}
 
 contract('RegulatorProxy', _accounts => {
     const commonVars = new CommonVariables(_accounts);
@@ -21,8 +11,8 @@ contract('RegulatorProxy', _accounts => {
     const minter = commonVars.user;
 
     beforeEach(async function () {
+        this.storage_v1 = (await RegulatorStorage.new({ from:owner })).address
         this.impl_v0 = (await Regulator.new({ from:owner })).address
-        this.impl_v1 = (await Regulator.new({ from:owner })).address
 
         this.proxy = await AdminUpgradeabilityProxy.new(this.impl_v0, { from:owner })
         this.proxyAddress = this.proxy.address

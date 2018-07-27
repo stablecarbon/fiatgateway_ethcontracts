@@ -8,18 +8,19 @@ pragma solidity ^0.4.23;
  *
  */
 contract RegulatorStorage {
-	/** 
+	
+    /** 
         Mappings 
     */
 
     /* method signature => Permission struct containing details about that permission */
     mapping (bytes4 => Permission) public permissions;
     /* method signature => is this signature currently used as a permission? */
-    mapping (bytes4 => bool) public _isPermission;
+    mapping (bytes4 => bool) public isPermission;
     /* (user address => (methodsignature => does user have permission to execute it?)) */
-    mapping (address => mapping(bytes4 => bool)) public _hasUserPermission;
+    mapping (address => mapping(bytes4 => bool)) public hasUserPermission;
     // (user address => is user a validator?)
-    mapping (address => bool) public _isValidator;
+    mapping (address => bool) public isValidator;
 
     /** 
         Structs 
@@ -61,7 +62,7 @@ contract RegulatorStorage {
     }
     
     function _addValidator(address _validator) internal {
-        _isValidator[_validator] = true;
+        isValidator[_validator] = true;
         emit ValidatorAdded(_validator);
     }
 
@@ -70,7 +71,7 @@ contract RegulatorStorage {
     * @param _validator Address of validator to remove
     */
     function removeValidator(address _validator) public {
-        _isValidator[_validator] = false;
+        isValidator[_validator] = false;
         emit ValidatorRemoved(_validator);
     }
 
@@ -93,7 +94,7 @@ contract RegulatorStorage {
     */
     function _addPermission(bytes4 _methodsignature, Permission _permission) internal {
         permissions[_methodsignature] = _permission;
-        _isPermission[_methodsignature] = true;
+        isPermission[_methodsignature] = true;
         emit PermissionAdded(_methodsignature);
 
     }
@@ -103,7 +104,7 @@ contract RegulatorStorage {
     * @param _methodsignature Signature of the method that this permission controls.
     */
     function removePermission(bytes4 _methodsignature) public {
-        _isPermission[_methodsignature] = false;
+        isPermission[_methodsignature] = false;
         emit PermissionRemoved(_methodsignature);
     }
     
@@ -112,8 +113,8 @@ contract RegulatorStorage {
     * @param _methodsignature Signature of the method that this permission controls.
     */
     function setUserPermission(address _who, bytes4 _methodsignature) public {
-        require(_isPermission[_methodsignature]);
-        _hasUserPermission[_who][_methodsignature] = true;
+        require(isPermission[_methodsignature]);
+        hasUserPermission[_who][_methodsignature] = true;
         emit SetUserPermission(_who, _methodsignature);
     }
 
@@ -122,8 +123,8 @@ contract RegulatorStorage {
     * @param _methodsignature Signature of the method that this permission controls.
     */
     function removeUserPermission(address _who, bytes4 _methodsignature) public {
-        require(_isPermission[_methodsignature]);
-        _hasUserPermission[_who][_methodsignature] = false;
+        require(isPermission[_methodsignature]);
+        hasUserPermission[_who][_methodsignature] = false;
         emit RemovedUserPermission(_who, _methodsignature);
     }
 }

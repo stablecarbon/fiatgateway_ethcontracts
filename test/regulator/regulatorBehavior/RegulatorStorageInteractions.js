@@ -1,8 +1,17 @@
-const { expectRevert } = require('../helpers/common');
+const { expectRevert } = require('../../helpers/common');
+
+const { RegulatorStorage } = require('../../helpers/artifacts')
 
 function regulatorStorageInteractionsTests(owner, user, validator, attacker) {
+    
+
     describe("Regulator Storage Interactions Tests", function () {
+        
         beforeEach(async function () {
+            this.testRegulatorStorage = await RegulatorStorage.new({ from:owner })
+            await this.sheet.setStorage(this.testRegulatorStorage.address, { from:owner });
+
+            // Test Permission
             this.testPermission = 0x12345678;
             this.testPermissionName = "Test Permission";
             this.testPermissionDescription = "A test permission description.";
@@ -16,15 +25,15 @@ function regulatorStorageInteractionsTests(owner, user, validator, attacker) {
                 beforeEach(async function () {
                     
                     // test that validator isn't added initially
-                    const validatorAdded = await this.sheet._isValidator(validator);
+                    const validatorAdded = await this.sheet.isValidator(validator);
                     assert(!validatorAdded);
 
                     // add the validator
                     await this.sheet.addValidator(validator, {from : owner});
-                    assert(await this.sheet._isValidator(validator));
+                    assert(await this.sheet.isValidator(validator));
 
                     // check that test permission isn't added initially
-                    const testPermissionAdded = await this.sheet._isPermission(this.testPermission);
+                    const testPermissionAdded = await this.sheet.isPermission(this.testPermission);
                     assert(!testPermissionAdded);
 
                     // add the test permission
@@ -32,7 +41,7 @@ function regulatorStorageInteractionsTests(owner, user, validator, attacker) {
                             this.testPermissionName,
                             this.testPermissionDescription,
                             this.testPermissionContract, { from });
-                    assert(await this.sheet._isPermission(this.testPermission));
+                    assert(await this.sheet.isPermission(this.testPermission));
                 })
 
                 describe('addPermission', function () {
@@ -47,7 +56,7 @@ function regulatorStorageInteractionsTests(owner, user, validator, attacker) {
                 describe('removePermission', function () {
                     it("removes the permission", async function () {
                         await this.sheet.removePermission(this.testPermission, { from });
-                        const hasPermission = await this.sheet._isPermission(this.testPermission);
+                        const hasPermission = await this.sheet.isPermission(this.testPermission);
                         assert(!hasPermission);
                     })
                 })
@@ -55,16 +64,16 @@ function regulatorStorageInteractionsTests(owner, user, validator, attacker) {
                 describe('setUserPermission', function () {
                     it("adds permission for user", async function () {
                         await this.sheet.setUserPermission(user, this.testPermission, { from });
-                        assert(await this.sheet._hasUserPermission(user, this.testPermission));
+                        assert(await this.sheet.hasUserPermission(user, this.testPermission));
                     })
                 })
 
                 describe('removeUserPermission', function () {
                     it('removes the permission for the user', async function () {
                         await this.sheet.setUserPermission(user, this.testPermission, { from });
-                        assert(await this.sheet._hasUserPermission(user, this.testPermission));
+                        assert(await this.sheet.hasUserPermission(user, this.testPermission));
                         await this.sheet.removeUserPermission(user, this.testPermission, { from });
-                        assert(!(await this.sheet._hasUserPermission(user, this.testPermission)));
+                        assert(!(await this.sheet.hasUserPermission(user, this.testPermission)));
                     })
                 })
             })
@@ -86,13 +95,13 @@ function regulatorStorageInteractionsTests(owner, user, validator, attacker) {
                 const from = owner
 
                 beforeEach( async function () {
-                    const validatorAdded = await this.sheet._isValidator(validator);
+                    const validatorAdded = await this.sheet.isValidator(validator);
                     assert(!validatorAdded);
                     await this.sheet.addValidator(validator, { from });
                 })
                 describe('addValidator', function () {
                     it("adds a validator", async function () {
-                        assert(await this.sheet._isValidator(validator));
+                        assert(await this.sheet.isValidator(validator));
                     })
 
                 })
@@ -100,7 +109,7 @@ function regulatorStorageInteractionsTests(owner, user, validator, attacker) {
                 describe('removeValidator', function () {
                     it("removes the validator", async function () {
                         await this.sheet.removeValidator(validator, { from });
-                        const validated = await this.sheet._isValidator(validator);
+                        const validated = await this.sheet.isValidator(validator);
                         assert(!validated);
                     })
                 })
