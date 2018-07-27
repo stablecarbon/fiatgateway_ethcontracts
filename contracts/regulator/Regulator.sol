@@ -1,7 +1,7 @@
 pragma solidity ^0.4.23;
 
-import "./helpers/PermissionsStorage.sol";
-import "./helpers/ValidatorStorage.sol";
+import "./dataStorage/PermissionsStorage.sol";
+import "./dataStorage/ValidatorStorage.sol";
 import "openzeppelin-solidity/contracts/ownership/Ownable.sol";
 import "openzeppelin-solidity/contracts/AddressUtils.sol";
 

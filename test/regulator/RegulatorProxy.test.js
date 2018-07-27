@@ -1,62 +1,67 @@
-const { CommonVariables, ZERO_ADDRESS, expectRevert } = require('../helpers/common');
+const { CommonVariables, ZERO_ADDRESS } = require('../helpers/common')
 
-const { AdminUpgradeabilityProxy, Regulator } = require('../helpers/artifacts');
+const { AdminUpgradeabilityProxy, Regulator, PermissionsStorage, ValidatorStorage } = require('../helpers/artifacts');
 
-const { PermissionsStorageMock, ValidatorStorageMock } = require('../helpers/mocks');
+const { RegulatorMock } = require('../helpers/mocks');
+
+async function RegulatorFactory ( owner ) {
+    const regulator = await Regulator.new({ from:owner })
+    const permissions = await PermissionsStorage.new({ from:owner })
+    const validators = await ValidatorStorage.new({ from:owner })
+
+    await regulator.setPermissionsStorage(permissions, { from:owner })
+    // regulator.setValidatorStorage(validators, { from:owner })
+    return regulator
+}
 
 contract('RegulatorProxy', _accounts => {
     const commonVars = new CommonVariables(_accounts);
     const owner = commonVars.owner;
-    const minter = commonVars.user;
-    const whitelisted = commonVars.user2;
-    const blacklisted = commonVars.attacker;
-    const nonlisted = commonVars.user3;
     const validator = commonVars.validator;
-    const validator2 = commonVars.validator2;
-
-    before(async function () {
-    	const from = owner
-
-        this.reg_v0 = (await Regulator.new({ from }));
-        // this.testPermissionsStorage = await PermissionsStorageMock.new({ from });
-        // this.testValidatorStorage = await ValidatorStorageMock.new(validator, { from });
-        // await this.testValidatorStorage.transferOwnership(this.reg_v0.address, { from });
-        // await this.testPermissionsStorage.transferOwnership(this.reg_v0.address, { from });
-        // await this.reg_v0.setPermissionsStorage(this.testPermissionsStorage.address, { from });
-        // await this.reg_v0.setValidatorStorage(this.testValidatorStorage.address, { from });
-
-        this.impl_v0 = this.reg_v0.address;
-    	// this.impl_v1 = (await RegulatorMock.new(validator2, minter, whitelisted, blacklisted, nonlisted, { from })).address
-    })
+    const minter = commonVars.user;
 
     beforeEach(async function () {
-    	const from = owner
+        this.impl_v0 = (await Regulator.new({ from:owner })).address
+        this.impl_v1 = (await Regulator.new({ from:owner })).address
 
-    	this.proxy = await AdminUpgradeabilityProxy.new(this.impl_v0, { from })
-    	this.proxyAddress = this.proxy.address
+        this.proxy = await AdminUpgradeabilityProxy.new(this.impl_v0, { from:owner })
+        this.proxyAddress = this.proxy.address
     })
 
     describe('implementation', function () {
 
-    	const from = owner
+        it('returns the implementation address', async function () {
+            let regulator = await Regulator.at(this.proxyAddress)
+            this.implementation = await this.proxy.implementation( { from:owner })
+            assert.equal(this.implementation, this.impl_v0)
+        })
 
-    	it('returns the current implementation address', async function () {
-    		const implementation = await this.proxy.implementation({ from })
-    		assert.equal(implementation, this.impl_v0)
-    	})
+    })
 
+    describe('upgradeTo', function () {
 
-    	it('delegates to the implementation', async function () {
-    		this.sheet = await Regulator.at(this.proxyAddress)
+        it('upgrades to new implementation', async function () {
+            await this.proxy.upgradeTo(this.impl_v1, { from:owner })
+            let regulator = await Regulator.at(this.proxyAddress)
+            this.implementation = await this.proxy.implementation( { from:owner })
+            assert.equal(this.implementation, this.impl_v1)
+        })
+    })
 
-            this.testPermissionsStorage = await PermissionsStorageMock.new({ from });
-            await this.testPermissionsStorage.transferOwnership(this.sheet.address, { from });
-            await this.sheet.setPermissionsStorage(this.testPermissionsStorage.address, { from });
-            // assert.equal(this.sheet.permissions(), this.testPermissionsStorage.address);
-            // console.log(this.sheet.permissions())
+    describe('function call to regulator address', function () {
 
-    	})
+        it('delegates calls to latest implementation', async function () {
+            let regulator_implementation = await Regulator.at(this.impl_v0)
+            console.log(await regulator_implementation.owner())
+            console.log(owner)
+            let regulator = await Regulator.at(this.proxyAddress)
+            // let permissions = await regulator.permissions()
 
+            // let permissions = await PermissionsStorage.new({ from:owner })
+            // await regulator.setPermissionsStorage(permissions.address, { from:owner })
+            // console.log(permissions.address)
+            // assert.equal(await regulator.permissions(), permissions.address)
+        })
     })
 
 })

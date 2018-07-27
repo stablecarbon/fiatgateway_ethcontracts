@@ -5,5 +5,5 @@ const RegulatorMock = artifacts.require("RegulatorMock");
 module.exports = {
 	PermissionsStorageMock,
 	ValidatorStorageMock,
-	RegulatorMock,
+	RegulatorMock
 }

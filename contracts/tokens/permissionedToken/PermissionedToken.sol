@@ -7,6 +7,7 @@ import "openzeppelin-solidity/contracts/AddressUtils.sol";
 import "openzeppelin-solidity/contracts/math/SafeMath.sol";
 import "openzeppelin-solidity/contracts/AddressUtils.sol";
 import "openzeppelin-solidity/contracts/lifecycle/Pausable.sol";
+import "openzeppelin-solidity/contracts/token/ERC20/ERC20.sol";
 
 /**
 * @title PermissionedToken
@@ -19,7 +20,7 @@ import "openzeppelin-solidity/contracts/lifecycle/Pausable.sol";
 * `ImmutablePermissionedToken` or `MutablePermissionedToken` instead.
 *
 */
-contract PermissionedToken is Pausable {
+contract PermissionedToken is Pausable, ERC20 {
     using SafeMath for uint256;
 
     /** Variables */
