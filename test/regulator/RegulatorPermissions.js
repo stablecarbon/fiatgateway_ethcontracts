@@ -1,36 +1,29 @@
 const { expectRevert } = require('../helpers/common');
 
-const { PermissionsStorageMock, ValidatorStorageMock } = require('../helpers/mocks');
+const { RegulatorMock } = require('../helpers/mocks');
 
 function regulatorPermissionsTests(owner, user, validator) {
 
     describe("Regulator user permissions setting and getting", async function () {
         beforeEach(async function() {
 
-            // Instantiate PermissionsStorage with function permissions and ValidatorStorage with one validator
-            this.testPermissionsStorage = await PermissionsStorageMock.new({ from:owner });
-            this.testValidatorStorage = await ValidatorStorageMock.new(validator, { from:owner });
+            // Instantiate RegulatorsMock that comes pre-loaded with all function permissions and one validator
+            this.sheet = await RegulatorMock.new(validator, { from:owner });
 
             // storing method signatures for testing convenience
-            this.MINT_SIG = await this.testPermissionsStorage.MINT_SIG();
-            this.DESTROY_BLACKLISTED_TOKENS_SIG = await this.testPermissionsStorage.DESTROY_BLACKLISTED_TOKENS_SIG();
-            this.APPROVE_BLACKLISTED_ADDRESS_SPENDER_SIG = await this.testPermissionsStorage.APPROVE_BLACKLISTED_ADDRESS_SPENDER_SIG();
-            this.BURN_SIG = await this.testPermissionsStorage.BURN_SIG();
-            this.BLACKLISTED_SIG = await this.testPermissionsStorage.BLACKLISTED_SIG();
+            this.MINT_SIG = await this.sheet.MINT_SIG();
+            this.DESTROY_BLACKLISTED_TOKENS_SIG = await this.sheet.DESTROY_BLACKLISTED_TOKENS_SIG();
+            this.APPROVE_BLACKLISTED_ADDRESS_SPENDER_SIG = await this.sheet.APPROVE_BLACKLISTED_ADDRESS_SPENDER_SIG();
+            this.BURN_SIG = await this.sheet.BURN_SIG();
+            this.BLACKLISTED_SIG = await this.sheet.BLACKLISTED_SIG();
             
-            // Make Regulator the owner of the storage contracts 
-            await this.testPermissionsStorage.transferOwnership(this.sheet.address, { from:owner });
-            await this.testValidatorStorage.transferOwnership(this.sheet.address, { from:owner });
-            await this.sheet.setPermissionsStorage(this.testPermissionsStorage.address, { from:owner });
-            await this.sheet.setValidatorStorage(this.testValidatorStorage.address, { from:owner });
-
-            // Assert invariants
-            assert(await this.sheet.isValidator(validator));
-            assert(await this.sheet.isPermission(this.MINT_SIG));
-            assert(await this.sheet.isPermission(this.DESTROY_BLACKLISTED_TOKENS_SIG));
-            assert(await this.sheet.isPermission(this.APPROVE_BLACKLISTED_ADDRESS_SPENDER_SIG));
-            assert(await this.sheet.isPermission(this.BURN_SIG));
-            assert(await this.sheet.isPermission(this.BLACKLISTED_SIG));
+            // Assert pre-test invariants
+            assert(await this.sheet._isValidator(validator));
+            assert(await this.sheet._isPermission(this.MINT_SIG));
+            assert(await this.sheet._isPermission(this.DESTROY_BLACKLISTED_TOKENS_SIG));
+            assert(await this.sheet._isPermission(this.APPROVE_BLACKLISTED_ADDRESS_SPENDER_SIG));
+            assert(await this.sheet._isPermission(this.BURN_SIG));
+            assert(await this.sheet._isPermission(this.BLACKLISTED_SIG));
         });
 
         describe('setMinter', function () {
@@ -40,25 +33,21 @@ function regulatorPermissionsTests(owner, user, validator) {
                     await this.sheet.setMinter(user, { from });
                     assert(await this.sheet.isMinter(user));
                 })
-                it('emits a SetMinter event', async function () {
+                it('emits a SetUserPermission event', async function () {
                     const { logs } = await this.sheet.setMinter(user, { from });
                     assert.equal(logs.length, 1);
-                    assert.equal(logs[0].event, 'SetMinter');
+                    assert.equal(logs[0].event, 'SetUserPermission');
                     assert.equal(logs[0].args.who, user);
+                    assert.equal(logs[0].args.methodsignature, this.MINT_SIG);
                 })
             })
             describe("when sender is not validator but is owner", function () {
                 const from = owner;
-                it('reverts all calls', async function () {
+                it('reverts', async function () {
                     await expectRevert(this.sheet.setMinter(user, { from }));
                 })
             })
-            describe("when sender is not validator and is not owner", function () {
-                const from = user;
-                it('reverts all calls', async function () {
-                    await expectRevert(this.sheet.setMinter(user, { from }));
-                })
-            })
+
         })
 
         describe('removeMinter', function () {
@@ -73,26 +62,20 @@ function regulatorPermissionsTests(owner, user, validator) {
                 const from = validator;
                 it('removes minter', async function () {
                     await this.sheet.removeMinter(user, { from });
-                    assert(!(await this.sheet.hasUserPermission(user, this.MINT_SIG)));
+                    assert(!(await this.sheet._hasUserPermission(user, this.MINT_SIG)));
                 })
-                it('emits a RemovedMinter event', async function () {
+                it('emits a RemovedUserPermission event', async function () {
                     const { logs } = await this.sheet.removeMinter(user, { from });
                     assert.equal(logs.length, 1);
-                    assert.equal(logs[0].event, 'RemovedMinter');
+                    assert.equal(logs[0].event, 'RemovedUserPermission');
                     assert.equal(logs[0].args.who, user);
+                    assert.equal(logs[0].args.methodsignature, this.MINT_SIG);
                 })
             })
 
-            describe("when sender is not validator but is owner", function () {
+            describe("when sender is not validator", function () {
                 const from = owner;
-                it('reverts all calls', async function () {
-                    await expectRevert(this.sheet.removeMinter(user, { from }));
-                })
-            })
-
-            describe("when sender is not validator and is not owner", function () {
-                const from = user;
-                it('reverts all calls', async function () {
+                it('reverts', async function () {
                     await expectRevert(this.sheet.removeMinter(user, { from }));
                 })
             })
@@ -105,22 +88,17 @@ function regulatorPermissionsTests(owner, user, validator) {
                     await this.sheet.setBlacklistDestroyer(user, { from });
                     assert(await this.sheet.isBlacklistDestroyer(user));
                 })
-                it('emits a SetBlacklistDestroyer event', async function () {
+                it('emits a SetUserPermission event', async function () {
                     const { logs } = await this.sheet.setBlacklistDestroyer(user, { from });
                     assert.equal(logs.length, 1);
-                    assert.equal(logs[0].event, 'SetBlacklistDestroyer');
+                    assert.equal(logs[0].event, 'SetUserPermission');
                     assert.equal(logs[0].args.who, user);
+                    assert.equal(logs[0].args.methodsignature, this.DESTROY_BLACKLISTED_TOKENS_SIG);
                 })
             })
-            describe("when sender is not validator but is owner", function () {
+            describe("when sender is not validator", function () {
                 const from = owner;
-                it('reverts all calls', async function () {
-                    await expectRevert(this.sheet.setBlacklistDestroyer(user, { from }));
-                })
-            })
-            describe("when sender is not validator and is not owner", function () {
-                const from = user;
-                it('reverts all calls', async function () {
+                it('reverts', async function () {
                     await expectRevert(this.sheet.setBlacklistDestroyer(user, { from }));
                 })
             })
@@ -139,22 +117,17 @@ function regulatorPermissionsTests(owner, user, validator) {
                     await this.sheet.removeBlacklistDestroyer(user, { from });
                     assert(!(await this.sheet.isBlacklistDestroyer(user)));
                 })
-                it('emits a RemovedBlacklistDestroyer event', async function () {
+                it('emits a RemovedUserPermission event', async function () {
                     const { logs } = await this.sheet.removeBlacklistDestroyer(user, { from });
                     assert.equal(logs.length, 1);
-                    assert.equal(logs[0].event, 'RemovedBlacklistDestroyer');
+                    assert.equal(logs[0].event, 'RemovedUserPermission');
                     assert.equal(logs[0].args.who, user);
+                    assert.equal(logs[0].args.methodsignature, this.DESTROY_BLACKLISTED_TOKENS_SIG);
                 })
             })
-            describe("when sender is not validator but is owner", function () {
+            describe("when sender is not validator", function () {
                 const from = owner;
-                it('reverts all calls', async function () {
-                    await expectRevert(this.sheet.removeBlacklistDestroyer(user, { from }));
-                })
-            })
-            describe("when sender is not validator and is not owner", function () {
-                const from = user;
-                it('reverts all calls', async function () {
+                it('reverts', async function () {
                     await expectRevert(this.sheet.removeBlacklistDestroyer(user, { from }));
                 })
             })
@@ -167,22 +140,17 @@ function regulatorPermissionsTests(owner, user, validator) {
                     await this.sheet.setBlacklistSpender(user, { from });
                     assert(await this.sheet.isBlacklistSpender(user));
                 })
-                it('emits a SetBlackListSpender event', async function () {
+                it('emits a SetUserPermission event', async function () {
                     const { logs } = await this.sheet.setBlacklistSpender(user, { from });
                     assert.equal(logs.length, 1);
-                    assert.equal(logs[0].event, 'SetBlacklistSpender');
+                    assert.equal(logs[0].event, 'SetUserPermission');
                     assert.equal(logs[0].args.who, user);
+                    assert.equal(logs[0].args.methodsignature, this.APPROVE_BLACKLISTED_ADDRESS_SPENDER_SIG);
                 })
             });
-            describe("when sender is not validator but is owner", function () {
+            describe("when sender is not validator", function () {
                 const from = owner;
-                it('reverts all calls', async function () {
-                    await expectRevert(this.sheet.setBlacklistSpender(user, { from }));
-                })
-            });
-            describe("when sender is not validator and is not owner", function () {
-                const from = user;
-                it('reverts all calls', async function () {
+                it('reverts', async function () {
                     await expectRevert(this.sheet.setBlacklistSpender(user, { from }));
                 })
             });
@@ -201,22 +169,17 @@ function regulatorPermissionsTests(owner, user, validator) {
                     await this.sheet.removeBlacklistSpender(user, { from });
                     assert(!(await this.sheet.isBlacklistSpender(user)));
                 })
-                it('emits a RemovedBlacklistSpender event', async function () {
+                it('emits a RemovedUserPermission event', async function () {
                     const { logs } = await this.sheet.removeBlacklistSpender(user, { from });
                     assert.equal(logs.length, 1);
-                    assert.equal(logs[0].event, 'RemovedBlacklistSpender');
+                    assert.equal(logs[0].event, 'RemovedUserPermission');
                     assert.equal(logs[0].args.who, user);
+                    assert.equal(logs[0].args.methodsignature, this.APPROVE_BLACKLISTED_ADDRESS_SPENDER_SIG);
                 })
             });
-            describe("when sender is not validator but is owner", function () {
+            describe("when sender is not validator", function () {
                 const from = owner;
-                it('reverts all calls', async function () {
-                    await expectRevert(this.sheet.removeBlacklistSpender(user, { from }));
-                })
-            });
-            describe("when sender is not validator and is not owner", function () {
-                const from = user;
-                it('reverts all calls', async function () {
+                it('reverts', async function () {
                     await expectRevert(this.sheet.removeBlacklistSpender(user, { from }));
                 })
             });
@@ -233,20 +196,14 @@ function regulatorPermissionsTests(owner, user, validator) {
                 })
                 it('emits a SetWhitelistedUser event', async function () {
                     const { logs } = await this.sheet.setWhitelistedUser(user, { from });
-                    assert.equal(logs.length, 1);
-                    assert.equal(logs[0].event, 'SetWhitelistedUser');
-                    assert.equal(logs[0].args.who, user);
+                    assert.equal(logs.length, 3);
+                    assert.equal(logs[2].event, 'SetWhitelistedUser');
+                    assert.equal(logs[2].args.who, user);
                 })
             });
-            describe("when sender is not validator but is owner", function () {
+            describe("when sender is not validator", function () {
                 const from = owner;
-                it('reverts all calls', async function () {
-                    await expectRevert(this.sheet.setWhitelistedUser(user, { from }));
-                })
-            });
-            describe("when sender is not validator and is not owner", function () {
-                const from = user;
-                it('reverts all calls', async function () {
+                it('reverts', async function () {
                     await expectRevert(this.sheet.setWhitelistedUser(user, { from }));
                 })
             });
@@ -263,20 +220,14 @@ function regulatorPermissionsTests(owner, user, validator) {
                 })
                 it('emits a SetBlacklistedUser event', async function () {
                     const { logs } = await this.sheet.setBlacklistedUser(user, { from });
-                    assert.equal(logs.length, 1);
-                    assert.equal(logs[0].event, 'SetBlacklistedUser');
-                    assert.equal(logs[0].args.who, user);
+                    assert.equal(logs.length, 3);
+                    assert.equal(logs[2].event, 'SetBlacklistedUser');
+                    assert.equal(logs[2].args.who, user);
                 })
             });
-            describe("when sender is not validator but is owner", function () {
+            describe("when sender is not validator", function () {
                 const from = owner;
-                it('reverts all calls', async function () {
-                    await expectRevert(this.sheet.setBlacklistedUser(user, { from }));
-                })
-            });
-            describe("when sender is not validator and is not owner", function () {
-                const from = user;
-                it('reverts all calls', async function () {
+                it('reverts', async function () {
                     await expectRevert(this.sheet.setBlacklistedUser(user, { from }));
                 })
             });
@@ -293,20 +244,14 @@ function regulatorPermissionsTests(owner, user, validator) {
                 })
                 it('emits a SetNonlistedUser event', async function () {
                     const { logs } = await this.sheet.setNonlistedUser(user, { from });
-                    assert.equal(logs.length, 1);
-                    assert.equal(logs[0].event, 'SetNonlistedUser');
-                    assert.equal(logs[0].args.who, user);
+                    assert.equal(logs.length, 3);
+                    assert.equal(logs[2].event, 'SetNonlistedUser');
+                    assert.equal(logs[2].args.who, user);
                 })
             });
-            describe("when sender is not validator but is owner", function () {
+            describe("when sender is not validator", function () {
                 const from = owner;
-                it('reverts all calls', async function () {
-                    await expectRevert(this.sheet.setNonlistedUser(user, { from }));
-                })
-            });
-            describe("when sender is not validator and is not owner", function () {
-                const from = user;
-                it('reverts all calls', async function () {
+                it('reverts', async function () {
                     await expectRevert(this.sheet.setNonlistedUser(user, { from }));
                 })
             });

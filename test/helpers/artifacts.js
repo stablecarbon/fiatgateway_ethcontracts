@@ -1,20 +1,18 @@
-const PermissionsStorage = artifacts.require("PermissionsStorage");
-const ValidatorStorage = artifacts.require("ValidatorStorage");
+const RegulatorStorage = artifacts.require("RegulatorStorage");
 const Regulator = artifacts.require("Regulator");
 const AllowanceSheet = artifacts.require("AllowanceSheet");
 const BalanceSheet = artifacts.require("BalanceSheet");
-const AdminUpgradeabilityProxy = artifacts.require("zos-lib/contracts/upgradeability/AdminUpgradeabilityProxy")
+const RegulatorProxy = artifacts.require("RegulatorProxy")
 const PermissionedToken = artifacts.require("PermissionedToken");
 const MutablePermissionedToken = artifacts.require("MutablePermissionedToken");
 
 
 module.exports = {
-	PermissionsStorage,
-	ValidatorStorage,
+	RegulatorStorage,
 	Regulator,
 	AllowanceSheet,
 	BalanceSheet,
-	AdminUpgradeabilityProxy,
+	RegulatorProxy,
 	PermissionedToken,
 	MutablePermissionedToken
 }

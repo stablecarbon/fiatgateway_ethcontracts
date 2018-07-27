@@ -2,8 +2,6 @@ const { CommonVariables } = require('../helpers/common');
 
 const { Regulator } = require('../helpers/artifacts');
 
-const { regulatorStorageTests } = require('./RegulatorStorage.js');
-
 const { regulatorStorageInteractionsTests } = require('./RegulatorStorageInteractions.js');
 
 const { regulatorPermissionsTests } = require('./RegulatorPermissions.js');
@@ -20,7 +18,6 @@ contract('Regulator', _accounts => {
     })
 
     describe("Regulator tests", function () {
-        regulatorStorageTests(owner, user);
         regulatorStorageInteractionsTests(owner, user, validator, attacker);
         regulatorPermissionsTests(owner, user, validator);
     })

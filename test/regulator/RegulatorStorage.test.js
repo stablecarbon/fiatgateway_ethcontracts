@@ -1,24 +1,79 @@
 const { expectRevert, CommonVariables } = require('../helpers/common');
 
-const { PermissionsStorage } = require('../helpers/artifacts');
+const { RegulatorStorage } = require('../helpers/artifacts');
 
-contract('PermissionsStorage', _accounts => {
-    
-    // Initialize common variables
+contract('RegulatorStorage', _accounts => {
     const commonVars = new CommonVariables(_accounts);
     const owner = commonVars.owner;
     const user = commonVars.user;
     const attacker = commonVars.attacker;
+    const validator = commonVars.validator;
+    const validator2 = commonVars.validator2;
+
+    // Test permission
     const testPermission = 0x12345678;
     const testPermissionName = "Test Permission";
     const testPermissionDescription = "A test permission description.";
     const testPermissionContract = "TestContract.sol";
 
     beforeEach(async function () {
-        this.sheet = await PermissionsStorage.new({ from: owner });
+        this.sheet = await RegulatorStorage.new({ from: owner })
     })
 
-    describe('when the sender is the owner', function () {
+    describe('--validators--', function () {
+
+        const from = owner
+
+        describe('addValidator', function () {
+            
+            beforeEach(async function () {
+                // assert that validator is not validator upon initialization
+                validatorAddedBefore = await this.sheet._isValidator(validator);
+                assert(!validatorAddedBefore);
+            })
+
+            it("adds one validator", async function () {
+                await this.sheet.addValidator(validator, { from });
+                assert(await this.sheet._isValidator(validator));
+            })
+            it("adds two validators", async function () {
+                await this.sheet.addValidator(validator, { from });
+                await this.sheet.addValidator(validator2, { from });
+                assert(await this.sheet._isValidator(validator));
+                assert(await this.sheet._isValidator(validator2));
+            })
+            it("emits a validator added event", async function () {
+                const { logs } = await this.sheet.addValidator(validator, { from });
+                assert.equal(logs.length, 1);
+                assert.equal(logs[0].event, 'ValidatorAdded');
+                assert.equal(logs[0].args.validator, validator);
+            })
+        })
+
+        describe('removeValidator', function () {
+            
+            // add validator to be removed
+            beforeEach(async function () {
+                await this.sheet.addValidator(validator, { from });
+                assert(await this.sheet._isValidator(validator));
+            })
+
+            it("removes the validator", async function () {
+                await this.sheet.removeValidator(validator, { from });
+                const validated = await this.sheet._isValidator(validator);
+                assert(!validated);
+            })
+            it("emits a validator removed event", async function () {
+                const { logs } = await this.sheet.removeValidator(validator, { from });
+                assert.equal(logs.length, 1);
+                assert.equal(logs[0].event, 'ValidatorRemoved');
+                assert.equal(logs[0].args.validator, validator);
+            })
+        })
+    })
+
+    describe('--permissions--', function () {
+
         const from = owner
 
         describe('addPermission', function () {
@@ -27,7 +82,7 @@ contract('PermissionsStorage', _accounts => {
                                             testPermissionName, 
                                             testPermissionDescription, 
                                             testPermissionContract, { from });
-                assert(await this.sheet.isPermission(testPermission));
+                assert(await this.sheet._isPermission(testPermission));
                 const permissions = await this.sheet.permissions(testPermission);
                 assert.equal(permissions[0], testPermissionName);
                 assert.equal(permissions[1], testPermissionDescription);
@@ -51,11 +106,11 @@ contract('PermissionsStorage', _accounts => {
                             testPermissionName, 
                             testPermissionDescription, 
                             testPermissionContract, { from });
-                assert(await this.sheet.isPermission(testPermission));
+                assert(await this.sheet._isPermission(testPermission));
 
                 // second, remove the permission
                 await this.sheet.removePermission(testPermission, { from });
-                const hasPermission = await this.sheet.isPermission(testPermission);
+                const hasPermission = await this.sheet._isPermission(testPermission);
                 assert(!hasPermission);
             })
             it("emits a permission removed event", async function () {
@@ -81,17 +136,17 @@ contract('PermissionsStorage', _accounts => {
 
                 it('sets the user permission', async function() {
                 
-                    assert(await this.sheet.isPermission(testPermission));
+                    assert(await this.sheet._isPermission(testPermission));
 
                     await this.sheet.setUserPermission(user, testPermission, { from });
-                    const userHasPermission = await this.sheet.hasUserPermission(user, testPermission);
+                    const userHasPermission = await this.sheet._hasUserPermission(user, testPermission);
                     assert(userHasPermission);
 
                 })
 
                 it('emits a SetUserPermission event', async function () {
 
-                    assert(await this.sheet.isPermission(testPermission));
+                    assert(await this.sheet._isPermission(testPermission));
 
                     const {logs} =  await this.sheet.setUserPermission(user, testPermission, { from });
 
@@ -108,7 +163,7 @@ contract('PermissionsStorage', _accounts => {
             describe('does not add a permission first', function () {
 
                 it('reverts', async function () {
-                    permissionSet = await this.sheet.isPermission(testPermission);
+                    permissionSet = await this.sheet._isPermission(testPermission);
                     assert(!permissionSet);
 
                     await expectRevert(this.sheet.setUserPermission(user, testPermission, { from }));
@@ -133,12 +188,12 @@ contract('PermissionsStorage', _accounts => {
 
             it('removes the user permission', async function () {
 
-                assert(await this.sheet.isPermission(testPermission));
-                const userHasPermission = await this.sheet.hasUserPermission(user, testPermission);
+                assert(await this.sheet._isPermission(testPermission));
+                const userHasPermission = await this.sheet._hasUserPermission(user, testPermission);
                 assert(userHasPermission);
 
                 await this.sheet.removeUserPermission(user, testPermission, { from });
-                const userNowHasPermission = await this.sheet.hasUserPermission(user, testPermission);
+                const userNowHasPermission = await this.sheet._hasUserPermission(user, testPermission);
                 assert(!userNowHasPermission);
 
             })
@@ -155,22 +210,4 @@ contract('PermissionsStorage', _accounts => {
         })
     })
 
-    describe('when the sender is not the owner', function () {
-        
-        const from = attacker
-
-        it('reverts all calls', async function () {
-            await expectRevert(this.sheet.addPermission(testPermission, "", "", "", { from }));
-
-            // add permission from owner to be removed
-            await this.sheet.addPermission(testPermission, "", "", "", { from: owner });
-            await expectRevert(this.sheet.removePermission(testPermission, { from }));
-
-            await expectRevert(this.sheet.setUserPermission(user, testPermission, { from }));
-
-            // set user permission from owner to be removed
-            await this.sheet.setUserPermission(user, testPermission, { from: owner });
-            await expectRevert(this.sheet.removeUserPermission(user, testPermission, { from }));
-        })
-    })
 })
