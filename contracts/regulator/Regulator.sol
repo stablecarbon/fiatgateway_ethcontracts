@@ -1,7 +1,6 @@
 pragma solidity ^0.4.23;
 
-import "./dataStorage/PermissionsStorage.sol";
-import "./dataStorage/ValidatorStorage.sol";
+import "./dataStorage/Storage.sol";
 import "openzeppelin-solidity/contracts/ownership/Ownable.sol";
 import "openzeppelin-solidity/contracts/AddressUtils.sol";
 
@@ -15,21 +14,7 @@ import "openzeppelin-solidity/contracts/AddressUtils.sol";
  * for regulatory compliance.
  *
  */
-contract Regulator is Ownable {
-    /** STORAGES
-    */
-
-    /** 
-    * @notice The list of possible permissions, as well as which users
-    * have what permissions.
-    */
-    PermissionsStorage public permissions;
-
-    /**
-    * @notice Accounts with ability to set permissions.
-    *
-    */
-    ValidatorStorage public validators;
+contract Regulator is Storage, Ownable {
 
     /** 
         Modifiers 
