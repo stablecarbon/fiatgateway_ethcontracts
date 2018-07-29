@@ -1,9 +1,9 @@
 pragma solidity ^0.4.23;
 
-import "./dataStorage/MutableRegulatorStorageConsumer.sol";
+// import "./dataStorage/RegulatorStorageConsumer.sol";
 import 'openzeppelin-solidity/contracts/AddressUtils.sol';
 import "openzeppelin-solidity/contracts/ownership/Ownable.sol";
-
+import './dataStorage/RegulatorStorageState.sol';
 
 
 /**
@@ -14,7 +14,7 @@ import "openzeppelin-solidity/contracts/ownership/Ownable.sol";
  * for regulatory compliance.
  *
  */
-contract Regulator is MutableRegulatorStorageConsumer, Ownable {
+contract Regulator is RegulatorStorageState, Ownable {
 
 
     /** 
@@ -34,6 +34,10 @@ contract Regulator is MutableRegulatorStorageConsumer, Ownable {
     event SetWhitelistedUser(address indexed who);
     event SetBlacklistedUser(address indexed who);
     event SetNonlistedUser(address indexed who);
+
+
+    // constructor (address regulatorStorage) RegulatorStorageConsumer(regulatorStorage) public {
+    // }
 
     /**
     * @notice Adds a validator to the regulator entity.

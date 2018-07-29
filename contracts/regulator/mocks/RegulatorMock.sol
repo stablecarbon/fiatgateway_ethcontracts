@@ -1,14 +1,17 @@
 pragma solidity ^0.4.23;
 
+import "../dataStorage/RegulatorStorageConsumer.sol";
 import "../Regulator.sol";
 
-contract RegulatorMock is Regulator {
-    /** 
-        @dev Creates permissions for all functions in WhitelistedToken.
-     */
-    constructor(address regulatorStorage) public {
+/**
+*
+* @dev creates a Regulator connected to an empty RegulatorStorage
+*
+*/
+contract RegulatorMock is Regulator, RegulatorStorageConsumer {
 
-        setStorage(regulatorStorage);
-    }
 
+	constructor (address regulatorStorage) RegulatorStorageConsumer(regulatorStorage) public {
+
+	}
 }

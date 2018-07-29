@@ -1,7 +1,9 @@
-const RegulatorMock = artifacts.require("RegulatorMock");
 const RegulatorStorageMock = artifacts.require("RegulatorStorageMock");
+const MutableStorageRegulatorMock = artifacts.require("MutableStorageRegulatorMock");
+const RegulatorMock = artifacts.require("RegulatorMock");
 
 module.exports = {
-	RegulatorMock,
-	RegulatorStorageMock
+	RegulatorStorageMock,
+	MutableStorageRegulatorMock,
+	RegulatorMock
 }

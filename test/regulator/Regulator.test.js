@@ -1,12 +1,12 @@
-const { CommonVariables } = require('../helpers/common');
+const { CommonVariables, ZERO_ADDRESS } = require('../helpers/common');
 
 const { Regulator } = require('../helpers/artifacts');
 
-const { regulatorStorageInteractionsTests } = require('./regulatorBehavior/RegulatorStorageInteractions.js');
+const { regulatorStorageBasicInteractionsTests } = require('./regulatorBehavior/RegulatorStorageBasicInteractions.js');
 
-const { regulatorPermissionsTests } = require('./regulatorBehavior/RegulatorPermissions.js');
+const { regulatorUserPermissionsTests } = require('./regulatorBehavior/RegulatorUserPermissions.js');
 
-const { regulatorStorageConsumerTests } = require('./regulatorBehavior/MutableRegulatorStorageConsumer.js'); 
+const { regulatorMutableStorageTests } = require('./regulatorBehavior/RegulatorMutableStorage.js'); 
 
 contract('Regulator', _accounts => {
     const commonVars = new CommonVariables(_accounts);
@@ -15,13 +15,21 @@ contract('Regulator', _accounts => {
     const validator = commonVars.validator;
     const attacker = commonVars.attacker;
 
-    beforeEach(async function () {
-        this.sheet = await Regulator.new({ from:owner });
+    describe('Regulator logic construction', function () {
+        beforeEach(async function () {
+            this.regulatorDefault = await Regulator.new({from:owner})
+        })
+        it('Regulator has no storage set on construction', async function () {
+            
+            assert.equal(await this.regulatorDefault._storage(), ZERO_ADDRESS);
+
+        }) 
+        
     })
 
-    describe("Regulator tests", function () {
-        regulatorStorageInteractionsTests(owner, user, validator, attacker);
-        regulatorPermissionsTests(owner, user, validator);
-        regulatorStorageConsumerTests(owner);
+    describe("Regulator sets RegulatorStorage", function () {
+        regulatorStorageBasicInteractionsTests(owner, user, validator, attacker);
+        regulatorUserPermissionsTests(owner, user, validator);
+        regulatorMutableStorageTests(owner, validator);
     })
 })
