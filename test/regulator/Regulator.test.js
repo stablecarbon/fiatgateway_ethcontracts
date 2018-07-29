@@ -1,4 +1,4 @@
-const { CommonVariables, ZERO_ADDRESS } = require('../helpers/common');
+const { CommonVariables, ZERO_ADDRESS, expectRevert } = require('../helpers/common');
 
 const { Regulator } = require('../helpers/artifacts');
 
@@ -15,7 +15,7 @@ contract('Regulator', _accounts => {
     const validator = commonVars.validator;
     const attacker = commonVars.attacker;
 
-    describe('Regulator logic construction', function () {
+    describe('Regulator logic default behavior', function () {
         beforeEach(async function () {
             this.regulatorDefault = await Regulator.new({from:owner})
         })
@@ -24,6 +24,10 @@ contract('Regulator', _accounts => {
             assert.equal(await this.regulatorDefault._storage(), ZERO_ADDRESS);
 
         }) 
+        it('Call to modify RegulatorStorage reverts because no storage set', async function () {
+            
+            await expectRevert(this.regulatorDefault.addValidator(validator, {from:owner}))
+        })
         
     })
 

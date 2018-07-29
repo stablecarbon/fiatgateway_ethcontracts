@@ -41,6 +41,12 @@ function regulatorUserPermissionsTests(owner, user, validator) {
                         await this.sheet.setMinter(user, { from });
                         assert(await this.sheet.isMinter(user));
                     })
+                    it('emits a SetMinter event', async function () {
+                        const { logs } = await this.sheet.setMinter(user, { from });
+                        assert.equal(logs.length, 1);
+                        assert.equal(logs[0].event, 'SetMinter');
+                        assert.equal(logs[0].args.who, user);
+                    })
                 })
                 describe("when sender is not validator but is owner", function () {
                     const from = owner;
@@ -82,6 +88,12 @@ function regulatorUserPermissionsTests(owner, user, validator) {
                         await this.sheet.setBlacklistDestroyer(user, { from });
                         assert(await this.sheet.isBlacklistDestroyer(user));
                     })
+                    it('emits a SetBlacklistDestroyer event', async function () {
+                        const { logs } = await this.sheet.setBlacklistDestroyer(user, { from });
+                        assert.equal(logs.length, 1);
+                        assert.equal(logs[0].event, 'SetBlacklistDestroyer');
+                        assert.equal(logs[0].args.who, user);
+                    })
                 })
                 describe("when sender is not validator", function () {
                     const from = owner;
@@ -119,6 +131,12 @@ function regulatorUserPermissionsTests(owner, user, validator) {
                     it('sets user as blacklist spender', async function () {
                         await this.sheet.setBlacklistSpender(user, { from });
                         assert(await this.sheet.isBlacklistSpender(user));
+                    })
+                    it('emits a SetBlacklistSpender event', async function () {
+                        const { logs } = await this.sheet.setBlacklistSpender(user, { from });
+                        assert.equal(logs.length, 1);
+                        assert.equal(logs[0].event, 'SetBlacklistSpender');
+                        assert.equal(logs[0].args.who, user);
                     })
                 });
                 describe("when sender is not validator", function () {

@@ -5,6 +5,7 @@ import "./dataStorage/MutableRegulatorStorageConsumer.sol";
 
 contract RegulatorProxy is UpgradeabilityProxy, MutableRegulatorStorageConsumer {
 
+	
 	constructor( address _implementation, address _regulatorStorage ) UpgradeabilityProxy( _implementation ) MutableRegulatorStorageConsumer(_regulatorStorage) public {}
 
 	/**
@@ -14,6 +15,7 @@ contract RegulatorProxy is UpgradeabilityProxy, MutableRegulatorStorageConsumer 
 	*/
 	function upgradeTo(address newImplementation) onlyOwner public {
 		_upgradeTo(newImplementation);
+
 	}
 
 	/**

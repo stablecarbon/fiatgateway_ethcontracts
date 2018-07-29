@@ -34,6 +34,9 @@ contract Regulator is RegulatorStorageState, Ownable {
     event SetWhitelistedUser(address indexed who);
     event SetBlacklistedUser(address indexed who);
     event SetNonlistedUser(address indexed who);
+    event SetMinter(address indexed who);
+    event SetBlacklistDestroyer(address indexed who);
+    event SetBlacklistSpender(address indexed who);
 
 
     // constructor (address regulatorStorage) RegulatorStorageConsumer(regulatorStorage) public {
@@ -70,6 +73,7 @@ contract Regulator is RegulatorStorageState, Ownable {
     function setMinter(address _who) public onlyValidator {
         require(isPermission(_storage.MINT_SIG()), "Minting not supported by token");
         setUserPermission(_who, _storage.MINT_SIG());
+        emit SetMinter(_who);
     }
     
 
@@ -97,6 +101,7 @@ contract Regulator is RegulatorStorageState, Ownable {
     function setBlacklistSpender(address _who) public onlyValidator {
         require(isPermission(_storage.APPROVE_BLACKLISTED_ADDRESS_SPENDER_SIG()), "Blacklist spending not supported by token");
         setUserPermission(_who, _storage.APPROVE_BLACKLISTED_ADDRESS_SPENDER_SIG());
+        emit SetBlacklistSpender(_who);
     }
     
     /**
@@ -123,6 +128,7 @@ contract Regulator is RegulatorStorageState, Ownable {
     function setBlacklistDestroyer(address _who) public onlyValidator {
         require(isPermission(_storage.DESTROY_BLACKLISTED_TOKENS_SIG()), "Blacklist token destruction not supported by token");
         setUserPermission(_who, _storage.DESTROY_BLACKLISTED_TOKENS_SIG());
+        emit SetBlacklistDestroyer(_who);
     }
     
 

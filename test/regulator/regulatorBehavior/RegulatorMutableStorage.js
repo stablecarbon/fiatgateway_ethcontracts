@@ -12,9 +12,7 @@ function regulatorMutableStorageTests(owner, validator) {
             // Empty RegulatorStorages
             this.testRegulatorStorageInitial = await RegulatorStorage.new({ from:owner });
             this.testRegulatorStorage = await RegulatorStorage.new({from:owner})
-
-            // RegulatorStorage pre-loaded with all permissions
-            this.testRegulatorStorage2 = await RegulatorStorageMock.new(validator, { from:owner });
+            this.testRegulatorStorage2 = await RegulatorStorageMock.new(validator, {from:owner})
 
             this.sheet = await MutableStorageRegulatorMock.new(this.testRegulatorStorageInitial.address, { from:owner })
 
