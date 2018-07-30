@@ -1,8 +1,8 @@
 pragma solidity ^0.4.23;
 
 import "../PermissionedToken.sol";
-import "../helpers/AllowanceSheet.sol";
-import "../helpers/BalanceSheet.sol";
+import "../dataStorage/AllowanceSheet.sol";
+import "../dataStorage/BalanceSheet.sol";
 
 /**
 * @title MutablePermissionedToken

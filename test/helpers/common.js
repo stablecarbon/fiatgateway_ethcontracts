@@ -3,7 +3,6 @@ const _ = require('lodash');
 const expectRevert = require('./utils/expectRevert');
 const expectThrow = require('./utils/expectThrow');
 const assertBalance = require('./utils/assertBalance');
-const printTitle = require('./utils/printTitle');
 const BigNumber = web3.BigNumber;
 const ZERO_ADDRESS = 0x0000000000000000000000000000000000000000;
 const RANDOM_ADDRESS = 0x3b5855bAEF50EBFdFC89c5E5463f92BCe194EAc9; 
@@ -40,7 +39,6 @@ class CommonVariables {
 /* Exporting the module */
 module.exports = {
     BigNumber,
-    printTitle,
     expectRevert,
     expectThrow,
     assertBalance,

@@ -1,1 +1,0 @@
-These contracts are provided by TrueUSD.

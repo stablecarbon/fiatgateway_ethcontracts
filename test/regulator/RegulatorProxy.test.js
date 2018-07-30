@@ -25,10 +25,10 @@ contract('RegulatorProxy', _accounts => {
         this.proxyAddress = this.proxy.address
 
         this.MINT_SIG = await (await RegulatorStorage.at(this.proxyStorage)).MINT_SIG();
-        // this.DESTROY_BLACKLISTED_TOKENS_SIG = (await RegulatorStorage.at(this.proxyStorage)).DESTROY_BLACKLISTED_TOKENS_SIG();
-        // this.APPROVE_BLACKLISTED_ADDRESS_SPENDER_SIG = (await RegulatorStorage.at(this.proxyStorage)).APPROVE_BLACKLISTED_ADDRESS_SPENDER_SIG();
-        // this.BURN_SIG = (await RegulatorStorage.at(this.proxyStorage)).BURN_SIG();
-        // this.BLACKLISTED_SIG = (await RegulatorStorage.at(this.proxyStorage)).BLACKLISTED_SIG();
+        // this.DESTROY_BLACKLISTED_TOKENS_SIG = await (await RegulatorStorage.at(this.proxyStorage)).DESTROY_BLACKLISTED_TOKENS_SIG();
+        // this.APPROVE_BLACKLISTED_ADDRESS_SPENDER_SIG = await (await RegulatorStorage.at(this.proxyStorage)).APPROVE_BLACKLISTED_ADDRESS_SPENDER_SIG();
+        // this.BURN_SIG = await (await RegulatorStorage.at(this.proxyStorage)).BURN_SIG();
+        // this.BLACKLISTED_SIG = await (await RegulatorStorage.at(this.proxyStorage)).BLACKLISTED_SIG();
 
 
     })

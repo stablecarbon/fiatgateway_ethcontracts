@@ -1,8 +1,8 @@
-const { expectRevert } = require("../../helpers/common");
+const { expectRevert } = require("../../../helpers/common");
 
-const { Regulator } = require("../../helpers/artifacts")
+const { Regulator } = require("../../../helpers/artifacts")
 
-function permissionedTokenStorage(owner, nonOwner) {
+function permissionedTokenStorageTests(owner, nonOwner) {
     describe("Permissioned Token Regulator setting/getting tests", function () {
 
     	describe('setRegulator', function () {
@@ -51,6 +51,6 @@ function permissionedTokenStorage(owner, nonOwner) {
 }
 
 module.exports = {
-    permissionedTokenStorage
+    permissionedTokenStorageTests
 }
         
