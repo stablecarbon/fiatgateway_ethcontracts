@@ -5,7 +5,7 @@ import "../Regulator.sol";
 
 /**
 *
-* @dev creates a RegulatorMock that has the ability to upgrade its RegulatorStorage
+* @dev creates a RegulatorMock that has the ability to upgrade its Regulator, balance, and allowance sheet locations
 *
 */
 contract MutableStorageRegulatorMock is Regulator, MutableRegulatorStorageConsumer {

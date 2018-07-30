@@ -2,12 +2,12 @@ pragma solidity ^0.4.23;
 
 import "openzeppelin-solidity/contracts/AddressUtils.sol";
 import "openzeppelin-solidity/contracts/ownership/HasNoTokens.sol";
-import "../permissionedToken/mutablePermissionedToken/MutablePermissionedToken.sol";
+import "../permissionedToken/PermissionedToken.sol";
 import "../whitelistedToken/WhitelistedToken.sol";
 import "./helpers/FeeSheet.sol";
 import "./helpers/StablecoinWhitelist.sol";
 
-contract CarbonDollar is MutablePermissionedToken, HasNoTokens {
+contract CarbonDollar is PermissionedToken, HasNoTokens {
 
     // TODO: Some sort of blacklist/whitelisting (similar to permissionedToken) @tanishq/@sam
     // Random Thought: GreyList (mark Dirty Money without prevent it from being transferred or receiving)

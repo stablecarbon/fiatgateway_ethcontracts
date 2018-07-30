@@ -1,6 +1,6 @@
 const { CommonVariables } = require('../helpers/common');
 
-const { RegulatorStorage, PermissionSheet, ValidatorSheet } = require('../helpers/artifacts');
+const { PermissionSheet, ValidatorSheet } = require('../helpers/artifacts');
 
 const { regulatorStorageTests } = require('./regulatorStorageBehavior/RegulatorStorage.js');
 

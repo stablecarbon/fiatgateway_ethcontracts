@@ -1,6 +1,5 @@
 pragma solidity ^0.4.23;
 
-// import "./dataStorage/RegulatorStorageConsumer.sol";
 import 'openzeppelin-solidity/contracts/AddressUtils.sol';
 import "openzeppelin-solidity/contracts/ownership/Ownable.sol";
 import './dataStorage/RegulatorStorageState.sol';

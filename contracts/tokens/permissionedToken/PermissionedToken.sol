@@ -1,8 +1,6 @@
 pragma solidity ^0.4.23;
 
-import "../../regulator/Regulator.sol";
-import "./dataStorage/AllowanceSheet.sol";
-import "./dataStorage/BalanceSheet.sol";
+import "./dataStorage/PermissionedTokenStorageState.sol";
 import "openzeppelin-solidity/contracts/AddressUtils.sol";
 import "openzeppelin-solidity/contracts/math/SafeMath.sol";
 import "openzeppelin-solidity/contracts/AddressUtils.sol";
@@ -20,26 +18,17 @@ import "openzeppelin-solidity/contracts/token/ERC20/ERC20.sol";
 * `ImmutablePermissionedToken` or `MutablePermissionedToken` instead.
 *
 */
-contract PermissionedToken is Pausable, ERC20 {
+contract PermissionedToken is PermissionedTokenStorageState, ERC20, Pausable {
     using SafeMath for uint256;
 
     /** Variables */
-    // Allowance and balance storage classes
     uint256 public totalSupply;
-    AllowanceSheet public allowances;
-    BalanceSheet public balances;
     
-    /**
-    * @notice `Regulatoregulator` that points to the latest
-    *         `Regulator` contract responsible for checking and applying trade
-    *         permissions.
-    */
-    Regulator public regulator;
 
     /** Events */
-    event ChangedRegulator(address oldProxy, address newProxy);
     event DestroyedBlacklistedTokens(address indexed account, uint256 amount);
     event ApprovedBlacklistedAddressSpender(address indexed owner, address indexed spender, uint256 value);
+    
     // ERC20
     event Mint(address indexed to, uint256 value);
     event Burn(address indexed burner, uint256 value);
@@ -51,7 +40,7 @@ contract PermissionedToken is Pausable, ERC20 {
     * whether the regulator allows the message sender to execute that function.
     **/
     modifier requiresPermission() {
-        require (regulator.hasUserPermission(msg.sender, msg.sig));
+        require (_regulator.hasUserPermission(msg.sender, msg.sig));
         _;
     }
 
@@ -60,8 +49,8 @@ contract PermissionedToken is Pausable, ERC20 {
      * more details.
     **/
     modifier transferConditionsRequired(address _to) {
-        require(!regulator.isBlacklistedUser(_to));
-        require(!regulator.isBlacklistedUser(msg.sender));
+        require(!_regulator.isBlacklistedUser(_to));
+        require(!_regulator.isBlacklistedUser(msg.sender));
         _;
     }
 
@@ -70,14 +59,14 @@ contract PermissionedToken is Pausable, ERC20 {
      * more details.
     **/
     modifier transferFromConditionsRequired(address _from, address _to) {
-        bool is_recipient_blacklisted = regulator.isBlacklistedUser(_to);
+        bool is_recipient_blacklisted = _regulator.isBlacklistedUser(_to);
         require(!is_recipient_blacklisted);
         
         // If the origin user is blacklisted, the transaction can only succeed if 
         // the message sender is a user that has been approved to transfer 
         // blacklisted tokens out of this address.
-        bool is_origin_blacklisted = regulator.isBlacklistedUser(_from);
-        bool sender_can_spend_from_blacklisted_address = regulator.isBlacklistSpender(msg.sender); // Is the message sender a person with the ability to transfer tokens out of a blacklisted account?
+        bool is_origin_blacklisted = _regulator.isBlacklistedUser(_from);
+        bool sender_can_spend_from_blacklisted_address = _regulator.isBlacklistSpender(msg.sender); // Is the message sender a person with the ability to transfer tokens out of a blacklisted account?
         require(!is_origin_blacklisted || sender_can_spend_from_blacklisted_address);
         _;
     }
@@ -86,7 +75,7 @@ contract PermissionedToken is Pausable, ERC20 {
      * @param _user The address of the user to check.
     **/
     modifier userWhitelisted(address _user) {
-        require(regulator.isWhitelistedUser(_user));
+        require(_regulator.isWhitelistedUser(_user));
         _;
     }
 
@@ -94,7 +83,7 @@ contract PermissionedToken is Pausable, ERC20 {
      * @param _user The address of the user to check.
     **/
     modifier userBlacklisted(address _user) {
-        require(regulator.isBlacklistedUser(_user));
+        require(_regulator.isBlacklistedUser(_user));
         _;
     }
 
@@ -102,57 +91,33 @@ contract PermissionedToken is Pausable, ERC20 {
      * @param _user The address of the user to check.
     **/
     modifier userNotBlacklisted(address _user) {
-        require(!regulator.isBlacklistedUser(_user));
+        require(!_regulator.isBlacklistedUser(_user));
         _;
     }
 
     /** @notice Modifier that checks whether the caller of a function is not blacklisted.
     **/
     modifier senderNotBlacklisted() {
-        require(!regulator.isBlacklistedUser(msg.sender));
+        require(!_regulator.isBlacklistedUser(msg.sender));
         _;
-    }
-
-    /** CONSTRUCTOR
-    * @param allowanceSheet Address of the allowances sheet to set for this token.
-    * @param balanceSheet Address of the balances sheet to set for this token.
-    */
-    constructor(address allowanceSheet, address balanceSheet) public {
-        require(AddressUtils.isContract(allowanceSheet));
-        require(AddressUtils.isContract(balanceSheet));
-        allowances = AllowanceSheet(allowanceSheet);
-        balances = BalanceSheet(balanceSheet);
     }
 
     /**
     * @notice Implements balanceOf() as specified in the ERC20 standard.
     */
     function balanceOf(address _of) public view returns (uint256) {
-        return balances.balanceOf(_of);
+        return _balances.balanceOf(_of);
     }
 
     /**
     * @notice Implements allowance() as specified in the ERC20 standard.
     */
     function allowance(address owner, address spender) public view returns (uint256) {
-        return allowances.allowanceOf(owner, spender);
+        return _allowances.allowanceOf(owner, spender);
     }
 
-    /**
-    * @notice Sets the address of the currently used regulator proxy
-    * @param _regulator Address of new `Regulator` contract
-    */
-    function setRegulator(address _regulator) public onlyOwner {
-        require(AddressUtils.isContract(_regulator));
-        _setRegulator(_regulator);
-    }
-
-    // Function so that constructor can also set the regulator proxy.
-    function _setRegulator(address _regulator) internal {
-        require(AddressUtils.isContract(_regulator));
-        address oldRegulator = address(regulator);
-        regulator = Regulator(_regulator);
-        emit ChangedRegulator(oldRegulator, _regulator);
+    function totalSupply() public view returns (uint256) {
+        return totalSupply;
     }
 
     /**
@@ -169,7 +134,7 @@ contract PermissionedToken is Pausable, ERC20 {
     
     function _mint(address _to, uint256 _amount) userWhitelisted(_to) internal returns (bool) {
         totalSupply = totalSupply.add(_amount);
-        balances.addBalance(_to, _amount);
+        _balances.addBalance(_to, _amount);
         emit Mint(_to, _amount);
         emit Transfer(address(0), _to, _amount);
         return true;
@@ -191,7 +156,7 @@ contract PermissionedToken is Pausable, ERC20 {
         // no need to require value <= totalSupply, since that would imply the
         // sender's balance is greater than the totalSupply, which *should* be an assertion failure
         /* uint burnAmount = _value / (10 **16) * (10 **16); */
-        balances.subBalance(_tokensOf, _amount);
+        _balances.subBalance(_tokensOf, _amount);
         totalSupply = totalSupply.sub(_amount);
         emit Burn(_tokensOf, _amount);
         emit Transfer(_tokensOf, address(0), _amount);
@@ -201,7 +166,7 @@ contract PermissionedToken is Pausable, ERC20 {
     * @notice Implements approve() as specified in the ERC20 standard.
     */
     function approve(address _spender, uint256 _value) userNotBlacklisted(_spender) senderNotBlacklisted whenNotPaused public returns (bool) {
-        allowances.setAllowance(msg.sender, _spender, _value);
+        _allowances.setAllowance(msg.sender, _spender, _value);
         emit Approval(msg.sender, _spender, _value);
         return true;
     }
@@ -222,8 +187,8 @@ contract PermissionedToken is Pausable, ERC20 {
     }
 
     function increaseApprovalAllArgs(address _spender, uint256 _addedValue, address _tokenHolder) internal {
-        allowances.addAllowance(_tokenHolder, _spender, _addedValue);
-        emit Approval(_tokenHolder, _spender, allowances.allowanceOf(_tokenHolder, _spender));
+        _allowances.addAllowance(_tokenHolder, _spender, _addedValue);
+        emit Approval(_tokenHolder, _spender, _allowances.allowanceOf(_tokenHolder, _spender));
     }
 
     /**
@@ -242,13 +207,13 @@ contract PermissionedToken is Pausable, ERC20 {
     }
 
     function decreaseApprovalAllArgs(address _spender, uint256 _subtractedValue, address _tokenHolder) internal {
-        uint256 oldValue = allowances.allowanceOf(_tokenHolder, _spender);
+        uint256 oldValue = _allowances.allowanceOf(_tokenHolder, _spender);
         if (_subtractedValue > oldValue) {
-            allowances.setAllowance(_tokenHolder, _spender, 0);
+            _allowances.setAllowance(_tokenHolder, _spender, 0);
         } else {
-            allowances.subAllowance(_tokenHolder, _spender, _subtractedValue);
+            _allowances.subAllowance(_tokenHolder, _spender, _subtractedValue);
         }
-        emit Approval(_tokenHolder, _spender, allowances.allowanceOf(_tokenHolder, _spender));
+        emit Approval(_tokenHolder, _spender, _allowances.allowanceOf(_tokenHolder, _spender));
     }
 
     /**
@@ -259,7 +224,7 @@ contract PermissionedToken is Pausable, ERC20 {
     */
     function destroyBlacklistedTokens(address _who) userBlacklisted(_who) whenNotPaused requiresPermission public {
         uint256 balance = balanceOf(_who);
-        balances.setBalance(_who, 0);
+        _balances.setBalance(_who, 0);
         totalSupply = totalSupply.sub(balance);
         emit DestroyedBlacklistedTokens(_who, balance);
     }
@@ -272,7 +237,7 @@ contract PermissionedToken is Pausable, ERC20 {
     * @param _blacklistedAccount The blacklisted account.
     */
     function approveBlacklistedAddressSpender(address _blacklistedAccount) whenNotPaused userBlacklisted(_blacklistedAccount) requiresPermission public {
-        allowances.setAllowance(_blacklistedAccount, msg.sender, balanceOf(_blacklistedAccount));
+        _allowances.setAllowance(_blacklistedAccount, msg.sender, balanceOf(_blacklistedAccount));
         emit ApprovedBlacklistedAddressSpender(_blacklistedAccount, msg.sender, balanceOf(_blacklistedAccount));
     }
 
@@ -289,8 +254,8 @@ contract PermissionedToken is Pausable, ERC20 {
         require(_to != address(0),"to address cannot be 0x0");
         require(_amount <= balanceOf(msg.sender),"not enough balance to transfer");
 
-        balances.subBalance(msg.sender, _amount);
-        balances.addBalance(_to, _amount);
+        _balances.subBalance(msg.sender, _amount);
+        _balances.addBalance(_to, _amount);
         emit Transfer(msg.sender, _to, _amount);
         return true;
     }
@@ -313,9 +278,9 @@ contract PermissionedToken is Pausable, ERC20 {
         require(_from != address(0),"from address cannot be 0x0");
         require(_amount <= balanceOf(_from),"not enough balance to transfer");
         
-        allowances.subAllowance(_from, msg.sender, _amount);
-        balances.addBalance(_to, _amount);
-        balances.subBalance(_from, _amount);
+        _allowances.subAllowance(_from, msg.sender, _amount);
+        _balances.addBalance(_to, _amount);
+        _balances.subBalance(_from, _amount);
         emit Transfer(_from, _to, _amount);
         return true;
     }

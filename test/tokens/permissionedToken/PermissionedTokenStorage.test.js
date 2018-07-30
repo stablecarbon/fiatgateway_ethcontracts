@@ -18,12 +18,7 @@ contract('PermissionedTokenStorage', _accounts => {
         this.allowanceSheet = await AllowanceSheet.new({from:owner})
     })
 
-    describe('PermissionedTokenStorage default behavior', function () {
-
-        
-    })
-
-    describe("RegulatorStorage tests", function () {
+    describe("PermissionedTokenStorage tests", function () {
         permissionedTokenStorageTests(owner, tokenHolder, spender, user);
     })
 

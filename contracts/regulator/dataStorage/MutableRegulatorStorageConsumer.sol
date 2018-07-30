@@ -7,7 +7,7 @@ import "openzeppelin-solidity/contracts/ownership/Ownable.sol";
 
 /**
 *
-* @dev A MutableRegulatorStorageConsumer can upgrade its RegulatorStorage location
+* @dev A MutableRegulatorStorageConsumer can upgrade its permission and validator sheet location
 *
 */
 contract MutableRegulatorStorageConsumer is RegulatorStorageConsumer, Ownable {

@@ -1,6 +1,6 @@
-const { expectRevert } = require("../../../helpers/common");
+const { expectRevert } = require("../../helpers/common");
 
-const { Regulator } = require("../../../helpers/artifacts")
+const { Regulator } = require("../../helpers/artifacts")
 
 function permissionedTokenStorageTests(owner, nonOwner) {
     describe("Permissioned Token Regulator setting/getting tests", function () {
