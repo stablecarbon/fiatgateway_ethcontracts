@@ -1,6 +1,8 @@
 const { expectRevert } = require('../../helpers/common');
 
-const { RegulatorStorageMock, RegulatorMock } = require('../../helpers/mocks');
+const { RegulatorMock, RegulatorFullyLoadedMock } = require('../../helpers/mocks');
+
+const { PermissionSheet, ValidatorSheet } = require('../../helpers/artifacts');
 
 /**
 *
@@ -15,15 +17,17 @@ function regulatorUserPermissionsTests(owner, user, validator) {
             beforeEach(async function() {
 
                 // Instantiate RegulatorsMock that comes pre-loaded with all function permissions and one validator
-                this.testRegulatorStorage = await RegulatorStorageMock.new(validator, { from:owner });
-                this.sheet = await RegulatorMock.new(this.testRegulatorStorage.address, { from:owner });
+                this.permissionSheet = await PermissionSheet.new( {from:owner })
+                this.validatorSheet = await ValidatorSheet.new({from:owner})
+                this.sheet = await RegulatorFullyLoadedMock.new(this.permissionSheet.address, this.validatorSheet.address, validator, {from:owner})
+                // this.sheet = await RegulatorMock.new(this.permissionSheet.address, this.validatorSheet.address, { from:owner })
 
                 // storing method signatures for testing convenience
-                this.MINT_SIG = await this.testRegulatorStorage.MINT_SIG();
-                this.DESTROY_BLACKLISTED_TOKENS_SIG = await this.testRegulatorStorage.DESTROY_BLACKLISTED_TOKENS_SIG();
-                this.APPROVE_BLACKLISTED_ADDRESS_SPENDER_SIG = await this.testRegulatorStorage.APPROVE_BLACKLISTED_ADDRESS_SPENDER_SIG();
-                this.BURN_SIG = await this.testRegulatorStorage.BURN_SIG();
-                this.BLACKLISTED_SIG = await this.testRegulatorStorage.BLACKLISTED_SIG();
+                this.MINT_SIG = await this.permissionSheet.MINT_SIG();
+                this.DESTROY_BLACKLISTED_TOKENS_SIG = await this.permissionSheet.DESTROY_BLACKLISTED_TOKENS_SIG();
+                this.APPROVE_BLACKLISTED_ADDRESS_SPENDER_SIG = await this.permissionSheet.APPROVE_BLACKLISTED_ADDRESS_SPENDER_SIG();
+                this.BURN_SIG = await this.permissionSheet.BURN_SIG();
+                this.BLACKLISTED_SIG = await this.permissionSheet.BLACKLISTED_SIG();
                 
                 // Assert pre-test invariants
                 assert(await this.sheet.isValidator(validator));

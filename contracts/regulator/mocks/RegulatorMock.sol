@@ -11,7 +11,7 @@ import "../Regulator.sol";
 contract RegulatorMock is Regulator, RegulatorStorageConsumer {
 
 
-	constructor (address regulatorStorage) RegulatorStorageConsumer(regulatorStorage) public {
+	constructor (address permissions, address validators) RegulatorStorageConsumer(permissions, validators) public {
 
 	}
 }

@@ -1,6 +1,7 @@
 pragma solidity ^0.4.23;
 
-import "./RegulatorStorage.sol";
+import "./PermissionSheet.sol";
+import "./ValidatorSheet.sol";
 
 /**
 *
@@ -12,6 +13,7 @@ contract RegulatorStorageState {
     /**
     	Storage
     */
-    RegulatorStorage public _storage;
+    PermissionSheet public _permissions;
+    ValidatorSheet public _validators;
 
 }

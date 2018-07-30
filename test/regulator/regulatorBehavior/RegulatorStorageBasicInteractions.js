@@ -1,6 +1,6 @@
 const { expectRevert } = require('../../helpers/common');
 
-const { RegulatorStorage } = require('../../helpers/artifacts');
+const { PermissionSheet, ValidatorSheet } = require('../../helpers/artifacts');
 
 const { RegulatorMock } = require('../../helpers/mocks');
 /**
@@ -16,8 +16,9 @@ function regulatorStorageBasicInteractionsTests(owner, user, validator, attacker
             
             beforeEach(async function () {
 
-                this.regulatorStorage = (await RegulatorStorage.new({ from:owner })).address
-                this.sheet = await RegulatorMock.new(this.regulatorStorage, { from:owner })
+                this.permissionSheet = (await PermissionSheet.new({ from:owner })).address
+                this.validatorSheet = (await ValidatorSheet.new({ from:owner })).address
+                this.sheet = await RegulatorMock.new(this.permissionSheet, this.validatorSheet, { from:owner })
 
                 // Test Permission
                 this.testPermission = 0x12345678;

@@ -13,12 +13,13 @@ import "openzeppelin-solidity/contracts/ownership/Ownable.sol";
 contract MutableRegulatorStorageConsumer is RegulatorStorageConsumer, Ownable {
 
     // Events
-	event ChangedRegulatorStorage(address _old, address _new);
+	event ChangedPermissionStorage(address _old, address _new);
+	event ChangedValidatorStorage(address _old, address _new);
 
 
     // Methods
 
-    constructor (address regulatorStorage) RegulatorStorageConsumer(regulatorStorage) public {
+    constructor (address permissions, address validators) RegulatorStorageConsumer(permissions, validators) public {
     }
 
     /**
@@ -27,12 +28,20 @@ contract MutableRegulatorStorageConsumer is RegulatorStorageConsumer, Ownable {
     * @param _newStorageAddress the new storage address
     *
     */
-    function setStorage(address _newStorageAddress) onlyOwner public {
-    	require(_newStorageAddress != address(_storage)); // require a new address to be set
-		require(AddressUtils.isContract(_newStorageAddress), "Cannot set a regulator storage to a non-contract address");
-		address old = address(_storage);
-		_storage = RegulatorStorage(_newStorageAddress);
-		emit ChangedRegulatorStorage(old, _newStorageAddress);
 
+	function setPermissionStorage(address _newStorageAddress) onlyOwner public {
+    	require(_newStorageAddress != address(_permissions)); // require a new address to be set
+		require(AddressUtils.isContract(_newStorageAddress), "Cannot set a regulator storage to a non-contract address");
+		address old = address(_permissions);
+		_permissions = PermissionSheet(_newStorageAddress);
+		emit ChangedPermissionStorage(old, _newStorageAddress);
+	}
+
+	function setValidatorStorage(address _newStorageAddress) onlyOwner public {
+    	require(_newStorageAddress != address(_validators)); // require a new address to be set
+		require(AddressUtils.isContract(_newStorageAddress), "Cannot set a regulator storage to a non-contract address");
+		address old = address(_validators);
+		_validators = ValidatorSheet(_newStorageAddress);
+		emit ChangedValidatorStorage(old, _newStorageAddress);
 	}
 }

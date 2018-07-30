@@ -18,15 +18,19 @@ contract('Regulator', _accounts => {
     describe('Regulator logic default behavior', function () {
         beforeEach(async function () {
             this.regulatorDefault = await Regulator.new({from:owner})
+
+            this.testPermission = 0x12345678;
         })
-        it('Regulator has no storage set on construction', async function () {
+        it('Regulator has no storages set on construction', async function () {
             
-            assert.equal(await this.regulatorDefault._storage(), ZERO_ADDRESS);
+            assert.equal(await this.regulatorDefault._permissions(), ZERO_ADDRESS);
+            assert.equal(await this.regulatorDefault._validators(), ZERO_ADDRESS);
 
         }) 
-        it('Call to modify RegulatorStorage reverts because no storage set', async function () {
+        it('Call to modify storages revert because no storages are set', async function () {
             
             await expectRevert(this.regulatorDefault.addValidator(validator, {from:owner}))
+            await expectRevert(this.regulatorDefault.addPermission(this.testPermission,'','','', {from:validator}))
         })
         
     })

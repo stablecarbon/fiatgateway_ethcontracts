@@ -1,3 +1,5 @@
+const PermissionSheet = artifacts.require("PermissionSheet");
+const ValidatorSheet = artifacts.require("ValidatorSheet");
 const RegulatorStorage = artifacts.require("RegulatorStorage");
 const Regulator = artifacts.require("Regulator");
 const AllowanceSheet = artifacts.require("AllowanceSheet");
@@ -9,6 +11,8 @@ const MutablePermissionedToken = artifacts.require("MutablePermissionedToken");
 
 
 module.exports = {
+	PermissionSheet,
+	ValidatorSheet,
 	RegulatorStorage,
 	Regulator,
 	AllowanceSheet,

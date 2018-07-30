@@ -1,6 +1,5 @@
 pragma solidity ^0.4.23;
 
-import "./RegulatorStorage.sol";
 import "./RegulatorStorageState.sol";
 
 
@@ -16,8 +15,10 @@ contract RegulatorStorageConsumer is RegulatorStorageState {
     * @dev a RegulatorStorageConsumer can set its storage only once, on construction
     *
     **/
-    constructor (address regulatorStorage) public {
-    	_storage = RegulatorStorage(regulatorStorage);
+    constructor (address permissions, address validators) public {
+    	_permissions = PermissionSheet(permissions);
+    	_validators = ValidatorSheet(validators);
+
     }
 
 }
