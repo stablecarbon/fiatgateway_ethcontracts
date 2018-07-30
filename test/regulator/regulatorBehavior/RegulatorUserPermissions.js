@@ -18,9 +18,7 @@ function regulatorUserPermissionsTests(owner, user, validator) {
 
                 // Instantiate RegulatorsMock that comes pre-loaded with all function permissions and one validator
                 this.permissionSheet = await PermissionSheet.new( {from:owner })
-                this.validatorSheet = await ValidatorSheet.new({from:owner})
-                this.sheet = await RegulatorFullyLoadedMock.new(this.permissionSheet.address, this.validatorSheet.address, validator, {from:owner})
-                // this.sheet = await RegulatorMock.new(this.permissionSheet.address, this.validatorSheet.address, { from:owner })
+                this.sheet = await RegulatorFullyLoadedMock.new(validator, {from:owner})
 
                 // storing method signatures for testing convenience
                 this.MINT_SIG = await this.permissionSheet.MINT_SIG();

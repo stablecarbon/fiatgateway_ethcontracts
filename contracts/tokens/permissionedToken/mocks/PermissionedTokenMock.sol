@@ -8,10 +8,12 @@ import "../PermissionedToken.sol";
 * @dev creates a PermissionedToken connected to empty Balance, Allowance storages and a Regulator
 *
 */
-contract PermissionedTokenMock is PermissionedToken, PermissionedTokenStorageConsumer {
+contract PermissionedTokenMock is PermissionedToken {
 
 
-	constructor (address regulator, address balances, address allowances) PermissionedTokenStorageConsumer(regulator, balances, allowances) public {
-
+	constructor (address regulator) public {
+		_regulator = Regulator(regulator);
+		_balances = new BalanceSheet();
+		_allowances = new AllowanceSheet();
 	}
 }

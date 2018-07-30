@@ -1,9 +1,8 @@
-const { assertBalance, expectRevert, ZERO_ADDRESS } = require("../../helpers/common");
-const { PermissionedToken, Regulator } = require('../../helpers/artifacts');
+const { assertBalance, expectRevert, ZERO_ADDRESS } = require("../../../helpers/common");
 var BigNumber = require('bignumber.js');
 
-function permissionedTokenBehavior(minter, whitelisted, blacklisted, nonlisted, user, validator, owner) {
-    describe("Permissioned Token Behavior Tests", function () {
+function permissionedTokenBehaviorTests(minter, whitelisted, blacklisted, nonlisted, user, validator, owner) {
+    describe("PermissionedToken behavior abides by regulator", function () {
         
         describe('mint', function () {
             const amountToMint = new BigNumber("100000000000000000000") //100e18
@@ -663,5 +662,5 @@ function permissionedTokenBehavior(minter, whitelisted, blacklisted, nonlisted, 
 }
 
 module.exports = {
-    permissionedTokenBehavior
+    permissionedTokenBehaviorTests
 }

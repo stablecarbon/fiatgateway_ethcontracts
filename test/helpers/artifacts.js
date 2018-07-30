@@ -5,7 +5,7 @@ const AllowanceSheet = artifacts.require("AllowanceSheet");
 const BalanceSheet = artifacts.require("BalanceSheet");
 const RegulatorProxy = artifacts.require("RegulatorProxy")
 const PermissionedToken = artifacts.require("PermissionedToken");
-const PermissionedTokenStorageState = artifacts.require("PermissionedTokenStorageState");
+const PermissionedTokenProxy = artifacts.require("PermissionedTokenProxy");
 
 
 module.exports = {
@@ -16,5 +16,5 @@ module.exports = {
 	BalanceSheet,
 	RegulatorProxy,
 	PermissionedToken,
-	PermissionedTokenStorageState
+	PermissionedTokenProxy
 }

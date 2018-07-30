@@ -76,7 +76,7 @@ contract('RegulatorProxy', _accounts => {
                     assert(!(await this.regulatorProxy.isPermission(this.MINT_SIG)))
                 })
                 it('after setting storage, Regulator proxy has new storage with all permissions set', async function () {
-                    this.regulatorWithPermissions = (await RegulatorFullyLoadedMock.new(this.proxyPermissionStorage, this.proxyValidatorStorage, validator, {from})).address
+                    this.regulatorWithPermissions = (await RegulatorFullyLoadedMock.new(validator, {from})).address
                     await this.proxy.setPermissionStorage(await Regulator.at(this.regulatorWithPermissions)._permissions(), {from})
                     await this.proxy.setValidatorStorage(await Regulator.at(this.regulatorWithPermissions)._validators(), {from})
 

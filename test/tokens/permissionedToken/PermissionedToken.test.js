@@ -1,9 +1,11 @@
-const { modularTokenTests } = require('../ModularTokenTests');
-// const { permissionedTokenBehavior } = require('./PermissionedTokenBehavior');
-// const { permissionedTokenStorage } = require('./PermissionedTokenStorage');
-const { PermissionedToken, PermissionedTokenStorageState } = require('../../helpers/artifacts');
+const { permissionedTokenBasicTests } = require('./permissionedTokenBehavior/PermissionedTokenBasic.js');
+const { permissionedTokenBehaviorTests } = require('./permissionedTokenBehavior/PermissionedTokenBehavior.js');
+const { permissionedTokenMutableStorageTests } = require('./permissionedTokenBehavior/PermissionedTokenMutableStorage');
+const { PermissionedToken, PermissionSheet } = require('../../helpers/artifacts');
 
-const { CommonVariables, ZERO_ADDRESS } = require('../../helpers/common');
+const { PermissionedTokenMock, RegulatorFullyLoadedMock } = require('../../helpers/mocks');
+
+const { CommonVariables, ZERO_ADDRESS, expectRevert } = require('../../helpers/common');
 
 contract('PermissionedToken', _accounts => {
     const commonVars = new CommonVariables(_accounts);
@@ -22,36 +24,44 @@ contract('PermissionedToken', _accounts => {
     describe('PermissionedToken logic default behavior', function () {
         
         beforeEach(async function () {
-            this.tokenDefault = await PermissionedTokenStorageState.new({from:owner})
-            this.token = await PermissionedToken.new({from:owner})
+            this.tokenDefault = await PermissionedToken.new({from:owner})
         })
-        // it('Permissioned has no storages set on construction', async function () {
+        it('Permissioned has no storages set on construction', async function () {
             
-        //     assert.equal(await this.tokenDefault._regulator(), ZERO_ADDRESS);
-        //     assert.equal(await this.tokenDefault._balances(), ZERO_ADDRESS);
-        //     assert.equal(await this.tokenDefault._allowances(), ZERO_ADDRESS);
+            assert.equal(await this.tokenDefault._regulator(), ZERO_ADDRESS);
+            assert.equal(await this.tokenDefault._balances(), ZERO_ADDRESS);
+            assert.equal(await this.tokenDefault._allowances(), ZERO_ADDRESS);
 
-        // }) 
-        // it('Call to get balance and allowance revert because no storages are set', async function () {
+        }) 
+        it('Call to get balance and allowance revert because no storages are set', async function () {
             
-        //     await expectRevert(this.tokenDefault.balanceOf(owner))
-        //     await expectRevert(this.tokenDefault.allowanceOf(owner))
-        // })
-        it('tets', async function () {
-            assert(true)
+            await expectRevert(this.tokenDefault.balanceOf(owner))
+            await expectRevert(this.tokenDefault.approve(user, 10 * 10 ** 18, {from:owner}))
         })
         
     })
 
+    beforeEach(async function () {
+
+            // Set up Regulator for token
+            this.permissions = await PermissionSheet.new({from:owner})
+            this.regulator = await RegulatorFullyLoadedMock.new(validator, {from:owner})
+
+            // Set user permissions
+            await this.regulator.setMinter(minter, {from:validator})
+            await this.regulator.setWhitelistedUser(whitelisted, {from:validator})
+            await this.regulator.setNonlistedUser(nonlisted, {from:validator})
+            await this.regulator.setBlacklistedUser(blacklisted, {from:validator})
+
+            this.token = await PermissionedTokenMock.new(this.regulator.address, {from:owner})
+
+    })
+
     describe("Permissioned Token tests", function () {
-        // describe("Behaves properly like a modular token", function () {
-        //     modularTokenTests(owner, whitelisted, nonlisted, minter);
-        // });
-        // describe("PermissionedToken set Regulator properly", function () {
-        //     permissionedTokenStorage(owner, user)
-        // })
-        // describe("PermissionedToken abides by regulator", function () {
-        //     permissionedTokenBehavior( minter, whitelisted, blacklisted, nonlisted, user, validator, owner );
-        // });
+
+        // permissionedTokenBasicTests(owner, whitelisted, nonlisted, minter);
+        permissionedTokenMutableStorageTests(owner, user)
+        permissionedTokenBehaviorTests( minter, whitelisted, blacklisted, nonlisted, user, validator, owner );
+
     });
 })

@@ -5,21 +5,23 @@ import "../Regulator.sol";
 
 /**
 *
-* @dev creates a Regulator connected to an empty RegulatorStorage
+* @dev creates a Regulator connected to a permission storage full of permissions
 *
 */
-contract RegulatorFullyLoadedMock is Regulator, RegulatorStorageConsumer {
+contract RegulatorFullyLoadedMock is Regulator {
 
 
 	/** 
         @dev Creates permissions for all functions in WhitelistedToken.
      */
-    constructor(address permissions, address validators, address validator) RegulatorStorageConsumer(permissions, validators) public {
+    constructor(address validator) public {
 
         // Each of these permission-setting procedures are separated into functions.
         // Because otherwise, Solidity complains about the size that the permission structs
         // take up on the stack if all of the structs are declared in memory within the
         // same function.
+        _permissions = new PermissionSheet();
+        _validators = new ValidatorSheet();
         _validators.addValidator(validator);
         setMintPermission();
         setMintCUSDPermission();
