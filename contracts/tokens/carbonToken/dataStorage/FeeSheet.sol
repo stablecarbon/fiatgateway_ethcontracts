@@ -22,8 +22,8 @@ contract FeeSheet is Ownable {
         Events
     */
     event DefaultFeeChanged(uint16 oldFee, uint16 newFee);
-    event FeeChanged(address stablecoin, uint16 oldFee, uint16 newFee);
-    event FeeRemoved(address stablecoin, uint16 oldFee);
+    event FeeChanged(address indexed stablecoin, uint16 oldFee, uint16 newFee);
+    event FeeRemoved(address indexed stablecoin, uint16 oldFee);
 
     /** @notice Sets the default fee for burning CarbonDollar into a stablecoin.
         @param fee The default fee.
@@ -31,7 +31,7 @@ contract FeeSheet is Ownable {
     function setDefaultFee(uint16 fee) public onlyOwner {
         uint16 oldFee = defaultFee;
         defaultFee = fee;
-        if (fee != defaultFee)
+        if (oldFee != defaultFee)
             emit DefaultFeeChanged(oldFee, fee);
     }
     
@@ -44,7 +44,7 @@ contract FeeSheet is Ownable {
         fees[stablecoin] = fee;
         isFeeSet[stablecoin] = true;
         if (oldFee != fee)
-            emit DefaultFeeChanged(oldFee, fee);
+            emit FeeChanged(stablecoin, oldFee, fee);
     }
 
     /** @notice Remove the fee for burning CarbonDollar into a particular kind of stablecoin.

@@ -1,8 +1,8 @@
 pragma solidity ^0.4.23;
 
 import 'openzeppelin-solidity/contracts/AddressUtils.sol';
-import './dataStorage/MutableRegulatorStorage.sol';
 import "openzeppelin-solidity/contracts/ownership/Ownable.sol";
+import './dataStorage/MutableRegulatorStorage.sol';
 
 
 /**
@@ -14,8 +14,6 @@ import "openzeppelin-solidity/contracts/ownership/Ownable.sol";
  *
  */
 contract Regulator is Ownable, MutableRegulatorStorage {
-
-
     /** 
         Modifiers 
     */
@@ -34,12 +32,14 @@ contract Regulator is Ownable, MutableRegulatorStorage {
     event SetBlacklistedUser(address indexed who);
     event SetNonlistedUser(address indexed who);
     event SetMinter(address indexed who);
+    event RemovedMinter(address indexed who);
     event SetBlacklistDestroyer(address indexed who);
+    event RemovedBlacklistDestroyer(address indexed who);
     event SetBlacklistSpender(address indexed who);
+    event RemovedBlacklistSpender(address indexed who);
 
 
-    constructor (address permissions, address validators) MutableRegulatorStorage(permissions, validators) public {
-    }
+    constructor (address p, address v) MutableRegulatorStorage(p, v) public {}
 
     /**
     * @notice Adds a validator to the regulator entity.
@@ -70,19 +70,27 @@ contract Regulator is Ownable, MutableRegulatorStorage {
     * @param _who The address of the account that we are setting permissions for.
     */
     function setMinter(address _who) public onlyValidator {
-        require(isPermission(permissions.MINT_SIG()), "Minting not supported by token");
-        setUserPermission(_who, permissions.MINT_SIG());
+        _setMinter(_who);
+    }
+
+    function _setMinter(address _who) internal {
+        require(permissions.isPermission(permissions.MINT_SIG()), "Minting not supported by token");
+        permissions.setUserPermission(_who, permissions.MINT_SIG());
         emit SetMinter(_who);
     }
-    
 
     /**
     * @notice Removes the necessary permissions for a user to mint tokens.
     * @param _who The address of the account that we are removing permissions for.
     */
     function removeMinter(address _who) public onlyValidator {
-        require(isPermission(permissions.MINT_SIG()), "Minting not supported by token");
-        removeUserPermission(_who, permissions.MINT_SIG());
+        _removeMinter(_who);
+    }
+
+    function _removeMinter(address _who) internal {
+        require(permissions.isPermission(permissions.MINT_SIG()), "Minting not supported by token");
+        permissions.removeUserPermission(_who, permissions.MINT_SIG());
+        emit RemovedMinter(_who);
     }
 
     /** Returns whether or not a user is a minter.
@@ -98,8 +106,8 @@ contract Regulator is Ownable, MutableRegulatorStorage {
     * @param _who The address of the account that we are setting permissions for.
     */
     function setBlacklistSpender(address _who) public onlyValidator {
-        require(isPermission(permissions.APPROVE_BLACKLISTED_ADDRESS_SPENDER_SIG()), "Blacklist spending not supported by token");
-        setUserPermission(_who, permissions.APPROVE_BLACKLISTED_ADDRESS_SPENDER_SIG());
+        require(permissions.isPermission(permissions.APPROVE_BLACKLISTED_ADDRESS_SPENDER_SIG()), "Blacklist spending not supported by token");
+        permissions.setUserPermission(_who, permissions.APPROVE_BLACKLISTED_ADDRESS_SPENDER_SIG());
         emit SetBlacklistSpender(_who);
     }
     
@@ -108,8 +116,9 @@ contract Regulator is Ownable, MutableRegulatorStorage {
     * @param _who The address of the account that we are removing permissions for.
     */
     function removeBlacklistSpender(address _who) public onlyValidator {
-        require(isPermission(permissions.APPROVE_BLACKLISTED_ADDRESS_SPENDER_SIG()), "Blacklist spending not supported by token");
-        removeUserPermission(_who, permissions.APPROVE_BLACKLISTED_ADDRESS_SPENDER_SIG());
+        require(permissions.isPermission(permissions.APPROVE_BLACKLISTED_ADDRESS_SPENDER_SIG()), "Blacklist spending not supported by token");
+        permissions.removeUserPermission(_who, permissions.APPROVE_BLACKLISTED_ADDRESS_SPENDER_SIG());
+        emit RemovedBlacklistSpender(_who);
     }
 
     /** Returns whether or not a user is a blacklist spender.
@@ -125,8 +134,8 @@ contract Regulator is Ownable, MutableRegulatorStorage {
     * @param _who The address of the account that we are setting permissions for.
     */
     function setBlacklistDestroyer(address _who) public onlyValidator {
-        require(isPermission(permissions.DESTROY_BLACKLISTED_TOKENS_SIG()), "Blacklist token destruction not supported by token");
-        setUserPermission(_who, permissions.DESTROY_BLACKLISTED_TOKENS_SIG());
+        require(permissions.isPermission(permissions.DESTROY_BLACKLISTED_TOKENS_SIG()), "Blacklist token destruction not supported by token");
+        permissions.setUserPermission(_who, permissions.DESTROY_BLACKLISTED_TOKENS_SIG());
         emit SetBlacklistDestroyer(_who);
     }
     
@@ -136,8 +145,9 @@ contract Regulator is Ownable, MutableRegulatorStorage {
     * @param _who The address of the account that we are removing permissions for.
     */
     function removeBlacklistDestroyer(address _who) public onlyValidator {
-        require(isPermission(permissions.DESTROY_BLACKLISTED_TOKENS_SIG()), "Blacklist token destruction not supported by token");
-        removeUserPermission(_who, permissions.DESTROY_BLACKLISTED_TOKENS_SIG());
+        require(permissions.isPermission(permissions.DESTROY_BLACKLISTED_TOKENS_SIG()), "Blacklist token destruction not supported by token");
+        permissions.removeUserPermission(_who, permissions.DESTROY_BLACKLISTED_TOKENS_SIG());
+        emit RemovedBlacklistDestroyer(_who);
     }
 
     /** Returns whether or not a user is a blacklist destroyer.
@@ -153,10 +163,14 @@ contract Regulator is Ownable, MutableRegulatorStorage {
     * @param _who The address of the account that we are setting permissions for.
     */
     function setWhitelistedUser(address _who) public onlyValidator {
-        require(isPermission(permissions.BURN_SIG()), "Burn method not supported by token");
-        require(isPermission(permissions.BLACKLISTED_SIG()), "Self-destruct method not supported by token");
-        setUserPermission(_who, permissions.BURN_SIG());
-        removeUserPermission(_who, permissions.BLACKLISTED_SIG());
+        _setWhitelistedUser(_who);
+    }
+
+    function _setWhitelistedUser(address _who) internal {
+        require(permissions.isPermission(permissions.BURN_SIG()), "Burn method not supported by token");
+        require(permissions.isPermission(permissions.BLACKLISTED_SIG()), "Self-destruct method not supported by token");
+        permissions.setUserPermission(_who, permissions.BURN_SIG());
+        permissions.removeUserPermission(_who, permissions.BLACKLISTED_SIG());
         emit SetWhitelistedUser(_who);
     }
 
@@ -166,10 +180,14 @@ contract Regulator is Ownable, MutableRegulatorStorage {
     * @param _who The address of the account that we are setting permissions for.
     */
     function setBlacklistedUser(address _who) public onlyValidator {
-        require(isPermission(permissions.BURN_SIG()), "Burn method not supported by token");
-        require(isPermission(permissions.BLACKLISTED_SIG()), "Self-destruct method not supported by token");
-        removeUserPermission(_who, permissions.BURN_SIG());
-        setUserPermission(_who, permissions.BLACKLISTED_SIG());
+        _setBlacklistedUser(_who);
+    }
+
+    function _setBlacklistedUser(address _who) internal {
+        require(permissions.isPermission(permissions.BURN_SIG()), "Burn method not supported by token");
+        require(permissions.isPermission(permissions.BLACKLISTED_SIG()), "Self-destruct method not supported by token");
+        permissions.removeUserPermission(_who, permissions.BURN_SIG());
+        permissions.setUserPermission(_who, permissions.BLACKLISTED_SIG());
         emit SetBlacklistedUser(_who);
     }
 
@@ -179,10 +197,14 @@ contract Regulator is Ownable, MutableRegulatorStorage {
     * @param _who The address of the account that we are setting permissions for.
     */
     function setNonlistedUser(address _who) public onlyValidator {
-        require(isPermission(permissions.BURN_SIG()), "Burn method not supported by token");
-        require(isPermission(permissions.BLACKLISTED_SIG()), "Self-destruct method not supported by token");
-        removeUserPermission(_who, permissions.BURN_SIG());
-        removeUserPermission(_who, permissions.BLACKLISTED_SIG());
+        _setNonlistedUser(_who);
+    }
+
+    function _setNonlistedUser(address _who) internal {
+        require(permissions.isPermission(permissions.BURN_SIG()), "Burn method not supported by token");
+        require(permissions.isPermission(permissions.BLACKLISTED_SIG()), "Self-destruct method not supported by token");
+        permissions.removeUserPermission(_who, permissions.BURN_SIG());
+        permissions.removeUserPermission(_who, permissions.BLACKLISTED_SIG());
         emit SetNonlistedUser(_who);
     }
 

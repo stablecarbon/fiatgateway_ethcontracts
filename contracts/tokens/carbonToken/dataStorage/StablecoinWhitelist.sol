@@ -14,8 +14,8 @@ contract StablecoinWhitelist is Ownable {
     /** 
         Events
     */
-    event StablecoinAdded(address stablecoin);
-    event StablecoinRemoved(address stablecoin);
+    event StablecoinAdded(address indexed stablecoin);
+    event StablecoinRemoved(address indexed stablecoin);
 
     /** @notice Add a stablecoin to the whitelist.
         @param stablecoin Address of the stablecoin.

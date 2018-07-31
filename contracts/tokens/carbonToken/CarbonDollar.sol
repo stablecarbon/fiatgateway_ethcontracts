@@ -1,37 +1,12 @@
 pragma solidity ^0.4.23;
 
 import "openzeppelin-solidity/contracts/AddressUtils.sol";
-import "openzeppelin-solidity/contracts/ownership/HasNoTokens.sol";
+import "./dataStorage/CarbonDollarStorage.sol";
 import "../permissionedToken/PermissionedToken.sol";
+import "../permissionedToken/dataStorage/MutablePermissionedTokenStorage.sol";
 import "../whitelistedToken/WhitelistedToken.sol";
-import "./helpers/FeeSheet.sol";
-import "./helpers/StablecoinWhitelist.sol";
 
-contract CarbonDollar is PermissionedToken, HasNoTokens {
-
-    // TODO: Some sort of blacklist/whitelisting (similar to permissionedToken) @tanishq/@sam
-    // Random Thought: GreyList (mark Dirty Money without prevent it from being transferred or receiving)
-    // TODO: Upgradeability of carbonUSD and similar umbrella/meta-token contracts @tanishq/@sam
-
-    // carbonUSD is an umbrella / meta-token to be trading on exchanges. It's a wrapper function on top of 
-    // all USD stablecoin products Carbon launches.
-
-    // Carbon-12 Labs, INC owns this smart contract.
-
-    /**
-        Global Variables
-    */
-    FeeSheet public stablecoinFees;
-    // Whitelist of stablecoins that can be traded into Carbon. The addresses stored in this list are actually
-    // proxies to WhitelistedToken objects.
-    StablecoinWhitelist public stablecoinWhitelist;
-
-    /**
-        Events
-     */
-    event FeeSheetChanged(address indexed oldSheet, address indexed newSheet);
-    event StablecoinWhitelistChanged(address indexed oldWhitelist, address indexed newWhitelist);
-
+contract CarbonDollar is PermissionedToken, CarbonDollarStorage {
     /**
         Modifiers
     */
@@ -42,21 +17,17 @@ contract CarbonDollar is PermissionedToken, HasNoTokens {
         _;
     }
 
-    /**
-     * @notice Set the stablecoin whitelist contract.
-     * @param _whitelist Address of the stablecoin whitelist contract.
-     */
-    function setStablecoinWhitelist(address _whitelist) public onlyOwner {
-        address oldWhitelist = address(stablecoinWhitelist);
-        stablecoinWhitelist = StablecoinWhitelist(_whitelist);
-        emit StablecoinWhitelistChanged(oldWhitelist, _whitelist);
-    }
+    /** CONSTRUCTOR
+    * @dev Passes along arguments to base class. 
+    */
+    constructor(address r, address b, address a, address f, address s) PermissionedToken(r,b,a) CarbonDollarStorage(f,s) public {}
 
     /**
      * @notice Add new stablecoin to whitelist.
      * @param _stablecoin Address of stablecoin contract.
      */
     function listToken(address _stablecoin) public onlyOwner {
+        require(AddressUtils.isContract(_stablecoin));
         stablecoinWhitelist.addStablecoin(_stablecoin); // add new stablecoin in whitelist mapping
     }
 
@@ -76,16 +47,6 @@ contract CarbonDollar is PermissionedToken, HasNoTokens {
     function isWhitelisted(address _stablecoin) public view returns (bool) {
         return stablecoinWhitelist.isWhitelisted(_stablecoin);
     }
-    
-    /**
-     * @notice Set the fee sheet for this CarbonUSD.
-     * @param _sheet Address of the fee sheet.
-     */
-    function setFeeSheet(address _sheet) public onlyOwner {
-        address oldSheet = address(stablecoinFees);
-        stablecoinFees = FeeSheet(_sheet);
-        emit FeeSheetChanged(oldSheet, _sheet);
-    }
 
     /**
      * @notice Change fees associated with going from CarbonUSD to a particular stablecoin.
@@ -104,6 +65,10 @@ contract CarbonDollar is PermissionedToken, HasNoTokens {
      */
     function setDefaultFee(uint16 _newFee) public onlyOwner {
         stablecoinFees.setDefaultFee(_newFee);
+    }
+
+    function getFee(address stablecoin) public view returns (uint16) {
+        return stablecoinFees.fees(stablecoin);
     }
 
     /**

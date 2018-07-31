@@ -11,7 +11,7 @@ import "../Regulator.sol";
 contract RegulatorFullyLoadedMock is Regulator {
 
 
-    /** 
+	/** 
         @dev Creates permissions for all functions in WhitelistedToken.
      */
     constructor(address ps, address vs, address validator) Regulator(ps, vs) public {
@@ -22,7 +22,9 @@ contract RegulatorFullyLoadedMock is Regulator {
         validators.addValidator(validator);
         setMintPermission();
         setMintCUSDPermission();
+        setConvertPermission();
         setBurnPermission();
+        setBurnCarbonDollarPermission();
         setDestroyBlacklistedTokensPermission();
         setApproveBlacklistedAddressSpenderPermission();
         setDestroySelfPermission();
@@ -36,8 +38,16 @@ contract RegulatorFullyLoadedMock is Regulator {
         permissions.addPermission(permissions.MINT_CUSD_SIG(), '','','');
     }
 
+    function setConvertPermission() internal {
+        permissions.addPermission(permissions.CONVERT_SIG(), '','','');
+    }
+
     function setBurnPermission() internal {
         permissions.addPermission(permissions.BURN_SIG(), '','','');
+    }
+
+    function setBurnCarbonDollarPermission() internal {
+        permissions.addPermission(permissions.BURN_CARBON_DOLLAR_SIG(), '','','');
     }
 
     function setDestroyBlacklistedTokensPermission() internal {
