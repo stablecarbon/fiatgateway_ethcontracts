@@ -1,6 +1,4 @@
 pragma solidity ^0.4.23;
-
-import "openzeppelin-solidity/contracts/AddressUtils.sol";
 import "./dataStorage/MutableCarbonDollarStorage.sol";
 import "../permissionedToken/PermissionedToken.sol";
 import "../whitelistedToken/WhitelistedToken.sol";
@@ -11,7 +9,6 @@ contract CarbonDollar is PermissionedToken, MutableCarbonDollarStorage {
     */
     /** Ensures that the caller of the function is a whitelisted token. */
     modifier requiresWhitelistedToken() {
-        require(AddressUtils.isContract(msg.sender)); // Must be a contract
         require(stablecoinWhitelist.isWhitelisted(msg.sender)); // Must be a whitelisted token
         _;
     }
@@ -26,7 +23,6 @@ contract CarbonDollar is PermissionedToken, MutableCarbonDollarStorage {
      * @param _stablecoin Address of stablecoin contract.
      */
     function listToken(address _stablecoin) public onlyOwner {
-        require(AddressUtils.isContract(_stablecoin));
         stablecoinWhitelist.addStablecoin(_stablecoin); 
     }
 

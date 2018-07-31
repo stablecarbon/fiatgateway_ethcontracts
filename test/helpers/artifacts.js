@@ -14,11 +14,13 @@ const PermissionedTokenProxy = artifacts.require("PermissionedTokenProxy");
 
 // WhitelistedToken
 const WhitelistedToken = artifacts.require("WhitelistedToken");
+const WhitelistedTokenRegulator = artifacts.require("WhitelistedTokenRegulator");
 
 // CarbonDollar
 const CarbonDollar = artifacts.require("CarbonDollar");
 const FeeSheet = artifacts.require("FeeSheet");
 const StablecoinWhitelist = artifacts.require("StablecoinWhitelist");
+const CarbonDollarRegulator = artifacts.require("CarbonDollarRegulator");
 
 
 module.exports = {
@@ -31,8 +33,10 @@ module.exports = {
 	PermissionedToken,
 	PermissionedTokenProxy,
 	WhitelistedToken,
+	WhitelistedTokenRegulator,
 	CarbonDollar,
     FeeSheet,
-    StablecoinWhitelist 
+    StablecoinWhitelist,
+    CarbonDollarRegulator
 }
 

@@ -96,11 +96,6 @@ function carbonDollarStorageInteractionTests(owner, wtMinter) {
                     await this.token.listToken(this.wtToken.address, {from:owner});
                     assert(await this.token.isWhitelisted(this.wtToken.address));
                 });
-                it('cannot add a non-contract address to whitelist', async function () {
-                    await expectRevert(this.token.listToken(owner, {from:owner}));
-                    await expectRevert(this.token.listToken(ZERO_ADDRESS, {from:owner}));
-
-                })
             });
             describe('unlistToken', function () {
                 it('removes stablecoin from whitelist', async function () {
