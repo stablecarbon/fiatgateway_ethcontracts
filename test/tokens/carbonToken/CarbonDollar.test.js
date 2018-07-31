@@ -1,7 +1,8 @@
 const { PermissionSheetMock, ValidatorSheetMock } = require('../../helpers/mocks');
 const { PermissionedToken, CarbonDollar, Regulator, AllowanceSheet, BalanceSheet, FeeSheet, StablecoinWhitelist } = require('../../helpers/artifacts');
 const { CommonVariables } = require('../../helpers/common');
-const { carbonDollarStorageInteractions } = require('./carbonTokenBehavior/CarbonTokenStorageBasicInteractions.js');
+const { carbonDollarStorageInteractionTests } = require('./carbonTokenBehavior/CarbonTokenStorageBasicInteractions.js');
+const { carbonDollarBehaviorTests } = require('./carbonTokenBehavior/CarbonTokenBehavior.js')
 
 contract('CarbonDollar', _accounts => {
     const commonVars = new CommonVariables(_accounts);
@@ -56,6 +57,7 @@ contract('CarbonDollar', _accounts => {
     });
 
     describe("Carbon Dollar tests", function () {
-        carbonDollarStorageInteractions(owner, minter);
+        // carbonDollarStorageInteractionTests(owner, minter);
+        carbonDollarBehaviorTests(owner, minter, whitelisted);
     });
 })

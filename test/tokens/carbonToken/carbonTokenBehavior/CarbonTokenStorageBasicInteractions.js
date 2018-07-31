@@ -2,7 +2,7 @@ const { FeeSheet, StablecoinWhitelist } = require('../../../helpers/artifacts');
 const { expectRevert, ZERO_ADDRESS } = require('../../../helpers/common');
 
 
-function carbonDollarStorageInteractions(owner, wtMinter) {
+function carbonDollarStorageInteractionTests(owner, wtMinter) {
     describe('Fee sheet interactions', function () {
         describe('when sender is owner', function () {
             describe('setFeeSheet', function () {
@@ -122,5 +122,5 @@ function carbonDollarStorageInteractions(owner, wtMinter) {
 }
 
 module.exports = {
-    carbonDollarStorageInteractions
+    carbonDollarStorageInteractionTests
 }
