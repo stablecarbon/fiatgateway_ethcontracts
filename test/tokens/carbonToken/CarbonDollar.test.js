@@ -1,11 +1,7 @@
-const { modularTokenTests } = require('../ModularTokenTests');
-const { pausableTokenTests } = require('../PausableTokenTests');
-const { permissionedTokenBehavior } = require('./PermissionedTokenBehavior');
-const { permissionedTokenStorage } = require('./PermissionedTokenStorage');
-const { mutablePermissionedTokenStorage } = require('./MutablePermissionedTokenStorage');
-const { PermissionsStorageMock, ValidatorStorageMock } = require('../../helpers/mocks');
-const { WhitelistedToken, CarbonDollar, Regulator, AllowanceSheet, BalanceSheet } = require('../../helpers/artifacts');
+const { PermissionSheetMock, ValidatorSheetMock } = require('../../helpers/mocks');
+const { PermissionedToken, CarbonDollar, Regulator, AllowanceSheet, BalanceSheet, FeeSheet, StablecoinWhitelist } = require('../../helpers/artifacts');
 const { CommonVariables } = require('../../helpers/common');
+const { carbonDollarStorageInteractions } = require('./carbonTokenBehavior/CarbonTokenStorageBasicInteractions.js');
 
 contract('CarbonDollar', _accounts => {
     const commonVars = new CommonVariables(_accounts);
@@ -19,45 +15,47 @@ contract('CarbonDollar', _accounts => {
 
     beforeEach(async function () {
         const from = owner
-        // Set up regulator data storage contracts and connect to regulator
-        this.regulator = await Regulator.new({ from });
-        this.permissionsStorage = await PermissionsStorageMock.new({ from });
-        this.validatorStorage = await ValidatorStorageMock.new(validator, { from });
-        await this.permissionsStorage.transferOwnership(this.regulator.address, { from });
-        await this.validatorStorage.transferOwnership(this.regulator.address, { from });
-        await this.regulator.setPermissionsStorage(this.permissionsStorage.address, { from });
-        await this.regulator.setValidatorStorage(this.validatorStorage.address, { from });
 
-        // Set up user permissions
-        await this.regulator.setWhitelistedUser(whitelisted, { from: validator }); // can burn, can transfer
-        await this.regulator.setBlacklistedUser(blacklisted, { from: validator }); // can't burn, can't transfer
-        await this.regulator.setNonlistedUser(nonlisted, { from: validator }); // can't burn can transfer
-        await this.regulator.setMinter(minter, { from: validator }); // can mint
+        // Set up Regulator for PermissionedToken
+        this.permissionSheet = await PermissionSheetMock.new( {from:owner })
+        this.validatorSheet = await ValidatorSheetMock.new(validator, {from:owner} )
+        this.regulator = await Regulator.new(this.permissionSheet.address, this.validatorSheet.address, {from:owner})
 
-        // Set up WhitelistedToken
-        this.wtAllowances = await AllowanceSheet.new({ from });
-        this.wtBalances = await BalanceSheet.new({ from });
-        this.wtToken = await WhitelistedToken.new(this.wtAllowances.address, this.wtBalances.address, { from });
-        await this.wtAllowances.transferOwnership(this.wtToken.address, { from });
-        await this.wtBalances.transferOwnership(this.wtToken.address, { from });
-        await this.wtToken.setRegulator(this.regulator.address, { from });
+        await this.permissionSheet.transferOwnership(this.regulator.address, {from:owner})
+        await this.validatorSheet.transferOwnership(this.regulator.address, {from:owner})
 
-        // Set up CarbonDollar
-        this.cdAllowances = await AllowanceSheet.new({ from });
-        this.cdBalances = await BalanceSheet.new({ from });
-        this.cdToken = await CarbonDollar.new(this.cdAllowances.address, this.cdBalances.address, { from });
-        this.token = this.cdToken
-        await this.cdAllowances.transferOwnership(this.cdToken.address, { from });
-        await this.cdBalances.transferOwnership(this.cdToken.address, { from });
-        await this.token.setRegulator(this.regulator.address, { from });
+        // Set user permissions in regulator
+        await this.regulator.setMinter(minter, {from:validator})
+        await this.regulator.setWhitelistedUser(whitelisted, {from:validator})
+        await this.regulator.setNonlistedUser(nonlisted, {from:validator})
+        await this.regulator.setBlacklistedUser(blacklisted, {from:validator})
+
+        // Set up token storage for PermissionedToken
+        this.balanceSheet = await BalanceSheet.new({from:owner})
+        this.allowanceSheet = await AllowanceSheet.new({from:owner})
+
+        // Make a PermissionedToken for testing CarbonDollar interactions with WhitelistedTokens
+        // reuse regulator but make new balances
+        this.balanceSheetWT = await BalanceSheet.new({from:owner}) 
+        this.allowanceSheetWT = await AllowanceSheet.new({from:owner})
+        this.wtToken = await PermissionedToken.new(this.regulator.address, this.balanceSheetWT.address, this.allowanceSheetWT.address, {from:owner})
+        await this.balanceSheetWT.transferOwnership(this.wtToken.address, {from:owner})
+        await this.allowanceSheetWT.transferOwnership(this.wtToken.address, {from:owner})
+
+        // Set up token storage for CarbonDollar
+        this.feeSheet = await FeeSheet.new({from:owner})
+        this.stablecoins = await StablecoinWhitelist.new({from:owner})
+
+        this.token = await CarbonDollar.new(this.regulator.address, this.balanceSheet.address, this.allowanceSheet.address, this.feeSheet.address, this.stablecoins.address, {from:owner})
+
+        await this.balanceSheet.transferOwnership(this.token.address, {from:owner})
+        await this.allowanceSheet.transferOwnership(this.token.address, {from:owner})
+        await this.feeSheet.transferOwnership(this.token.address, {from:owner})
+        await this.stablecoins.transferOwnership(this.token.address, {from:owner})
+
     });
-    describe("Behaves properly like a mutable permissioned token", function () {
-        modularTokenTests(minter, whitelisted, nonlisted);
-        permissionedTokenStorage(owner, user);
-        mutablePermissionedTokenStorage(owner, user);
-        permissionedTokenBehavior(minter, whitelisted, blacklisted, nonlisted, user, validator);
-    });
+
     describe("Carbon Dollar tests", function () {
-        carbonDollarTests(owner, minter);
+        carbonDollarStorageInteractions(owner, minter);
     });
 })

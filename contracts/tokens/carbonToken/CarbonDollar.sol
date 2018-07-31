@@ -1,12 +1,11 @@
 pragma solidity ^0.4.23;
 
 import "openzeppelin-solidity/contracts/AddressUtils.sol";
-import "./dataStorage/CarbonDollarStorage.sol";
+import "./dataStorage/MutableCarbonDollarStorage.sol";
 import "../permissionedToken/PermissionedToken.sol";
-import "../permissionedToken/dataStorage/MutablePermissionedTokenStorage.sol";
 import "../whitelistedToken/WhitelistedToken.sol";
 
-contract CarbonDollar is PermissionedToken, CarbonDollarStorage {
+contract CarbonDollar is PermissionedToken, MutableCarbonDollarStorage {
     /**
         Modifiers
     */
@@ -20,7 +19,7 @@ contract CarbonDollar is PermissionedToken, CarbonDollarStorage {
     /** CONSTRUCTOR
     * @dev Passes along arguments to base class. 
     */
-    constructor(address r, address b, address a, address f, address s) PermissionedToken(r,b,a) CarbonDollarStorage(f,s) public {}
+    constructor(address regulator, address balances, address allowances, address fees, address stablecoins) PermissionedToken(regulator, balances, allowances) MutableCarbonDollarStorage(fees, stablecoins) public {}
 
     /**
      * @notice Add new stablecoin to whitelist.
@@ -69,6 +68,10 @@ contract CarbonDollar is PermissionedToken, CarbonDollarStorage {
 
     function getFee(address stablecoin) public view returns (uint16) {
         return stablecoinFees.fees(stablecoin);
+    }
+
+    function getDefaultFee() public view returns (uint16) {
+        return stablecoinFees.defaultFee();
     }
 
     /**
