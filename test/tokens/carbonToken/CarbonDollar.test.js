@@ -37,7 +37,7 @@ contract('CarbonDollar', _accounts => {
         // CarbonDollar Regulator
         this.permissionSheet_c = await PermissionSheetMock.new( {from:owner })
         this.validatorSheet_c = await ValidatorSheetMock.new(validator, {from:owner} )
-        this.regulator_c = await WhitelistedTokenRegulator.new(this.permissionSheet_c.address, this.validatorSheet_c.address, {from:owner})
+        this.regulator_c = await CarbonDollarRegulator.new(this.permissionSheet_c.address, this.validatorSheet_c.address, {from:owner})
 
         await this.permissionSheet_c.transferOwnership(this.regulator_c.address, {from:owner})
         await this.validatorSheet_c.transferOwnership(this.regulator_c.address, {from:owner})
@@ -73,14 +73,15 @@ contract('CarbonDollar', _accounts => {
         this.wtToken = await WhitelistedToken.new(this.regulator_w.address, this.balanceSheetWT.address, this.allowanceSheetWT.address, this.token.address, {from:owner})
         await this.balanceSheetWT.transferOwnership(this.wtToken.address, {from:owner})
         await this.allowanceSheetWT.transferOwnership(this.wtToken.address, {from:owner})
-        await this.regulator_w.setWhitelistedUser(this.token.address, { from: validator }); // must whitelist CUSD address
 
-
+        // must whitelist CUSD address to convert from WT into CUSD (used for minting CUSD)
+        await this.regulator_w.setWhitelistedUser(this.token.address, { from: validator }); 
+        await this.regulator_c.setWhitelistedUser(this.token.address, { from: validator })
 
     });
 
     describe("Carbon Dollar tests", function () {
         // carbonDollarStorageInteractionTests(owner, minter);
-        carbonDollarBehaviorTests(owner, user, whitelisted, minter);
+        carbonDollarBehaviorTests(owner, user, whitelisted);
     });
 })
