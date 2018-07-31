@@ -1,12 +1,14 @@
 pragma solidity ^0.4.23;
 
 import "zos-lib/contracts/upgradeability/UpgradeabilityProxy.sol";
-import "./dataStorage/MutablePermissionedTokenStorageConsumer.sol";
+import "./dataStorage/MutablePermissionedTokenStorage.sol";
+import "openzeppelin-solidity/contracts/ownership/Ownable.sol";
 
-contract PermissionedTokenProxy is UpgradeabilityProxy, MutablePermissionedTokenStorageConsumer {
+
+contract PermissionedTokenProxy is UpgradeabilityProxy, Ownable, MutablePermissionedTokenStorage {
 
 	
-	constructor( address _implementation, address regulator, address balances, address allowances ) UpgradeabilityProxy( _implementation ) MutablePermissionedTokenStorageConsumer(regulator, balances, allowances) public {}
+	constructor( address _implementation, address regulator, address balances, address allowances ) UpgradeabilityProxy( _implementation ) MutablePermissionedTokenStorage(regulator, balances, allowances) public {}
 
 	/**
 	* @dev Upgrade the backing implementation of the proxy.

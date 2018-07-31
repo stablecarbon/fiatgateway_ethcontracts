@@ -1,5 +1,7 @@
 pragma solidity ^0.4.23;
 
+import "openzeppelin-solidity/contracts/ownership/Ownable.sol";
+
 /**
  * @title PermissionSheet
  * @dev Stores all of the possible token-level permissions that a user can have access to. For example,
@@ -8,7 +10,7 @@ pragma solidity ^0.4.23;
  *
  */
 
-contract PermissionSheet {
+contract PermissionSheet is Ownable {
 	
     /** 
         Mappings 
@@ -57,7 +59,7 @@ contract PermissionSheet {
     * @param _permissionDescription A lengthier description for this permission (e.g. "Allows user to mint tokens").
     * @param _contractName Name of the contract that the method belongs to.
     */
-    function addPermission(bytes4 _methodsignature, string _permissionName, string _permissionDescription, string _contractName) public { 
+    function addPermission(bytes4 _methodsignature, string _permissionName, string _permissionDescription, string _contractName) onlyOwner public { 
         Permission memory p = Permission(_permissionName, _permissionDescription, _contractName);
         _addPermission(_methodsignature, p);
     }
@@ -78,7 +80,7 @@ contract PermissionSheet {
     * @notice Removes a permission the list of permissions.
     * @param _methodsignature Signature of the method that this permission controls.
     */
-    function removePermission(bytes4 _methodsignature) public {
+    function removePermission(bytes4 _methodsignature) onlyOwner public {
         isPermission[_methodsignature] = false;
         emit PermissionRemoved(_methodsignature);
     }
@@ -87,7 +89,7 @@ contract PermissionSheet {
     * @notice Sets a permission in the list of permissions that a user has.
     * @param _methodsignature Signature of the method that this permission controls.
     */
-    function setUserPermission(address _who, bytes4 _methodsignature) public {
+    function setUserPermission(address _who, bytes4 _methodsignature) onlyOwner public {
         require(isPermission[_methodsignature]);
         hasUserPermission[_who][_methodsignature] = true;
         emit SetUserPermission(_who, _methodsignature);
@@ -97,7 +99,7 @@ contract PermissionSheet {
     * @notice Removes a permission from the list of permissions that a user has.
     * @param _methodsignature Signature of the method that this permission controls.
     */
-    function removeUserPermission(address _who, bytes4 _methodsignature) public {
+    function removeUserPermission(address _who, bytes4 _methodsignature) onlyOwner public {
         require(isPermission[_methodsignature]);
         hasUserPermission[_who][_methodsignature] = false;
         emit RemovedUserPermission(_who, _methodsignature);

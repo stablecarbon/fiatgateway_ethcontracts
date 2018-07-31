@@ -1,28 +1,25 @@
 pragma solidity ^0.4.23;
 
-import "../dataStorage/RegulatorStorageConsumer.sol";
+import "../dataStorage/MutableRegulatorStorage.sol";
 import "../Regulator.sol";
 
 /**
 *
-* @dev creates a Regulator connected to a permission storage full of permissions
+* @dev creates a Regulator connected to an empty RegulatorStorage
 *
 */
 contract RegulatorFullyLoadedMock is Regulator {
 
 
-	/** 
+    /** 
         @dev Creates permissions for all functions in WhitelistedToken.
      */
-    constructor(address validator) public {
-
+    constructor(address ps, address vs, address validator) Regulator(ps, vs) public {
         // Each of these permission-setting procedures are separated into functions.
         // Because otherwise, Solidity complains about the size that the permission structs
         // take up on the stack if all of the structs are declared in memory within the
         // same function.
-        _permissions = new PermissionSheet();
-        _validators = new ValidatorSheet();
-        _validators.addValidator(validator);
+        validators.addValidator(validator);
         setMintPermission();
         setMintCUSDPermission();
         setBurnPermission();
@@ -32,26 +29,26 @@ contract RegulatorFullyLoadedMock is Regulator {
     }
 
     function setMintPermission() internal {
-        _permissions.addPermission(_permissions.MINT_SIG(), '','','');
+        permissions.addPermission(permissions.MINT_SIG(), '','','');
     }
     
     function setMintCUSDPermission() internal {
-        _permissions.addPermission(_permissions.MINT_CUSD_SIG(), '','','');
+        permissions.addPermission(permissions.MINT_CUSD_SIG(), '','','');
     }
 
     function setBurnPermission() internal {
-        _permissions.addPermission(_permissions.BURN_SIG(), '','','');
+        permissions.addPermission(permissions.BURN_SIG(), '','','');
     }
 
     function setDestroyBlacklistedTokensPermission() internal {
-        _permissions.addPermission(_permissions.DESTROY_BLACKLISTED_TOKENS_SIG(), '','','');
+        permissions.addPermission(permissions.DESTROY_BLACKLISTED_TOKENS_SIG(), '','','');
     }
 
     function setApproveBlacklistedAddressSpenderPermission() internal {
-        _permissions.addPermission(_permissions.APPROVE_BLACKLISTED_ADDRESS_SPENDER_SIG(), '','','');
+        permissions.addPermission(permissions.APPROVE_BLACKLISTED_ADDRESS_SPENDER_SIG(), '','','');
     }
 
     function setDestroySelfPermission() internal {
-        _permissions.addPermission(_permissions.BLACKLISTED_SIG(), '','','');
+        permissions.addPermission(permissions.BLACKLISTED_SIG(), '','','');
     }
 }

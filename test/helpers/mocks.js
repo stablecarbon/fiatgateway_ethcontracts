@@ -1,13 +1,7 @@
-const MutableStorageRegulatorMock = artifacts.require("MutableStorageRegulatorMock");
-const RegulatorMock = artifacts.require("RegulatorMock");
-const RegulatorFullyLoadedMock = artifacts.require("RegulatorFullyLoadedMock");
-const PermissionedTokenMock = artifacts.require("PermissionedTokenMock");
-const MutableStoragePermissionedTokenMock = artifacts.require("MutableStoragePermissionedTokenMock");
+const PermissionSheetMock = artifacts.require("PermissionSheetMock");
+const ValidatorSheetMock = artifacts.require("ValidatorSheetMock");
 
 module.exports = {
-	MutableStorageRegulatorMock,
-	RegulatorMock,
-	RegulatorFullyLoadedMock,
-	PermissionedTokenMock,
-	MutableStoragePermissionedTokenMock
+	PermissionSheetMock,
+	ValidatorSheetMock,
 }

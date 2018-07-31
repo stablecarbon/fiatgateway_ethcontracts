@@ -13,53 +13,81 @@ function permissionedTokenStorageTests(owner, tokenHolder, spender, user) {
 
         describe('Allowances CRUD tests', function () {
 
-            it('addAllowance', async function () {
-                await this.allowanceSheet.addAllowance(tokenHolder, spender, 70 * 10 ** 18, { from })
-                const balance = await this.allowanceSheet.allowanceOf(tokenHolder, spender)
-                assert.equal(balance, (100 + 70) * 10 ** 18)
+            describe('owner calls', function () {
+                const from = owner
+
+                it('addAllowance', async function () {
+                    await this.allowanceSheet.addAllowance(tokenHolder, spender, 70 * 10 ** 18, { from })
+                    const balance = await this.allowanceSheet.allowanceOf(tokenHolder, spender)
+                    assert.equal(balance, (100 + 70) * 10 ** 18)
+                })
+
+                it('subAllowance', async function () {
+                    await this.allowanceSheet.subAllowance(tokenHolder, spender, 70 * 10 ** 18, { from })
+                    const balance = await this.allowanceSheet.allowanceOf(tokenHolder, spender)
+                    assert.equal(balance, (100 - 70) * 10 ** 18)
+                })
+
+                it('setAllowance', async function () {
+                    await this.allowanceSheet.setAllowance(tokenHolder, spender, 70 * 10 ** 18, { from })
+                    const balance = await this.allowanceSheet.allowanceOf(tokenHolder, spender)
+                    assert.equal(balance, 70 * 10 ** 18)
+                })
+
+                it('reverts subAllowance if insufficient funds', async function () {
+                    await expectThrow(this.allowanceSheet.subAllowance(tokenHolder, spender, 170 * 10 ** 18, { from }))
+                })
+
+
             })
 
-            it('subAllowance', async function () {
-                await this.allowanceSheet.subAllowance(tokenHolder, spender, 70 * 10 ** 18, { from })
-                const balance = await this.allowanceSheet.allowanceOf(tokenHolder, spender)
-                assert.equal(balance, (100 - 70) * 10 ** 18)
-            })
+            describe('non-owner calls', function () {
+                const from = tokenHolder
 
-            it('setAllowance', async function () {
-                await this.allowanceSheet.setAllowance(tokenHolder, spender, 70 * 10 ** 18, { from })
-                const balance = await this.allowanceSheet.allowanceOf(tokenHolder, spender)
-                assert.equal(balance, 70 * 10 ** 18)
+                it('reverts all calls', async function () {
+                    await expectRevert(this.allowanceSheet.addAllowance(tokenHolder, spender, 70 * 10 ** 18, { from }))
+                    await expectRevert(this.allowanceSheet.subAllowance(tokenHolder, spender, 70 * 10 ** 18, { from }))
+                    await expectRevert(this.allowanceSheet.setAllowance(tokenHolder, spender, 70 * 10 ** 18, { from }))
+                })
             })
-
-            it('reverts subAllowance if insufficient funds', async function () {
-                await expectThrow(this.allowanceSheet.subAllowance(tokenHolder, spender, 170 * 10 ** 18, { from }))
-            })
-
 
         })
 
         describe('Balances CRUD tests', function () {
 
-            it('addBalance', async function () {
-                await this.balanceSheet.addBalance(user, 70 * 10 ** 18, { from })
-                const balance = await this.balanceSheet.balanceOf(user)
-                assert.equal(balance, (100 + 70) * 10 ** 18)
+            describe('owner calls', function () {
+                const from = owner
+                it('addBalance', async function () {
+                    await this.balanceSheet.addBalance(user, 70 * 10 ** 18, { from })
+                    const balance = await this.balanceSheet.balanceOf(user)
+                    assert.equal(balance, (100 + 70) * 10 ** 18)
+                })
+
+                it('subBalance', async function () {
+                    await this.balanceSheet.subBalance(user, 70 * 10 ** 18, { from })
+                    const balance = await this.balanceSheet.balanceOf(user)
+                    assert.equal(balance, (100 - 70) * 10 ** 18)
+                })
+
+                it('setBalance', async function () {
+                    await this.balanceSheet.setBalance(user, 70 * 10 ** 18, { from })
+                    const balance = await this.balanceSheet.balanceOf(user)
+                    assert.equal(balance, 70 * 10 ** 18)
+                })
+
+                it('reverts subBalance if insufficient funds', async function () {
+                    await expectThrow(this.balanceSheet.subBalance(user, 170 * 10 ** 18, { from }))
+                })
             })
 
-            it('subBalance', async function () {
-                await this.balanceSheet.subBalance(user, 70 * 10 ** 18, { from })
-                const balance = await this.balanceSheet.balanceOf(user)
-                assert.equal(balance, (100 - 70) * 10 ** 18)
-            })
+            describe('non-owner calls', function () {
+                const from = tokenHolder
 
-            it('setBalance', async function () {
-                await this.balanceSheet.setBalance(user, 70 * 10 ** 18, { from })
-                const balance = await this.balanceSheet.balanceOf(user)
-                assert.equal(balance, 70 * 10 ** 18)
-            })
-
-            it('reverts subBalance if insufficient funds', async function () {
-                await expectThrow(this.balanceSheet.subBalance(user, 170 * 10 ** 18, { from }))
+                it('reverts all calls', async function () {
+                    await expectRevert(this.balanceSheet.addBalance(user, 70 * 10 ** 18, { from }))
+                    await expectRevert(this.balanceSheet.subBalance(user, 70 * 10 ** 18, { from }))
+                    await expectRevert(this.balanceSheet.setBalance(user, 70 * 10 ** 18, { from }))
+                })
             })
             
 

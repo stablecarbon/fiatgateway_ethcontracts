@@ -1,8 +1,8 @@
 pragma solidity ^0.4.23;
 
 import 'openzeppelin-solidity/contracts/AddressUtils.sol';
+import './dataStorage/MutableRegulatorStorage.sol';
 import "openzeppelin-solidity/contracts/ownership/Ownable.sol";
-import './dataStorage/RegulatorStorageState.sol';
 
 
 /**
@@ -13,7 +13,7 @@ import './dataStorage/RegulatorStorageState.sol';
  * for regulatory compliance.
  *
  */
-contract Regulator is RegulatorStorageState, Ownable {
+contract Regulator is Ownable, MutableRegulatorStorage {
 
 
     /** 
@@ -38,15 +38,15 @@ contract Regulator is RegulatorStorageState, Ownable {
     event SetBlacklistSpender(address indexed who);
 
 
-    // constructor (address regulatorStorage) RegulatorStorageConsumer(regulatorStorage) public {
-    // }
+    constructor (address permissions, address validators) MutableRegulatorStorage(permissions, validators) public {
+    }
 
     /**
     * @notice Adds a validator to the regulator entity.
     * @param _who New validator.
     */
     function addValidator(address _who) public onlyOwner {
-        _validators.addValidator(_who);
+        validators.addValidator(_who);
     }
 
     /**
@@ -54,7 +54,7 @@ contract Regulator is RegulatorStorageState, Ownable {
     * @param _who Validator to remove.
     */
     function removeValidator(address _who) public onlyOwner {
-        _validators.removeValidator(_who);
+        validators.removeValidator(_who);
     }
 
     /** Returns whether or not a user is a validator.
@@ -62,7 +62,7 @@ contract Regulator is RegulatorStorageState, Ownable {
      * @return `true` if the user is a validator, `false` otherwise.
      */
     function isValidator(address _who) public view returns (bool) {
-        return _validators.isValidator(_who);
+        return validators.isValidator(_who);
     }
 
     /**
@@ -70,8 +70,8 @@ contract Regulator is RegulatorStorageState, Ownable {
     * @param _who The address of the account that we are setting permissions for.
     */
     function setMinter(address _who) public onlyValidator {
-        require(isPermission(_permissions.MINT_SIG()), "Minting not supported by token");
-        setUserPermission(_who, _permissions.MINT_SIG());
+        require(isPermission(permissions.MINT_SIG()), "Minting not supported by token");
+        setUserPermission(_who, permissions.MINT_SIG());
         emit SetMinter(_who);
     }
     
@@ -81,8 +81,8 @@ contract Regulator is RegulatorStorageState, Ownable {
     * @param _who The address of the account that we are removing permissions for.
     */
     function removeMinter(address _who) public onlyValidator {
-        require(isPermission(_permissions.MINT_SIG()), "Minting not supported by token");
-        removeUserPermission(_who, _permissions.MINT_SIG());
+        require(isPermission(permissions.MINT_SIG()), "Minting not supported by token");
+        removeUserPermission(_who, permissions.MINT_SIG());
     }
 
     /** Returns whether or not a user is a minter.
@@ -90,7 +90,7 @@ contract Regulator is RegulatorStorageState, Ownable {
      * @return `true` if the user is a minter, `false` otherwise.
      */
     function isMinter(address _who) public view returns (bool) {
-        return hasUserPermission(_who, _permissions.MINT_SIG());
+        return hasUserPermission(_who, permissions.MINT_SIG());
     }
 
     /**
@@ -98,8 +98,8 @@ contract Regulator is RegulatorStorageState, Ownable {
     * @param _who The address of the account that we are setting permissions for.
     */
     function setBlacklistSpender(address _who) public onlyValidator {
-        require(isPermission(_permissions.APPROVE_BLACKLISTED_ADDRESS_SPENDER_SIG()), "Blacklist spending not supported by token");
-        setUserPermission(_who, _permissions.APPROVE_BLACKLISTED_ADDRESS_SPENDER_SIG());
+        require(isPermission(permissions.APPROVE_BLACKLISTED_ADDRESS_SPENDER_SIG()), "Blacklist spending not supported by token");
+        setUserPermission(_who, permissions.APPROVE_BLACKLISTED_ADDRESS_SPENDER_SIG());
         emit SetBlacklistSpender(_who);
     }
     
@@ -108,8 +108,8 @@ contract Regulator is RegulatorStorageState, Ownable {
     * @param _who The address of the account that we are removing permissions for.
     */
     function removeBlacklistSpender(address _who) public onlyValidator {
-        require(isPermission(_permissions.APPROVE_BLACKLISTED_ADDRESS_SPENDER_SIG()), "Blacklist spending not supported by token");
-        removeUserPermission(_who, _permissions.APPROVE_BLACKLISTED_ADDRESS_SPENDER_SIG());
+        require(isPermission(permissions.APPROVE_BLACKLISTED_ADDRESS_SPENDER_SIG()), "Blacklist spending not supported by token");
+        removeUserPermission(_who, permissions.APPROVE_BLACKLISTED_ADDRESS_SPENDER_SIG());
     }
 
     /** Returns whether or not a user is a blacklist spender.
@@ -117,7 +117,7 @@ contract Regulator is RegulatorStorageState, Ownable {
      * @return `true` if the user is a blacklist spender, `false` otherwise.
      */
     function isBlacklistSpender(address _who) public view returns (bool) {
-        return hasUserPermission(_who, _permissions.APPROVE_BLACKLISTED_ADDRESS_SPENDER_SIG());
+        return hasUserPermission(_who, permissions.APPROVE_BLACKLISTED_ADDRESS_SPENDER_SIG());
     }
 
     /**
@@ -125,8 +125,8 @@ contract Regulator is RegulatorStorageState, Ownable {
     * @param _who The address of the account that we are setting permissions for.
     */
     function setBlacklistDestroyer(address _who) public onlyValidator {
-        require(isPermission(_permissions.DESTROY_BLACKLISTED_TOKENS_SIG()), "Blacklist token destruction not supported by token");
-        setUserPermission(_who, _permissions.DESTROY_BLACKLISTED_TOKENS_SIG());
+        require(isPermission(permissions.DESTROY_BLACKLISTED_TOKENS_SIG()), "Blacklist token destruction not supported by token");
+        setUserPermission(_who, permissions.DESTROY_BLACKLISTED_TOKENS_SIG());
         emit SetBlacklistDestroyer(_who);
     }
     
@@ -136,8 +136,8 @@ contract Regulator is RegulatorStorageState, Ownable {
     * @param _who The address of the account that we are removing permissions for.
     */
     function removeBlacklistDestroyer(address _who) public onlyValidator {
-        require(isPermission(_permissions.DESTROY_BLACKLISTED_TOKENS_SIG()), "Blacklist token destruction not supported by token");
-        removeUserPermission(_who, _permissions.DESTROY_BLACKLISTED_TOKENS_SIG());
+        require(isPermission(permissions.DESTROY_BLACKLISTED_TOKENS_SIG()), "Blacklist token destruction not supported by token");
+        removeUserPermission(_who, permissions.DESTROY_BLACKLISTED_TOKENS_SIG());
     }
 
     /** Returns whether or not a user is a blacklist destroyer.
@@ -145,7 +145,7 @@ contract Regulator is RegulatorStorageState, Ownable {
      * @return `true` if the user is a blacklist destroyer, `false` otherwise.
      */
     function isBlacklistDestroyer(address _who) public view returns (bool) {
-        return hasUserPermission(_who, _permissions.DESTROY_BLACKLISTED_TOKENS_SIG());
+        return hasUserPermission(_who, permissions.DESTROY_BLACKLISTED_TOKENS_SIG());
     }
 
     /**
@@ -153,10 +153,10 @@ contract Regulator is RegulatorStorageState, Ownable {
     * @param _who The address of the account that we are setting permissions for.
     */
     function setWhitelistedUser(address _who) public onlyValidator {
-        require(isPermission(_permissions.BURN_SIG()), "Burn method not supported by token");
-        require(isPermission(_permissions.BLACKLISTED_SIG()), "Self-destruct method not supported by token");
-        setUserPermission(_who, _permissions.BURN_SIG());
-        removeUserPermission(_who, _permissions.BLACKLISTED_SIG());
+        require(isPermission(permissions.BURN_SIG()), "Burn method not supported by token");
+        require(isPermission(permissions.BLACKLISTED_SIG()), "Self-destruct method not supported by token");
+        setUserPermission(_who, permissions.BURN_SIG());
+        removeUserPermission(_who, permissions.BLACKLISTED_SIG());
         emit SetWhitelistedUser(_who);
     }
 
@@ -166,10 +166,10 @@ contract Regulator is RegulatorStorageState, Ownable {
     * @param _who The address of the account that we are setting permissions for.
     */
     function setBlacklistedUser(address _who) public onlyValidator {
-        require(isPermission(_permissions.BURN_SIG()), "Burn method not supported by token");
-        require(isPermission(_permissions.BLACKLISTED_SIG()), "Self-destruct method not supported by token");
-        removeUserPermission(_who, _permissions.BURN_SIG());
-        setUserPermission(_who, _permissions.BLACKLISTED_SIG());
+        require(isPermission(permissions.BURN_SIG()), "Burn method not supported by token");
+        require(isPermission(permissions.BLACKLISTED_SIG()), "Self-destruct method not supported by token");
+        removeUserPermission(_who, permissions.BURN_SIG());
+        setUserPermission(_who, permissions.BLACKLISTED_SIG());
         emit SetBlacklistedUser(_who);
     }
 
@@ -179,10 +179,10 @@ contract Regulator is RegulatorStorageState, Ownable {
     * @param _who The address of the account that we are setting permissions for.
     */
     function setNonlistedUser(address _who) public onlyValidator {
-        require(isPermission(_permissions.BURN_SIG()), "Burn method not supported by token");
-        require(isPermission(_permissions.BLACKLISTED_SIG()), "Self-destruct method not supported by token");
-        removeUserPermission(_who, _permissions.BURN_SIG());
-        removeUserPermission(_who, _permissions.BLACKLISTED_SIG());
+        require(isPermission(permissions.BURN_SIG()), "Burn method not supported by token");
+        require(isPermission(permissions.BLACKLISTED_SIG()), "Self-destruct method not supported by token");
+        removeUserPermission(_who, permissions.BURN_SIG());
+        removeUserPermission(_who, permissions.BLACKLISTED_SIG());
         emit SetNonlistedUser(_who);
     }
 
@@ -191,7 +191,7 @@ contract Regulator is RegulatorStorageState, Ownable {
      * @return `true` if the user is whitelisted, `false` otherwise.
      */
     function isWhitelistedUser(address _who) public view returns (bool) {
-        return (hasUserPermission(_who, _permissions.BURN_SIG()) && !hasUserPermission(_who, _permissions.BLACKLISTED_SIG()));
+        return (hasUserPermission(_who, permissions.BURN_SIG()) && !hasUserPermission(_who, permissions.BLACKLISTED_SIG()));
     }
 
     /** Returns whether or not a user is blacklisted.
@@ -199,7 +199,7 @@ contract Regulator is RegulatorStorageState, Ownable {
      * @return `true` if the user is blacklisted, `false` otherwise.
      */
     function isBlacklistedUser(address _who) public view returns (bool) {
-        return (!hasUserPermission(_who, _permissions.BURN_SIG()) && hasUserPermission(_who, _permissions.BLACKLISTED_SIG()));
+        return (!hasUserPermission(_who, permissions.BURN_SIG()) && hasUserPermission(_who, permissions.BLACKLISTED_SIG()));
     }
 
     /** Returns whether or not a user is nonlisted.
@@ -207,7 +207,7 @@ contract Regulator is RegulatorStorageState, Ownable {
      * @return `true` if the user is nonlisted, `false` otherwise.
      */
     function isNonlistedUser(address _who) public view returns (bool) {
-        return (!hasUserPermission(_who, _permissions.BURN_SIG()) && !hasUserPermission(_who, _permissions.BLACKLISTED_SIG()));
+        return (!hasUserPermission(_who, permissions.BURN_SIG()) && !hasUserPermission(_who, permissions.BLACKLISTED_SIG()));
     }
         
     /**
@@ -216,7 +216,7 @@ contract Regulator is RegulatorStorageState, Ownable {
     * @param _methodsignature The signature of the method that the user is getting permission to run.
     */
     function setUserPermission(address _who, bytes4 _methodsignature) public onlyValidator {
-        _permissions.setUserPermission(_who, _methodsignature);
+        permissions.setUserPermission(_who, _methodsignature);
     }
  
     /**
@@ -225,7 +225,7 @@ contract Regulator is RegulatorStorageState, Ownable {
     * @param _methodsignature The signature of the method that the user will no longer be able to execute.
     */
     function removeUserPermission(address _who, bytes4 _methodsignature) public onlyValidator {
-        _permissions.removeUserPermission(_who, _methodsignature);
+        permissions.removeUserPermission(_who, _methodsignature);
     }
 
     /**
@@ -235,7 +235,7 @@ contract Regulator is RegulatorStorageState, Ownable {
     * @return A boolean indicating whether the user has permission or not
     */
     function hasUserPermission(address _who, bytes4 _methodsignature) public view returns (bool) {
-        return _permissions.hasUserPermission(_who,_methodsignature);
+        return permissions.hasUserPermission(_who,_methodsignature);
     }
 
     /**
@@ -251,14 +251,14 @@ contract Regulator is RegulatorStorageState, Ownable {
         string _permissionDescription,
         string _contractName) 
     onlyValidator public {
-        _permissions.addPermission(_methodsignature, _permissionName, _permissionDescription, _contractName);
+        permissions.addPermission(_methodsignature, _permissionName, _permissionDescription, _contractName);
     }
 
     function getPermission(bytes4 _methodsignature) public view returns
             (string name, 
             string description, 
             string contract_name) {
-        return (_permissions.permissions(_methodsignature));
+        return (permissions.permissions(_methodsignature));
     }
 
     /**
@@ -266,7 +266,7 @@ contract Regulator is RegulatorStorageState, Ownable {
     * @param _methodsignature Signature of the method that this permission controls.
     */
     function removePermission(bytes4 _methodsignature) public onlyValidator {
-        _permissions.removePermission(_methodsignature);
+        permissions.removePermission(_methodsignature);
     }
 
     /**
@@ -275,6 +275,6 @@ contract Regulator is RegulatorStorageState, Ownable {
     * @return A boolean indicating whether the permission is valid or not
     */
     function isPermission(bytes4 _methodsignature) public view returns (bool) {
-        return _permissions.isPermission(_methodsignature);
+        return permissions.isPermission(_methodsignature);
     }
 }

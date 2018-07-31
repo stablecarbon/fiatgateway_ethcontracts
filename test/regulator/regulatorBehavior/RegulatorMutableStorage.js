@@ -1,8 +1,6 @@
 const { expectRevert, ZERO_ADDRESS, RANDOM_ADDRESS } = require('../../helpers/common');
 
-const { PermissionSheet, ValidatorSheet } = require('../../helpers/artifacts');
-
-const { MutableStorageRegulatorMock } = require('../../helpers/mocks'); 
+const { PermissionSheet, ValidatorSheet, Regulator } = require('../../helpers/artifacts');
 
 function regulatorMutableStorageTests(owner, validator) {
 
@@ -18,16 +16,15 @@ function regulatorMutableStorageTests(owner, validator) {
             this.permissionSheet2 = await PermissionSheet.new({from:owner})
             this.validatorSheet2 = await ValidatorSheet.new({from:owner})
 
-            this.sheet = await MutableStorageRegulatorMock.new(this.permissionSheetInitial.address, this.validatorSheetInitial.address, { from:owner })
-
+            this.sheet = await Regulator.new(this.permissionSheetInitial.address, this.validatorSheetInitial.address, { from:owner })
 
         });
 
         describe('Default behavior', function () {
 
             it('Initial storage is empty RegulatorStorage', async function () {
-                const initialPermissionStorage = await this.sheet._permissions()
-                const initialValidatorStorage = await this.sheet._validators()
+                const initialPermissionStorage = await this.sheet.permissions()
+                const initialValidatorStorage = await this.sheet.validators()
 
                 assert.equal(initialPermissionStorage, this.permissionSheetInitial.address);
                 assert.equal(initialValidatorStorage, this.validatorSheetInitial.address);
@@ -52,10 +49,14 @@ function regulatorMutableStorageTests(owner, validator) {
                     // Can only read one logs per scope?
                     await this.sheet.setValidatorStorage(this.validatorSheet.address, {from})
 
+                    await this.permissionSheet.transferOwnership(this.sheet.address, {from:owner})
+                    await this.validatorSheet.transferOwnership(this.sheet.address, {from:owner})
+
+
                 })
                 it('sets new permission and validator storage', async function () {
-                    const newPermissionStorage = await this.sheet._permissions()
-                    const newValidatorStorage = await this.sheet._validators()
+                    const newPermissionStorage = await this.sheet.permissions()
+                    const newValidatorStorage = await this.sheet.validators()
                     assert.equal(this.permissionSheet.address, newPermissionStorage)
                     assert.equal(this.validatorSheet.address, newValidatorStorage)
 
@@ -141,6 +142,7 @@ function regulatorMutableStorageTests(owner, validator) {
                     describe('replacing validator storage to one with a validator', function () {
                         beforeEach(async function () {
                             await this.sheet.setValidatorStorage(this.validatorSheet2.address, {from})
+                            await this.validatorSheet2.transferOwnership(this.sheet.address, {from})
                             await this.sheet.addValidator(validator, {from})
                         })
                         it('new sheet has the validator', async function () {

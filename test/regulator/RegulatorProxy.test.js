@@ -2,7 +2,7 @@ const { CommonVariables, ZERO_ADDRESS, expectRevert } = require('../helpers/comm
 
 const { RegulatorProxy, Regulator, PermissionSheet, ValidatorSheet } = require('../helpers/artifacts');
 
-const { RegulatorMock, RegulatorFullyLoadedMock } = require('../helpers/mocks');
+const { PermissionSheetMock, ValidatorSheetMock } = require('../helpers/mocks');
 
 contract('RegulatorProxy', _accounts => {
     const commonVars = new CommonVariables(_accounts);
@@ -16,12 +16,16 @@ contract('RegulatorProxy', _accounts => {
         this.proxyPermissionStorage = (await PermissionSheet.new({ from:owner })).address
         this.proxyValidatorStorage = (await ValidatorSheet.new({ from:owner })).address
 
+        // Regulator logic contract storages
+        this.regulator_logic_v0_permission_storage = (await PermissionSheet.new({ from:owner })).address
+        this.regulator_logic_v0_validator_storage = (await ValidatorSheet.new({ from:owner })).address
+
         this.regulator_logic_v1_permission_storage = (await PermissionSheet.new({ from:owner })).address
         this.regulator_logic_v1_validator_storage = (await ValidatorSheet.new({ from:owner })).address
         
         // Upgradeable logic contracts
-        this.impl_v0 = (await Regulator.new({ from:owner })).address
-        this.impl_v1 = (await RegulatorMock.new(this.regulator_logic_v1_permission_storage, this.regulator_logic_v1_validator_storage, { from:owner })).address
+        this.impl_v0 = (await Regulator.new(this.regulator_logic_v0_permission_storage, this.regulator_logic_v0_validator_storage, { from:owner })).address
+        this.impl_v1 = (await Regulator.new(this.regulator_logic_v1_permission_storage, this.regulator_logic_v1_validator_storage, { from:owner })).address
 
         // Setting up Proxy initially at version 0 with data storage
         this.proxy = await RegulatorProxy.new(this.impl_v0, this.proxyPermissionStorage, this.proxyValidatorStorage, { from:proxyOwner })
@@ -53,8 +57,8 @@ contract('RegulatorProxy', _accounts => {
 
             })
             it('sets regulator proxy storage', async function () {
-                assert.equal(await this.proxy._permissions(), this.newProxyPermissionStorage)
-                assert.equal(await this.proxy._validators(), this.newProxyValidatorStorage)
+                assert.equal(await this.proxy.permissions(), this.newProxyPermissionStorage)
+                assert.equal(await this.proxy.validators(), this.newProxyValidatorStorage)
 
             })
             it('emits a ChangedPermissionsStorage event', async function () {
@@ -63,25 +67,9 @@ contract('RegulatorProxy', _accounts => {
                 assert.equal(this.newAddress, this.newProxyPermissionStorage)
             })
             it('does not change regulator implementation storages', async function () {
-                assert.equal(await this.logic_v0._permissions(), ZERO_ADDRESS)
-                assert.equal(await this.logic_v0._validators(), ZERO_ADDRESS)
+                assert.equal(await this.logic_v0.permissions(), this.regulator_logic_v0_permission_storage)
+                assert.equal(await this.logic_v0.validators(), this.regulator_logic_v0_validator_storage)
 
-            })
-            describe('set storages to another one with all permissions set', function () {
-                beforeEach(async function () {
-                    this.regulatorProxy = await Regulator.at(this.proxyAddress)
-                })
-
-                it('before setting storage, Regulator proxy has no permissions', async function () {
-                    assert(!(await this.regulatorProxy.isPermission(this.MINT_SIG)))
-                })
-                it('after setting storage, Regulator proxy has new storage with all permissions set', async function () {
-                    this.regulatorWithPermissions = (await RegulatorFullyLoadedMock.new(validator, {from})).address
-                    await this.proxy.setPermissionStorage(await Regulator.at(this.regulatorWithPermissions)._permissions(), {from})
-                    await this.proxy.setValidatorStorage(await Regulator.at(this.regulatorWithPermissions)._validators(), {from})
-
-                    assert(await this.regulatorProxy.isPermission(this.MINT_SIG))
-                })
             })
 
         })
@@ -123,21 +111,28 @@ contract('RegulatorProxy', _accounts => {
             this.regulatorProxy = Regulator.at(this.proxyAddress)
             this.logic_v0 = Regulator.at(this.impl_v0)
 
+            this.regulatorProxyStorage = ValidatorSheet.at(await this.regulatorProxy.validators());
+            this.logicStorage = ValidatorSheet.at(await this.logic_v0.validators());
+
         })
         describe('call to proxy to addValidator', function () {
 
-            it('logic_v0 has validator storage set to 0x000... and reverts', async function () {
-                await expectRevert(this.logic_v0.addValidator(validator, {from:owner}))
+            beforeEach(async function() {
+                // How to use proxy: 
+                // (1) proxy storage must transfer ownership to proxy
+                await this.regulatorProxyStorage.transferOwnership(await this.regulatorProxy.address, {from:owner})
             })
-            it('proxy has its own storage and can set a validator', async function () {
+            it('proxy has its own storage and can set a validator but does NOT set logic contract storage', async function () {
+
                 assert(!(await this.regulatorProxy.isValidator(validator)))
                 await this.regulatorProxy.addValidator(validator, {from:proxyOwner})
                 assert(await this.regulatorProxy.isValidator(validator))
+                assert(!(await this.logic_v0.isValidator(validator)))
             })
         })
     })
 
-    describe('upgradeTo v1 (immutable RegulatorStorage location)', function () {
+    describe('upgradeTo v1', function () {
 
         describe('owner calls upgradeTo', function () {
             const from = proxyOwner
@@ -163,26 +158,41 @@ contract('RegulatorProxy', _accounts => {
                 assert.equal(this.newImplementation, this.impl_v1)
             })
             describe('proxy storages do not change even though logic storages changes', function () {
-                it('V0 logic has storage set to 0x0000...', async function () {
-                    assert.equal(await this.logic_v0._permissions(), ZERO_ADDRESS)
-                    assert.equal(await this.logic_v0._validators(), ZERO_ADDRESS)
+                it('V0 logic has storage unchanged', async function () {
+                    assert.equal(await this.logic_v0.permissions(), this.regulator_logic_v0_permission_storage)
+                    assert.equal(await this.logic_v0.validators(), this.regulator_logic_v0_validator_storage)
                 })
-                it('V1 logic has its own storages', async function () {
-                    assert.equal(await this.logic_v1._permissions(), this.regulator_logic_v1_permission_storage)
-                    assert.equal(await this.logic_v1._validators(), this.regulator_logic_v1_validator_storage)
+                it('V1 logic has storage unchanged', async function () {
+                    assert.equal(await this.logic_v1.permissions(), this.regulator_logic_v1_permission_storage)
+                    assert.equal(await this.logic_v1.validators(), this.regulator_logic_v1_validator_storage)
 
                 })
                 it('proxy storage remains the same', async function () {
-                    assert.equal(await this.proxy._permissions(), this.proxyPermissionStorage)
-                    assert.equal(await this.proxy._validators(), this.proxyValidatorStorage)
+                    assert.equal(await this.proxy.permissions(), this.proxyPermissionStorage)
+                    assert.equal(await this.proxy.validators(), this.proxyValidatorStorage)
 
                 })
             })
             describe('Calls proxy', function () {
 
+                beforeEach(async function () {
+                    this.regulatorProxyStorage = ValidatorSheet.at(await this.regulatorProxy.validators())
+                    this.regulatorProxyStorage2 = PermissionSheet.at(await this.regulatorProxy.permissions())
+                    await this.regulatorProxyStorage.transferOwnership(this.regulatorProxy.address, {from:owner})
+                    await this.regulatorProxyStorage2.transferOwnership(this.regulatorProxy.address, {from:owner})
+
+                    // add validator to logic for comparison
+                    this.v1_validator = ValidatorSheet.at(await this.logic_v1.validators())
+                    this.v1_permission = PermissionSheet.at(await this.logic_v1.permissions())
+                    await this.v1_validator.transferOwnership(this.logic_v1.address, {from:owner})
+                    await this.v1_permission.transferOwnership(this.logic_v1.address, {from:owner})
+
+                })
                 describe('addValidator', function () {
 
                     describe('proxyOwner calls', function () {
+
+                        const from = proxyOwner
 
                         it('adds validator to proxy storage and NOT logic storage', async function () {
 
@@ -207,7 +217,7 @@ contract('RegulatorProxy', _accounts => {
                 describe('removeValidator', function () {
 
                     beforeEach(async function () {
-                        await this.regulatorProxy.addValidator(validator, {from})
+                        await this.regulatorProxy.addValidator(validator, {from:proxyOwner})
                         await this.logic_v1.addValidator(validator, {from:owner})
                     })
                     describe('proxyOwner calls', function () {
@@ -234,7 +244,7 @@ contract('RegulatorProxy', _accounts => {
                 describe('addPermission', function () {
 
                     beforeEach(async function () {
-                        await this.regulatorProxy.addValidator(validator, { from })
+                        await this.regulatorProxy.addValidator(validator, { from:proxyOwner })
                     })
                     describe('validator calls', function () {
 
@@ -266,7 +276,7 @@ contract('RegulatorProxy', _accounts => {
                 describe('removePermission', function () {
 
                     beforeEach(async function () {
-                        await this.regulatorProxy.addValidator(validator, {from})
+                        await this.regulatorProxy.addValidator(validator, {from:proxyOwner})
                         await this.regulatorProxy.addPermission(this.MINT_SIG, '', '', '', {from:validator})
                         await this.logic_v1.addValidator(validator, {from:owner})
                         await this.logic_v1.addPermission(this.MINT_SIG, '', '', '', {from:validator})
@@ -296,7 +306,7 @@ contract('RegulatorProxy', _accounts => {
                 describe('setUserPermission', function () {
 
                     beforeEach(async function () {
-                        await this.regulatorProxy.addValidator(validator, {from})
+                        await this.regulatorProxy.addValidator(validator, {from:proxyOwner})
                         await this.regulatorProxy.addPermission(this.MINT_SIG, '', '', '', {from:validator})
                         await this.logic_v1.addValidator(validator, {from:owner})
                         await this.logic_v1.addPermission(this.MINT_SIG, '', '', '', {from:validator})
@@ -323,7 +333,7 @@ contract('RegulatorProxy', _accounts => {
                 describe('removeUserPermission', function () {
 
                     beforeEach(async function () {
-                        await this.regulatorProxy.addValidator(validator, {from})
+                        await this.regulatorProxy.addValidator(validator, {from:proxyOwner})
                         await this.regulatorProxy.addPermission(this.MINT_SIG, '', '', '', {from:validator})
                         await this.logic_v1.addValidator(validator, {from:owner})
                         await this.logic_v1.addPermission(this.MINT_SIG, '', '', '', {from:validator})
@@ -352,7 +362,7 @@ contract('RegulatorProxy', _accounts => {
 
                 describe('Regulator events emit', function () {
                     beforeEach(async function () {
-                        await this.regulatorProxy.addValidator(validator, {from})
+                        await this.regulatorProxy.addValidator(validator, {from:proxyOwner})
                         await this.regulatorProxy.addPermission(this.MINT_SIG, '', '', '', {from:validator})
                     })
                     describe('setMinter', function () {

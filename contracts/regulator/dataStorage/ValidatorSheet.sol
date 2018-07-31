@@ -1,11 +1,13 @@
 pragma solidity ^0.4.23;
 
+import "openzeppelin-solidity/contracts/ownership/Ownable.sol";
+
 /**
  * @title ValidatorSheet
  * @dev Stores all validators capable of adding permissions and setting user permissions
  *
  */
-contract ValidatorSheet {
+contract ValidatorSheet is Ownable{
 	
     /** 
         Mappings 
@@ -21,7 +23,7 @@ contract ValidatorSheet {
     * @notice add a Validator
     * @param _validator Address of validator to add
     */
-    function addValidator(address _validator) public {
+    function addValidator(address _validator) onlyOwner public {
         _addValidator(_validator);
     }
     
@@ -34,7 +36,7 @@ contract ValidatorSheet {
     * @notice remove a Validator
     * @param _validator Address of validator to remove
     */
-    function removeValidator(address _validator) public {
+    function removeValidator(address _validator) onlyOwner public {
         isValidator[_validator] = false;
         emit ValidatorRemoved(_validator);
     }

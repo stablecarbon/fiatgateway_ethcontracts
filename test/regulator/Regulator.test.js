@@ -1,6 +1,6 @@
 const { CommonVariables, ZERO_ADDRESS, expectRevert } = require('../helpers/common');
 
-const { Regulator } = require('../helpers/artifacts');
+const { Regulator, PermissionSheet, ValidatorSheet } = require('../helpers/artifacts');
 
 const { regulatorStorageBasicInteractionsTests } = require('./regulatorBehavior/RegulatorStorageBasicInteractions.js');
 
@@ -17,21 +17,18 @@ contract('Regulator', _accounts => {
 
     describe('Regulator logic default behavior', function () {
         beforeEach(async function () {
-            this.regulatorDefault = await Regulator.new({from:owner})
+            this.permissions = await PermissionSheet.new({ from:owner })
+            this.validators = await ValidatorSheet.new({ from:owner })
+            this.regulatorDefault = await Regulator.new(this.permissions.address, this.validators.address, {from:owner})
 
             this.testPermission = 0x12345678;
         })
-        it('Regulator has no storages set on construction', async function () {
+        it('Regulator has storages set on construction', async function () {
             
-            assert.equal(await this.regulatorDefault._permissions(), ZERO_ADDRESS);
-            assert.equal(await this.regulatorDefault._validators(), ZERO_ADDRESS);
+            assert.equal(await this.regulatorDefault.permissions(), this.permissions.address);
+            assert.equal(await this.regulatorDefault.validators(), this.validators.address);
 
         }) 
-        it('Call to modify storages revert because no storages are set', async function () {
-            
-            await expectRevert(this.regulatorDefault.addValidator(validator, {from:owner}))
-            await expectRevert(this.regulatorDefault.addPermission(this.testPermission,'','','', {from:validator}))
-        })
         
     })
 

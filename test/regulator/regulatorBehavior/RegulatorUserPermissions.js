@@ -1,8 +1,8 @@
 const { expectRevert } = require('../../helpers/common');
 
-const { RegulatorMock, RegulatorFullyLoadedMock } = require('../../helpers/mocks');
+const { ValidatorSheetMock, PermissionSheetMock } = require('../../helpers/mocks');
 
-const { PermissionSheet, ValidatorSheet } = require('../../helpers/artifacts');
+const { Regulator } = require('../../helpers/artifacts');
 
 /**
 *
@@ -17,8 +17,13 @@ function regulatorUserPermissionsTests(owner, user, validator) {
             beforeEach(async function() {
 
                 // Instantiate RegulatorsMock that comes pre-loaded with all function permissions and one validator
-                this.permissionSheet = await PermissionSheet.new( {from:owner })
-                this.sheet = await RegulatorFullyLoadedMock.new(validator, {from:owner})
+                this.permissionSheet = await PermissionSheetMock.new( {from:owner })
+                this.validatorSheet = await ValidatorSheetMock.new(validator, {from:owner} )
+
+                this.sheet = await Regulator.new(this.permissionSheet.address, this.validatorSheet.address, {from:owner})
+
+                await this.permissionSheet.transferOwnership(this.sheet.address, {from:owner})
+                await this.validatorSheet.transferOwnership(this.sheet.address, {from:owner})
 
                 // storing method signatures for testing convenience
                 this.MINT_SIG = await this.permissionSheet.MINT_SIG();
