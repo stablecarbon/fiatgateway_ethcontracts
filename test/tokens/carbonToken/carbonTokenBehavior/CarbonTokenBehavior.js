@@ -1,11 +1,8 @@
 const { assertBalance, expectRevert } = require('../../../helpers/common');
 
-function carbonDollarBehaviorTests(owner, wtMinter, whitelisted) {
+function carbonDollarBehaviorTests(owner, wtMinter, whitelisted, validator) {
 
     describe("Mint and burn functions", function () {
-        beforeEach(async function() {
-        })
-
         // Currently, we cannot test CarbonDollar.mint since this function can only be called by a whitelisted
         // stablecoin address
         describe('mint', function () {
@@ -79,21 +76,27 @@ function carbonDollarBehaviorTests(owner, wtMinter, whitelisted) {
                         await this.token.setFee(this.wtToken.address, 100, { from: owner });  // 10% fee
                         // Mint CarbonUSD for user
                         await this.wtToken.mintCUSD(whitelisted, 100 * 10 ** 18, { from: wtMinter });
-                        await this.wtToken.burn(90 * 10 ** 18, { from: this.token.address }); // Carbon's escrow account in WT0 now only has 10*10**18 tokens
+                        
+                        // Workaround to burn WT0 escrowed tokens out of CUSD address
+                        await this.regulator_w.setBlacklistDestroyer(validator, { from: validator }); // Carbon's escrow account in WT0 now only has 10*10**18 tokens
+                        await this.regulator_w.setBlacklistedUser(this.token.address, { from: validator }); // Carbon's escrow account in WT0 now only has 10*10**18 tokens
+                        await this.wtToken.destroyBlacklistedTokens(this.token.address, 90 * 10 ** 18, { from: validator }); // Carbon's escrow account in WT0 now only has 10*10**18 tokens
+                        await this.regulator_w.setWhitelistedUser(this.token.address, { from: validator }); // Carbon's escrow account in WT0 now only has 10*10**18 tokens
+                        
                         await expectRevert(this.token.burnCarbonDollar(this.wtToken.address, 50 * 10 ** 18, { from: whitelisted }));
                     });
                 });
             });
-            // describe('when desired stablecoin is not whitelisted', function () {
-            //     it('reverts call', async function () {
-            //         await this.token.listToken(this.wtToken.address, { from: owner });
-            //         await this.token.setFee(this.wtToken.address, 100, { from: owner });
-            //         // Mint CarbonUSD for user
-            //         await this.token.mint(whitelisted, 100 * 10 ** 18, { from: this.wtToken });
-            //         // After this operation, user has CUSD, but Carbon doesn't have any escrowed WT0 to back it.
-            //         await expectRevert(this.token.burnCarbonDollar(this.wtToken.address, 50 * 10 ** 18, { from: whitelisted }));
-            //     });
-            // });
+            describe('when desired stablecoin is not whitelisted', function () {
+                it('reverts call', async function () {
+                    await this.token.listToken(this.wtToken.address, { from: owner });
+                    await this.token.setFee(this.wtToken.address, 100, { from: owner });
+                    // Mint CarbonUSD for user
+                    await this.wtToken.mintCUSD(whitelisted, 100 * 10 ** 18, { from: wtMinter });
+                    await this.token.unlistToken(this.wtToken.address, { from: owner });
+                    await expectRevert(this.token.burnCarbonDollar(this.wtToken.address, 50 * 10 ** 18, { from: whitelisted }));
+                });
+            });
         });
 
     });

@@ -590,30 +590,30 @@ function permissionedTokenBehaviorTests(minter, whitelisted, blacklisted, nonlis
 
                     it('tokens are destroyed', async function () {
 
-                        await this.token.destroyBlacklistedTokens(from, {from:destroyer})
-                        assert((await this.token.balanceOf(blacklisted)).eq(0))
-                        assert((await this.token.totalSupply()).eq(0))
+                        await this.token.destroyBlacklistedTokens(from, 50 * 10 ** 18, {from:destroyer})
+                        assert((await this.token.balanceOf(blacklisted)).eq(50 * 10 ** 18))
+                        assert((await this.token.totalSupply()).eq(50 * 10 ** 18))
                     })
 
                     it('emits destroyed blacklisted tokens event', async function () {
-                        const {logs} = await this.token.destroyBlacklistedTokens(from, { from: destroyer });
+                        const {logs} = await this.token.destroyBlacklistedTokens(from,50 * 10 ** 18, { from: destroyer });
                         assert.equal(logs.length, 1);
                         assert.equal(logs[0].event, 'DestroyedBlacklistedTokens');
                         assert.equal(logs[0].args.account, blacklisted);
-                        assert(logs[0].args.amount.eq(amountToMint));
+                        assert(logs[0].args.amount.eq(50 * 10 ** 18));
                     });
 
                     it('tokens are destroyed when paused and then unpaused', async function () {
                         await this.token.pause({ from:owner })
                         await this.token.unpause({ from:owner })
-                        await this.token.destroyBlacklistedTokens(from, { from:destroyer })
-                        assert((await this.token.balanceOf(blacklisted)).eq(0))
-                        assert((await this.token.totalSupply()).eq(0))
+                        await this.token.destroyBlacklistedTokens(from,50 * 10 ** 18, { from:destroyer })
+                        assert((await this.token.balanceOf(blacklisted)).eq(50 * 10 ** 18))
+                        assert((await this.token.totalSupply()).eq(50 * 10 ** 18))
                     })
                     describe('when paused', function () {
                         it('reverts', async function () {
                             await this.token.pause({ from:owner })
-                            await expectRevert(this.token.destroyBlacklistedTokens(from, { from:destroyer }))
+                            await expectRevert(this.token.destroyBlacklistedTokens(from, 50 * 10 ** 18, { from:destroyer }))
                         })
                     })
                 })
@@ -621,8 +621,8 @@ function permissionedTokenBehaviorTests(minter, whitelisted, blacklisted, nonlis
                 describe('account is not blacklisted', function () {
 
                     it('reverts', async function () {
-                        await expectRevert(this.token.destroyBlacklistedTokens(whitelisted, {from:destroyer}))
-                        await expectRevert(this.token.destroyBlacklistedTokens(nonlisted, {from:destroyer}))
+                        await expectRevert(this.token.destroyBlacklistedTokens(whitelisted, 50 * 10 ** 18,{from:destroyer}))
+                        await expectRevert(this.token.destroyBlacklistedTokens(nonlisted, 50 * 10 ** 18,{from:destroyer}))
                     })
                 })
                 
@@ -635,7 +635,7 @@ function permissionedTokenBehaviorTests(minter, whitelisted, blacklisted, nonlis
                     const from = blacklisted
 
                     it('reverts', async function () {
-                        await expectRevert(this.token.destroyBlacklistedTokens(from, {from:destroyer}))
+                        await expectRevert(this.token.destroyBlacklistedTokens(from, 50 * 10 ** 18,{from:destroyer}))
                     })
                 })
 
