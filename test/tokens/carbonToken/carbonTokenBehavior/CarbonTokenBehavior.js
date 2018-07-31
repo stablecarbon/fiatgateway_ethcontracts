@@ -3,9 +3,6 @@ const { assertBalance, expectRevert } = require('../../../helpers/common');
 function carbonDollarBehaviorTests(owner, wtMinter, whitelisted, validator) {
 
     describe("Mint and burn functions", function () {
-        beforeEach(async function() {
-        })
-
         // Currently, we cannot test CarbonDollar.mint since this function can only be called by a whitelisted
         // stablecoin address
         describe('mint', function () {
