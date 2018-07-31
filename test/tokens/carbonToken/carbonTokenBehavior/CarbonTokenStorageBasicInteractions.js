@@ -30,34 +30,39 @@ function carbonDollarStorageInteractions(owner, wtMinter) {
                     })
                 })
             });
-            // describe('setFee and getFee', function () {
-            //     it('sets fee for whitelisted token and gets updated fee', async function () {
-            //         await this.token.listToken(this.wtToken.address, {from: owner}); // Only whitelisted tokens may have a fee attached to them
-            //         await this.token.setFee(this.wtToken.address, 100, {from: owner});
-            //         assert.equal(await this.token.getFee(this.wtToken.address), 100);
-            //     });
-            // });
-            // describe('setDefaultFee', function () {
-            //     it('sets default fee', async function () {
-            //         await this.token.setDefaultFee(100, {from: owner});
-            //         assert.equal(await this.token.getDefaultFee(), 100);
-            //     });
-            // });
+            describe('setFee and getFee', function () {
+                it('sets fee for whitelisted token and gets updated fee', async function () {
+                    await this.token.listToken(this.wtToken.address, {from: owner}); // Only whitelisted tokens may have a fee attached to them
+                    await this.token.setFee(this.wtToken.address, 100, {from: owner});
+                    assert.equal(await this.token.getFee(this.wtToken.address), 100);
+                });
+                it('cannot set fee for non-whitelisted token', async function () {
+                    await expectRevert(this.token.setFee(this.wtToken.address, 100, {from:owner}))
+                })
+            });
+            describe('setDefaultFee', function () {
+                it('sets default fee', async function () {
+                    await this.token.setDefaultFee(100, {from: owner});
+                    assert.equal(await this.token.getDefaultFee(), 100);
+                });
+            });
         });
-        // describe('when sender is not owner', function () {
-        //     it('reverts all setter calls', async function () {
-        //         const feeSheet = FeeSheet.new({ from: this.token });
-        //         await expectRevert(this.token.setFeeSheet(feeSheet, { from: blacklisted }));
-        //         await expectRevert(this.token.setFee(this.wtToken.address, 100, { from: blacklisted }));
-        //         await expectRevert(this.token.setDefaultFee(100, { from: blacklisted }));
-        //     });
-        // });
-        // describe('computeStablecoinFee', function () {
-        //     it('computes fee for burning into stablecoin', async function () {
-        //         await this.token.setFee(this.wtToken.address, 100);
-        //         assert.equal(await this.token.stablecoinFees().fees(this.wtToken.address), 100);
-        //     });
-        // });
+        describe('when sender is not owner', function () {
+            const from = wtMinter
+            it('reverts', async function () {
+                this.newFeeSheet = await FeeSheet.new({ from:owner });
+                await expectRevert(this.token.setFeeSheet(this.newFeeSheet.address, { from }));
+                await expectRevert(this.token.setFee(this.wtToken.address, 100, { from }));
+                await expectRevert(this.token.setDefaultFee(100, { from }));
+            });
+        });
+        describe('computeStablecoinFee', function () {
+            it('computes fee for burning (for example) into stablecoin', async function () {
+                await this.token.listToken(this.wtToken.address, {from:owner})
+                await this.token.setFee(this.wtToken.address, 100, {from:owner});
+                assert.equal(await this.token.getFee(this.wtToken.address), 100);
+            });
+        });
     });
     describe('Stablecoin whitelist interactions', function () {
         describe('when sender is owner', function () {
@@ -88,33 +93,30 @@ function carbonDollarStorageInteractions(owner, wtMinter) {
             });
             describe('listToken', function () {
                 it('adds stablecoin to whitelist', async function () {
-                    await this.token.listToken(this.wtToken.address, { from: owner });
+                    await this.token.listToken(this.wtToken.address, {from:owner});
                     assert(await this.token.isWhitelisted(this.wtToken.address));
                 });
+                it('cannot add a non-contract address to whitelist', async function () {
+                    await expectRevert(this.token.listToken(owner, {from:owner}));
+                    await expectRevert(this.token.listToken(ZERO_ADDRESS, {from:owner}));
+
+                })
             });
-            // describe('unlistToken', function () {
-            //     it('removes stablecoin from whitelist', async function () {
-            //         await this.token.unlistToken(this.wtToken.address, { from: owner });
-            //         assert(!(await this.token.stablecoinWhitelist().isWhitelisted(this.wtToken.address)));
-            //     });
-            // });
+            describe('unlistToken', function () {
+                it('removes stablecoin from whitelist', async function () {
+                    await this.token.unlistToken(this.wtToken.address, { from: owner });
+                    assert(!(await this.token.isWhitelisted(this.wtToken.address)));
+                });
+            });
         });
-        // describe('when sender is not owner', function () {
-        //     it('reverts all calls', async function () {
-        //         await this.token.unlistToken(this.wtToken.address, { from: owner });
-        //         assert(!(await this.token.stablecoinWhitelist().isWhitelisted(this.wtToken.address)));
-        //     });
-        // });
-        // describe('isWhitelisted', function () {
-        //     it('correctly determines stablecoin is on whitelist', async function () {
-        //         await this.token.listToken(this.wtToken.address, { from: owner });
-        //         assert(await this.token.isWhitelisted(this.wtToken.address));
-        //     });
-        //     it('correctly determines stablecoin is not on whitelist', async function () {
-        //         await this.token.unlistToken(this.wtToken.address, { from: owner });
-        //         assert(!(await this.token.isWhitelisted(this.wtToken.address)));
-        //     });
-        // });
+        describe('when sender is not owner', function () {
+            const from = wtMinter
+            it('reverts all calls', async function () {
+                await expectRevert(this.token.listToken(this.wtToken.address, {from}))
+                await expectRevert(this.token.unlistToken(this.wtToken.address, {from}))
+            });
+        });
+
     });
 
 }

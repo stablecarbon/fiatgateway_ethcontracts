@@ -10,11 +10,6 @@ import "openzeppelin-solidity/contracts/ownership/Ownable.sol";
 *
 */
 contract MutableCarbonDollarStorage is Ownable, CarbonDollarStorage {
-	/**
-		Storage
-    */
-    FeeSheet public stablecoinFees;
-    StablecoinWhitelist public stablecoinWhitelist;
 
 	/**
         Events

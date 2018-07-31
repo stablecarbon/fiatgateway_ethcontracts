@@ -27,7 +27,7 @@ contract CarbonDollar is PermissionedToken, MutableCarbonDollarStorage {
      */
     function listToken(address _stablecoin) public onlyOwner {
         require(AddressUtils.isContract(_stablecoin));
-        stablecoinWhitelist.addStablecoin(_stablecoin); // add new stablecoin in whitelist mapping
+        stablecoinWhitelist.addStablecoin(_stablecoin); 
     }
 
     /**
