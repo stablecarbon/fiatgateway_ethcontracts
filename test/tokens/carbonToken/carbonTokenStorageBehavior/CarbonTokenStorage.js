@@ -78,6 +78,73 @@ function carbonTokenStorageTests(owner, tokenHolder, spender, user) {
                 })  
             })
 
+            describe('when the sender is not the owner', function () {
+                const from = tokenHolder
+
+                it('reverts all changeable calls', async function () {
+                    await expectRevert(this.feeSheet.setFee(RANDOM_ADDRESS, 1000, { from }))
+                    await expectRevert(this.feeSheet.setDefaultFee(1000, { from }))
+                    await expectRevert(this.feeSheet.removeFee(RANDOM_ADDRESS, { from }))
+                })
+                describe('still computes fee', async function () {
+                    describe('computeFee', function () {
+                        it('computes the fee given an amount and a fee percentage', async function () {
+                            assert.equal(await this.feeSheet.computeFee(1000, 100, { from }), 100) // 10.0% of 1000 is 100
+                        })
+                        it('computes the fee given an amount and a stablecoin', async function () {
+                            await this.feeSheet.setFee(RANDOM_ADDRESS, 100, { from:owner })
+                            assert.equal(await this.feeSheet.computeStablecoinFee(1000, RANDOM_ADDRESS, { from }), 100) // 10.0% of 1000 is 100
+                        })
+                    })
+                })
+            })
+
+        })
+
+        describe('StablecoinWhitelist CRUD tests', function () {
+
+            describe('when the sender is the owner', function () {
+                const from = owner
+
+                describe('addStablecoin', function () {
+                    it("adds the stablecoin to the whitelist", async function () {
+                        await this.stablecoinWhitelist.addStablecoin(RANDOM_ADDRESS, { from });
+                        assert(await this.stablecoinWhitelist.isWhitelisted(RANDOM_ADDRESS));
+                    })
+                    it("emits a StablecoinAdded event", async function () {
+                        const { logs } = await this.stablecoinWhitelist.addStablecoin(RANDOM_ADDRESS, { from });
+                        assert.equal(logs.length, 1);
+                        assert.equal(logs[0].event, 'StablecoinAdded');
+                        assert.equal(logs[0].args.stablecoin, RANDOM_ADDRESS);
+                    })
+                })
+
+                describe('removeStablecoin', function () {
+                    beforeEach(async function () {
+                        await this.stablecoinWhitelist.addStablecoin(RANDOM_ADDRESS, { from })
+                        assert(await this.stablecoinWhitelist.isWhitelisted(RANDOM_ADDRESS))
+                    })
+                    it("removes the stablecoin from the whitelist", async function () {
+                        await this.stablecoinWhitelist.removeStablecoin(RANDOM_ADDRESS, { from });
+                        assert(!(await this.stablecoinWhitelist.isWhitelisted(RANDOM_ADDRESS)));
+                    })
+                    it("emits a StablecoinRemoved event", async function () {
+                        const { logs } = await this.stablecoinWhitelist.removeStablecoin(RANDOM_ADDRESS, { from });
+                        assert.equal(logs.length, 1);
+                        assert.equal(logs[0].event, 'StablecoinRemoved');
+                        assert.equal(logs[0].args.stablecoin, RANDOM_ADDRESS);
+                    })
+                })
+            })
+
+            describe('when the sender is not the owner', function () {
+                const from = tokenHolder
+                it('reverts all calls', async function () {
+                    await expectRevert(this.stablecoinWhitelist.addStablecoin(RANDOM_ADDRESS, { from }));
+                    await expectRevert(this.stablecoinWhitelist.removeStablecoin(RANDOM_ADDRESS, { from }));
+                })
+            })
+
         })
     })
 }
