@@ -1,7 +1,6 @@
 pragma solidity ^0.4.23;
 
-import "./dataStorage/MutableCarbonDollarStorage.sol";
-import "../permissionedToken/PermissionedTokenProxy.sol";
+import "zos-lib/contracts/upgradeability/UpgradeabilityProxy.sol";
 
 /** 
  * @title DelayedUpgradeabilityProxy
@@ -21,8 +20,10 @@ contract DelayedUpgradeabilityProxy is UpgradeabilityProxy {
     constructor(address i) UpgradeabilityProxy(i) public {}
 
     /**
-    * @dev Sets the pending implementation address of the proxy.
-    * @param newImplementation Address of the new implementation.
+    * @notice Sets the pending implementation address of the proxy.
+    * This function is internal--uses of this proxy should wrap this function
+    * with a public function in order to make it externally callable.
+    * @param implementation Address of the new implementation.
     */
     function _setPendingUpgrade(address implementation) internal {
         address oldPendingImplementation = _pendingImplementation;
@@ -33,10 +34,10 @@ contract DelayedUpgradeabilityProxy is UpgradeabilityProxy {
     }
 
     /**
-    * @dev Overrides the _willFallback() function of Proxy, which enables some code to
+    * @notice Overrides the _willFallback() function of Proxy, which enables some code to
     * be executed prior to the fallback function. In this case, the purpose of this code
     * is to automatically switch the implementation to the pending implementation if the 
-    * wait period of 28 days has been satisfied.
+    * wait period of UPGRADE_DELAY (28 days) has been satisfied.
     */
     function _willFallback() internal {
         if (pendingImplementationIsSet && now > pendingImplementationApplicationDate) {
