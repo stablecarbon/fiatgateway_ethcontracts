@@ -1,99 +1,41 @@
 pragma solidity ^0.4.23;
-
-import "openzeppelin-solidity/contracts/AddressUtils.sol";
-import "openzeppelin-solidity/contracts/ownership/HasNoTokens.sol";
-import "../permissionedToken/mutablePermissionedToken/MutablePermissionedToken.sol";
+import "./dataStorage/MutableCarbonDollarStorage.sol";
+import "../permissionedToken/PermissionedToken.sol";
 import "../whitelistedToken/WhitelistedToken.sol";
-import "./helpers/FeeSheet.sol";
-import "./helpers/StablecoinWhitelist.sol";
-import "../../DataMigratable.sol";
 
-contract CarbonDollar is DataMigratable, MutablePermissionedToken, HasNoTokens {
+/**
+* @title CarbonDollar
+* @notice The main functionality for the CarbonUSD metatoken. (CarbonUSD is just a proxy
+* on top of this token contract.) This is a permissioned token, so users have to be 
+* whitelisted before they can do any mint/burn/convert operation.
+*/
+contract CarbonDollar is MutableCarbonDollarStorage, PermissionedToken {
+    
+    // Events
+    event ConvertedToWT(address indexed user, uint256 amount);
 
-    // TODO: Some sort of blacklist/whitelisting (similar to permissionedToken) @tanishq/@sam
-    // Random Thought: GreyList (mark Dirty Money without prevent it from being transferred or receiving)
-    // TODO: Upgradeability of carbonUSD and similar umbrella/meta-token contracts @tanishq/@sam
-
-    // carbonUSD is an umbrella / meta-token to be trading on exchanges. It's a wrapper function on top of 
-    // all USD stablecoin products Carbon launches.
-
-    // Carbon-12 Labs, INC owns this smart contract.
-
-    /**
-        Global Variables
-    */
-    FeeSheet public stablecoinFees;
-    // Whitelist of stablecoins that can be traded into Carbon. The addresses stored in this list are actually
-    // proxies to WhitelistedToken objects.
-    StablecoinWhitelist public stablecoinWhitelist;
-
-    /**
-        Events
-     */
-    event FeeSheetChanged(address indexed oldSheet, address indexed newSheet);
-    event StablecoinWhitelistChanged(address indexed oldWhitelist, address indexed newWhitelist);
 
     /**
         Modifiers
     */
-    /** Ensures that the caller of the function is a whitelisted token. */
     modifier requiresWhitelistedToken() {
-        require(AddressUtils.isContract(msg.sender)); // Must be a contract
-        require(stablecoinWhitelist.isWhitelisted(msg.sender)); // Must be a whitelisted token
+        require(stablecoinWhitelist.isWhitelisted(msg.sender), "Sender must be a whitelisted token contract");
         _;
     }
 
-    /**
-    * @notice Function used as part of Migratable interface. Must be called when
-    * proxy is assigned to contract in order to correctly assign the contract's
-    * version number.
-    *
-    * If deploying a new contract version, the version number must be changed as well. 
+    /** CONSTRUCTOR
+    * @dev Passes along arguments to base class.
     */
-    function initialize() isInitializer("CarbonDollar", "1.0") public {
-        // Nothing to initialize!
-    }
-
-    /** @dev Migrates data from an old CarbonDollar contract to a new one.
-        Precondition: the new contract has already been transferred ownership of the old contract.
-        @param _oldDollar The address of the old CarbonDollar contract. */
-    function migrate(address _oldDollar) isMigration("CarbonDollar", "1.0", "1.1") public {
-        CarbonDollar oldDollar = CarbonDollar(_oldDollar);
-        oldDollar.claimOwnership(); // Take the proferred ownership of the old contract
-        oldDollar.transferStorageOwnership();
-        setFeeSheet(address(oldDollar.stablecoinFees()));
-        setStablecoinWhitelist(address(oldDollar.stablecoinWhitelist()));
-        claimSO();
-    }
-
-    function transferSO(address owner) internal {
-        super.transferSO(owner);
-        stablecoinFees.transferOwnership(owner);
-        stablecoinWhitelist.transferOwnership(owner);
-    }
-
-    function claimSO() internal {
-        super.claimSO();
-        stablecoinFees.claimOwnership();
-        stablecoinWhitelist.claimOwnership();
-    }
-
-    /**
-     * @notice Set the stablecoin whitelist contract.
-     * @param _whitelist Address of the stablecoin whitelist contract.
-     */
-    function setStablecoinWhitelist(address _whitelist) public onlyOwner {
-        address oldWhitelist = address(stablecoinWhitelist);
-        stablecoinWhitelist = StablecoinWhitelist(_whitelist);
-        emit StablecoinWhitelistChanged(oldWhitelist, _whitelist);
-    }
+    constructor(address r, address b, address a, address f, address s) 
+    PermissionedToken(r, b, a) 
+    MutableCarbonDollarStorage(f, s) public {}
 
     /**
      * @notice Add new stablecoin to whitelist.
      * @param _stablecoin Address of stablecoin contract.
      */
     function listToken(address _stablecoin) public onlyOwner {
-        stablecoinWhitelist.addStablecoin(_stablecoin); // add new stablecoin in whitelist mapping
+        stablecoinWhitelist.addStablecoin(_stablecoin); 
     }
 
     /**
@@ -112,16 +54,6 @@ contract CarbonDollar is DataMigratable, MutablePermissionedToken, HasNoTokens {
     function isWhitelisted(address _stablecoin) public view returns (bool) {
         return stablecoinWhitelist.isWhitelisted(_stablecoin);
     }
-    
-    /**
-     * @notice Set the fee sheet for this CarbonUSD.
-     * @param _sheet Address of the fee sheet.
-     */
-    function setFeeSheet(address _sheet) public onlyOwner {
-        address oldSheet = address(stablecoinFees);
-        stablecoinFees = FeeSheet(_sheet);
-        emit FeeSheetChanged(oldSheet, _sheet);
-    }
 
     /**
      * @notice Change fees associated with going from CarbonUSD to a particular stablecoin.
@@ -129,7 +61,7 @@ contract CarbonDollar is DataMigratable, MutablePermissionedToken, HasNoTokens {
      * @param _newFee The new fee rate to set, in tenths of a percent. 
      */
     function setFee(address stablecoin, uint16 _newFee) public onlyOwner {
-        require(stablecoinWhitelist.isWhitelisted(stablecoin));
+        require(stablecoinWhitelist.isWhitelisted(stablecoin), "Stablecoin must be whitelisted prior to setting conversion fee");
         stablecoinFees.setFee(stablecoin, _newFee);
     }
 
@@ -143,7 +75,26 @@ contract CarbonDollar is DataMigratable, MutablePermissionedToken, HasNoTokens {
     }
 
     /**
-     * @notice A whitelisted token can issue CUSD on behalf of a user.
+     * @notice Get the fee associated with going from CarbonUSD to a specific WhitelistedToken.
+     * @param stablecoin The stablecoin whose fee is being checked.
+     * @return The fee associated with the stablecoin.
+     */
+    function getFee(address stablecoin) public view returns (uint16) {
+        return stablecoinFees.fees(stablecoin);
+    }
+
+    /**
+     * @notice Get the default fee associated with going from CarbonUSD to a specific WhitelistedToken.
+     * @return The default fee for stablecoin trades.
+     */
+    function getDefaultFee() public view returns (uint16) {
+        return stablecoinFees.defaultFee();
+    }
+
+    /**
+     * @notice Mints CUSD on behalf of a user. Note the use of the "requiresWhitelistedToken"
+     * modifier; this means that minting authority does not belong to any personal account; 
+     * only whitelisted token contracts can call this function.
      * @param _to User to send CUSD to
      * @param _amount Amount of CarbonUSD to burn.
      */
@@ -158,13 +109,13 @@ contract CarbonDollar is DataMigratable, MutablePermissionedToken, HasNoTokens {
     /**
      * @notice user can convert CarbonUSD umbrella token into the underlying assets. This is potentially interchain (EOS, ETH, Hedera etc)
      * @param stablecoin represents the type of coin the users wishes to receive for burning carbonUSD
-     * @param _amount Amount of CarbonUSD to burn.
+     * @param _amount Amount of CarbonUSD to convert.
      * we credit the user's account at the sender address with the _amount minus the percentage fee we want to charge.
      */
-    function burnCarbonDollar(address stablecoin, uint256 _amount) public requiresPermission returns (bool) {
-        require(stablecoinWhitelist.isWhitelisted(stablecoin));
+    function convertCarbonDollar(address stablecoin, uint256 _amount) public requiresPermission returns (bool) {
+        require(stablecoinWhitelist.isWhitelisted(stablecoin), "Stablecoin must be whitelisted prior to setting conversion fee");
         WhitelistedToken w = WhitelistedToken(stablecoin);
-        require(w.balanceOf(address(this)) >= _amount); // Need enough WT0 in Carbon escrow account in order for transfer to succeed!
+        require(w.balanceOf(address(this)) >= _amount, "Carbon escrow account in WT0 doesn't have enough tokens for burning");
  
         // Send back WT0 to calling user, but with a fee reduction.
         // Transfer this fee into this Carbon account (this contract's address)
@@ -180,9 +131,16 @@ contract CarbonDollar is DataMigratable, MutablePermissionedToken, HasNoTokens {
         w.transfer(msg.sender, feedAmount);
         w.burn(chargedFee);
         _mint(address(this), chargedFee);
+        emit ConvertedToWT(msg.sender, _amount);
         return true;
     }
 
+    /**
+     * @notice Compute the fee for converting a particular amount of CarbonUSD to a specific WhitelistedToken.
+     * @param amount The amount that the fee will be charged on.
+     * @param stablecoin The stablecoin to check fees for.
+     * @return The fee charged on the amount for the specified whitelisted token.
+     */
     function computeStablecoinFee(uint256 amount, address stablecoin) public view returns (uint256) {
         return stablecoinFees.computeStablecoinFee(amount, stablecoin);
     }

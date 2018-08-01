@@ -1,1 +1,0 @@
-These tests mostly borrowed from TrueUSD.

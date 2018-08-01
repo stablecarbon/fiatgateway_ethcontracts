@@ -1,44 +1,40 @@
-const {
-    CommonVariables,
-    Regulator,
-    PermissionsStorage
-} = require('../helpers/common');
+const { CommonVariables, ZERO_ADDRESS, expectRevert } = require('../helpers/common');
 
-const {
-    regulatorStorageTests
-} = require('./RegulatorStorage');
+const { Regulator, PermissionSheet, ValidatorSheet } = require('../helpers/artifacts');
 
-const {
-    regulatorStorageInteractionsTests
-} = require('./RegulatorStorageInteractions');
+const { regulatorStorageBasicInteractionsTests } = require('./regulatorBehavior/RegulatorStorageBasicInteractions.js');
 
-const {
-    regulatorPermissionsTests
-} = require('./RegulatorPermissions');
+const { regulatorUserPermissionsTests } = require('./regulatorBehavior/RegulatorUserPermissions.js');
+
+const { regulatorMutableStorageTests } = require('./regulatorBehavior/RegulatorMutableStorage.js'); 
 
 contract('Regulator', _accounts => {
     const commonVars = new CommonVariables(_accounts);
-    const owner = commonVars.accounts[0];
-    const validator = commonVars.accounts[1];
-    const user = commonVars.accounts[2];
-    const otherAccount = commonVars.accounts[3];
+    const owner = commonVars.owner;
+    const user = commonVars.user;
+    const validator = commonVars.validator;
+    const attacker = commonVars.attacker;
 
-    beforeEach(async function () {
-        this.sheet = await Regulator.new({ from: owner });
-        this.pStorage = await PermissionsStorage.new({from: owner});
-        this.MINT_SIG = await this.pStorage.MINT_SIG();
-        this.MINT_CUSD_SIG = await this.pStorage.MINT_CUSD_SIG();
-        this.BURN_SIG = await this.pStorage.BURN_SIG();
-        this.TRANSFER_SIG = await this.pStorage.TRANSFER_SIG();
-        this.TRANSFER_FROM_SIG = await this.pStorage.TRANSFER_FROM_SIG();
-        this.DESTROY_BLACKLISTED_TOKENS_SIG = await this.pStorage.DESTROY_BLACKLISTED_TOKENS_SIG();
-        this.ADD_BLACKLISTED_ADDRESS_SPENDER_SIG = await this.pStorage.ADD_BLACKLISTED_ADDRESS_SPENDER_SIG();
-        this.BLACKLISTED_SIG = await this.pStorage.BLACKLISTED_SIG();
+    describe('Regulator logic default behavior', function () {
+        beforeEach(async function () {
+            this.permissions = await PermissionSheet.new({ from:owner })
+            this.validators = await ValidatorSheet.new({ from:owner })
+            this.regulatorDefault = await Regulator.new(this.permissions.address, this.validators.address, {from:owner})
+
+            this.testPermission = 0x12345678;
+        })
+        it('Regulator has storages set on construction', async function () {
+            
+            assert.equal(await this.regulatorDefault.permissions(), this.permissions.address);
+            assert.equal(await this.regulatorDefault.validators(), this.validators.address);
+
+        }) 
+        
     })
 
-    describe("Regulator tests", function () {
-        regulatorStorageTests(owner, user);
-        regulatorStorageInteractionsTests(owner, user, validator, otherAccount);
-        regulatorPermissionsTests(owner, user, otherAccount);
+    describe("Regulator sets RegulatorStorage", function () {
+        regulatorStorageBasicInteractionsTests(owner, user, validator, attacker);
+        regulatorUserPermissionsTests(owner, user, validator);
+        regulatorMutableStorageTests(owner, validator);
     })
 })

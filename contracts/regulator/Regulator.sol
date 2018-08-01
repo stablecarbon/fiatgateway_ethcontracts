@@ -1,10 +1,9 @@
 pragma solidity ^0.4.23;
 
-import "openzeppelin-solidity/contracts/ownership/Claimable.sol";
-import "zos-lib/contracts/migrations/Migratable.sol";
-import "./helpers/PermissionsStorage.sol";
-import "./helpers/ValidatorStorage.sol";
-import "../DataMigratable.sol";
+import "openzeppelin-solidity/contracts/AddressUtils.sol";
+import "openzeppelin-solidity/contracts/ownership/Ownable.sol";
+import "./dataStorage/MutableRegulatorStorage.sol";
+
 
 /**
  * @title Regulator
@@ -14,22 +13,7 @@ import "../DataMigratable.sol";
  * for regulatory compliance.
  *
  */
-contract Regulator is Claimable, Migratable, DataMigratable {
-    /** STORAGES
-    */
-
-    /** 
-    * @notice The list of possible permissions, as well as which users
-    * have what permissions.
-    */
-    PermissionsStorage public permissions;
-
-    /**
-    * @notice Accounts with ability to set permissions.
-    *
-    */
-    ValidatorStorage public validators;
-
+contract Regulator is Ownable, MutableRegulatorStorage {
     /** 
         Modifiers 
     */
@@ -37,96 +21,25 @@ contract Regulator is Claimable, Migratable, DataMigratable {
     * @notice Throws if called by any account that does not have access to set attributes
     */
     modifier onlyValidator() {
-        require (isValidator(msg.sender));
+        require (isValidator(msg.sender), "Sender must be validator");
         _;
     }
 
     /** 
         Events 
     */
-    event SetPermissionsStorage(address indexed oldStorage, address indexed newStorage);
-    event SetValidatorStorage(address indexed oldStorage, address indexed newStorage);
-    event SetMinter(address indexed who);
-    event RemovedMinter(address indexed who);
-    event SetBlacklistSpender(address indexed who);
-    event RemovedBlacklistSpender(address indexed who);
-    event SetBlacklistDestroyer(address indexed who);
-    event RemovedBlacklistDestroyer(address indexed who);
     event SetWhitelistedUser(address indexed who);
     event SetBlacklistedUser(address indexed who);
     event SetNonlistedUser(address indexed who);
+    event SetMinter(address indexed who);
+    event RemovedMinter(address indexed who);
+    event SetBlacklistDestroyer(address indexed who);
+    event RemovedBlacklistDestroyer(address indexed who);
+    event SetBlacklistSpender(address indexed who);
+    event RemovedBlacklistSpender(address indexed who);
 
-    /**
-    * @notice Function used as part of Migratable interface. Must be called when
-    * a proxy is assigned to contract in order to correctly assign the contract's
-    * version number.
-    *
-    * If deploying a new contract version, the version number must be changed as well. 
-    */
-    function initialize() isInitializer("Regulator", "1.0") public {
-        // Nothing to initialize!
-    }
 
-    /** @notice Migrates data from an old regulator contract to a new one. Precondition: 
-    *  the new contract has already been transferred ownership of the old contract.
-    *   @param _oldRegulator The address of the old regulator. 
-    */
-    function migrate(address _oldRegulator) isMigration("Regulator", "1.0", "1.1") public {
-        Regulator r = Regulator(_oldRegulator);
-        r.claimOwnership(); // Take the proferred ownership of the old contract
-        r.transferStorageOwnership();
-        setPS(r.permissions());
-        setVS(r.validators());
-        claimSO();
-    }
-
-    /**
-    * @notice Sets the internal permission storage to point to a new storage.
-    * @param _newStorage The address of a new PermissionsStorage.
-    */
-    function setPermissionsStorage(address _newStorage) external onlyOwner {
-        setPS(_newStorage);
-    }
-
-    // Allows the migrate function to set the storage.
-    function setPS(address _newStorage) internal {
-        address _oldStorage = address(permissions);
-        permissions = PermissionsStorage(_newStorage);
-        emit SetPermissionsStorage(_oldStorage, _newStorage);
-    }
-
-    /**
-    * @notice Sets the internal validators storage to point to a new storage.
-    * @param _newStorage The address of a new ValidatorStorage.
-    */
-    function setValidatorStorage(address _newStorage) external onlyOwner {
-        setVS(_newStorage);
-    }
-
-    // Allows the migrate function to set the storage.
-    function setVS(address _newStorage) internal {
-        address _oldStorage = address(validators);
-        validators = ValidatorStorage(_newStorage);
-        emit SetValidatorStorage(_oldStorage, _newStorage);
-    }
-
-    /** @notice Transfers ownership of the storage contracts to the owner  of this token contract. 
-    * This is useful for migrations, since the new token contract is made the
-    * owner of the old token contract.
-    **/
-    function transferSO(address owner) internal {
-        permissions.transferOwnership(owner);
-        validators.transferOwnership(owner);
-    }
-
-    /** @notice Claims ownership of the storage contracts. Succeeds if the
-    * ownership of those contracts was transferred to this contract
-    * (which will happen in the case of a migration).
-    **/
-    function claimSO() internal {
-        permissions.claimOwnership();
-        validators.claimOwnership();
-    }
+    constructor (address p, address v) MutableRegulatorStorage(p, v) public {}
 
     /**
     * @notice Adds a validator to the regulator entity.
@@ -157,19 +70,26 @@ contract Regulator is Claimable, Migratable, DataMigratable {
     * @param _who The address of the account that we are setting permissions for.
     */
     function setMinter(address _who) public onlyValidator {
+        _setMinter(_who);
+    }
+
+    function _setMinter(address _who) internal {
         require(permissions.isPermission(permissions.MINT_SIG()), "Minting not supported by token");
-        setUserPermission(_who, permissions.MINT_SIG());
+        permissions.setUserPermission(_who, permissions.MINT_SIG());
         emit SetMinter(_who);
     }
-    
 
     /**
     * @notice Removes the necessary permissions for a user to mint tokens.
     * @param _who The address of the account that we are removing permissions for.
     */
     function removeMinter(address _who) public onlyValidator {
+        _removeMinter(_who);
+    }
+
+    function _removeMinter(address _who) internal {
         require(permissions.isPermission(permissions.MINT_SIG()), "Minting not supported by token");
-        removeUserPermission(_who, permissions.MINT_SIG());
+        permissions.removeUserPermission(_who, permissions.MINT_SIG());
         emit RemovedMinter(_who);
     }
 
@@ -186,8 +106,8 @@ contract Regulator is Claimable, Migratable, DataMigratable {
     * @param _who The address of the account that we are setting permissions for.
     */
     function setBlacklistSpender(address _who) public onlyValidator {
-        require(permissions.isPermission(permissions.ADD_BLACKLISTED_ADDRESS_SPENDER_SIG()), "Blacklist spending not supported by token");
-        setUserPermission(_who, permissions.ADD_BLACKLISTED_ADDRESS_SPENDER_SIG());
+        require(permissions.isPermission(permissions.APPROVE_BLACKLISTED_ADDRESS_SPENDER_SIG()), "Blacklist spending not supported by token");
+        permissions.setUserPermission(_who, permissions.APPROVE_BLACKLISTED_ADDRESS_SPENDER_SIG());
         emit SetBlacklistSpender(_who);
     }
     
@@ -196,8 +116,8 @@ contract Regulator is Claimable, Migratable, DataMigratable {
     * @param _who The address of the account that we are removing permissions for.
     */
     function removeBlacklistSpender(address _who) public onlyValidator {
-        require(permissions.isPermission(permissions.ADD_BLACKLISTED_ADDRESS_SPENDER_SIG()), "Blacklist spending not supported by token");
-        removeUserPermission(_who, permissions.ADD_BLACKLISTED_ADDRESS_SPENDER_SIG());
+        require(permissions.isPermission(permissions.APPROVE_BLACKLISTED_ADDRESS_SPENDER_SIG()), "Blacklist spending not supported by token");
+        permissions.removeUserPermission(_who, permissions.APPROVE_BLACKLISTED_ADDRESS_SPENDER_SIG());
         emit RemovedBlacklistSpender(_who);
     }
 
@@ -206,7 +126,7 @@ contract Regulator is Claimable, Migratable, DataMigratable {
      * @return `true` if the user is a blacklist spender, `false` otherwise.
      */
     function isBlacklistSpender(address _who) public view returns (bool) {
-        return hasUserPermission(_who, permissions.ADD_BLACKLISTED_ADDRESS_SPENDER_SIG());
+        return hasUserPermission(_who, permissions.APPROVE_BLACKLISTED_ADDRESS_SPENDER_SIG());
     }
 
     /**
@@ -215,7 +135,7 @@ contract Regulator is Claimable, Migratable, DataMigratable {
     */
     function setBlacklistDestroyer(address _who) public onlyValidator {
         require(permissions.isPermission(permissions.DESTROY_BLACKLISTED_TOKENS_SIG()), "Blacklist token destruction not supported by token");
-        setUserPermission(_who, permissions.DESTROY_BLACKLISTED_TOKENS_SIG());
+        permissions.setUserPermission(_who, permissions.DESTROY_BLACKLISTED_TOKENS_SIG());
         emit SetBlacklistDestroyer(_who);
     }
     
@@ -226,7 +146,7 @@ contract Regulator is Claimable, Migratable, DataMigratable {
     */
     function removeBlacklistDestroyer(address _who) public onlyValidator {
         require(permissions.isPermission(permissions.DESTROY_BLACKLISTED_TOKENS_SIG()), "Blacklist token destruction not supported by token");
-        removeUserPermission(_who, permissions.DESTROY_BLACKLISTED_TOKENS_SIG());
+        permissions.removeUserPermission(_who, permissions.DESTROY_BLACKLISTED_TOKENS_SIG());
         emit RemovedBlacklistDestroyer(_who);
     }
 
@@ -243,10 +163,14 @@ contract Regulator is Claimable, Migratable, DataMigratable {
     * @param _who The address of the account that we are setting permissions for.
     */
     function setWhitelistedUser(address _who) public onlyValidator {
+        _setWhitelistedUser(_who);
+    }
+
+    function _setWhitelistedUser(address _who) internal {
         require(permissions.isPermission(permissions.BURN_SIG()), "Burn method not supported by token");
         require(permissions.isPermission(permissions.BLACKLISTED_SIG()), "Self-destruct method not supported by token");
-        setUserPermission(_who, permissions.BURN_SIG());
-        removeUserPermission(_who, permissions.BLACKLISTED_SIG());
+        permissions.setUserPermission(_who, permissions.BURN_SIG());
+        permissions.removeUserPermission(_who, permissions.BLACKLISTED_SIG());
         emit SetWhitelistedUser(_who);
     }
 
@@ -256,10 +180,14 @@ contract Regulator is Claimable, Migratable, DataMigratable {
     * @param _who The address of the account that we are setting permissions for.
     */
     function setBlacklistedUser(address _who) public onlyValidator {
+        _setBlacklistedUser(_who);
+    }
+
+    function _setBlacklistedUser(address _who) internal {
         require(permissions.isPermission(permissions.BURN_SIG()), "Burn method not supported by token");
         require(permissions.isPermission(permissions.BLACKLISTED_SIG()), "Self-destruct method not supported by token");
-        removeUserPermission(_who, permissions.BURN_SIG());
-        setUserPermission(_who, permissions.BLACKLISTED_SIG());
+        permissions.removeUserPermission(_who, permissions.BURN_SIG());
+        permissions.setUserPermission(_who, permissions.BLACKLISTED_SIG());
         emit SetBlacklistedUser(_who);
     }
 
@@ -269,10 +197,14 @@ contract Regulator is Claimable, Migratable, DataMigratable {
     * @param _who The address of the account that we are setting permissions for.
     */
     function setNonlistedUser(address _who) public onlyValidator {
+        _setNonlistedUser(_who);
+    }
+
+    function _setNonlistedUser(address _who) internal {
         require(permissions.isPermission(permissions.BURN_SIG()), "Burn method not supported by token");
         require(permissions.isPermission(permissions.BLACKLISTED_SIG()), "Self-destruct method not supported by token");
-        removeUserPermission(_who, permissions.BURN_SIG());
-        removeUserPermission(_who, permissions.BLACKLISTED_SIG());
+        permissions.removeUserPermission(_who, permissions.BURN_SIG());
+        permissions.removeUserPermission(_who, permissions.BLACKLISTED_SIG());
         emit SetNonlistedUser(_who);
     }
 
@@ -325,7 +257,7 @@ contract Regulator is Claimable, Migratable, DataMigratable {
     * @return A boolean indicating whether the user has permission or not
     */
     function hasUserPermission(address _who, bytes4 _methodsignature) public view returns (bool) {
-        return permissions.hasUserPermission(_who, _methodsignature);
+        return permissions.hasUserPermission(_who,_methodsignature);
     }
 
     /**
@@ -340,15 +272,15 @@ contract Regulator is Claimable, Migratable, DataMigratable {
         string _permissionName, 
         string _permissionDescription,
         string _contractName) 
-    onlyValidator public {
+    public onlyValidator {
         permissions.addPermission(_methodsignature, _permissionName, _permissionDescription, _contractName);
     }
 
-    function getPermission(bytes4 _methodsignature) public view returns (
-            string name, 
+    function getPermission(bytes4 _methodsignature) public view returns
+            (string name, 
             string description, 
             string contract_name) {
-        return permissions.permissions(_methodsignature);
+        return (permissions.permissions(_methodsignature));
     }
 
     /**
