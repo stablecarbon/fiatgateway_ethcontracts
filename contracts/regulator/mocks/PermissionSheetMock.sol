@@ -22,34 +22,34 @@ contract PermissionSheetMock is PermissionSheet {
     }
 
     function setMintPermission() internal {
-        addPermission(MINT_SIG, "","","");
+        addPermission(MINT_SIG, '','','');
     }
     
     function setMintCUSDPermission() internal {
-        addPermission(MINT_CUSD_SIG, "","","");
+        addPermission(MINT_CUSD_SIG, '','','');
     }
 
     function setBurnPermission() internal {
-        addPermission(BURN_SIG, "","","");
+        addPermission(BURN_SIG, '','','');
     }
 
     function setBurnCarbonDollarPermission() internal {
-        addPermission(BURN_CARBON_DOLLAR_SIG, "","","");
+        addPermission(BURN_CARBON_DOLLAR_SIG, '','','');
     }
 
     function setConvertPermission() internal {
-        addPermission(CONVERT_SIG, "","","");
+        addPermission(CONVERT_SIG, '','','');
     }
 
     function setDestroyBlacklistedTokensPermission() internal {
-        addPermission(DESTROY_BLACKLISTED_TOKENS_SIG, "","","");
+        addPermission(DESTROY_BLACKLISTED_TOKENS_SIG, '','','');
     }
 
     function setApproveBlacklistedAddressSpenderPermission() internal {
-        addPermission(APPROVE_BLACKLISTED_ADDRESS_SPENDER_SIG, "","","");
+        addPermission(APPROVE_BLACKLISTED_ADDRESS_SPENDER_SIG, '','','');
     }
 
     function setDestroySelfPermission() internal {
-        addPermission(BLACKLISTED_SIG, "","","");
+        addPermission(BLACKLISTED_SIG, '','','');
     }
 }

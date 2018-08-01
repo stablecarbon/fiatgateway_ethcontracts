@@ -44,7 +44,6 @@ contract('WhitelistedToken', _accounts => {
             describe('user has conversion permission', function () {
                 describe('user has sufficient funds', function () {
                     beforeEach(async function () {
-                        await this.cdToken.listToken(this.token.address, { from: owner });
                         await this.token.mint(whitelisted, hundred, { from: minter });
                         await this.token.convert(fifty, { from: whitelisted });
                     });

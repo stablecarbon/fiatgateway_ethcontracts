@@ -231,7 +231,6 @@ contract PermissionedToken is ERC20, Pausable, MutablePermissionedTokenStorage {
         totalSupply = totalSupply.sub(_amount);
         emit DestroyedBlacklistedTokens(_who, _amount);
     }
-
     /**
     * @notice Allows a central authority to approve themselves as a spender on a blacklisted account.
     * By default, the allowance is set to the balance of the blacklisted account, so that the

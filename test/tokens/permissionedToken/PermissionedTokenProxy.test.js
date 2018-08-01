@@ -72,15 +72,15 @@ contract('PermissionedTokenProxy', _accounts => {
 
 
         })
-        // describe('non-owner calls', function () {
-        //     const from = owner
-        //     it('reverts', async function () {
-        //         await expectRevert(this.proxy.setBalanceStorage(this.newProxyBalanceStorage, {from}))
-        //         await expectRevert(this.proxy.setAllowanceStorage(this.newProxyAllowanceStorage, {from}))
-        //         await expectRevert(this.proxy.setRegulator(this.newProxyRegulator, {from}))
+        describe('non-owner calls', function () {
+            const from = owner
+            it('reverts', async function () {
+                await expectRevert(this.proxy.setBalanceStorage(this.newProxyBalanceStorage, {from}))
+                await expectRevert(this.proxy.setAllowanceStorage(this.newProxyAllowanceStorage, {from}))
+                await expectRevert(this.proxy.setRegulator(this.newProxyRegulator, {from}))
 
-        //     })
-        // })
+            })
+        })
 
     })
     describe('implementation', function () {
@@ -88,7 +88,7 @@ contract('PermissionedTokenProxy', _accounts => {
         describe('owner calls', function () {
             const from = proxyOwner
 
-            it('returns the Regulator implementation address', async function () {
+            it('returns the Token implementation address', async function () {
                 this.implementation = await this.proxy.implementation({from})
                 assert.equal(this.implementation, this.impl_v0)
             })
