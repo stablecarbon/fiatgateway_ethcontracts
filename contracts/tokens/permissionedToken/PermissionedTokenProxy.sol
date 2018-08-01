@@ -17,7 +17,6 @@ contract PermissionedTokenProxy is UpgradeabilityProxy, Ownable, MutablePermissi
 	*/
 	function upgradeTo(address newImplementation) onlyOwner public {
 		_upgradeTo(newImplementation);
-
 	}
 
 	/**
