@@ -3,7 +3,11 @@ pragma solidity ^0.4.23;
 import "openzeppelin-solidity/contracts/ownership/Ownable.sol";
 import "openzeppelin-solidity/contracts/math/SafeMath.sol";
 
-// A wrapper around the balanceOf mapping.
+/**
+* @title FeeSheet
+* @notice Contains a mapping indicating whether or not a token contract
+* is approved to participate on the CarbonUSD network.
+*/
 contract StablecoinWhitelist is Ownable {
     /** 
         Mappings

@@ -98,14 +98,12 @@ function carbonTokenStorageTests(owner, tokenHolder, spender, user) {
                     })
                 })
             })
-
         })
 
         describe('StablecoinWhitelist CRUD tests', function () {
 
             describe('when the sender is the owner', function () {
                 const from = owner
-
                 describe('addStablecoin', function () {
                     it("adds the stablecoin to the whitelist", async function () {
                         await this.stablecoinWhitelist.addStablecoin(RANDOM_ADDRESS, { from });
@@ -144,7 +142,6 @@ function carbonTokenStorageTests(owner, tokenHolder, spender, user) {
                     await expectRevert(this.stablecoinWhitelist.removeStablecoin(RANDOM_ADDRESS, { from }));
                 })
             })
-
         })
     })
 }

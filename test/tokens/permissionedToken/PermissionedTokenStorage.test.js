@@ -21,5 +21,4 @@ contract('PermissionedTokenStorage', _accounts => {
     describe("PermissionedTokenStorage tests", function () {
         permissionedTokenStorageTests(owner, tokenHolder, spender, user);
     })
-
 })
