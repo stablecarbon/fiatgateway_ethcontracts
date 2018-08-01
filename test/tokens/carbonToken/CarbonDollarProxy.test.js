@@ -92,20 +92,13 @@ contract('CarbonDollarProxy', _accounts => {
     })
 
     describe('implementation', function () {
-        describe('owner calls', function () {
-            const from = proxyOwner
-            it('returns the implementation address', async function () {
-                this.implementation = await this.proxy.implementation({from})
-                assert.equal(this.implementation, this.impl_v0)
-            })
-        })
-        describe('non-owner calls', function () {
-            const from = owner
-            it('reverts', async function () {
-                await expectRevert(this.proxy.implementation({from}))
-            })
+        const from = proxyOwner
+        it('returns the implementation address', async function () {
+            this.implementation = await this.proxy.implementation({from})
+            assert.equal(this.implementation, this.impl_v0)
         })
     })
+    
     describe('Proxy delegates calls to logic contract', function () {
         beforeEach(async function () {
             this.tokenProxyRegulator = CarbonDollarRegulator.at(this.proxyRegulator)
