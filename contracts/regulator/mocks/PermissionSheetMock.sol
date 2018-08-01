@@ -8,9 +8,10 @@ import "../dataStorage/PermissionSheet.sol";
 *
 */
 contract PermissionSheetMock is PermissionSheet {
-
+    /** 
+        @dev Initializes common permissions
+     */
     constructor() public {
-
         setMintPermission();
         setMintCUSDPermission();
         setBurnPermission();

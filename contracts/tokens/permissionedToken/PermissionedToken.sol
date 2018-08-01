@@ -19,7 +19,6 @@ contract PermissionedToken is ERC20, Pausable, MutablePermissionedTokenStorage {
 
     /** Variables */
     uint256 public totalSupply;
-    
 
     /** Events */
     event DestroyedBlacklistedTokens(address indexed account, uint256 amount);
@@ -30,7 +29,6 @@ contract PermissionedToken is ERC20, Pausable, MutablePermissionedTokenStorage {
     event Burn(address indexed burner, uint256 value);
     event Transfer(address indexed from, address indexed to, uint256 value);
     event Approval(address indexed owner, address indexed spender, uint256 value);
-
 
     constructor (address regulator, address balances, address allowances) MutablePermissionedTokenStorage(regulator, balances, allowances) public {}
 

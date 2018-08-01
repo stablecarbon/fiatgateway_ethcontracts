@@ -60,7 +60,7 @@ contract('WhitelistedToken', _accounts => {
                     it('Burned to CUSD event is emitted', async function () {
                         const { logs } = await this.token.convertWT(fifty, { from: whitelisted });
                         assert.equal(logs.length, 8); // Lots of events are emitted!
-                        assert.equal(logs[7].event, 'BurnedToCUSD');
+                        assert.equal(logs[7].event, 'ConvertedToCUSD');
                         assert.equal(logs[7].args.user, whitelisted);
                         assert(logs[7].args.amount.eq(fifty));
                     });
@@ -68,14 +68,14 @@ contract('WhitelistedToken', _accounts => {
                 describe('user has insufficient funds', function () {
                     it('reverts', async function () {
                         await this.token.mint(whitelisted, hundred, { from: minter });
-                        await expectRevert(this.token.convert(hundred.plus(1), { from: whitelisted }));
+                        await expectRevert(this.token.convertWT(hundred.plus(1), { from: whitelisted }));
                     });
                 });
             });
             describe('user does not have conversion permission', function () {
                 it('call reverts', async function () {
                     await this.token.mint(whitelisted, hundred, { from: minter });
-                    await expectRevert(this.token.convert(fifty, { from: nonlisted }));
+                    await expectRevert(this.token.convertWT(fifty, { from: nonlisted }));
                 });
             });
         });

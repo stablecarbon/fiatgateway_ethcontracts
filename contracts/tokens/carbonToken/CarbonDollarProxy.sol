@@ -47,5 +47,4 @@ contract CarbonDollarProxy is UpgradeabilityProxy, Ownable, MutableCarbonDollarS
 	function implementation() onlyOwner public view returns (address) {
 		return _implementation();
 	}
-
 }

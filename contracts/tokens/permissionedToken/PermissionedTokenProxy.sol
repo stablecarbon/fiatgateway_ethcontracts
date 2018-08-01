@@ -9,7 +9,9 @@ import "openzeppelin-solidity/contracts/ownership/Ownable.sol";
 * @notice A proxy contract that serves the latest implementation of PermissionedToken.
 */
 contract PermissionedTokenProxy is DelayedUpgradeabilityProxy, Ownable, MutablePermissionedTokenStorage {
-    constructor( address _implementation, address regulator, address balances, address allowances ) DelayedUpgradeabilityProxy( _implementation ) MutablePermissionedTokenStorage(regulator, balances, allowances) public {}
+    constructor(address i, address r, address b, address a) 
+        DelayedUpgradeabilityProxy(i) 
+        MutablePermissionedTokenStorage(r, b, a) public {}
 
     /**
     * @dev Upgrade the backing implementation of the proxy.

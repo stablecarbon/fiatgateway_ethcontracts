@@ -1,9 +1,6 @@
 const { CommonVariables, ZERO_ADDRESS } = require('../../helpers/common');
-
 const { FeeSheet, StablecoinWhitelist } = require('../../helpers/artifacts');
-
 const { carbonTokenStorageTests } = require('./carbonTokenStorageBehavior/CarbonTokenStorage.js');
-
 
 contract('PermissionedTokenStorage', _accounts => {
     const commonVars = new CommonVariables(_accounts);
@@ -22,5 +19,4 @@ contract('PermissionedTokenStorage', _accounts => {
     describe("PermissionedTokenStorage tests", function () {
        carbonTokenStorageTests(owner, tokenHolder, spender, user);
     })
-
 })

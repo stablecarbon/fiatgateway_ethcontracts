@@ -22,5 +22,4 @@ contract CarbonDollarStorage {
     	stablecoinFees = FeeSheet(feeSheet);
     	stablecoinWhitelist = StablecoinWhitelist(whitelist);
     }
-
 }

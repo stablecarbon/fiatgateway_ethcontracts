@@ -9,7 +9,6 @@ import "openzeppelin-solidity/contracts/ownership/Ownable.sol";
 * @notice Adds mutability to CarbonDollarStorage (FeeSheet and StablecoinWhitelist can be changed.)
 */
 contract MutableCarbonDollarStorage is Ownable, CarbonDollarStorage {
-
 	/**
         Events
      */

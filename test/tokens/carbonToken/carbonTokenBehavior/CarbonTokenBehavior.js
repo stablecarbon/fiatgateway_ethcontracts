@@ -3,8 +3,9 @@ const { assertBalance, expectRevert } = require('../../../helpers/common');
 function carbonDollarBehaviorTests(owner, wtMinter, whitelisted, validator) {
 
     describe("Mint and burn functions", function () {
-        // Currently, we cannot test CarbonDollar.mint since this function can only be called by a whitelisted
-        // stablecoin address
+        // Currently, we cannot test CarbonDollar.mint in isolation since this function 
+        // can only be called by a whitelisted stablecoin address. However, we know that
+        // mint() must work, since mintCUSD() in WhitelistedToken works.
         describe('mint', function () {
             // describe('when sender is a token contract', function () {
                 // describe('when token contract is whitelisted', function () {
@@ -106,7 +107,6 @@ function carbonDollarBehaviorTests(owner, wtMinter, whitelisted, validator) {
                 });
             });
         });
-
     });
 }
 
