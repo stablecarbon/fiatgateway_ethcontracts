@@ -5,7 +5,7 @@ const { FeeSheet, StablecoinWhitelist } = require('../../helpers/artifacts');
 const { carbonTokenStorageTests } = require('./carbonTokenStorageBehavior/CarbonTokenStorage.js');
 
 
-contract('PermissionedTokenStorage', _accounts => {
+contract('CarbonDollarStorage', _accounts => {
     const commonVars = new CommonVariables(_accounts);
     const owner = commonVars.owner;
     const user = commonVars.user;
@@ -19,7 +19,7 @@ contract('PermissionedTokenStorage', _accounts => {
 
     })
 
-    describe("PermissionedTokenStorage tests", function () {
+    describe("CarbonDollarStorage tests", function () {
        carbonTokenStorageTests(owner, tokenHolder, spender, user);
     })
 

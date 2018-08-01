@@ -97,7 +97,7 @@ contract('CarbonDollarProxy', _accounts => {
         })
 
     })
-    
+
     describe('implementation', function () {
 
         describe('owner calls', function () {
@@ -239,7 +239,7 @@ contract('CarbonDollarProxy', _accounts => {
             })
 
         })
-        describe('Regulator implementation owner calls upgradeTo', function () {
+        describe('CarbonDollar implementation owner calls upgradeTo', function () {
             const from = owner
             it('reverts', async function () {
                 await expectRevert(this.proxy.upgradeTo(this.impl_v1, {from}))
