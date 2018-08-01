@@ -111,9 +111,7 @@ function carbonDollarStorageInteractionTests(owner, wtMinter) {
                 await expectRevert(this.token.unlistToken(this.wtToken.address, {from}))
             });
         });
-
     });
-
 }
 
 module.exports = {

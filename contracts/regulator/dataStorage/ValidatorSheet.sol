@@ -8,7 +8,6 @@ import "openzeppelin-solidity/contracts/ownership/Ownable.sol";
  *
  */
 contract ValidatorSheet is Ownable{
-	
     /** 
         Mappings 
     */
@@ -40,5 +39,4 @@ contract ValidatorSheet is Ownable{
         isValidator[_validator] = false;
         emit ValidatorRemoved(_validator);
     }
-
 }

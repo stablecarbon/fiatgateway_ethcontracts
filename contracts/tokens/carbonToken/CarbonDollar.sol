@@ -3,6 +3,12 @@ import "./dataStorage/MutableCarbonDollarStorage.sol";
 import "../permissionedToken/PermissionedToken.sol";
 import "../whitelistedToken/WhitelistedToken.sol";
 
+/**
+* @title CarbonDollar
+* @notice The main functionality for the CarbonUSD metatoken. (CarbonUSD is just a proxy
+* on top of this token contract.) This is a permissioned token, so users have to be 
+* whitelisted before they can do any mint/burn/convert operation.
+*/
 contract CarbonDollar is MutableCarbonDollarStorage, PermissionedToken {
     
     // Events
@@ -19,9 +25,11 @@ contract CarbonDollar is MutableCarbonDollarStorage, PermissionedToken {
     }
 
     /** CONSTRUCTOR
-    * @dev Passes along arguments to base class. 
+    * @dev Passes along arguments to base class.
     */
-    constructor(address regulator, address balances, address allowances, address fees, address stablecoins) PermissionedToken(regulator, balances, allowances) MutableCarbonDollarStorage(fees, stablecoins) public {}
+    constructor(address r, address b, address a, address f, address s) 
+        PermissionedToken(r, b, a) 
+        MutableCarbonDollarStorage(f, s) public {}
 
     /**
      * @notice Add new stablecoin to whitelist.
@@ -67,16 +75,27 @@ contract CarbonDollar is MutableCarbonDollarStorage, PermissionedToken {
         stablecoinFees.setDefaultFee(_newFee);
     }
 
+    /**
+     * @notice Get the fee associated with going from CarbonUSD to a specific WhitelistedToken.
+     * @param stablecoin The stablecoin whose fee is being checked.
+     * @return The fee associated with the stablecoin.
+     */
     function getFee(address stablecoin) public view returns (uint16) {
         return stablecoinFees.fees(stablecoin);
     }
 
+    /**
+     * @notice Get the default fee associated with going from CarbonUSD to a specific WhitelistedToken.
+     * @return The default fee for stablecoin trades.
+     */
     function getDefaultFee() public view returns (uint16) {
         return stablecoinFees.defaultFee();
     }
 
     /**
-     * @notice A whitelisted token can issue CUSD on behalf of a user.
+     * @notice Mints CUSD on behalf of a user. Note the use of the "requiresWhitelistedToken"
+     * modifier; this means that minting authority does not belong to any personal account; 
+     * only whitelisted token contracts can call this function.
      * @param _to User to send CUSD to
      * @param _amount Amount of CarbonUSD to burn.
      */
@@ -117,6 +136,12 @@ contract CarbonDollar is MutableCarbonDollarStorage, PermissionedToken {
         return true;
     }
 
+    /**
+     * @notice Compute the fee for converting a particular amount of CarbonUSD to a specific WhitelistedToken.
+     * @param amount The amount that the fee will be charged on.
+     * @param stablecoin The stablecoin to check fees for.
+     * @return The fee charged on the amount for the specified whitelisted token.
+     */
     function computeStablecoinFee(uint256 amount, address stablecoin) public view returns (uint256) {
         return stablecoinFees.computeStablecoinFee(amount, stablecoin);
     }

@@ -3,7 +3,10 @@ pragma solidity ^0.4.23;
 import "openzeppelin-solidity/contracts/ownership/Ownable.sol";
 import "openzeppelin-solidity/contracts/math/SafeMath.sol";
 
-// A wrapper around the balanceOf mapping.
+/**
+* @title FeeSheet
+* @notice Contains fee amounts for burning CUSD into a stablecoin.
+*/
 contract FeeSheet is Ownable {
     using SafeMath for uint16;
 

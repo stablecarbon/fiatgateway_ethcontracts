@@ -4,11 +4,10 @@ import "./FeeSheet.sol";
 import "./StablecoinWhitelist.sol";
 
 /**
-*
-* @dev A CarbonDollarStorage base storage class
-*
+* @title CarbonDollarStorage
+* @notice Contains necessary storage contracts for CarbonDollar (FeeSheet and StablecoinWhitelist).
 */
-contract CarbonDollarStorage{
+contract CarbonDollarStorage {
 	/**
 		Storage
     */
@@ -23,5 +22,4 @@ contract CarbonDollarStorage{
     	stablecoinFees = FeeSheet(feeSheet);
     	stablecoinWhitelist = StablecoinWhitelist(whitelist);
     }
-
 }

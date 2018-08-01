@@ -11,13 +11,9 @@ import "openzeppelin-solidity/contracts/ownership/Ownable.sol";
 *
 */
 contract MutableRegulatorStorage is Ownable, RegulatorStorage {
-
     // Events
 	event ChangedPermissionStorage(address _old, address _new);
 	event ChangedValidatorStorage(address _old, address _new);
-
-
-    // Methods
 
     constructor (address permissions, address validators) RegulatorStorage(permissions, validators) public {
     }
@@ -28,7 +24,6 @@ contract MutableRegulatorStorage is Ownable, RegulatorStorage {
     * @param _newStorageAddress the new storage address
     *
     */
-
 	function setPermissionStorage(address _newStorageAddress) onlyOwner public {
     	require(_newStorageAddress != address(permissions)); // require a new address to be set
 		require(AddressUtils.isContract(_newStorageAddress), "Cannot set a regulator storage to a non-contract address");

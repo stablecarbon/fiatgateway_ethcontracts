@@ -4,11 +4,17 @@ import "./dataStorage/MutableCarbonDollarStorage.sol";
 import "../permissionedToken/dataStorage/MutablePermissionedTokenStorage.sol";
 import "../permissionedToken/PermissionedTokenProxy.sol";
 
-
+/**
+* @title CarbonDollarProxy
+* @notice This contract IS CarbonUSD. All calls to the CarbonUSD contract will
+* be routed through this proxy, since this proxy contract is the owner of the
+* storage contracts.
+*/
 contract CarbonDollarProxy is UpgradeabilityProxy, Ownable, MutableCarbonDollarStorage, MutablePermissionedTokenStorage {
-
-	
-	constructor(address _implementation, address regulator, address balances, address allowances, address fees, address stablecoins) UpgradeabilityProxy(_implementation) MutableCarbonDollarStorage(fees, stablecoins) MutablePermissionedTokenStorage(regulator, balances, allowances) public {}
+	constructor(address i, address r, address b, address a, address f, address s) 
+		UpgradeabilityProxy(i) 
+		MutableCarbonDollarStorage(f, s) 
+		MutablePermissionedTokenStorage(r, b, a) public {}
 
 	/**
 	* @dev Upgrade the backing implementation of the proxy.
@@ -41,5 +47,4 @@ contract CarbonDollarProxy is UpgradeabilityProxy, Ownable, MutableCarbonDollarS
 	function implementation() onlyOwner public view returns (address) {
 		return _implementation();
 	}
-
 }

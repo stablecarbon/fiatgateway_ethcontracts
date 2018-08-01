@@ -26,7 +26,6 @@ contract('PermissionedTokenProxy', _accounts => {
         this.proxy = await PermissionedTokenProxy.new(this.impl_v0, this.proxyRegulator, this.proxyBalancesStorage, this.proxyAllowancesStorage, { from:proxyOwner })
         this.proxyAddress = this.proxy.address
     })
-
     describe('setRegulator, setBalanceStorage and setAllowanceStorage', function () {
         beforeEach(async function () {
             this.newProxyBalanceStorage = (await BalanceSheet.new({ from:owner })).address;
@@ -37,11 +36,9 @@ contract('PermissionedTokenProxy', _accounts => {
 
             this.logic_v0 = await PermissionedToken.at(this.impl_v0)
         })
-
         describe('owner calls', function () {
             const from = proxyOwner
             beforeEach(async function () {
-
                 const { logs } = await this.proxy.setBalanceStorage(this.newProxyBalanceStorage, {from})
                 this.logs = logs
                 this.event = this.logs.find(l => l.event === 'ChangedBalanceStorage').event
@@ -50,13 +47,11 @@ contract('PermissionedTokenProxy', _accounts => {
 
                 await this.proxy.setAllowanceStorage(this.newProxyAllowanceStorage, {from})
                 await this.proxy.setRegulator(this.newProxyRegulator, { from })
-
             })
             it('sets token proxy storage and regulator', async function () {
                 assert.equal(await this.proxy.balances(), this.newProxyBalanceStorage)
                 assert.equal(await this.proxy.allowances(), this.newProxyAllowanceStorage)
                 assert.equal(await this.proxy.regulator(), this.newProxyRegulator)
-
             })
             it('emits a ChangedBalanceStorage event', async function () {
                 assert.equal(this.logs.length, 1)
@@ -66,10 +61,7 @@ contract('PermissionedTokenProxy', _accounts => {
             it('does not change regulator implementation storages', async function () {
                 assert.equal(await this.logic_v0.balances(), this.proxyBalancesStorage)
                 assert.equal(await this.logic_v0.allowances(), this.proxyAllowancesStorage)
-
             })
-
-
         })
         describe('non-owner calls', function () {
             const from = owner
@@ -77,16 +69,12 @@ contract('PermissionedTokenProxy', _accounts => {
                 await expectRevert(this.proxy.setBalanceStorage(this.newProxyBalanceStorage, {from}))
                 await expectRevert(this.proxy.setAllowanceStorage(this.newProxyAllowanceStorage, {from}))
                 await expectRevert(this.proxy.setRegulator(this.newProxyRegulator, {from}))
-
             })
         })
-
     })
     describe('implementation', function () {
-
         describe('owner calls', function () {
             const from = proxyOwner
-
             it('returns the Token implementation address', async function () {
                 this.implementation = await this.proxy.implementation({from})
                 assert.equal(this.implementation, this.impl_v0)
@@ -94,19 +82,14 @@ contract('PermissionedTokenProxy', _accounts => {
         })
         describe('non-owner calls', function () {
             const from = owner
-
             it('reverts', async function () {
                 await expectRevert(this.proxy.implementation({from}))
             })
         })
-
-
     })
 
     describe('Proxy delegates calls to logic contract', function () {
-
         beforeEach(async function () {
-
             this.tokenProxy = PermissionedToken.at(this.proxyAddress)
             this.logic_v0 = PermissionedToken.at(this.impl_v0)
             this.tokenProxyRegulator = Regulator.at(this.proxyRegulator)
@@ -119,11 +102,8 @@ contract('PermissionedTokenProxy', _accounts => {
 
             await (await BalanceSheet.at(this.proxyBalancesStorage)).transferOwnership(this.tokenProxy.address, {from:owner})
             await (await AllowanceSheet.at(this.proxyAllowancesStorage)).transferOwnership(this.tokenProxy.address, {from:owner})
-
-
         })
         describe('call to proxy to mint', function () {
-
             it('proxy mints to whitelisted user', async function () {
                 await this.tokenProxy.mint(user, 10 * 10 ** 18, {from:owner})
                 assert.equal(await this.tokenProxy.balanceOf(user), 10 * 10 ** 18)
@@ -139,7 +119,6 @@ contract('PermissionedTokenProxy', _accounts => {
             this.validatorSheet_v1 = await ValidatorSheetMock.new(validator, {from:owner} )
             this.token_logic_v1_regulator = (await Regulator.new(this.permissionSheet_v1.address, this.validatorSheet_v1.address, { from:owner })).address
             this.impl_v1 = (await PermissionedToken.new(this.token_logic_v1_regulator, this.proxyBalancesStorage, this.proxyAllowancesStorage,{ from:owner })).address
-
         })
         describe('owner calls upgradeTo', function () {
             const from = proxyOwner
@@ -154,7 +133,6 @@ contract('PermissionedTokenProxy', _accounts => {
                 this.logs = logs
                 this.event = this.logs.find(l => l.event === 'Upgraded').event
                 this.newImplementation = this.logs.find(l => l.event === 'Upgraded').args.implementation
-
             })
             it('upgrades to V1 implementation', async function () {
                 this.implementation = await this.proxy.implementation( { from })
@@ -172,14 +150,11 @@ contract('PermissionedTokenProxy', _accounts => {
                 })
                 it('V1 logic has a new regulator', async function () {
                     assert.equal(await this.logic_v1.regulator(), this.token_logic_v1_regulator)
-
                 })
                 it('proxy storage maintains its original regulator', async function () {
                     assert.equal(await this.proxy.regulator(), this.proxyRegulator)
-
                 })
             })
-
         })
         describe('Regulator implementation owner calls upgradeTo', function () {
             const from = owner
@@ -187,8 +162,5 @@ contract('PermissionedTokenProxy', _accounts => {
                 await expectRevert(this.proxy.upgradeTo(this.impl_v1, {from}))
             })
         })
-
     })
-
-
 })

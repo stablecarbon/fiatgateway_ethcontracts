@@ -65,6 +65,5 @@ contract WhitelistedTokenRegulator is Regulator {
 
     function isNonlistedUser(address _who) public view returns (bool) {
         return (!hasUserPermission(_who, permissions.CONVERT_WT_SIG()) && super.isNonlistedUser(_who));
-    }
-        
+    }   
 }
