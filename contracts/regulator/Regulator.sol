@@ -1,8 +1,8 @@
 pragma solidity ^0.4.23;
 
-import 'openzeppelin-solidity/contracts/AddressUtils.sol';
+import "openzeppelin-solidity/contracts/AddressUtils.sol";
 import "openzeppelin-solidity/contracts/ownership/Ownable.sol";
-import './dataStorage/MutableRegulatorStorage.sol';
+import "./dataStorage/MutableRegulatorStorage.sol";
 
 
 /**
@@ -21,7 +21,7 @@ contract Regulator is Ownable, MutableRegulatorStorage {
     * @notice Throws if called by any account that does not have access to set attributes
     */
     modifier onlyValidator() {
-        require (isValidator(msg.sender));
+        require (isValidator(msg.sender), "Sender must be validator");
         _;
     }
 
@@ -272,7 +272,7 @@ contract Regulator is Ownable, MutableRegulatorStorage {
         string _permissionName, 
         string _permissionDescription,
         string _contractName) 
-    onlyValidator public {
+    public onlyValidator {
         permissions.addPermission(_methodsignature, _permissionName, _permissionDescription, _contractName);
     }
 

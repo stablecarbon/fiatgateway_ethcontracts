@@ -12,16 +12,17 @@ contract CarbonDollar is MutableCarbonDollarStorage, PermissionedToken {
     /**
         Modifiers
     */
-    /** Ensures that the caller of the function is a whitelisted token. */
     modifier requiresWhitelistedToken() {
-        require(stablecoinWhitelist.isWhitelisted(msg.sender)); // Must be a whitelisted token
+        require(stablecoinWhitelist.isWhitelisted(msg.sender), "Sender must be a whitelisted token contract");
         _;
     }
 
     /** CONSTRUCTOR
     * @dev Passes along arguments to base class. 
     */
-    constructor(address regulator, address balances, address allowances, address fees, address stablecoins) PermissionedToken(regulator, balances, allowances) MutableCarbonDollarStorage(fees, stablecoins) public {}
+    constructor(address r, address b, address a, address f, address s) 
+    PermissionedToken(r, b, a) 
+    MutableCarbonDollarStorage(f, s) public {}
 
     /**
      * @notice Add new stablecoin to whitelist.
@@ -54,7 +55,7 @@ contract CarbonDollar is MutableCarbonDollarStorage, PermissionedToken {
      * @param _newFee The new fee rate to set, in tenths of a percent. 
      */
     function setFee(address stablecoin, uint16 _newFee) public onlyOwner {
-        require(stablecoinWhitelist.isWhitelisted(stablecoin));
+        require(stablecoinWhitelist.isWhitelisted(stablecoin), "Stablecoin must be whitelisted prior to setting conversion fee");
         stablecoinFees.setFee(stablecoin, _newFee);
     }
 
@@ -95,9 +96,9 @@ contract CarbonDollar is MutableCarbonDollarStorage, PermissionedToken {
      * we credit the user's account at the sender address with the _amount minus the percentage fee we want to charge.
      */
     function convertCarbonDollar(address stablecoin, uint256 _amount) public requiresPermission returns (bool) {
-        require(stablecoinWhitelist.isWhitelisted(stablecoin));
+        require(stablecoinWhitelist.isWhitelisted(stablecoin), "Stablecoin must be whitelisted prior to setting conversion fee");
         WhitelistedToken w = WhitelistedToken(stablecoin);
-        require(w.balanceOf(address(this)) >= _amount); // Need enough WT0 in Carbon escrow account in order for transfer to succeed!
+        require(w.balanceOf(address(this)) >= _amount, "Carbon escrow account in WT0 doesn't have enough tokens for burning");
  
         // Send back WT0 to calling user, but with a fee reduction.
         // Transfer this fee into this Carbon account (this contract's address)

@@ -9,15 +9,15 @@ contract BalanceSheet is Ownable {
 
     mapping (address => uint256) public balanceOf;
 
-    function addBalance(address _addr, uint256 _value) onlyOwner public {
+    function addBalance(address _addr, uint256 _value) public onlyOwner {
         balanceOf[_addr] = balanceOf[_addr].add(_value);
     }
 
-    function subBalance(address _addr, uint256 _value) onlyOwner public {
+    function subBalance(address _addr, uint256 _value) public onlyOwner {
         balanceOf[_addr] = balanceOf[_addr].sub(_value);
     }
 
-    function setBalance(address _addr, uint256 _value) onlyOwner public {
+    function setBalance(address _addr, uint256 _value) public onlyOwner {
         balanceOf[_addr] = _value;
     }
 }

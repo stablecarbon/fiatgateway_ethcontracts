@@ -1,7 +1,7 @@
 pragma solidity ^0.4.23;
 
 import "./CarbonDollarStorage.sol";
-import 'openzeppelin-solidity/contracts/AddressUtils.sol';
+import "openzeppelin-solidity/contracts/AddressUtils.sol";
 import "openzeppelin-solidity/contracts/ownership/Ownable.sol";
 
 /**
@@ -33,8 +33,8 @@ contract MutableCarbonDollarStorage is Ownable, CarbonDollarStorage {
     }
 
     function _setStablecoinWhitelist(address _whitelist) internal {
-        require(_whitelist != address(stablecoinWhitelist)); // require a new address to be set
-        require(AddressUtils.isContract(_whitelist));
+        require(_whitelist != address(stablecoinWhitelist), "Must be a new stablecoin whitelist");
+        require(AddressUtils.isContract(_whitelist), "Must be an actual contract");
         address oldWhitelist = address(stablecoinWhitelist);
         stablecoinWhitelist = StablecoinWhitelist(_whitelist);
         emit StablecoinWhitelistChanged(oldWhitelist, _whitelist);
@@ -49,8 +49,8 @@ contract MutableCarbonDollarStorage is Ownable, CarbonDollarStorage {
     }
 
     function _setFeeSheet(address _sheet) internal {
-        require(_sheet != address(stablecoinFees)); // require a new address to be set
-        require(AddressUtils.isContract(_sheet));
+        require(_sheet != address(stablecoinFees), "Must be a new fee sheet");
+        require(AddressUtils.isContract(_sheet), "Must be an actual contract");
         address oldSheet = address(stablecoinFees);
         stablecoinFees = FeeSheet(_sheet);
         emit FeeSheetChanged(oldSheet, _sheet);

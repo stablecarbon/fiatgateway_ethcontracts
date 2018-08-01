@@ -22,7 +22,7 @@ contract WhitelistedToken is PermissionedToken {
     * @param _cusd Address of `CarbonDollar` contract
     */
     constructor(address r, address b, address a, address _cusd) PermissionedToken(r,b,a) public {
-        require(AddressUtils.isContract(_cusd));
+        require(AddressUtils.isContract(_cusd), "Address provided for CarbonUSD must be a contract");
         cusdAddress = _cusd;
     }
 
@@ -38,7 +38,7 @@ contract WhitelistedToken is PermissionedToken {
     }
 
     function _mintCUSD(address _to, uint256 _amount) internal returns (bool) {
-        require(_to != cusdAddress); // This is to prevent Carbon Labs from printing money out of thin air!
+        require(_to != cusdAddress, "Cannot mint to CarbonUSD contract"); // This is to prevent Carbon Labs from printing money out of thin air!
         bool successful = CarbonDollar(cusdAddress).mint(_to, _amount);
         successful = successful && _mint(cusdAddress, _amount);
         emit MintedToCUSD(_to, _amount);
@@ -51,8 +51,8 @@ contract WhitelistedToken is PermissionedToken {
     * @param _amount The number of tokens to withdraw
     * @return `true` if successful and `false` if unsuccessful
     */
-    function convertWT(uint256 _amount) requiresPermission public returns (bool) {
-        require(balanceOf(msg.sender) >= _amount);
+    function convertWT(uint256 _amount) public requiresPermission returns (bool) {
+        require(balanceOf(msg.sender) >= _amount, "Conversion amount should be less than balance");
         _burn(msg.sender, _amount);
         bool mintSuccessful = _mintCUSD(msg.sender, _amount);
         emit ConvertedToCUSD(msg.sender, _amount);

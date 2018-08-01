@@ -23,7 +23,7 @@ contract ValidatorSheet is Ownable{
     * @notice add a Validator
     * @param _validator Address of validator to add
     */
-    function addValidator(address _validator) onlyOwner public {
+    function addValidator(address _validator) public onlyOwner {
         _addValidator(_validator);
     }
     
@@ -36,7 +36,7 @@ contract ValidatorSheet is Ownable{
     * @notice remove a Validator
     * @param _validator Address of validator to remove
     */
-    function removeValidator(address _validator) onlyOwner public {
+    function removeValidator(address _validator) public onlyOwner {
         isValidator[_validator] = false;
         emit ValidatorRemoved(_validator);
     }

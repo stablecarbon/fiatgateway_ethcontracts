@@ -6,21 +6,23 @@ import "openzeppelin-solidity/contracts/ownership/Ownable.sol";
 
 
 contract PermissionedTokenProxy is DelayedUpgradeabilityProxy, Ownable, MutablePermissionedTokenStorage {
-    constructor( address _implementation, address regulator, address balances, address allowances ) DelayedUpgradeabilityProxy( _implementation ) MutablePermissionedTokenStorage(regulator, balances, allowances) public {}
+    constructor( address i, address r, address b, address a ) 
+    DelayedUpgradeabilityProxy(i) 
+    MutablePermissionedTokenStorage(r, b, a) public {}
 
     /**
     * @dev Upgrade the backing implementation of the proxy.
     * Only the admin can call this function.
     * @param newImplementation Address of the new implementation.
     */
-    function upgradeTo(address newImplementation) onlyOwner public {
+    function upgradeTo(address newImplementation) public onlyOwner {
         _setPendingUpgrade(newImplementation);
     }
 
     /**
     * @return The address of the implementation.
     */
-    function implementation() onlyOwner public view returns (address) {
+    function implementation() public view onlyOwner returns (address) {
         return _implementation();
     }
 }

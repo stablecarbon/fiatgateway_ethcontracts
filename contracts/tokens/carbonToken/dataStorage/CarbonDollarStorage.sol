@@ -9,19 +9,18 @@ import "./StablecoinWhitelist.sol";
 *
 */
 contract CarbonDollarStorage{
-	/**
-		Storage
+    /**
+        Storage
     */
     FeeSheet public stablecoinFees;
     StablecoinWhitelist public stablecoinWhitelist;
 
-	/**
+    /**
     * @dev a CarbonDollarStorage can set its storages only once, on construction
     *
     **/
     constructor (address feeSheet, address whitelist) public {
-    	stablecoinFees = FeeSheet(feeSheet);
-    	stablecoinWhitelist = StablecoinWhitelist(whitelist);
+        stablecoinFees = FeeSheet(feeSheet);
+        stablecoinWhitelist = StablecoinWhitelist(whitelist);
     }
-
 }

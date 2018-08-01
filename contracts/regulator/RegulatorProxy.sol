@@ -15,25 +15,27 @@ import "openzeppelin-solidity/contracts/ownership/Ownable.sol";
  */
 contract RegulatorProxy is UpgradeabilityProxy, Ownable, MutableRegulatorStorage {
 
-	
-	constructor( address _implementation, address _permissions, address _validators ) UpgradeabilityProxy( _implementation ) MutableRegulatorStorage(_permissions, _validators) public {}
+    
+    constructor(address i, address p, address v) public
+    UpgradeabilityProxy(i)
+    MutableRegulatorStorage(p, v) {}
 
-	/**
-	* @dev Upgrade the backing implementation of the proxy.
-	* Only the admin can call this function.
-	* @param newImplementation Address of the new implementation.
-	*/
-	function upgradeTo(address newImplementation) onlyOwner public {
-		_upgradeTo(newImplementation);
+    /**
+    * @dev Upgrade the backing implementation of the proxy.
+    * Only the admin can call this function.
+    * @param newImplementation Address of the new implementation.
+    */
+    function upgradeTo(address newImplementation) public onlyOwner {
+        _upgradeTo(newImplementation);
 
-	}
+    }
 
-  	/**
+      /**
     * @return The address of the implementation.
     */
-	function implementation() onlyOwner public view returns (address) {
-		return _implementation();
-	}
+    function implementation() public view returns (address) {
+        return _implementation();
+    }
 
 
 }

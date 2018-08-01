@@ -61,7 +61,11 @@ contract PermissionSheet is Ownable {
     * @param _permissionDescription A lengthier description for this permission (e.g. "Allows user to mint tokens").
     * @param _contractName Name of the contract that the method belongs to.
     */
-    function addPermission(bytes4 _methodsignature, string _permissionName, string _permissionDescription, string _contractName) public onlyOwner { 
+    function addPermission(
+        bytes4 _methodsignature, 
+        string _permissionName, 
+        string _permissionDescription, 
+        string _contractName) public onlyOwner { 
         Permission memory p = Permission(_permissionName, _permissionDescription, _contractName);
         _addPermission(_methodsignature, p);
     }
@@ -92,7 +96,7 @@ contract PermissionSheet is Ownable {
     * @param _methodsignature Signature of the method that this permission controls.
     */
     function setUserPermission(address _who, bytes4 _methodsignature) public onlyOwner {
-        require(isPermission[_methodsignature]);
+        require(isPermission[_methodsignature], "Permission being set must be for a valid method signature");
         hasUserPermission[_who][_methodsignature] = true;
         emit SetUserPermission(_who, _methodsignature);
     }
@@ -102,7 +106,7 @@ contract PermissionSheet is Ownable {
     * @param _methodsignature Signature of the method that this permission controls.
     */
     function removeUserPermission(address _who, bytes4 _methodsignature) public onlyOwner {
-        require(isPermission[_methodsignature]);
+        require(isPermission[_methodsignature], "Permission being removed must be for a valid method signature");
         hasUserPermission[_who][_methodsignature] = false;
         emit RemovedUserPermission(_who, _methodsignature);
     }
