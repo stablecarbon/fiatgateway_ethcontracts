@@ -23,6 +23,8 @@ const StablecoinWhitelist = artifacts.require("StablecoinWhitelist");
 const CarbonDollarRegulator = artifacts.require("CarbonDollarRegulator");
 const CarbonDollarProxy = artifacts.require("CarbonDollarProxy");
 
+// Upgradeability
+const DelayedUpgradeabilityProxy = artifacts.require("DelayedUpgradeabilityProxy");
 
 module.exports = {
 	PermissionSheet,
@@ -38,7 +40,7 @@ module.exports = {
 	CarbonDollar,
     FeeSheet,
     StablecoinWhitelist,
-    CarbonDollarRegulator,
-    CarbonDollarProxy
+	CarbonDollarRegulator,
+	DelayedUpgradeabilityProxy
 }
 

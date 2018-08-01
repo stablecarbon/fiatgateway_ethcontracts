@@ -25,7 +25,6 @@ contract('PermissionedTokenProxy', _accounts => {
         // Setting up Proxy initially at version 0 with data storage
         this.proxy = await PermissionedTokenProxy.new(this.impl_v0, this.proxyRegulator, this.proxyBalancesStorage, this.proxyAllowancesStorage, { from:proxyOwner })
         this.proxyAddress = this.proxy.address
-
     })
 
     describe('setRegulator, setBalanceStorage and setAllowanceStorage', function () {
