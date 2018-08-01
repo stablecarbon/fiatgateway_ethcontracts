@@ -32,8 +32,6 @@ function regulatorUserPermissionsTests(owner, user, validator) {
                 this.BURN_SIG = await this.permissionSheet.BURN_SIG();
                 this.BLACKLISTED_SIG = await this.permissionSheet.BLACKLISTED_SIG();
                 this.MINT_CUSD_SIG = await this.permissionSheet.MINT_CUSD_SIG();
-                this.CONVERT_SIG = await this.permissionSheet.CONVERT_SIG(); 
-                this.BURN_CARBON_DOLLAR_SIG = await this.permissionSheet.BURN_CARBON_DOLLAR_SIG();
                 
                 // Assert pre-test invariants
                 assert(await this.sheet.isValidator(validator));
@@ -43,8 +41,6 @@ function regulatorUserPermissionsTests(owner, user, validator) {
                 assert(await this.sheet.isPermission(this.BURN_SIG));
                 assert(await this.sheet.isPermission(this.BLACKLISTED_SIG));
                 assert(await this.sheet.isPermission(this.MINT_CUSD_SIG));
-                assert(await this.sheet.isPermission(this.CONVERT_SIG));
-                assert(await this.sheet.isPermission(this.BURN_CARBON_DOLLAR_SIG));
 
             });
 

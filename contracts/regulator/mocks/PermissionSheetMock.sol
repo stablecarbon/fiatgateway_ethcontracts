@@ -4,7 +4,7 @@ import "../dataStorage/PermissionSheet.sol";
 
 /**
 *
-* @dev creates a PermissionSheet full of permissions
+* @dev creates a PermissionSheet-loaded with all permissions
 *
 */
 contract PermissionSheetMock is PermissionSheet {
@@ -14,7 +14,7 @@ contract PermissionSheetMock is PermissionSheet {
         setMintPermission();
         setMintCUSDPermission();
         setBurnPermission();
-        setBurnCarbonDollarPermission();
+        setConvertCarbonDollarPermission();
         setConvertPermission();
         setDestroyBlacklistedTokensPermission();
         setApproveBlacklistedAddressSpenderPermission();
@@ -33,8 +33,8 @@ contract PermissionSheetMock is PermissionSheet {
         addPermission(BURN_SIG, "","","");
     }
 
-    function setBurnCarbonDollarPermission() internal {
-        addPermission(BURN_CARBON_DOLLAR_SIG, "","","");
+    function setConvertCarbonDollarPermission() internal {
+        addPermission(CONVERT_CARBON_DOLLAR_SIG, "","","");
     }
 
     function setConvertPermission() internal {
