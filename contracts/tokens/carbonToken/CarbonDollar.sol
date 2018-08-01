@@ -86,10 +86,10 @@ contract CarbonDollar is MutableCarbonDollarStorage, PermissionedToken {
     /**
      * @notice user can convert CarbonUSD umbrella token into the underlying assets. This is potentially interchain (EOS, ETH, Hedera etc)
      * @param stablecoin represents the type of coin the users wishes to receive for burning carbonUSD
-     * @param _amount Amount of CarbonUSD to burn.
+     * @param _amount Amount of CarbonUSD to convert.
      * we credit the user's account at the sender address with the _amount minus the percentage fee we want to charge.
      */
-    function burnCarbonDollar(address stablecoin, uint256 _amount) public requiresPermission returns (bool) {
+    function convertCarbonDollar(address stablecoin, uint256 _amount) public requiresPermission returns (bool) {
         require(stablecoinWhitelist.isWhitelisted(stablecoin));
         WhitelistedToken w = WhitelistedToken(stablecoin);
         require(w.balanceOf(address(this)) >= _amount); // Need enough WT0 in Carbon escrow account in order for transfer to succeed!
