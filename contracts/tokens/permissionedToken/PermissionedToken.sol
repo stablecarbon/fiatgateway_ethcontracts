@@ -67,8 +67,7 @@ contract PermissionedToken is ERC20, Pausable, MutablePermissionedTokenStorage {
 
         // Is the message sender a person with the ability to transfer tokens out of a blacklisted account?
         bool sender_can_spend_from_blacklisted_address = regulator.isBlacklistSpender(msg.sender);
-        require(!is_origin_blacklisted || sender_can_spend_from_blacklisted_address, 
-            "Origin cannot be blacklisted if spender is not an approved blacklist spender");
+        require(!is_origin_blacklisted || sender_can_spend_from_blacklisted_address, "Origin cannot be blacklisted if spender is not an approved blacklist spender");
         _;
     }
 
@@ -106,15 +105,15 @@ contract PermissionedToken is ERC20, Pausable, MutablePermissionedTokenStorage {
     /**
     * @notice Implements balanceOf() as specified in the ERC20 standard.
     */
-    function balanceOf(address _who) public view returns (uint256) {
-        return balances.balanceOf(_who);
+    function balanceOf(address who) public view returns (uint256) {
+        return balances.balanceOf(who);
     }
 
     /**
     * @notice Implements allowance() as specified in the ERC20 standard.
     */
-    function allowance(address _owner, address _spender) public view returns (uint256) {
-        return allowances.allowanceOf(_owner, _spender);
+    function allowance(address owner, address spender) public view returns (uint256) {
+        return allowances.allowanceOf(owner, spender);
     }
 
     /**
@@ -169,7 +168,8 @@ contract PermissionedToken is ERC20, Pausable, MutablePermissionedTokenStorage {
     /**
     * @notice Implements approve() as specified in the ERC20 standard.
     */
-    function approve(address _spender, uint256 _value) public userNotBlacklisted(_spender) senderNotBlacklisted whenNotPaused returns (bool) {
+    function approve(address _spender, uint256 _value) 
+    public userNotBlacklisted(_spender) senderNotBlacklisted whenNotPaused returns (bool) {
         allowances.setAllowance(msg.sender, _spender, _value);
         emit Approval(msg.sender, _spender, _value);
         return true;
@@ -296,7 +296,7 @@ contract PermissionedToken is ERC20, Pausable, MutablePermissionedTokenStorage {
     * execute this dummy function. This function effectively acts as a marker 
     * to indicate that a user is blacklisted.
     */
-    function blacklisted() public pure requiresPermission returns (bool) {
+    function blacklisted() public view requiresPermission returns (bool) {
         return true;
     }
 }

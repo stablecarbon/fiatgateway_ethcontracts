@@ -36,6 +36,4 @@ contract RegulatorProxy is UpgradeabilityProxy, Ownable, MutableRegulatorStorage
     function implementation() public view returns (address) {
         return _implementation();
     }
-
-
 }

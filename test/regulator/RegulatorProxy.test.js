@@ -32,7 +32,6 @@ contract('RegulatorProxy', _accounts => {
         this.proxyAddress = this.proxy.address
 
         this.MINT_SIG = await (await PermissionSheet.at(this.proxyPermissionStorage)).MINT_SIG();
-
     })
 
     describe('setPermissionStorage and setValidatorStorage', function () {
@@ -46,7 +45,6 @@ contract('RegulatorProxy', _accounts => {
         describe('owner calls', function () {
             const from = proxyOwner
             beforeEach(async function () {
-
                 const { logs } = await this.proxy.setPermissionStorage(this.newProxyPermissionStorage, {from})
                 this.logs = logs
                 this.event = this.logs.find(l => l.event === 'ChangedPermissionStorage').event
@@ -54,7 +52,6 @@ contract('RegulatorProxy', _accounts => {
                 this.newAddress = this.logs.find(l => l.event === 'ChangedPermissionStorage').args._new
 
                 await this.proxy.setValidatorStorage(this.newProxyValidatorStorage, {from})
-
             })
             it('sets regulator proxy storage', async function () {
                 assert.equal(await this.proxy.permissions(), this.newProxyPermissionStorage)
@@ -69,51 +66,29 @@ contract('RegulatorProxy', _accounts => {
             it('does not change regulator implementation storages', async function () {
                 assert.equal(await this.logic_v0.permissions(), this.regulator_logic_v0_permission_storage)
                 assert.equal(await this.logic_v0.validators(), this.regulator_logic_v0_validator_storage)
-
             })
-
         })
         describe('non-owner calls', function () {
             const from = owner
             it('reverts', async function () {
                 await expectRevert(this.proxy.setPermissionStorage(this.newProxyPermissionStorage, {from}))
                 await expectRevert(this.proxy.setValidatorStorage(this.newProxyValidatorStorage, {from}))
-
             })
         })
-
     })
     describe('implementation', function () {
-
-        describe('owner calls', function () {
-            const from = proxyOwner
-
-            it('returns the Regulator implementation address', async function () {
-                this.implementation = await this.proxy.implementation({from})
-                assert.equal(this.implementation, this.impl_v0)
-            })
+        it('returns the Regulator implementation address', async function () {
+            this.implementation = await this.proxy.implementation({ from: user })
+            assert.equal(this.implementation, this.impl_v0)
         })
-        describe('non-owner calls', function () {
-            const from = owner
-
-            it('reverts', async function () {
-                await expectRevert(this.proxy.implementation({from}))
-            })
-        })
-
-
     })
-
     describe('before upgrading to v1', function () {
-
         beforeEach(async function () {
-
             this.regulatorProxy = Regulator.at(this.proxyAddress)
             this.logic_v0 = Regulator.at(this.impl_v0)
 
             this.regulatorProxyStorage = ValidatorSheet.at(await this.regulatorProxy.validators());
             this.logicStorage = ValidatorSheet.at(await this.logic_v0.validators());
-
         })
         describe('call to proxy to addValidator', function () {
 
@@ -147,7 +122,6 @@ contract('RegulatorProxy', _accounts => {
                 this.logs = logs
                 this.event = this.logs.find(l => l.event === 'Upgraded').event
                 this.newImplementation = this.logs.find(l => l.event === 'Upgraded').args.implementation
-
             })
             it('upgrades to V1 implementation', async function () {
                 this.implementation = await this.proxy.implementation( { from })
@@ -170,11 +144,9 @@ contract('RegulatorProxy', _accounts => {
                 it('proxy storage remains the same', async function () {
                     assert.equal(await this.proxy.permissions(), this.proxyPermissionStorage)
                     assert.equal(await this.proxy.validators(), this.proxyValidatorStorage)
-
                 })
             })
             describe('Calls proxy', function () {
-
                 beforeEach(async function () {
                     this.regulatorProxyStorage = ValidatorSheet.at(await this.regulatorProxy.validators())
                     this.regulatorProxyStorage2 = PermissionSheet.at(await this.regulatorProxy.permissions())
@@ -186,44 +158,30 @@ contract('RegulatorProxy', _accounts => {
                     this.v1_permission = PermissionSheet.at(await this.logic_v1.permissions())
                     await this.v1_validator.transferOwnership(this.logic_v1.address, {from:owner})
                     await this.v1_permission.transferOwnership(this.logic_v1.address, {from:owner})
-
                 })
                 describe('addValidator', function () {
-
                     describe('proxyOwner calls', function () {
-
                         const from = proxyOwner
-
                         it('adds validator to proxy storage and NOT logic storage', async function () {
-
                             await this.regulatorProxy.addValidator(validator, {from})
                             assert(await this.regulatorProxy.isValidator(validator))
                             assert(!(await this.logic_v1.isValidator(validator)))
-
                         })
                     })
                     describe('regulator implementation owner calls', function () {
-
                         const from = owner
-
                         it('reverts', async function () {
-
                             await expectRevert(this.regulatorProxy.addValidator(validator, {from}))
-
                         })
                     })
                 })
-
                 describe('removeValidator', function () {
-
                     beforeEach(async function () {
                         await this.regulatorProxy.addValidator(validator, {from:proxyOwner})
                         await this.logic_v1.addValidator(validator, {from:owner})
                     })
                     describe('proxyOwner calls', function () {
-
                         const from = proxyOwner
-
                         it('removes validator from proxy storage and NOT logic storage', async function () {
                             await this.regulatorProxy.removeValidator(validator, {from})
                             assert(!(await this.regulatorProxy.isValidator(validator)))
@@ -231,26 +189,19 @@ contract('RegulatorProxy', _accounts => {
                         })
                     })
                     describe('regulator implementation owner calls', function () {
-
                         const from = owner
-
                         it('reverts', async function () {
-
                             await expectRevert(this.regulatorProxy.removeValidator(validator, {from}))
                         })
                     })
                 })
-
                 describe('addPermission', function () {
-
                     beforeEach(async function () {
                         await this.regulatorProxy.addValidator(validator, { from:proxyOwner })
                     })
                     describe('validator calls', function () {
-
                         const from = validator
                         it('adds permission to proxy storage and NOT logic storage', async function () {
-
                             await this.regulatorProxy.addPermission(this.MINT_SIG,'MINT','users can mint','minting is fun', {from})
                             assert(await this.regulatorProxy.isPermission(this.MINT_SIG))
                             const permissions = await this.regulatorProxy.getPermission(this.MINT_SIG);
@@ -258,17 +209,12 @@ contract('RegulatorProxy', _accounts => {
                             assert.equal(permissions[1], 'users can mint');
                             assert.equal(permissions[2], 'minting is fun');
                             assert(!(await this.logic_v1.isPermission(this.MINT_SIG)))
-
                         })
-
                     })
                     describe('non validator calls', function () {
-
                         it('reverts', async function () {
-
                             await expectRevert(this.regulatorProxy.addPermission(this.MINT_SIG,'','','', {from:owner}))
                             await expectRevert(this.regulatorProxy.addPermission(this.MINT_SIG,'','','', {from:proxyOwner}))
-
                         })
                     })
                 })
@@ -283,15 +229,12 @@ contract('RegulatorProxy', _accounts => {
                     })
 
                     describe('validator calls', function () {
-
                         const from = validator
                         it('removes permission from proxy storage and NOT logic storage', async function () {
-
                             await this.regulatorProxy.removePermission(this.MINT_SIG, {from})
                             assert(!(await this.regulatorProxy.isPermission(this.MINT_SIG)))
                             assert(await this.logic_v1.isPermission(this.MINT_SIG))
                         })
-
                     })
                     describe('non validator calls', function () {
 
@@ -300,22 +243,18 @@ contract('RegulatorProxy', _accounts => {
                             await expectRevert(this.regulatorProxy.removePermission(this.MINT_SIG), {from:proxyOwner})
                         })
                     })
-
                 })
 
                 describe('setUserPermission', function () {
-
                     beforeEach(async function () {
                         await this.regulatorProxy.addValidator(validator, {from:proxyOwner})
                         await this.regulatorProxy.addPermission(this.MINT_SIG, '', '', '', {from:validator})
                         await this.logic_v1.addValidator(validator, {from:owner})
                         await this.logic_v1.addPermission(this.MINT_SIG, '', '', '', {from:validator})
                     })
-
                     describe('validator calls', function () {
                         const from = validator
                         it('sets user permission to proxy storage and NOT logic storage', async function () {
-
                             await this.regulatorProxy.setUserPermission(user, this.MINT_SIG, {from})
                             assert(await this.regulatorProxy.hasUserPermission(user, this.MINT_SIG))
                             assert(!(await this.logic_v1.hasUserPermission(user, this.MINT_SIG)))
@@ -331,7 +270,6 @@ contract('RegulatorProxy', _accounts => {
                 })
 
                 describe('removeUserPermission', function () {
-
                     beforeEach(async function () {
                         await this.regulatorProxy.addValidator(validator, {from:proxyOwner})
                         await this.regulatorProxy.addPermission(this.MINT_SIG, '', '', '', {from:validator})
@@ -340,18 +278,14 @@ contract('RegulatorProxy', _accounts => {
                         await this.regulatorProxy.setUserPermission(user, this.MINT_SIG, {from:validator})
                         await this.logic_v1.setUserPermission(user, this.MINT_SIG, {from:validator})
                     })
-
                     describe('validator calls', function () {
                         const from = validator
                         it('removes user permission from proxy storage and NOT logic storage', async function () {
-
                             await this.regulatorProxy.removeUserPermission(user, this.MINT_SIG, {from})
                             assert(!(await this.regulatorProxy.hasUserPermission(user, this.MINT_SIG)))
                             assert(await this.logic_v1.hasUserPermission(user, this.MINT_SIG))
-
                         })
                     })
-
                     describe('non-validator calls', function () {
                         it('reverts', async function () {
                             await expectRevert(this.regulatorProxy.removeUserPermission(user, this.MINT_SIG, {from:owner}))
@@ -359,7 +293,6 @@ contract('RegulatorProxy', _accounts => {
                         })
                     })
                 })
-
                 describe('Regulator events emit', function () {
                     beforeEach(async function () {
                         await this.regulatorProxy.addValidator(validator, {from:proxyOwner})
@@ -377,9 +310,7 @@ contract('RegulatorProxy', _accounts => {
                         })
                     })
                 })
-
             })
-
         })
         describe('Regulator implementation owner calls upgradeTo', function () {
             const from = owner
@@ -387,8 +318,5 @@ contract('RegulatorProxy', _accounts => {
                 await expectRevert(this.proxy.upgradeTo(this.impl_v1, {from}))
             })
         })
-
     })
-
-
 })

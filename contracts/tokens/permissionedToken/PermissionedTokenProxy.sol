@@ -10,15 +10,15 @@ import "zos-lib/contracts/upgradeability/UpgradeabilityProxy.sol";
 */
 contract PermissionedTokenProxy is UpgradeabilityProxy, Ownable, MutablePermissionedTokenStorage {
     constructor(address i, address r, address b, address a) 
-        UpgradeabilityProxy(i) 
-        MutablePermissionedTokenStorage(r, b, a) public {}
+    UpgradeabilityProxy(i) 
+    MutablePermissionedTokenStorage(r, b, a) public {}
 
     /**
     * @dev Upgrade the backing implementation of the proxy.
     * Only the admin can call this function.
     * @param newImplementation Address of the new implementation.
     */
-    function upgradeTo(address newImplementation) onlyOwner public {
+    function upgradeTo(address newImplementation) public onlyOwner {
         // _setPendingUpgrade(newImplementation);
         _upgradeTo(newImplementation);
     }
