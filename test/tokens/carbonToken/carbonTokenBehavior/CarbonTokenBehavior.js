@@ -71,10 +71,12 @@ function carbonDollarBehaviorTests(owner, wtMinter, whitelisted, validator) {
                     });
                     it('emits a ConvertedToWT event', async function () {
                         const { logs } = await this.token.convertCarbonDollar(this.wtToken.address, 50 * 10 ** 18, { from: whitelisted });
-                        assert.equal(logs.length, 1)
-                        assert.equal(logs[0].event, 'ConvertedToWT')
-                        assert.equal(logs[0].args.user, whitelisted)
-                        assert.equal(logs[0].args.amount, 50 * 10 ** 18)
+                        this.logs = logs
+                        this.event = this.logs.find(l => l.event === 'ConvertedToWT').event
+                        this.args = this.logs.find(l => l.event === 'ConvertedToWT').args
+                        assert.equal(this.event, 'ConvertedToWT')
+                        assert.equal(this.args.user, whitelisted)
+                        assert.equal(this.args.amount, 50 * 10 ** 18)
 
                     })
                 });
