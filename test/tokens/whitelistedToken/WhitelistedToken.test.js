@@ -1,5 +1,6 @@
 const { CommonVariables, expectRevert, assertBalance } = require('../../helpers/common');
 const { tokenSetup } = require('../../helpers/tokenSetup');
+const { PermissionSheet, Regulator } = require('../../helpers/artifacts');
 var BigNumber = require("bignumber.js");
 
 contract('WhitelistedToken', _accounts => {
@@ -10,9 +11,10 @@ contract('WhitelistedToken', _accounts => {
     const blacklisted = commonVars.attacker
     const whitelisted = commonVars.user2
     const nonlisted = commonVars.user3
+    const user = commonVars.validator2
 
     beforeEach(async function () {
-        await tokenSetup.call(this, validator, minter, owner, whitelisted, blacklisted, nonlisted);
+        await tokenSetup.call(this, validator, minter, user, owner, whitelisted, blacklisted, nonlisted);
         this.token = this.wtToken;
     });
 
@@ -22,6 +24,7 @@ contract('WhitelistedToken', _accounts => {
         describe('mintCUSD', function () {       
             describe('user has mint CUSD permission', function () {
                 beforeEach(async function () {
+                    await this.cdToken.listToken(this.token.address, { from: owner });
                     await this.token.mintCUSD(whitelisted, hundred, { from: minter });
                 });
                 it('appropriate number of funds end up in Carbon\'s WT0 escrow account', async function () {

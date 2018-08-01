@@ -1,41 +1,38 @@
 const { assertBalance, expectRevert } = require('../../../helpers/common');
 
-function carbonDollarBehaviorTests(owner, wtMinter, whitelisted, minter) {
+function carbonDollarBehaviorTests(owner, wtMinter, whitelisted, validator) {
 
     describe("Mint and burn functions", function () {
-        beforeEach(async function() {
-        })
-
         // Currently, we cannot test CarbonDollar.mint since this function can only be called by a whitelisted
         // stablecoin address
-        // describe('mint', function () {
-        //     describe('when sender is a token contract', function () {
-        //         describe('when token contract is whitelisted', function () {
-        //             it('mints CUSD to user', async function () {
-        //                 await this.token.listToken(this.wtToken.address, { from: owner });
-        //                 await this.token.mint(whitelisted, 100 * 10 ** 18, { from: this.wtToken })
-        //                 assertBalance(this.token, whitelisted, 100 * 10 ** 18);
-        //             });
-        //         });
-        //         describe('when token contract is not whitelisted', function () {
-        //             it('reverts call', async function () {
-        //                 await this.token.unlistToken(this.wtToken.address, { from: owner });
-        //                 await expectRevert(this.token.mint(whitelisted, 100 * 10 ** 18, { from: this.wtToken }));
-        //             });
-        //         });
-        //     });
+        describe('mint', function () {
+            // describe('when sender is a token contract', function () {
+                // describe('when token contract is whitelisted', function () {
+                //     it('mints CUSD to user', async function () {
+                //         await this.token.listToken(this.wtToken.address, { from: owner });
+                //         await this.token.mint(whitelisted, 100 * 10 ** 18, { from: this.wtToken })
+                //         assertBalance(this.token, whitelisted, 100 * 10 ** 18);
+                //     });
+                // });
+                // describe('when token contract is not whitelisted', function () {
+                //     it('reverts call', async function () {
+                //         await this.token.unlistToken(this.wtToken.address, { from: owner });
+                //         await expectRevert(this.token.mint(whitelisted, 100 * 10 ** 18, { from: this.wtToken }));
+                //     });
+                // });
+            // });
 
-        //     describe('when sender is not a token contract', function () {
-        //         it('reverts call', async function () {
-        //             await expectRevert(this.token.mint(whitelisted, 100 * 10 ** 18, { from: whitelisted }));
-        //         });
-        //     });
-        // })
+            describe('when sender is not a token contract', function () {
+                it('reverts call', async function () {
+                    await expectRevert(this.token.mint(whitelisted, 100 * 10 ** 18, { from: whitelisted }));
+                });
+            });
+        })
 
         describe('burnCarbonDollar', function () {
             describe('when desired stablecoin is whitelisted', function () {
                 describe('when CUSD WT0 escrow account within stablecoin holds enough funds', function () {
-                    it('converts user CUSD into WT0, minus a fee', async function () {
+                    beforeEach(async function () {
                         // Whitelist the WT0 contract and add a fee
                         await this.token.listToken(this.wtToken.address, { from: owner });
                         await this.token.setFee(this.wtToken.address, 100, { from: owner });  // 10% fee
@@ -49,59 +46,57 @@ function carbonDollarBehaviorTests(owner, wtMinter, whitelisted, minter) {
                         // Whitelisted account should have carbon dollars
                         assert.equal(await this.token.balanceOf(whitelisted), 100 * 10 ** 18)
 
-                        // // User now could call CarbonDollar.burnCarbonDollar to convert CUSD back into WT
-                        this.token.burnCarbonDollar(this.wtToken.address, 50 * 10 ** 18, { from: whitelisted });
+                    })
+                    it('converts user CUSD into WT0, minus a fee', async function () {
 
-                        console.log(await this.wtToken.balanceOf(whitelisted))
-                        console.log(await this.token.balanceOf(whitelisted))
-                        console.log(await this.wtToken.balanceOf(this.token.address))
-                        console.log(await this.token.balanceOf(this.token.address))
-                        // assertBalance(this.wtToken, whitelisted, 45 * 10 ** 18); // User gets WT0 returned to them
-                        // assertBalance(this.token, whitelisted, 50 * 10 ** 18); // User's remaining CUSD balance
+                        // // User now could call CarbonDollar.burnCarbonDollar to convert CUSD back into WT
+                        await this.token.burnCarbonDollar(this.wtToken.address, 50 * 10 ** 18, { from: whitelisted });
+
+                        assertBalance(this.wtToken, whitelisted, 45 * 10 ** 18); // User gets WT0 returned to them
+                        assertBalance(this.token, whitelisted, 50 * 10 ** 18); // User's remaining CUSD balance
 
                     });
-                    // it('deposits fee into CarbonDollar contract address as CUSD', async function () {
-                    //     // Whitelist the WT0 contract and add a fee
-                    //     await this.token.listToken(this.wtToken.address, { from: owner });
-                    //     await this.token.setFee(this.wtToken.address, 100, { from: owner });  // 10% fee
-                    //     // Mint CarbonUSD for user
-                    //     await this.wtToken.mint(whitelisted, 100 * 10 ** 18, true, { from: wtMinter });
-                    //     await this.token.burnCarbonDollar(this.wtToken.address, 50 * 10 ** 18, { from: whitelisted });
+                    it('deposits fee into CarbonDollar contract address as CUSD', async function () {
 
-                    //     assertBalance(this.token, this.token.address, 10 * 10 ** 18); // Fee deposited into Carbon account for transaction                    
-                    // });
-                    // it('diminishes amount in CUSD WT0 escrow account', async function () {
-                    //     // Whitelist the WT0 contract and add a fee
-                    //     await this.token.listToken(this.wtToken.address, { from: owner });
-                    //     await this.token.setFee(this.wtToken.address, 100, { from: owner });  // 10% fee
-                    //     // Mint CarbonUSD for user
-                    //     await this.wtToken.mint(whitelisted, 100 * 10 ** 18, true, { from: wtMinter });
-                    //     await this.token.burnCarbonDollar(this.wtToken.address, 50 * 10 ** 18, { from: whitelisted });
+                        await this.token.burnCarbonDollar(this.wtToken.address, 50 * 10 ** 18, { from: whitelisted });
 
-                    //     assertBalance(this.wtToken, this.token.address, 50 * 10 ** 18); // Carbon's remaining WT0 escrowed balance
-                    // });
+                        assertBalance(this.token, this.token.address, 5 * 10 ** 18); // Fee deposited into Carbon account for transaction                    
+                    
+                    });
+                    it('diminishes amount in CUSD WT0 escrow account', async function () {
+
+                        await this.token.burnCarbonDollar(this.wtToken.address, 50 * 10 ** 18, { from: whitelisted });
+
+                        assertBalance(this.wtToken, this.token.address, 50 * 10 ** 18); // Carbon's remaining WT0 escrowed balance
+                    });
                 });
-                // describe('when CUSD escrow account within stablecoin does not hold enough funds', function () {
-                //     it('reverts call', async function () {
-                //         await this.token.listToken(this.wtToken.address, { from: owner });
-                //         await this.token.setFee(this.wtToken.address, 100, { from: owner });  // 10% fee
-                //         // Mint CarbonUSD for user
-                //         await this.wtToken.mint(whitelisted, 100 * 10 ** 18, true, { from: wtMinter });
-                //         await this.wtToken.burn(90 * 10 ** 18, { from: this.token.address }); // Carbon's escrow account in WT0 now only has 10*10**18 tokens
-                //         await expectRevert(this.token.burnCarbonDollar(this.wtToken.address, 50 * 10 ** 18, { from: whitelisted }));
-                //     });
-                // });
+                describe('when CUSD escrow account within stablecoin does not hold enough funds', function () {
+                    it('reverts call', async function () {
+                        await this.token.listToken(this.wtToken.address, { from: owner });
+                        await this.token.setFee(this.wtToken.address, 100, { from: owner });  // 10% fee
+                        // Mint CarbonUSD for user
+                        await this.wtToken.mintCUSD(whitelisted, 100 * 10 ** 18, { from: wtMinter });
+                        
+                        // Workaround to burn WT0 escrowed tokens out of CUSD address
+                        await this.regulator_w.setBlacklistDestroyer(validator, { from: validator }); // Carbon's escrow account in WT0 now only has 10*10**18 tokens
+                        await this.regulator_w.setBlacklistedUser(this.token.address, { from: validator }); // Carbon's escrow account in WT0 now only has 10*10**18 tokens
+                        await this.wtToken.destroyBlacklistedTokens(this.token.address, 90 * 10 ** 18, { from: validator }); // Carbon's escrow account in WT0 now only has 10*10**18 tokens
+                        await this.regulator_w.setWhitelistedUser(this.token.address, { from: validator }); // Carbon's escrow account in WT0 now only has 10*10**18 tokens
+                        
+                        await expectRevert(this.token.burnCarbonDollar(this.wtToken.address, 50 * 10 ** 18, { from: whitelisted }));
+                    });
+                });
             });
-            // describe('when desired stablecoin is not whitelisted', function () {
-            //     it('reverts call', async function () {
-            //         await this.token.listToken(this.wtToken.address, { from: owner });
-            //         await this.token.setFee(this.wtToken.address, 100, { from: owner });
-            //         // Mint CarbonUSD for user
-            //         await this.token.mint(whitelisted, 100 * 10 ** 18, { from: this.wtToken });
-            //         // After this operation, user has CUSD, but Carbon doesn't have any escrowed WT0 to back it.
-            //         await expectRevert(this.token.burnCarbonDollar(this.wtToken.address, 50 * 10 ** 18, { from: whitelisted }));
-            //     });
-            // });
+            describe('when desired stablecoin is not whitelisted', function () {
+                it('reverts call', async function () {
+                    await this.token.listToken(this.wtToken.address, { from: owner });
+                    await this.token.setFee(this.wtToken.address, 100, { from: owner });
+                    // Mint CarbonUSD for user
+                    await this.wtToken.mintCUSD(whitelisted, 100 * 10 ** 18, { from: wtMinter });
+                    await this.token.unlistToken(this.wtToken.address, { from: owner });
+                    await expectRevert(this.token.burnCarbonDollar(this.wtToken.address, 50 * 10 ** 18, { from: whitelisted }));
+                });
+            });
         });
 
     });

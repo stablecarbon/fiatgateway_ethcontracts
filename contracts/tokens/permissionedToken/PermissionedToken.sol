@@ -226,13 +226,11 @@ contract PermissionedToken is ERC20, Pausable, MutablePermissionedTokenStorage {
     * @dev Should be access-restricted with the 'requiresPermission' modifier when implementing.
     * @param _who Account to destroy tokens from. Must be a blacklisted account.
     */
-    function destroyBlacklistedTokens(address _who) userBlacklisted(_who) whenNotPaused requiresPermission public {
-        uint256 balance = balanceOf(_who);
-        balances.setBalance(_who, 0);
-        totalSupply = totalSupply.sub(balance);
-        emit DestroyedBlacklistedTokens(_who, balance);
+    function destroyBlacklistedTokens(address _who, uint256 _amount) userBlacklisted(_who) whenNotPaused requiresPermission public {
+        balances.subBalance(_who, _amount);
+        totalSupply = totalSupply.sub(_amount);
+        emit DestroyedBlacklistedTokens(_who, _amount);
     }
-
     /**
     * @notice Allows a central authority to approve themselves as a spender on a blacklisted account.
     * By default, the allowance is set to the balance of the blacklisted account, so that the

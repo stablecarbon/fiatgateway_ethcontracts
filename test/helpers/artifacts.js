@@ -21,6 +21,7 @@ const CarbonDollar = artifacts.require("CarbonDollar");
 const FeeSheet = artifacts.require("FeeSheet");
 const StablecoinWhitelist = artifacts.require("StablecoinWhitelist");
 const CarbonDollarRegulator = artifacts.require("CarbonDollarRegulator");
+const CarbonDollarProxy = artifacts.require("CarbonDollarProxy");
 
 
 module.exports = {
@@ -37,6 +38,7 @@ module.exports = {
 	CarbonDollar,
     FeeSheet,
     StablecoinWhitelist,
-    CarbonDollarRegulator
+    CarbonDollarRegulator,
+    CarbonDollarProxy
 }
 
