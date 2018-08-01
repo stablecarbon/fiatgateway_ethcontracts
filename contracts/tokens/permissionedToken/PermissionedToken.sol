@@ -36,8 +36,7 @@ contract PermissionedToken is ERC20, Pausable, MutablePermissionedTokenStorage {
     event Approval(address indexed owner, address indexed spender, uint256 value);
 
 
-    constructor (address regulator, address balances, address allowances) MutablePermissionedTokenStorage (regulator, balances, allowances) public {
-    }
+    constructor (address regulator, address balances, address allowances) MutablePermissionedTokenStorage(regulator, balances, allowances) public {}
 
     /** Modifiers */
     /** @notice Modifier that allows function access to be restricted based on

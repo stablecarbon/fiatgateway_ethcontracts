@@ -3,7 +3,7 @@ import "./dataStorage/MutableCarbonDollarStorage.sol";
 import "../permissionedToken/PermissionedToken.sol";
 import "../whitelistedToken/WhitelistedToken.sol";
 
-contract CarbonDollar is PermissionedToken, MutableCarbonDollarStorage {
+contract CarbonDollar is MutableCarbonDollarStorage, PermissionedToken {
     /**
         Modifiers
     */

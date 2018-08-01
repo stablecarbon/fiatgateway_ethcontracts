@@ -1,6 +1,7 @@
 pragma solidity ^0.4.23;
 
 import "zos-lib/contracts/upgradeability/UpgradeabilityProxy.sol";
+import "openzeppelin-solidity/contracts/math/SafeMath.sol";
 
 /** 
  * @title DelayedUpgradeabilityProxy
@@ -10,12 +11,12 @@ import "zos-lib/contracts/upgradeability/UpgradeabilityProxy.sol";
 contract DelayedUpgradeabilityProxy is UpgradeabilityProxy {
     using SafeMath for uint256;
 
-    address public _pendingImplementation;
+    address public pendingImplementation;
     bool public pendingImplementationIsSet;
-    uint256 pendingImplementationApplicationDate; // Date on which to switch all contract calls to the new implementation
+    uint256 public pendingImplementationApplicationDate; // Date on which to switch all contract calls to the new implementation
     uint256 public UPGRADE_DELAY = 4 weeks;
 
-    event PendingImplementationChanged(address oldPendingImplementation, address newPendingImplementation);
+    event PendingImplementationChanged(address indexed oldPendingImplementation, address indexed newPendingImplementation);
 
     constructor(address i) UpgradeabilityProxy(i) public {}
 
@@ -26,8 +27,8 @@ contract DelayedUpgradeabilityProxy is UpgradeabilityProxy {
     * @param implementation Address of the new implementation.
     */
     function _setPendingUpgrade(address implementation) internal {
-        address oldPendingImplementation = _pendingImplementation;
-        _pendingImplementation = implementation;
+        address oldPendingImplementation = pendingImplementation;
+        pendingImplementation = implementation;
         pendingImplementationIsSet = true;
         emit PendingImplementationChanged(oldPendingImplementation, implementation);
         pendingImplementationApplicationDate = now.add(UPGRADE_DELAY);
@@ -41,7 +42,7 @@ contract DelayedUpgradeabilityProxy is UpgradeabilityProxy {
     */
     function _willFallback() internal {
         if (pendingImplementationIsSet && now > pendingImplementationApplicationDate) {
-            _upgradeTo(_pendingImplementation());
+            _upgradeTo(pendingImplementation);
             pendingImplementationIsSet = false;
         }
     }

@@ -7,7 +7,6 @@ const BigNumber = web3.BigNumber;
 const ZERO_ADDRESS = 0x0000000000000000000000000000000000000000;
 const RANDOM_ADDRESS = 0x3b5855bAEF50EBFdFC89c5E5463f92BCe194EAc9; 
 
-
 /** Contract classes **/
 // WT0
 const WhitelistedToken = artifacts.require("WhitelistedToken");
@@ -33,6 +32,8 @@ class CommonVariables {
         this.user3 = _accounts[4];
         this.validator = _accounts[5];
         this.validator2 = _accounts[6];
+        this.user4 = _accounts[7];
+        this.user5 = _accounts[8];
     }
 }
 
