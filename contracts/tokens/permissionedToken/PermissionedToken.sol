@@ -288,7 +288,7 @@ contract PermissionedToken is ERC20, Pausable, MutablePermissionedTokenStorage {
     }
 
     /**
-    * @notice Iff a user is blacklisted, they will have the permission to 
+    * @notice If a user is blacklisted, they will have the permission to 
     * execute this dummy function. This function effectively acts as a marker 
     * to indicate that a user is blacklisted.
     */

@@ -11,7 +11,7 @@ contract WhitelistedToken is PermissionedToken {
         Events
      */
     event MintedToCUSD(address indexed user, uint256 amount);
-    event BurnedToCUSD(address indexed user, uint256 amount);
+    event ConvertedToCUSD(address indexed user, uint256 amount);
 
     /**
     * @notice Constructor sets the regulator proxy contract and the address of the
@@ -51,11 +51,11 @@ contract WhitelistedToken is PermissionedToken {
     * @param _amount The number of tokens to withdraw
     * @return `true` if successful and `false` if unsuccessful
     */
-    function convert(uint256 _amount) requiresPermission public returns (bool) {
+    function convertWT(uint256 _amount) requiresPermission public returns (bool) {
         require(balanceOf(msg.sender) >= _amount);
         _burn(msg.sender, _amount);
         bool mintSuccessful = _mintCUSD(msg.sender, _amount);
-        emit BurnedToCUSD(msg.sender, _amount);
+        emit ConvertedToCUSD(msg.sender, _amount);
         return mintSuccessful;
     }
 }

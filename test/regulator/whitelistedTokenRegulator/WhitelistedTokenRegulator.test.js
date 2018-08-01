@@ -1,11 +1,11 @@
 const { CommonVariables, expectRevert } = require('../../helpers/common');
 
-const { CarbonDollarRegulator } = require('../../helpers/artifacts');
+const { WhitelistedTokenRegulator } = require('../../helpers/artifacts');
 
 const { ValidatorSheetMock, PermissionSheetMock } = require('../../helpers/mocks');
 
 
-contract('CarbonDollarRegulator', _accounts => {
+contract('WhitelistedTokenRegulator', _accounts => {
     const commonVars = new CommonVariables(_accounts);
     const owner = commonVars.owner;
     const user = commonVars.user;
@@ -13,38 +13,100 @@ contract('CarbonDollarRegulator', _accounts => {
     const attacker = commonVars.attacker;
 
 
-    describe("testing CarbonDollarRegulator overwritten functions", function () {
-        describe('CarbonDollarRegulator sets CarbonDollarRegulatorStorage pre-loaded with all permissions', function () {
+    describe("testing WhitelistedTokenRegulator overwritten functions", function () {
+        describe('WhitelistedTokenRegulator sets WhitelistedTokenRegulatorStorage pre-loaded with all permissions', function () {
 
-            describe("Testing CarbonDollarRegulator ability to SET/GET user permissions", async function () {
+            describe("Testing WhitelistedTokenRegulator ability to SET/GET user permissions", async function () {
                 beforeEach(async function() {
 
                     // Instantiate RegulatorsMock that comes pre-loaded with all function permissions and one validator
                     this.permissionSheet = await PermissionSheetMock.new( {from:owner })
                     this.validatorSheet = await ValidatorSheetMock.new(validator, {from:owner} )
 
-                    this.sheet = await CarbonDollarRegulator.new(this.permissionSheet.address, this.validatorSheet.address, {from:owner})
+                    this.sheet = await WhitelistedTokenRegulator.new(this.permissionSheet.address, this.validatorSheet.address, {from:owner})
 
                     await this.permissionSheet.transferOwnership(this.sheet.address, {from:owner})
                     await this.validatorSheet.transferOwnership(this.sheet.address, {from:owner})
 
                     // storing method signatures for testing convenience
                     this.BLACKLISTED_SIG = await this.permissionSheet.BLACKLISTED_SIG();
-                    this.CONVERT_CARBON_DOLLAR_SIG = await this.permissionSheet.CONVERT_CARBON_DOLLAR_SIG();
+                    this.CONVERT_WT_SIG = await this.permissionSheet.CONVERT_WT_SIG();
+                    this.MINT_CUSD_SIG = await this.permissionSheet.MINT_CUSD_SIG();
+                    this.MINT_SIG = await this.permissionSheet.MINT_SIG();
+
                     
                     // Assert pre-test invariants
                     assert(await this.sheet.isValidator(validator));
                     assert(await this.sheet.isPermission(this.BLACKLISTED_SIG));
-                    assert(await this.sheet.isPermission(this.CONVERT_CARBON_DOLLAR_SIG));
+                    assert(await this.sheet.isPermission(this.CONVERT_WT_SIG));
+                    assert(await this.sheet.isPermission(this.MINT_CUSD_SIG));
+                    assert(await this.sheet.isPermission(this.MINT_SIG));
 
                 });
+
+                describe('setMinter', function () {
+                    describe("when sender is validator", function () {
+                        const from = validator;
+                        it('sets user as WT minter', async function () {
+                            await this.sheet.setMinter(user, { from });
+                            assert(await this.sheet.hasUserPermission(user, this.MINT_CUSD_SIG));
+                            assert(await this.sheet.hasUserPermission(user, this.MINT_SIG));
+                            assert(await this.sheet.isMinter(user));
+                        })
+                        it('emits a SetMinter event', async function () {
+                            const { logs } = await this.sheet.setMinter(user, { from });
+                            assert.equal(logs.length, 1);
+                            assert.equal(logs[0].event, 'SetMinter');
+                            assert.equal(logs[0].args.who, user);
+                        })
+                    })
+                    describe("when sender is not validator but is owner", function () {
+                        const from = owner;
+                        it('reverts', async function () {
+                            await expectRevert(this.sheet.setMinter(user, { from }));
+                        })
+                    })
+
+                })
+
+                describe('removeMinter', function () {
+
+                    beforeEach(async function () {
+                        const from = validator; 
+                        await this.sheet.setMinter(user, { from });
+                        assert(await this.sheet.isMinter(user));
+                    })
+
+                    describe("when sender is validator", function () {
+                        const from = validator;
+                        it('removes minter', async function () {
+                            await this.sheet.removeMinter(user, { from });
+                            assert(!(await this.sheet.hasUserPermission(user, this.MINT_CUSD_SIG)));
+                            assert(!(await this.sheet.hasUserPermission(user, this.MINT_SIG)));
+                            assert(!(await this.sheet.isMinter(user)))
+                        })
+                        it('emits a RemovedMinter event', async function () {
+                            const { logs } = await this.sheet.removeMinter(user, { from })
+                            assert.equal(logs.length, 1)
+                            assert.equal(logs[0].event, 'RemovedMinter')
+                            assert.equal(logs[0].args.who, user)
+                        })
+                    })
+
+                    describe("when sender is not validator", function () {
+                        const from = owner;
+                        it('reverts', async function () {
+                            await expectRevert(this.sheet.removeMinter(user, { from }));
+                        })
+                    })
+                })
 
                 describe('setWhitelistedUser', function () {
                     describe("when sender is validator", function () {
                         const from = validator;
-                        it('adds CarbonDollar \'whitelisted\' user', async function () {
+                        it('adds WT \'whitelisted\' user', async function () {
                             await this.sheet.setWhitelistedUser(user, { from });
-                            assert(await this.sheet.hasUserPermission(user, this.CONVERT_CARBON_DOLLAR_SIG));
+                            assert(await this.sheet.hasUserPermission(user, this.CONVERT_WT_SIG));
                             assert(!(await this.sheet.hasUserPermission(user, this.BLACKLISTED_SIG)));
 
                         })
@@ -66,9 +128,9 @@ contract('CarbonDollarRegulator', _accounts => {
                 describe('setBlacklistedUser', function () {
                     describe("when sender is validator", function () {
                         const from = validator;
-                        it('adds CarbonDollar \'blacklisted\' user', async function () {
+                        it('adds WT \'blacklisted\' user', async function () {
                             await this.sheet.setBlacklistedUser(user, { from });
-                            assert(!(await this.sheet.hasUserPermission(user, this.CONVERT_CARBON_DOLLAR_SIG)));
+                            assert(!(await this.sheet.hasUserPermission(user, this.CONVERT_WT_SIG)));
                             assert(await this.sheet.hasUserPermission(user, this.BLACKLISTED_SIG));
 
                         })
@@ -90,9 +152,9 @@ contract('CarbonDollarRegulator', _accounts => {
                 describe('setNonlistedUser', function () {
                     describe("when sender is validator", function () {
                         const from = validator;
-                        it('adds CarbonDollar \'nonlisted\' user', async function () {
+                        it('adds WT \'nonlisted\' user', async function () {
                             await this.sheet.setNonlistedUser(user, { from });
-                            assert(!(await this.sheet.hasUserPermission(user, this.CONVERT_CARBON_DOLLAR_SIG)));
+                            assert(!(await this.sheet.hasUserPermission(user, this.CONVERT_WT_SIG)));
                             assert(!(await this.sheet.hasUserPermission(user, this.BLACKLISTED_SIG)));
 
                         })

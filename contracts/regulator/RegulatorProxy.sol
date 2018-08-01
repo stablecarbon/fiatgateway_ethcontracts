@@ -4,7 +4,15 @@ import "zos-lib/contracts/upgradeability/UpgradeabilityProxy.sol";
 import "./dataStorage/MutableRegulatorStorage.sol";
 import "openzeppelin-solidity/contracts/ownership/Ownable.sol";
 
-
+/**
+ * @title RegulatorProxy
+ * @dev A RegulatorProxy is a proxy contract that acts identically to a Regulator from the
+ * user's point of view. It can change its data storage locations and can also
+ * change its implementation contract location. A call to RegulatorProxy delegates the function call
+ * to the latest implementation contract's version of the function and the proxy then
+ * calls that function in the context of the proxy's data storage
+ *
+ */
 contract RegulatorProxy is UpgradeabilityProxy, Ownable, MutableRegulatorStorage {
 
 	
@@ -18,21 +26,6 @@ contract RegulatorProxy is UpgradeabilityProxy, Ownable, MutableRegulatorStorage
 	function upgradeTo(address newImplementation) onlyOwner public {
 		_upgradeTo(newImplementation);
 
-	}
-
-	/**
-	* @dev Upgrade the backing implementation of the proxy and call a function
-	* on the new implementation.
-	* This is useful to initialize the proxied contract.
-	* @param newImplementation Address of the new implementation.
-	* @param data Data to send as msg.data in the low level call.
-	* It should include the signature and the parameters of the function to be
-	* called, as described in
-	* https://solidity.readthedocs.io/en/develop/abi-spec.html#function-selector-and-argument-encoding.
-	*/
-	function upgradeToAndCall(address newImplementation, bytes data) payable onlyOwner public {
-		_upgradeTo(newImplementation);
-		require(address(this).call.value(msg.value)(data));
 	}
 
   	/**

@@ -139,72 +139,72 @@ contract('CarbonDollarProxy', _accounts => {
             await (AllowanceSheet.at(await this.tokenProxy.allowances())).transferOwnership(this.tokenProxy.address, {from:owner})
 
         })
-        // describe('call to proxy to set fee', function () {
+        describe('call to proxy to set fee', function () {
 
-        //     it('proxy sets fee on stablecoin', async function () {
-        //         await this.tokenProxy.listToken(RANDOM_ADDRESS, {from:proxyOwner})
-        //         await this.tokenProxy.setFee(RANDOM_ADDRESS, 100, {from:proxyOwner})
-        //         assert.equal(await this.tokenProxy.getFee(RANDOM_ADDRESS), 100)
-        //     })
-        // })
+            it('proxy sets fee on stablecoin', async function () {
+                await this.tokenProxy.listToken(RANDOM_ADDRESS, {from:proxyOwner})
+                await this.tokenProxy.setFee(RANDOM_ADDRESS, 100, {from:proxyOwner})
+                assert.equal(await this.tokenProxy.getFee(RANDOM_ADDRESS), 100)
+            })
+        })
 
-        // describe('call to proxy to list coin', function () {
+        describe('call to proxy to list coin', function () {
 
-        //     it('proxy whitelists stablecoin', async function () {
-        //         await this.tokenProxy.listToken(RANDOM_ADDRESS, {from:proxyOwner})
-        //         assert(await this.tokenProxy.isWhitelisted(RANDOM_ADDRESS))
-        //         await this.tokenProxy.unlistToken(RANDOM_ADDRESS, {from:proxyOwner})
-        //         assert(!(await this.tokenProxy.isWhitelisted(RANDOM_ADDRESS)))
-        //     })
-        // })
+            it('proxy whitelists stablecoin', async function () {
+                await this.tokenProxy.listToken(RANDOM_ADDRESS, {from:proxyOwner})
+                assert(await this.tokenProxy.isWhitelisted(RANDOM_ADDRESS))
+                await this.tokenProxy.unlistToken(RANDOM_ADDRESS, {from:proxyOwner})
+                assert(!(await this.tokenProxy.isWhitelisted(RANDOM_ADDRESS)))
+            })
+        })
 
-        // describe('call proxy to burnCUSD, relies on PermissionedToken calls working correctly', function () {
-        //     beforeEach(async function () {
+        describe('call proxy to convertCarbonDollar, relies on PermissionedToken calls working correctly', function () {
+            beforeEach(async function () {
 
-        //         await tokenSetupProxy.call(this, this.tokenProxy.address, validator, minter, user, owner, whitelisted, blacklisted, nonlisted);
+                await tokenSetupProxy.call(this, this.tokenProxy.address, validator, minter, user, owner, whitelisted, blacklisted, nonlisted);
 
-        //     })
-        //     beforeEach(async function () {
+            })
+            beforeEach(async function () {
                 
-        //             // Whitelist the WT0 contract and add a fee
-        //             await this.tokenProxy.listToken(this.wtToken.address, { from: proxyOwner });
-        //             await this.tokenProxy.setFee(this.wtToken.address, 100, { from: proxyOwner });  // 10% fee
-        //             // Mint WT for user directly into CUSD (user is set as minter in token setup)
-        //             await this.wtToken.mintCUSD(whitelisted, 100 * 10 ** 18, { from: user });
+                    // Whitelist the WT0 contract and add a fee
+                    await this.tokenProxy.listToken(this.wtToken.address, { from: proxyOwner });
+                    await this.tokenProxy.setFee(this.wtToken.address, 100, { from: proxyOwner });  // 10% fee
+                    // Mint WT for user directly into CUSD (user is set as minter in token setup)
+                    await this.wtToken.mintCUSD(whitelisted, 100 * 10 ** 18, { from: user });
 
-        //             // Whitelisted account should have no WT tokens
-        //             assert.equal(await this.wtToken.balanceOf(whitelisted), 0)
-        //             // CUSD account should have WT tokens 
-        //             assert.equal(await this.wtToken.balanceOf(this.tokenProxy.address), 100 * 10 ** 18)
-        //             // Whitelisted account should have carbon dollars
-        //             assert.equal(await this.tokenProxy.balanceOf(whitelisted), 100 * 10 ** 18)
+                    // Whitelisted account should have no WT tokens
+                    assert.equal(await this.wtToken.balanceOf(whitelisted), 0)
+                    // CUSD account should have WT tokens 
+                    assert.equal(await this.wtToken.balanceOf(this.tokenProxy.address), 100 * 10 ** 18)
+                    // Whitelisted account should have carbon dollars
+                    assert.equal(await this.tokenProxy.balanceOf(whitelisted), 100 * 10 ** 18)
 
-        //     })
-        //     it('converts user CUSD into WT0, minus a fee', async function () {
+            })
+            it('converts user CUSD into WT0, minus a fee', async function () {
 
-        //         // // User now could call CarbonDollar.burnCarbonDollar to convert CUSD back into WT
-        //         await this.tokenProxy.burnCarbonDollar(this.wtToken.address, 50 * 10 ** 18, { from: whitelisted });
+                // // User now could call CarbonDollar.convertCarbonDollar to convert CUSD back into WT
+                await this.tokenProxy.convertCarbonDollar(this.wtToken.address, 50 * 10 ** 18, { from: whitelisted });
 
-        //         assertBalance(this.wtToken, whitelisted, 45 * 10 ** 18); // User gets WT0 returned to them
-        //         assertBalance(this.tokenProxy, whitelisted, 50 * 10 ** 18); // User's remaining CUSD balance
+                assertBalance(this.wtToken, whitelisted, 45 * 10 ** 18); // User gets WT0 returned to them
+                assertBalance(this.tokenProxy, whitelisted, 50 * 10 ** 18); // User's remaining CUSD balance
 
-        //     });
-        //     it('deposits fee into CarbonDollar contract address as CUSD', async function () {
+            });
+            it('deposits fee into CarbonDollar contract address as CUSD', async function () {
 
-        //         await this.tokenProxy.burnCarbonDollar(this.wtToken.address, 50 * 10 ** 18, { from: whitelisted });
+                await this.tokenProxy.convertCarbonDollar(this.wtToken.address, 50 * 10 ** 18, { from: whitelisted });
 
-        //         assertBalance(this.tokenProxy, this.tokenProxy.address, 5 * 10 ** 18); // Fee deposited into Carbon account for transaction                    
+                assertBalance(this.tokenProxy, this.tokenProxy.address, 5 * 10 ** 18); // Fee deposited into Carbon account for transaction                    
             
-        //     });
-        //     it('diminishes amount in CUSD WT0 escrow account', async function () {
+            });
+            it('diminishes amount in CUSD WT0 escrow account', async function () {
 
-        //         await this.tokenProxy.burnCarbonDollar(this.wtToken.address, 50 * 10 ** 18, { from: whitelisted });
+                await this.tokenProxy.convertCarbonDollar(this.wtToken.address, 50 * 10 ** 18, { from: whitelisted });
 
-        //         assertBalance(this.wtToken, this.tokenProxy.address, 50 * 10 ** 18); // Carbon's remaining WT0 escrowed balance
-        //     });
+                assertBalance(this.wtToken, this.tokenProxy.address, 50 * 10 ** 18); // Carbon's remaining WT0 escrowed balance
+            });
 
 
-        // })
+        })
     })
 
     describe('upgradeTo v1', function () {

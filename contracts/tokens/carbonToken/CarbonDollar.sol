@@ -4,6 +4,11 @@ import "../permissionedToken/PermissionedToken.sol";
 import "../whitelistedToken/WhitelistedToken.sol";
 
 contract CarbonDollar is MutableCarbonDollarStorage, PermissionedToken {
+    
+    // Events
+    event ConvertedToWT(address indexed user, uint256 amount);
+
+
     /**
         Modifiers
     */
@@ -108,6 +113,7 @@ contract CarbonDollar is MutableCarbonDollarStorage, PermissionedToken {
         w.transfer(msg.sender, feedAmount);
         w.burn(chargedFee);
         _mint(address(this), chargedFee);
+        emit ConvertedToWT(msg.sender, _amount);
         return true;
     }
 

@@ -5,7 +5,7 @@ import "./ValidatorSheet.sol";
 
 /**
 *
-* @dev contains a RegulatorStorage 
+* @dev contains a PermissionSheet and a ValidatorSheet
 *
 */
 contract RegulatorStorage {
@@ -17,7 +17,7 @@ contract RegulatorStorage {
     ValidatorSheet public validators;
 
     /**
-    * @dev a RegulatorStorage can set its storage only once, on construction
+    * @dev a RegulatorStorage can set its storages only once, on construction
     *
     **/
     constructor (address _permissions, address _validators) public {
