@@ -9,7 +9,6 @@ import "./ValidatorSheet.sol";
 *
 */
 contract RegulatorStorage {
-
     /**
     	Storage
     */
@@ -24,5 +23,4 @@ contract RegulatorStorage {
         permissions = PermissionSheet(_permissions);
         validators = ValidatorSheet(_validators);
     }
-
 }

@@ -4,7 +4,10 @@ import "openzeppelin-solidity/contracts/math/SafeMath.sol";
 import "openzeppelin-solidity/contracts/ownership/Ownable.sol";
 
 
-// A wrapper around the allowanceOf mapping. Slightly modified from TrueUSD
+/**
+* @title AllowanceSheet
+* @notice A wrapper around an allowance mapping. Slightly modified from a TrueUSD-provided contract of the same name.
+*/
 contract AllowanceSheet is Ownable {
     using SafeMath for uint256;
 

@@ -3,8 +3,9 @@ const { assertBalance, expectRevert } = require('../../../helpers/common');
 function carbonDollarBehaviorTests(owner, wtMinter, whitelisted, validator) {
 
     describe("Mint and burn functions", function () {
-        // Currently, we cannot test CarbonDollar.mint since this function can only be called by a whitelisted
-        // stablecoin address
+        // Currently, we cannot test CarbonDollar.mint in isolation since this function 
+        // can only be called by a whitelisted stablecoin address. However, we know that
+        // mint() must work, since mintCUSD() in WhitelistedToken works.
         describe('mint', function () {
             // describe('when sender is a token contract', function () {
                 // describe('when token contract is whitelisted', function () {
@@ -71,10 +72,12 @@ function carbonDollarBehaviorTests(owner, wtMinter, whitelisted, validator) {
                     });
                     it('emits a ConvertedToWT event', async function () {
                         const { logs } = await this.token.convertCarbonDollar(this.wtToken.address, 50 * 10 ** 18, { from: whitelisted });
-                        assert.equal(logs.length, 1)
-                        assert.equal(logs[0].event, 'ConvertedToWT')
-                        assert.equal(logs[0].args.user, whitelisted)
-                        assert.equal(logs[0].args.amount, 50 * 10 ** 18)
+                        this.logs = logs
+                        this.event = this.logs.find(l => l.event === 'ConvertedToWT').event
+                        this.args = this.logs.find(l => l.event === 'ConvertedToWT').args
+                        assert.equal(this.event, 'ConvertedToWT')
+                        assert.equal(this.args.user, whitelisted)
+                        assert.equal(this.args.amount, 50 * 10 ** 18)
 
                     })
                 });
@@ -106,7 +109,6 @@ function carbonDollarBehaviorTests(owner, wtMinter, whitelisted, validator) {
                 });
             });
         });
-
     });
 }
 

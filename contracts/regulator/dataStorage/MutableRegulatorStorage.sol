@@ -11,7 +11,6 @@ import "openzeppelin-solidity/contracts/ownership/Ownable.sol";
 *
 */
 contract MutableRegulatorStorage is Ownable, RegulatorStorage {
-
     // Events
     event ChangedPermissionStorage(address _old, address _new);
     event ChangedValidatorStorage(address _old, address _new);

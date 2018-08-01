@@ -6,13 +6,11 @@ import "./BalanceSheet.sol";
 import "../../../regulator/Regulator.sol";
 
 /**
-*
-* @dev a PermissionedTokenStorage is constructed by setting Regulator, BalanceSheet, and AllowanceSheet locations
-*
+* @title PermissionedTokenStorage
+* @notice a PermissionedTokenStorage is constructed by setting Regulator, BalanceSheet, and AllowanceSheet locations.
+* Once the storages are set, they cannot be changed.
 */
 contract PermissionedTokenStorage {
-
-
     /**
         Storage
     */

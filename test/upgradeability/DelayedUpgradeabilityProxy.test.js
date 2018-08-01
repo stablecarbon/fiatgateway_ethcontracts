@@ -6,8 +6,11 @@ const DummyContractV1 = artifacts.require("DummyContractV1");
 
 contract('DelayedUpgradeabilityProxy', _accounts => {
     const owner = _accounts[0];
-    const TWO_WEEKS = 2 * 7 * 24 * 60 * 60; // Number of seconds in two weeks
-    const FOUR_WEEKS = 2 * TWO_WEEKS; // Number of seconds in four weeks
+    const ONE_HOUR = 60 * 60; // Number of seconds in one hour
+    const ONE_DAY = 24 * ONE_HOUR; // Number of seconds in one day
+    const ONE_WEEK = 7 * ONE_DAY; // Number of seconds in one week
+    const TWO_WEEKS = 2 * ONE_WEEK; // Number of seconds in two weeks
+    const FOUR_WEEKS = 4 * ONE_WEEK; // Number of seconds in four weeks
 
     beforeEach(async function () {
         this.dummyContractv0 = await DummyContractV0.new({ from: owner });
@@ -45,7 +48,7 @@ contract('DelayedUpgradeabilityProxy', _accounts => {
                 assert.equal(await DummyContractV0.at(this.proxy.address).hello(), "Konichiwa!");
             });
             it('switches to pending implementation after the application date', async function () {
-                timeTravel(FOUR_WEEKS);
+                timeTravel(FOUR_WEEKS + ONE_HOUR);
                 assert.equal(await DummyContractV0.at(this.proxy.address).hello(), "Hello!");
             });
         });

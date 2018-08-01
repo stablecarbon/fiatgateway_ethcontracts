@@ -5,12 +5,10 @@ import "openzeppelin-solidity/contracts/AddressUtils.sol";
 import "openzeppelin-solidity/contracts/ownership/Ownable.sol";
 
 /**
-*
-* @dev A CarbonDollarStorage can upgrade its location
-*
+* @title MutableCarbonDollarStorage
+* @notice Adds mutability to CarbonDollarStorage (FeeSheet and StablecoinWhitelist can be changed.)
 */
 contract MutableCarbonDollarStorage is Ownable, CarbonDollarStorage {
-
 	/**
         Events
      */
@@ -21,8 +19,7 @@ contract MutableCarbonDollarStorage is Ownable, CarbonDollarStorage {
     * @dev a PermissionedTokenStorage can set its storages only once, on construction
     *
     **/
-    constructor (address feeSheet, address whitelist) CarbonDollarStorage(feeSheet, whitelist) public {
-    }
+    constructor (address f, address w) CarbonDollarStorage(f, w) public {}
 
     /**
      * @notice Set the stablecoin whitelist contract.

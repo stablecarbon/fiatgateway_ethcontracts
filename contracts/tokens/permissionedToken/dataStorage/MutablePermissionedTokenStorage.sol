@@ -6,9 +6,9 @@ import "openzeppelin-solidity/contracts/ownership/Ownable.sol";
 
 
 /**
-*
-* @dev A MutablePermissionedTokenStorageConsumer can upgrade its location
-*
+* @title MutablePermissionedTokenStorage
+* @notice Extends PermissionedTokenStorage by allowing changing the locations 
+* of the allowance, balance, and regulator contracts.
 */
 contract MutablePermissionedTokenStorage is Ownable, PermissionedTokenStorage {
 
@@ -16,9 +16,6 @@ contract MutablePermissionedTokenStorage is Ownable, PermissionedTokenStorage {
     event ChangedRegulator(address _old, address _new);
     event ChangedBalanceStorage(address _old, address _new);
     event ChangedAllowanceStorage(address _old, address _new);
-
-
-    // Methods
 
     constructor (address regulator, address balances, address allowances) PermissionedTokenStorage (regulator, balances, allowances) public {
     }

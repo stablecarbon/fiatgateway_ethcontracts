@@ -16,7 +16,6 @@ function permissionedTokenBehaviorTests(minter, whitelisted, blacklisted, nonlis
                         await this.token.mint(to, amountToMint, { from })
                         assertBalance(this.token, to, amountToMint);
                     });
-                      
                 });
                 describe('when user is not whitelisted', function () {
                     afterEach(async function () {
@@ -84,20 +83,15 @@ function permissionedTokenBehaviorTests(minter, whitelisted, blacklisted, nonlis
                 })
 
                 describe('when paused', function () {
-
                     const from = whitelisted
-
                     it('reverts', async function () {
                         await this.token.pause( { from:owner } )
                         await expectRevert( this.token.burn( amountToBurn, { from } ) )
                     })
-
                 })
-
             });
 
             describe('when sender is not whitelisted', function () {
-
                 it('if sender is blacklisted, reverts call', async function () {
                     const from = blacklisted
                     await this.regulator.setWhitelistedUser(from, {from:validator});
@@ -114,11 +108,8 @@ function permissionedTokenBehaviorTests(minter, whitelisted, blacklisted, nonlis
                     await this.regulator.setNonlistedUser(from, {from:validator});
                     await expectRevert(this.token.burn(amountToBurn, { from }));
                     assertBalance(this.token, from, amountToMint)
-
                 });
             });
-
-
         });
 
         describe('transfer', function () {
@@ -131,11 +122,9 @@ function permissionedTokenBehaviorTests(minter, whitelisted, blacklisted, nonlis
                 const to = nonlisted
 
                 beforeEach(async function () {
-
                     await this.regulator.setWhitelistedUser(from, {from:validator});
                     await this.token.mint(from, amountToMint, {from:minter});
                     await this.regulator.setBlacklistedUser(from, {from:validator});
-
                 })
 
                 it('reverts call', async function () {
@@ -145,14 +134,11 @@ function permissionedTokenBehaviorTests(minter, whitelisted, blacklisted, nonlis
             });
 
             describe('sender is nonlisted or whitelisted', function () {
-
                 beforeEach(async function () {
-
                     await this.regulator.setWhitelistedUser(nonlisted, {from:validator});
                     await this.token.mint(nonlisted, amountToMint, {from:minter});
                     await this.token.mint(whitelisted, amountToMint, {from:minter})
                     await this.regulator.setNonlistedUser(nonlisted, {from:validator});
-
                 }) 
 
                 describe('when receiver is whitelisted or nonlisted', function () {
@@ -232,9 +218,7 @@ function permissionedTokenBehaviorTests(minter, whitelisted, blacklisted, nonlis
                     })
 
                     describe('tries to approve when paused', function () {
-
                         it('reverts', async function () {
-
                             await this.token.pause( { from:owner })
                             await expectRevert(this.token.approve(spender, amountToTransferFrom, {from:holder}))
                         })
@@ -251,11 +235,8 @@ function permissionedTokenBehaviorTests(minter, whitelisted, blacklisted, nonlis
             })
 
             describe('token holder is blacklisted', function () {
-
                 const holder = blacklisted
-
                 describe('spender is not blacklisted', function () {
-
                     it('reverts', async function () {
                         await expectRevert(this.token.approve(whitelisted, amountToTransferFrom, {from:holder}));
                     })
@@ -265,25 +246,20 @@ function permissionedTokenBehaviorTests(minter, whitelisted, blacklisted, nonlis
 
         describe('increaseApproval', function () {
             const amountToTransferFrom = new BigNumber("100000000000000000000") //100e18
-
             describe('token holder is not blacklisted', function () {
                 const holder = whitelisted
-
                 describe('spender is not blacklisted', function () {
                     const spender = nonlisted
-
                     it('increases senders allowance', async function () {
                         assert(await this.token.increaseApproval(spender, amountToTransferFrom, {from:holder}))
                         assert((await this.token.allowance(holder, spender)).eq(amountToTransferFrom));
                     })
-
                     it('approves when paused and then paused', async function () {
                         await this.token.pause( { from:owner })
                         await this.token.unpause( { from:owner })
                         assert(await this.token.increaseApproval(spender, amountToTransferFrom, {from:holder}))
                         assert((await this.token.allowance(holder, spender)).eq(amountToTransferFrom));
                     })
-
                     describe('when paused', function () {
                         it('reverts', async function () {
                             await this.token.pause( { from:owner })
@@ -293,9 +269,7 @@ function permissionedTokenBehaviorTests(minter, whitelisted, blacklisted, nonlis
                 })
 
                 describe('spender is blacklisted', function () {
-                    
                     const spender = blacklisted
-
                     it('reverts', async function () {
                         await expectRevert(this.token.increaseApproval(spender, amountToTransferFrom, {from:holder}))
                         assert((await this.token.allowance(holder, spender)).eq(0));
@@ -304,9 +278,7 @@ function permissionedTokenBehaviorTests(minter, whitelisted, blacklisted, nonlis
             })
 
             describe('token holder is blacklisted', function () {
-
                 const holder = blacklisted
-
                 it('reverts', async function () {
                     await expectRevert(this.token.increaseApproval(whitelisted, amountToTransferFrom, {from:holder}));
                 })
@@ -347,9 +319,7 @@ function permissionedTokenBehaviorTests(minter, whitelisted, blacklisted, nonlis
                 })
 
                 describe('spender is blacklisted', function () {
-                    
                     const spender = blacklisted
-
                     it('reverts', async function () {
                         await expectRevert(this.token.decreaseApproval(spender, amountToTransferFrom, {from:holder}))
                         assert((await this.token.allowance(holder, spender)).eq(0));
@@ -358,24 +328,18 @@ function permissionedTokenBehaviorTests(minter, whitelisted, blacklisted, nonlis
             })
 
             describe('token holder is blacklisted', function () {
-
                 const holder = blacklisted
-
                 it('reverts', async function () {
                     await expectRevert(this.token.decreaseApproval(whitelisted, amountToTransferFrom, {from:holder}));
                 })
-            })   
-
+            })
         })
 
 
         describe('approveBlacklistedAddressSpender', function () {
-            
             const amountToMint = new BigNumber("100000000000000000000") //100e18
             const from = validator
-
             beforeEach(async function () {
-
                 // seed blacklisted account
                 await this.regulator.setWhitelistedUser(blacklisted, {from:validator});
                 await this.token.mint(blacklisted, amountToMint, {from:minter});
@@ -386,14 +350,10 @@ function permissionedTokenBehaviorTests(minter, whitelisted, blacklisted, nonlis
             })
 
             describe('message sender is a blacklist spender', function () {
-
                 describe('token holder is blacklisted', function () {
-
                     it('allowance is set properly', async function () {
-
                         await this.token.approveBlacklistedAddressSpender(blacklisted, { from });
                         assert((await this.token.allowance(blacklisted, from)).eq(amountToMint));
-
                     })
                     it('emits a ApprovedBlacklistedAddressSpender event', async function () {
                         const { logs } = await this.token.approveBlacklistedAddressSpender(blacklisted, { from });
@@ -418,9 +378,7 @@ function permissionedTokenBehaviorTests(minter, whitelisted, blacklisted, nonlis
                 })
 
                 describe('token holder is not blacklisted', function () {
-
                     it('reverts', async function () {
-
                         await expectRevert(this.token.approveBlacklistedAddressSpender(nonlisted, { from }));
                         await expectRevert(this.token.approveBlacklistedAddressSpender(whitelisted, { from }));
                     })
@@ -428,25 +386,18 @@ function permissionedTokenBehaviorTests(minter, whitelisted, blacklisted, nonlis
             })
 
             describe('message sender is NOT a blacklist spender', function () {
-
                 describe('token holder is blacklisted', function () {
-                    
                     it('reverts', async function () {
                         await this.regulator.removeBlacklistSpender(from, { from: validator })
                         await expectRevert(this.token.approveBlacklistedAddressSpender(blacklisted, { from }));
                     })
-
                 })
-
                 describe('token holder is not blacklisted', function () {
-                    
                     it('reverts', async function () {
                         await this.regulator.removeBlacklistSpender(from, { from: validator })
                         await expectRevert(this.token.approveBlacklistedAddressSpender(nonlisted, { from }));
                         await expectRevert(this.token.approveBlacklistedAddressSpender(whitelisted, { from }));
-
                     })
-
                 })
             })
         })
@@ -463,23 +414,17 @@ function permissionedTokenBehaviorTests(minter, whitelisted, blacklisted, nonlis
 
                 describe('function caller is approved to transferFrom token holder account', function () {
                     beforeEach(async function () {
-
                         // seed token holder account
                         await this.token.mint(from, amountToMint, {from:minter})
-
                         // approve spender to transfer from nonlisted and whitelisted accounts
                         await this.token.approve(spender, amountToTransferFrom, {from:whitelisted})
-
                         // nonlist receiver
                         await this.regulator.setNonlistedUser(to, {from:validator})
-
                     })
-
 
                     describe('token holder has enough funds', function () {
                         it('transfer succeeds', async function () {
                             await this.token.transferFrom(from, to, amountToTransferFrom, { from: spender });
-
                             assertBalance(this.token, from, amountToMint.minus(amountToTransferFrom));
                             assertBalance(this.token, to, amountToTransferFrom);
                         });
@@ -488,7 +433,6 @@ function permissionedTokenBehaviorTests(minter, whitelisted, blacklisted, nonlis
                             await this.token.pause({ from:owner })
                             await this.token.unpause({ from:owner })
                             await this.token.transferFrom(from, to, amountToTransferFrom, { from: spender });
-
                             assertBalance(this.token, from, amountToMint.minus(amountToTransferFrom));
                             assertBalance(this.token, to, amountToTransferFrom);
                         })
@@ -500,24 +444,18 @@ function permissionedTokenBehaviorTests(minter, whitelisted, blacklisted, nonlis
                             })
                         })
                     });
-
                 });
 
                 describe('function caller is NOT approved to transferFrom token holder account', function () {
-                    
                     beforeEach(async function () {
-
                         // seed token holder account
                         await this.token.mint(from, amountToMint, {from:minter})
-                        
                         // nonlist receiver
                         await this.regulator.setNonlistedUser(to, {from:validator})
                     })
-
                     afterEach(async function () {
                         assert((await this.token.totalSupply()).eq(amountToMint));
                     })
-
                     it('reverts', async function () {
                         await expectRevert(this.token.transferFrom(from, to, amountToTransferFrom, {from: spender}));
                     });
@@ -530,39 +468,30 @@ function permissionedTokenBehaviorTests(minter, whitelisted, blacklisted, nonlis
                 const to = nonlisted
 
                 beforeEach(async function () {
-
                     // seed blacklisted account
                     await this.regulator.setWhitelistedUser(from, {from:validator});
                     await this.token.mint(from, amountToMint, {from:minter});
                     await this.regulator.setBlacklistedUser(from, {from:validator});
-
                     // approve sender for moving blacklisted tokens
                     await this.regulator.setBlacklistSpender(blacklistedSpender, {from:validator});
                 })
-
                 afterEach(async function () {
                     assert((await this.token.totalSupply()).eq(amountToMint));
                 })
-
                 describe('function caller is approved to spend from a blacklisted account', function () {
-
                     it('transferFrom succeeds', async function () {
                         await this.token.approveBlacklistedAddressSpender(from, { from:blacklistedSpender });
                         await this.token.transferFrom( from, to, amountToTransferFrom, { from:blacklistedSpender } )
                         assertBalance(this.token, to, amountToTransferFrom)
                         assertBalance(this.token, from, amountToMint.minus(amountToTransferFrom))
                     })
-
                 })
 
                 describe('function caller is NOT approved to spend from a blacklisted account', function () {
-
                     it('reverts', async function () {
                         await expectRevert(this.token.transferFrom( from, to, amountToTransferFrom, { from:blacklistedSpender } ));
                     })
-
                 })
-
             });
         });
 
@@ -570,26 +499,18 @@ function permissionedTokenBehaviorTests(minter, whitelisted, blacklisted, nonlis
             const amountToMint = 100 * 10 ** 18
 
             beforeEach(async function () {
-
                 // seed blacklisted account
                 await this.regulator.setWhitelistedUser(blacklisted, {from:validator})
                 await this.token.mint(blacklisted, amountToMint, {from:minter})
                 await this.regulator.setBlacklistedUser(blacklisted, {from:validator})
-
                 // give validator ability to destroy blacklisted tokens
                 await this.regulator.setBlacklistDestroyer(validator, {from:validator})
-
             })
             describe('function caller has permission to destroy blacklisted tokens', function () {
-
                 const destroyer = validator
-
                 describe('account is blacklisted', function () {
-                    
                     const from = blacklisted
-
                     it('tokens are destroyed', async function () {
-
                         await this.token.destroyBlacklistedTokens(from, 50 * 10 ** 18, {from:destroyer})
                         assert((await this.token.balanceOf(blacklisted)).eq(50 * 10 ** 18))
                         assert((await this.token.totalSupply()).eq(50 * 10 ** 18))
@@ -619,7 +540,6 @@ function permissionedTokenBehaviorTests(minter, whitelisted, blacklisted, nonlis
                 })
 
                 describe('account is not blacklisted', function () {
-
                     it('reverts', async function () {
                         await expectRevert(this.token.destroyBlacklistedTokens(whitelisted, 50 * 10 ** 18,{from:destroyer}))
                         await expectRevert(this.token.destroyBlacklistedTokens(nonlisted, 50 * 10 ** 18,{from:destroyer}))
@@ -631,14 +551,11 @@ function permissionedTokenBehaviorTests(minter, whitelisted, blacklisted, nonlis
                 const destroyer = nonlisted
 
                 describe('account is blacklisted', function () {
-
                     const from = blacklisted
-
                     it('reverts', async function () {
                         await expectRevert(this.token.destroyBlacklistedTokens(from, 50 * 10 ** 18,{from:destroyer}))
                     })
                 })
-
             });
         });
 

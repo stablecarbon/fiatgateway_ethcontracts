@@ -13,17 +13,12 @@ import "openzeppelin-solidity/contracts/token/ERC20/ERC20.sol";
 * if and only if it is approved by an on-chain Regulator service. PermissionedToken is an
 * ERC-20 smart contract representing ownership of securities and overrides the
 * transfer, burn, and mint methods to check with the Regulator.
-*
-* @dev This token is not meant to be instantiated. Instantiate the derived contracts
-* `ImmutablePermissionedToken` or `MutablePermissionedToken` instead.
-*
 */
 contract PermissionedToken is ERC20, Pausable, MutablePermissionedTokenStorage {
     using SafeMath for uint256;
 
     /** Variables */
     uint256 public totalSupply;
-    
 
     /** Events */
     event DestroyedBlacklistedTokens(address indexed account, uint256 amount);
