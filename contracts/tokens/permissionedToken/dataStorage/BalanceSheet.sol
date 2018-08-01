@@ -13,7 +13,7 @@ contract BalanceSheet is Ownable {
     mapping (address => uint256) public balanceOf;
 
     /** @notice Adds to balance of user.
-        @param _address Address of user.
+        @param _addr Address of user.
         @param _value Balance to add.
     */
     function addBalance(address _addr, uint256 _value) onlyOwner public {
@@ -21,7 +21,7 @@ contract BalanceSheet is Ownable {
     }
 
     /** @notice Subtracts from balance of user.
-        @param _address Address of user.
+        @param _addr Address of user.
         @param _value Balance to subtract.
     */
     function subBalance(address _addr, uint256 _value) onlyOwner public {
@@ -29,7 +29,7 @@ contract BalanceSheet is Ownable {
     }
 
     /** @notice Sets balance of user.
-        @param _address Address of user.
+        @param _addr Address of user.
         @param _value Balance to set.
     */
     function setBalance(address _addr, uint256 _value) onlyOwner public {
