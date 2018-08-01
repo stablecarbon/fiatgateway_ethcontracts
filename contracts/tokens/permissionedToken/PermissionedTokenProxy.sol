@@ -3,6 +3,7 @@ pragma solidity ^0.4.23;
 import "../../upgradeability/DelayedUpgradeabilityProxy.sol";
 import "./dataStorage/MutablePermissionedTokenStorage.sol";
 import "openzeppelin-solidity/contracts/ownership/Ownable.sol";
+import "zos-lib/contracts/upgradeability/UpgradeabilityProxy.sol";
 
 /**
 * @title PermissionedTokenProxy
@@ -19,7 +20,8 @@ contract PermissionedTokenProxy is DelayedUpgradeabilityProxy, Ownable, MutableP
     * @param newImplementation Address of the new implementation.
     */
     function upgradeTo(address newImplementation) onlyOwner public {
-        _setPendingUpgrade(newImplementation);
+        // _setPendingUpgrade(newImplementation);
+        _upgradeTo(newImplementation);
     }
 
     /**
