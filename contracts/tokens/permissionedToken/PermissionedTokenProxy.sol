@@ -26,7 +26,7 @@ contract PermissionedTokenProxy is UpgradeabilityProxy, Ownable, MutablePermissi
     /**
     * @return The address of the implementation.
     */
-    function implementation() public view onlyOwner returns (address) {
+    function implementation() public view returns (address) {
         return _implementation();
     }
 }
