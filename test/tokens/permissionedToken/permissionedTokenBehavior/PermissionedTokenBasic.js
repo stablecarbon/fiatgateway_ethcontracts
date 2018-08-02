@@ -1,8 +1,7 @@
 // Tests slightly modified from TrueUSD contracts.
 
 const { assertBalance, expectRevert, ZERO_ADDRESS } = require('../../../helpers/common');
-
-var BigNumber = require('bignumber.js');
+var BigNumber = require("bignumber.js");
 
 function permissionedTokenBasicTests(owner, oneHundred, anotherAccount, minter) {
     describe("Behaves properly like a Pausable, Burnable, Mintable, Standard ERC20 token", function () {

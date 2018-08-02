@@ -1,6 +1,6 @@
-const { CommonVariables, expectRevert, assertBalance } = require('../../helpers/common');
+const { CommonVariables, ZERO_ADDRESS, expectRevert, assertBalance } = require('../../helpers/common');
 const { tokenSetup } = require('../../helpers/tokenSetup');
-const { PermissionSheet, Regulator } = require('../../helpers/artifacts');
+const { WhitelistedToken } = require('../../helpers/artifacts');
 var BigNumber = require("bignumber.js");
 
 contract('WhitelistedToken', _accounts => {
@@ -21,6 +21,15 @@ contract('WhitelistedToken', _accounts => {
     describe("Whitelisted token tests", function () {
         const hundred = new BigNumber("100000000000000000000") // 100 * 10**18
         const fifty = new BigNumber("50000000000000000000") // 50 * 10**18
+        describe('constructor', function () {
+            it('reverts if provided CUSD address is not a contract', async function() {
+                await expectRevert(WhitelistedToken.new(
+                    this.regulator_w.address, 
+                    this.balanceSheetWT.address, 
+                    this.allowanceSheetWT.address,
+                    ZERO_ADDRESS, { from: owner }))
+            })
+        })
         describe('mintCUSD', function () {       
             describe('user has mint CUSD permission', function () {
                 beforeEach(async function () {
@@ -37,6 +46,11 @@ contract('WhitelistedToken', _accounts => {
             describe('user does not have mint CUSD permission', function () {
                 it('call reverts', async function () {
                     await expectRevert(this.token.mintCUSD(whitelisted, hundred, { from: whitelisted }));
+                });
+            });
+            describe('minting to CarbonUSD contract address', function () {
+                it('should fail', async function () {
+                    await expectRevert(this.token.mintCUSD(this.cdToken.address, hundred, { from: minter }));
                 });
             });
         });

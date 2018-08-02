@@ -1,5 +1,5 @@
 const { assertBalance, expectRevert, ZERO_ADDRESS } = require("../../../helpers/common");
-var BigNumber = require('bignumber.js');
+var BigNumber = require("bignumber.js");
 
 function permissionedTokenBehaviorTests(minter, whitelisted, blacklisted, nonlisted, user, validator, owner) {
     describe("PermissionedToken behavior abides by regulator", function () {

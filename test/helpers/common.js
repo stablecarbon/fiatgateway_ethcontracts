@@ -7,15 +7,6 @@ const BigNumber = web3.BigNumber;
 const ZERO_ADDRESS = 0x0000000000000000000000000000000000000000;
 const RANDOM_ADDRESS = 0x3b5855bAEF50EBFdFC89c5E5463f92BCe194EAc9; 
 
-/** Contract classes **/
-// WT0
-const WhitelistedToken = artifacts.require("WhitelistedToken");
-// Storage classes for CarbonDollar
-const FeeSheet = artifacts.require("FeeSheet");
-const StablecoinWhitelist = artifacts.require("StablecoinWhitelist");
-// CarbonUSD
-const CarbonDollar = artifacts.require("CarbonDollar");
-
 require('chai')
     .use(require('chai-bignumber')(BigNumber))
     .use(require('chai-as-promised'))
@@ -46,8 +37,4 @@ module.exports = {
     CommonVariables,
     ZERO_ADDRESS,
     RANDOM_ADDRESS,
-    WhitelistedToken,
-    FeeSheet,
-    StablecoinWhitelist,
-    CarbonDollar,
 }

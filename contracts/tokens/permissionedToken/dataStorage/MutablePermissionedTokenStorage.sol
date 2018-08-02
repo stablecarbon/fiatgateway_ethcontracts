@@ -4,7 +4,6 @@ import "./PermissionedTokenStorage.sol";
 import "openzeppelin-solidity/contracts/AddressUtils.sol";
 import "openzeppelin-solidity/contracts/ownership/Ownable.sol";
 
-
 /**
 * @title MutablePermissionedTokenStorage
 * @notice Extends PermissionedTokenStorage by allowing changing the locations 
