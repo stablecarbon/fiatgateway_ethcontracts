@@ -1,14 +1,27 @@
-const { expectRevert, RANDOM_ADDRESS } = require('../../../helpers/common');
+const { ZERO_ADDRESS, expectRevert, RANDOM_ADDRESS } = require('../../../helpers/common');
+const { CarbonDollarStorage } = require('../../../helpers/artifacts');
 
-function carbonTokenStorageTests(owner, tokenHolder, spender, user) {
+function carbonDollarStorageTests(owner, tokenHolder, spender, user) {
 
-    describe('CarbonTokenStorage behavior tests', function () {
+    describe('CarbonDollarStorage behavior tests', function () {
+        describe("constructor tests", function () {
+            describe("fee sheet provided is not a valid contract address", function() {
+                it("call reverts", async function() {
+                    await expectRevert(CarbonDollarStorage.new(ZERO_ADDRESS, 
+                        this.stablecoinWhitelist.address, {from: owner}));
+                })
+            })
+            describe("stablecoin whitelist provided is not a valid contract address", function () {
+                it("call reverts", async function () {
+                    await expectRevert(CarbonDollarStorage.new(this.feeSheet.address, 
+                        ZERO_ADDRESS, { from: owner }));
+                })
+            })
+        })
 
         describe('FeeSheet CRUD tests', function () {
-
             describe('when the sender is the owner', function () {
                 const from = owner
-
                 describe('setDefaultFee', function() {
                     it('sets default fee', async function () {
                         await this.feeSheet.setDefaultFee(1000, { from })
@@ -147,5 +160,5 @@ function carbonTokenStorageTests(owner, tokenHolder, spender, user) {
 }
 
 module.exports = {
-    carbonTokenStorageTests
+    carbonDollarStorageTests
 }

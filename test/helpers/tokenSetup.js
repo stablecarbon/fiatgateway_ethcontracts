@@ -58,7 +58,11 @@ async function tokenSetup(validator, minter, user, owner, whitelisted, blacklist
     this.feeSheet = await FeeSheet.new({ from: owner })
     this.stablecoins = await StablecoinWhitelist.new({ from: owner })
 
-    this.cdToken = await CarbonDollar.new(this.regulator_c.address, this.balanceSheet.address, this.allowanceSheet.address, this.feeSheet.address, this.stablecoins.address, { from: owner })
+    this.cdToken = await CarbonDollar.new(this.regulator_c.address, 
+                                          this.balanceSheet.address,
+                                          this.allowanceSheet.address, 
+                                          this.feeSheet.address, 
+                                          this.stablecoins.address, { from: owner })
 
     await this.balanceSheet.transferOwnership(this.cdToken.address, { from: owner })
     await this.allowanceSheet.transferOwnership(this.cdToken.address, { from: owner })

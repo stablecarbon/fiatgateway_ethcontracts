@@ -1,5 +1,6 @@
 pragma solidity ^0.4.23;
 
+import "openzeppelin-solidity/contracts/AddressUtils.sol";
 import "./FeeSheet.sol";
 import "./StablecoinWhitelist.sol";
 
@@ -19,6 +20,8 @@ contract CarbonDollarStorage{
     *
     **/
     constructor (address feeSheet, address whitelist) public {
+        require(AddressUtils.isContract(feeSheet));
+        require(AddressUtils.isContract(whitelist));
         stablecoinFees = FeeSheet(feeSheet);
         stablecoinWhitelist = StablecoinWhitelist(whitelist);
     }
