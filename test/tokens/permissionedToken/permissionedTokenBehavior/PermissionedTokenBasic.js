@@ -236,7 +236,8 @@ function permissionedTokenBasicTests(owner, oneHundred, anotherAccount, minter) 
             describe('transfer from', function () {
                 const spender = anotherAccount
                 
-                describe('when the anotherAccount is not the zero address', function () {
+
+                describe('when the recipient is not the zero address', function () {
                     const to = owner
                     
                     describe('when the spender has enough approved balance', function () {
@@ -244,7 +245,7 @@ function permissionedTokenBasicTests(owner, oneHundred, anotherAccount, minter) 
                             await this.token.approve(spender, new BigNumber("100000000000000000000"), { from: oneHundred })
                         })
                         
-                        describe('when the oneHundred has enough balance', function () {
+                        describe('when the token holder has enough balance', function () {
                             const amount = new BigNumber("100000000000000000000")
                             
                             it('transfers the requested amount', async function () {
@@ -269,9 +270,11 @@ function permissionedTokenBasicTests(owner, oneHundred, anotherAccount, minter) 
                                 assert.equal(logs[0].args.to, to)
                                 assert(logs[0].args.value.eq(amount))
                             })
+                            
+
                         })
                         
-                        describe('when the oneHundred does not have enough balance', function () {
+                        describe('when the token holder does not have enough balance', function () {
                             const amount = new BigNumber("101000000000000000000")
                             
                             it('reverts', async function () {
@@ -285,7 +288,7 @@ function permissionedTokenBasicTests(owner, oneHundred, anotherAccount, minter) 
                             await this.token.approve(spender,new BigNumber("99000000000000000000"), { from: oneHundred })
                         })
                         
-                        describe('when the oneHundred has enough balance', function () {
+                        describe('when the token holder has enough balance', function () {
                             const amount = new BigNumber("100000000000000000000")
                             
                             it('reverts', async function () {
@@ -293,8 +296,8 @@ function permissionedTokenBasicTests(owner, oneHundred, anotherAccount, minter) 
                             })
                         })
                         
-                        describe('when the oneHundred does not have enough balance', function () {
-                            const amount = new BigNumber("100000000000000000000")
+                        describe('when the token holder does not have enough balance', function () {
+                            const amount = new BigNumber("101000000000000000000")
                             
                             it('reverts', async function () {
                                 await expectRevert(this.token.transferFrom(oneHundred, to, amount, { from: spender }))
@@ -303,7 +306,7 @@ function permissionedTokenBasicTests(owner, oneHundred, anotherAccount, minter) 
                     })
                 })
                 
-                describe('when the anotherAccount is the zero address', function () {
+                describe('when the recipient is the zero address', function () {
                     const amount = new BigNumber("100000000000000000000")
                     const to = ZERO_ADDRESS
                     
@@ -315,6 +318,7 @@ function permissionedTokenBasicTests(owner, oneHundred, anotherAccount, minter) 
                         await expectRevert(this.token.transferFrom(oneHundred, to, amount, { from: spender }))
                     })
                 })
+
             })
             
             describe('decrease approval', function () {

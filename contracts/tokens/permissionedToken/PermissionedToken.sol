@@ -281,7 +281,6 @@ contract PermissionedToken is ERC20, Pausable, MutablePermissionedTokenStorage {
     public whenNotPaused transferFromConditionsRequired(_from, _to) returns (bool) {
         require(_amount <= allowance(_from, msg.sender),"not enough allowance to transfer");
         require(_to != address(0),"to address cannot be 0x0");
-        require(_from != address(0),"from address cannot be 0x0");
         require(_amount <= balanceOf(_from),"not enough balance to transfer");
         
         allowances.subAllowance(_from, msg.sender, _amount);

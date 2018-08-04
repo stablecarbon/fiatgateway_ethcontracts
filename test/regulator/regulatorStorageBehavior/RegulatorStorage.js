@@ -148,62 +148,66 @@ function regulatorStorageTests(owner, user, attacker, validator, validator2) {
 	                	})
 	                })
 
-
-
 	            })
-	            
+
 	        })
 
 	        describe('removeUserPermission', function () {
 	            
-	            beforeEach(async function () {
-	                
-	                // add as possible permission
-	                await this.permissionSheet.addPermission(this.testPermission, 
-	                    this.testPermissionName, 
-	                    this.testPermissionDescription, 
-	                    this.testPermissionContract, { from:owner });
+	            describe('adds Permission first', function () {
+		            beforeEach(async function () {
+		                
+		                // add as possible permission
+		                await this.permissionSheet.addPermission(this.testPermission, 
+		                    this.testPermissionName, 
+		                    this.testPermissionDescription, 
+		                    this.testPermissionContract, { from:owner });
 
-	                // set user permission
-	                await this.permissionSheet.setUserPermission(user, this.testPermission, { from:owner });
-	            })
+		                // set user permission
+		                await this.permissionSheet.setUserPermission(user, this.testPermission, { from:owner });
+		            })
+			        describe('owner calls', function () {
+		            	const from = owner
 
-	            describe('owner calls', function () {
-	            	const from = owner
+		            	it('removes the user permission', async function () {
 
-	            	it('removes the user permission', async function () {
+			                assert(await this.permissionSheet.isPermission(this.testPermission));
+			                const userHasPermission = await this.permissionSheet.hasUserPermission(user, this.testPermission);
+			                assert(userHasPermission);
 
-		                assert(await this.permissionSheet.isPermission(this.testPermission));
-		                const userHasPermission = await this.permissionSheet.hasUserPermission(user, this.testPermission);
-		                assert(userHasPermission);
+			                await this.permissionSheet.removeUserPermission(user, this.testPermission, { from });
+			                const userNowHasPermission = await this.permissionSheet.hasUserPermission(user, this.testPermission);
+			                assert(!userNowHasPermission);
 
-		                await this.permissionSheet.removeUserPermission(user, this.testPermission, { from });
-		                const userNowHasPermission = await this.permissionSheet.hasUserPermission(user, this.testPermission);
-		                assert(!userNowHasPermission);
+			            })
+
+			            it('emits a RemovedUserPermission event', async function () {
+
+			                const { logs } = await this.permissionSheet.removeUserPermission(user, this.testPermission, { from });
+			                assert.equal(logs.length, 1);
+			                assert.equal(logs[0].event, 'RemovedUserPermission');
+			                assert.equal(logs[0].args.who, user);
+			                assert.equal(logs[0].args.methodsignature, this.testPermission);
+
+			            })
 
 		            })
 
-		            it('emits a RemovedUserPermission event', async function () {
+		            describe('non owner calls', function () {
 
-		                const { logs } = await this.permissionSheet.removeUserPermission(user, this.testPermission, { from });
-		                assert.equal(logs.length, 1);
-		                assert.equal(logs[0].event, 'RemovedUserPermission');
-		                assert.equal(logs[0].args.who, user);
-		                assert.equal(logs[0].args.methodsignature, this.testPermission);
+		            	const from = user
+		            	it('reverts', async function () {
+		            		await expectRevert(this.permissionSheet.removeUserPermission(user, this.testPermission, { from }));
 
+		            	})
 		            })
 
 	            })
-
-	            describe('non owner calls', function () {
-
-	            	const from = user
+	            describe('does not add Permission first', function () {
 	            	it('reverts', async function () {
-	            		await expectRevert(this.permissionSheet.removeUserPermission(user, this.testPermission, { from }));
-
+	            		await expectRevert(this.permissionSheet.removeUserPermission(user, this.testPermission, {from:owner}))
 	            	})
 	            })
-
 	        })
 	    })
 

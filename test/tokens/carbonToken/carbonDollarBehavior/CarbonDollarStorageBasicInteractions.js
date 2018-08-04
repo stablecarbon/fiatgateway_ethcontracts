@@ -39,7 +39,26 @@ function carbonDollarStorageInteractionTests(owner, wtMinter) {
                 it('cannot set fee for non-whitelisted token', async function () {
                     await expectRevert(this.token.setFee(this.wtToken.address, 100, {from:owner}))
                 })
+                it('reverts if called by non owner', async function () {
+                    await this.token.listToken(this.wtToken.address, {from: owner}); 
+                    await expectRevert(this.token.setFee(this.wtToken.address, 100, {from:wtMinter}))
+                })
             });
+            describe('removeFee', function () {
+                it('removes fee for whitelisted token', async function () {
+                    await this.token.listToken(this.wtToken.address, {from:owner})
+                    await this.token.setFee(this.wtToken.address, 100, {from:owner})
+                    await this.token.removeFee(this.wtToken.address, {from:owner})
+                    assert.equal(await this.token.getFee(this.wtToken.address), 0)
+                })
+                it('cannot remove fee for non-whitelisted token', async function () {
+                    await expectRevert(this.token.removeFee(this.wtToken.address, {from:owner}))
+                })
+                it('reverts if called by non owner', async function () {
+                    await this.token.listToken(this.wtToken.address, {from:owner})
+                    await expectRevert(this.token.removeFee(this.wtToken.address, {from:wtMinter}))
+                })
+            })
             describe('setDefaultFee', function () {
                 it('sets default fee', async function () {
                     await this.token.setDefaultFee(100, {from: owner});

@@ -412,7 +412,7 @@ function permissionedTokenBehaviorTests(minter, whitelisted, blacklisted, nonlis
                 const to = user
                 const from = whitelisted
 
-                describe('function caller is approved to transferFrom token holder account', function () {
+                describe('spender is approved to transferFrom token holder account', function () {
                     beforeEach(async function () {
                         // seed token holder account
                         await this.token.mint(from, amountToMint, {from:minter})
@@ -423,24 +423,34 @@ function permissionedTokenBehaviorTests(minter, whitelisted, blacklisted, nonlis
                     })
 
                     describe('token holder has enough funds', function () {
-                        it('transfer succeeds', async function () {
-                            await this.token.transferFrom(from, to, amountToTransferFrom, { from: spender });
-                            assertBalance(this.token, from, amountToMint.minus(amountToTransferFrom));
-                            assertBalance(this.token, to, amountToTransferFrom);
-                        });
- 
-                        it('transfer succeeds when paused and then unpaused', async function () {
-                            await this.token.pause({ from:owner })
-                            await this.token.unpause({ from:owner })
-                            await this.token.transferFrom(from, to, amountToTransferFrom, { from: spender });
-                            assertBalance(this.token, from, amountToMint.minus(amountToTransferFrom));
-                            assertBalance(this.token, to, amountToTransferFrom);
+
+                        describe('recipient is not blacklisted', function () {
+                            it('transfer succeeds', async function () {
+                                await this.token.transferFrom(from, to, amountToTransferFrom, { from: spender });
+                                assertBalance(this.token, from, amountToMint.minus(amountToTransferFrom));
+                                assertBalance(this.token, to, amountToTransferFrom);
+                            });
+     
+                            it('transfer succeeds when paused and then unpaused', async function () {
+                                await this.token.pause({ from:owner })
+                                await this.token.unpause({ from:owner })
+                                await this.token.transferFrom(from, to, amountToTransferFrom, { from: spender });
+                                assertBalance(this.token, from, amountToMint.minus(amountToTransferFrom));
+                                assertBalance(this.token, to, amountToTransferFrom);
+                            })
+
+                            describe('when paused', function () {
+                                it('reverts', async function () {
+                                    await this.token.pause({ from:owner })
+                                    await expectRevert(this.token.transferFrom(from, to, amountToTransferFrom, { from:spender }))
+                                })
+                            })
                         })
 
-                        describe('when paused', function () {
+                        describe('recipient is blacklisted', function () {
                             it('reverts', async function () {
-                                await this.token.pause({ from:owner })
-                                await expectRevert(this.token.transferFrom(from, to, amountToTransferFrom, { from:spender }))
+                                const to = blacklisted
+                                await expectRevert(this.token.transferFrom(from, to, amountToTransferFrom, {from:spender}))
                             })
                         })
                     });
