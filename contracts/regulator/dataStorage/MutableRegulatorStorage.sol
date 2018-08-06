@@ -1,4 +1,4 @@
-pragma solidity ^0.4.23;
+pragma solidity ^0.4.24;
 
 import "./RegulatorStorage.sol";
 import "openzeppelin-solidity/contracts/AddressUtils.sol";
