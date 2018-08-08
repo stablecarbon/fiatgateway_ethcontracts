@@ -4,7 +4,8 @@ const PermissionSheet = artifacts.require("PermissionSheet");
 const ValidatorSheet = artifacts.require("ValidatorSheet");
 const Regulator = artifacts.require("Regulator");
 const RegulatorProxy = artifacts.require("RegulatorProxy")
-
+const RegulatorProxyFactory = artifacts.require('RegulatorProxyFactory')
+const RegulatorLogicFactory = artifacts.require('RegulatorLogicFactory')
 
 // PermissionedToken
 const AllowanceSheet = artifacts.require("AllowanceSheet");
@@ -32,6 +33,8 @@ module.exports = {
 	PermissionSheet,
 	ValidatorSheet,
 	Regulator,
+	RegulatorProxyFactory,
+	RegulatorLogicFactory,
 	AllowanceSheet,
 	BalanceSheet,
 	RegulatorProxy,

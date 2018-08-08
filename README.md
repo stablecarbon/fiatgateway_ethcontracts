@@ -1,5 +1,5 @@
 # fiat_gateway
-Carbon's Crypto-Fiat gateway
+Carbon's Crypto-Fiat gateway: smart contracts
 
 
 Token Roles:

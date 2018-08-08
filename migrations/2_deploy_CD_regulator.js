@@ -6,6 +6,8 @@ var AllowanceSheet = artifacts.require("./AllowanceSheet");
 var FeeSheet = artifacts.require("./FeeSheet");
 var StablecoinWhitelist = artifacts.require("./StablecoinWhitelist");
 var CarbonDollar = artifacts.require("./CarbonDollar");
+var RegulatorProxyFactory = artifacts.require("./RegulatorProxyFactory");
+var RegulatorLogicFactory = artifacts.require("./RegulatorLogicFactory")
 
 var RegulatorProxy = artifacts.require("./RegulatorProxy")
 
@@ -21,9 +23,12 @@ module.exports = function(deployer, network, accounts) {
   let feeSheetInstance = null
   let whitelistInstance = null
 
+  // Testing regular Regulator 
+  deployer.deploy(RegulatorLogicFactory, {from:regulator})
+  deployer.deploy(RegulatorProxyFactory, {from:regulator})
   // CARBONDOLLAR
 
-  // PermissionSheet add all permissions
+  // // PermissionSheet add all permissions
   // deployer.deploy(PermissionSheetMock, {from:regulator}).then(function () {
   //   return PermissionSheetMock.deployed().then(function (instance) {
   //     permissionSheetInstance = instance
