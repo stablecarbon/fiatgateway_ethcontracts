@@ -1,52 +1,29 @@
 var PermissionSheetMock = artifacts.require("./PermissionSheetMock");
 var ValidatorSheet = artifacts.require("./ValidatorSheet");
 var WhitelistedTokenRegulator = artifacts.require("./WhitelistedTokenRegulator");
+var WhitelistedToken = artifacts.require("./WhitelistedToken");
+var CarbonDollar = artifacts.require("./CarbonDollar");
+var BalanceSheet = artifacts.require("./BalanceSheet");
+var AllowanceSheet = artifacts.require("./AllowanceSheet");
+
 
 module.exports = function(deployer, network, accounts) {
   let regulator = accounts[0];
   let user = accounts[1];
   let whitelistedTokenInstance = null;
+  let whitelistedTokenToken = null;
   let permissionSheetInstance = null;
   let validatorSheetInstance = null;
-
-  let mint = null;
-  let mint_cusd = null
-  let convert_wt = null
-  let convert_cd = null
-  let burn = null
-  let destroy_blacklisted = null
-  let spend_blacklisted = null
-  let blacklisted = null
 
   // WHITELISTEDTOKEN
 
   // PermissionSheet add all permissions
   deployer.deploy(PermissionSheetMock, {from:regulator}).then(function () {
     return PermissionSheetMock.deployed().then(function (instance) {
-      permissionSheetInstance = instance
-      return permissionSheetInstance.MINT_SIG().then(function (sig) {
-        mint = sig
-        return permissionSheetInstance.MINT_CUSD_SIG().then(function (sig) {
-          mint_cusd = sig
-          return permissionSheetInstance.CONVERT_WT_SIG().then(function (sig) {
-            convert_wt = sig
-            return permissionSheetInstance.CONVERT_CARBON_DOLLAR_SIG().then(function (sig) {
-              convert_cd = sig
-              return permissionSheetInstance.BURN_SIG().then(function (sig) {
-                burn = sig
-                return permissionSheetInstance.DESTROY_BLACKLISTED_TOKENS_SIG().then(function (sig) {
-                  destroy_blacklisted = sig
-                  return permissionSheetInstance.APPROVE_BLACKLISTED_ADDRESS_SPENDER_SIG().then(function (sig) {
-                    spend_blacklisted = sig
-                    return permissionSheetInstance.BLACKLISTED_SIG().then(function (sig) {
-                      blacklisted = sig
-                    })
-                  })
-                })
-              })
-            })
-          })
-        })
+      return PermissionSheetMock.new({ from:regulator }).then(function (newInstance) {
+        console.log('deployed: ' + instance.address)
+        console.log('new: ' + newInstance.address)
+        permissionSheetInstance = instance
       })
     })
   }).then(function () {
@@ -66,6 +43,18 @@ module.exports = function(deployer, network, accounts) {
               // Set regulator as minter, user as whitelisted
               whitelistedTokenInstance.setMinter(regulator, {from:regulator})
               whitelistedTokenInstance.setWhitelistedUser(user, {from:regulator})
+            }).then(function () {
+                deployer.deploy(BalanceSheet, {from:regulator}).then(function () {
+                  return BalanceSheet.deployed().then(function (instance) {
+                    balanceSheetInstance = instance
+                  })
+                }).then(function () {
+                  deployer.deploy(AllowanceSheet, {from:regulator}).then(function () {
+                    return AllowanceSheet.deployed().then(function (instance) {
+                      allowanceSheetInstance = instance
+                    })
+                  })
+                })
             })
           })
         })
