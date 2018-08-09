@@ -21,15 +21,6 @@ contract('WhitelistedToken', _accounts => {
     describe("Whitelisted token tests", function () {
         const hundred = new BigNumber("100000000000000000000") // 100 * 10**18
         const fifty = new BigNumber("50000000000000000000") // 50 * 10**18
-        describe('constructor', function () {
-            it('reverts if provided CUSD address is not a contract', async function() {
-                await expectRevert(WhitelistedToken.new(
-                    this.regulator_w.address, 
-                    this.balanceSheetWT.address, 
-                    this.allowanceSheetWT.address,
-                    ZERO_ADDRESS, { from: owner }))
-            })
-        })
         describe('mintCUSD', function () {       
             describe('user has mint CUSD permission', function () {
                 beforeEach(async function () {

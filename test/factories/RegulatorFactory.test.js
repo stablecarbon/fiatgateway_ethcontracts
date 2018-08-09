@@ -109,7 +109,7 @@ contract('Regulator Factory creating Regulators', _accounts => {
             it('upgrades to next implementation', async function () {
                 await this.logicFactory.createRegulator()
 
-                this.model_1 = Regulator.at(await this.logicFactory.regulators((await this.logicFactory.getCount())-1))
+                this.model_1 = Regulator.at(await this.logicFactory.getRegulator((await this.logicFactory.getCount())-1))
     
                 const { logs } = await this.proxy_0.upgradeTo(this.model_1.address, {from}) 
                 assert.equal(await this.proxy_0.implementation(), this.model_1.address) 
@@ -159,6 +159,18 @@ contract('Regulator Factory creating Regulators', _accounts => {
             })
         })
     })
+
+    // describe('Creating a Whitelisted Regulator', function () {
+    //     const from = validator // Proxy owner
+    //     it('logic creates a new whietlisted regulator', async function () {
+    //         const { logs } = await this.logicFactory.createWhitelistedRegulator()
+    //         assert.equal(logs.length, 1)
+    //         assert.equal(logs[0].event, "CreatedWhielistedRegulatorLogic")
+    //         assert.equal(logs[0].args.newRegulator, await this.logicFactory.getRegulator(0))
+    //         assert.equal(logs[0].args.index, 0)
+    //         assert.equal(await this.logicFactory.getCount(), 1)
+    //     })
+    // })
 
 
 

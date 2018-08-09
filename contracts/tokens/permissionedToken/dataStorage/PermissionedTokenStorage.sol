@@ -1,6 +1,5 @@
 pragma solidity ^0.4.24;
 
-import "openzeppelin-solidity/contracts/AddressUtils.sol";
 import "./AllowanceSheet.sol";
 import "./BalanceSheet.sol";
 import "../../../regulator/Regulator.sol";
@@ -23,9 +22,6 @@ contract PermissionedTokenStorage {
     *
     **/
     constructor (address _regulator, address _balances, address _allowances) public {
-        require(AddressUtils.isContract(_regulator));
-        require(AddressUtils.isContract(_balances));
-        require(AddressUtils.isContract(_allowances));
         regulator = Regulator(_regulator);
         balances = BalanceSheet(_balances);
         allowances = AllowanceSheet(_allowances);

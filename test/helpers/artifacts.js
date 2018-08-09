@@ -13,6 +13,8 @@ const BalanceSheet = artifacts.require("BalanceSheet");
 const PermissionedToken = artifacts.require("PermissionedToken");
 const PermissionedTokenStorage = artifacts.require("PermissionedTokenStorage");
 const PermissionedTokenProxy = artifacts.require("PermissionedTokenProxy");
+const PermissionedTokenLogicFactory = artifacts.require("PermissionedTokenLogicFactory");
+const PermissionedTokenProxyFactory = artifacts.require("PermissionedTokenProxyFactory");
 
 // WhitelistedToken
 const WhitelistedToken = artifacts.require("WhitelistedToken");
@@ -41,6 +43,8 @@ module.exports = {
 	PermissionedToken,
 	PermissionedTokenStorage,
 	PermissionedTokenProxy,
+	PermissionedTokenLogicFactory,
+	PermissionedTokenProxyFactory,
 	WhitelistedToken,
 	WhitelistedTokenRegulator,
 	CarbonDollarProxy,

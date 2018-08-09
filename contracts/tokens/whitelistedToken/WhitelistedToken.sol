@@ -1,6 +1,5 @@
 pragma solidity ^0.4.24;
 
-import "openzeppelin-solidity/contracts/AddressUtils.sol";
 import "../permissionedToken/PermissionedToken.sol";
 import "../carbonToken/CarbonDollar.sol";
 
@@ -22,7 +21,6 @@ contract WhitelistedToken is PermissionedToken {
     * @param _cusd Address of `CarbonDollar` contract
     */
     constructor(address r, address b, address a, address _cusd) PermissionedToken(r,b,a) public {
-        require(AddressUtils.isContract(_cusd), "Address provided for CarbonUSD must be a contract");
         cusdAddress = _cusd;
     }
 
