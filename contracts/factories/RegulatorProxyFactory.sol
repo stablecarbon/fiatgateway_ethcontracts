@@ -28,6 +28,7 @@ contract RegulatorProxyFactory {
 
 	// Return the i'th created proxy
 	function getRegulator(uint i) public view returns(address) {
+		require((i < regulators.length) && (i >= 0));
 		return regulators[i];
 	}
 

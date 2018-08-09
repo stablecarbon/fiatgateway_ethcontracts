@@ -25,6 +25,7 @@ contract RegulatorLogicFactory {
 
 	// Return the i'th created regulator
 	function getRegulator(uint i) public view returns(address) {
+		require((i < regulators.length) && (i >= 0));
 		return regulators[i];
 	}
 

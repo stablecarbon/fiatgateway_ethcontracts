@@ -44,6 +44,31 @@ contract('Regulator Factory creating Regulators', _accounts => {
     
     })
 
+    describe('getRegulator', function () {
+        beforeEach(async function () {
+            await this.logicFactory.createRegulator()
+            await this.logicFactory.createRegulator()
+            await this.proxyFactory.createRegulator(await this.logicFactory.getRegulator(0))
+            await this.proxyFactory.createRegulator(await this.logicFactory.getRegulator(1))
+
+        })
+        it('i is negative, reverts', async function () {
+            await expectRevert(this.logicFactory.getRegulator(-1))
+            await expectRevert(this.proxyFactory.getRegulator(-1))
+        })
+        it('i is equal to or greater than length, reverts', async function () {
+            await expectRevert(this.logicFactory.getRegulator(2))
+            await expectRevert(this.proxyFactory.getRegulator(2))
+            await expectRevert(this.logicFactory.getRegulator(3))
+            await expectRevert(this.proxyFactory.getRegulator(3))
+        })
+        it('i >= 0 and < length, retrieves regulator', async function () {
+            assert.equal(await this.logicFactory.getRegulator(1), await this.logicFactory.regulators(1))
+            assert.equal(await this.proxyFactory.getRegulator(1), await this.proxyFactory.regulators(1))
+
+        })
+    })
+
     describe('Casting children to Regulator and RegulatorProxy', function () {
         const from = validator // Proxy owner
         beforeEach(async function () {
