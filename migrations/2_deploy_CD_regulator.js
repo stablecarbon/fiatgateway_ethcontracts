@@ -8,8 +8,9 @@ var StablecoinWhitelist = artifacts.require("./StablecoinWhitelist");
 var CarbonDollar = artifacts.require("./CarbonDollar");
 var RegulatorProxyFactory = artifacts.require("./RegulatorProxyFactory");
 var RegulatorLogicFactory = artifacts.require("./RegulatorLogicFactory")
-
-var RegulatorProxy = artifacts.require("./RegulatorProxy")
+var PermissionSheet = artifacts.require("./PermissionSheet")
+var ValidatorSheet = artifacts.require("./ValidatorSheet")
+var Regulator = artifacts.require("./Regulator")
 
 module.exports = function(deployer, network, accounts) {
   let regulator = accounts[0];
@@ -24,6 +25,9 @@ module.exports = function(deployer, network, accounts) {
   let whitelistInstance = null
 
   // Testing regular Regulator 
+  deployer.deploy(PermissionSheet, {from:regulator})
+  deployer.deploy(ValidatorSheet, {from:regulator})
+  deployer.deploy(Regulator, PermissionSheet.address, ValidatorSheet.address, {from:regulator})
   deployer.deploy(RegulatorLogicFactory, {from:regulator})
   deployer.deploy(RegulatorProxyFactory, {from:regulator})
   // CARBONDOLLAR
