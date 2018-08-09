@@ -1,15 +1,16 @@
 pragma solidity ^0.4.23;
 
 import '../regulator/Regulator.sol';
-import "openzeppelin-solidity/contracts/ownership/Ownable.sol";
 
 
 /**
 *
-* @dev RegulatorLogicFactory creates new Regulator logic contracts 
+* @dev RegulatorLogicFactory creates new Regulator logic contracts. A logic contract implements the 
+* functionality of the Regulator, but it must be connected to proper data storage contracts to execute
+* its functions.
 *
 **/
-contract RegulatorLogicFactory is Ownable {
+contract RegulatorLogicFactory {
 
 	// Parameters
 	address[] public regulators;
@@ -17,17 +18,25 @@ contract RegulatorLogicFactory is Ownable {
 	// Events
 	event CreatedRegulatorLogic(address newRegulator, uint index);
 
+	// Return number of regulator logic contracts created so far
 	function getCount() public view returns (uint) {
 		return regulators.length;
 	}
 
+	// Return the i'th created regulator
+	function getRegulator(uint i) public view returns(address) {
+		return regulators[i];
+	}
+
 	/**
 	*
-	* @dev generate a new regulator address that users can cast to either a RegulatorProxy or a Regulator.
-	* The Regulator has the same logic as the regulatorImplementation input contract.
+	* @dev generate a new regulator address that users can cast to a Regulator. The
+	* Regulator has no data storage contracts connected to it, so users must call
+	* set[Permission]/[Validator]Storage or use it as the implementation address
+	* for a RegulatorProxy
 	*
 	**/
-	function createRegulator() onlyOwner public {
+	function createRegulator() public {
 		
 		// Store new data storage contracts for regulator
 

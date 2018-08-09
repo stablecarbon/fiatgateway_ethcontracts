@@ -12,48 +12,45 @@ contract('Regulator Factory creating Regulators', _accounts => {
     const Blacklisted = commonVars.validator2;
 
     beforeEach(async function () {
-        const from = validator;
 
-        this.proxyFactory = await RegulatorProxyFactory.new({from});
-        this.logicFactory = await RegulatorLogicFactory.new({from});
+        this.proxyFactory = await RegulatorProxyFactory.new();
+        this.logicFactory = await RegulatorLogicFactory.new();
 
     })
 
     describe('Creating a brand new Regulator logic and proxy from the factory', function () {
 
-        const from = validator
         it('initiates the factories', async function () {
             assert.equal(await this.proxyFactory.getCount(), 0)
             assert.equal(await this.logicFactory.getCount(), 0)
         })
         it('logic creates a new regulator', async function () {
-            const { logs } = await this.logicFactory.createRegulator({from})
+            const { logs } = await this.logicFactory.createRegulator()
             assert.equal(logs.length, 1)
             assert.equal(logs[0].event, "CreatedRegulatorLogic")
-            assert.equal(logs[0].args.newRegulator, await this.logicFactory.regulators(0))
+            assert.equal(logs[0].args.newRegulator, await this.logicFactory.getRegulator(0))
             assert.equal(logs[0].args.index, 0)
             assert.equal(await this.logicFactory.getCount(), 1)
         })
         it('proxy creates a new regulator', async function () {
-            await this.logicFactory.createRegulator({from})
-            const { logs } = await this.proxyFactory.createRegulator(await this.logicFactory.regulators(0), {from})
-            assert.equal(logs.length, 4)
-            assert.equal(logs[3].event, "CreatedRegulatorProxy")
-            assert.equal(logs[3].args.newRegulator, await this.proxyFactory.regulators(0))
-            assert.equal(logs[3].args.index, 0)
+            await this.logicFactory.createRegulator()
+            const { logs } = await this.proxyFactory.createRegulator(await this.logicFactory.getRegulator(0))
+            assert.equal(logs.length, 1)
+            assert.equal(logs[0].event, "CreatedRegulatorProxy")
+            assert.equal(logs[0].args.newRegulator, await this.proxyFactory.getRegulator(0))
+            assert.equal(logs[0].args.index, 0)
             assert.equal(await this.proxyFactory.getCount(), 1)
         })
     
     })
 
     describe('Casting children to Regulator and RegulatorProxy', function () {
-        const from = validator
-
+        const from = validator // Proxy owner
         beforeEach(async function () {
-            await this.logicFactory.createRegulator({from})
-            this.model_0 = Regulator.at(await this.logicFactory.regulators((await this.logicFactory.getCount())-1))
+            await this.logicFactory.createRegulator()
+            this.model_0 = Regulator.at(await this.logicFactory.getRegulator((await this.logicFactory.getCount())-1))
             await this.proxyFactory.createRegulator(this.model_0.address, {from})
-            this.proxy_0 = RegulatorProxy.at(await this.proxyFactory.regulators((await this.proxyFactory.getCount())-1))
+            this.proxy_0 = RegulatorProxy.at(await this.proxyFactory.getRegulator((await this.proxyFactory.getCount())-1))
             this.regulator_0 = Regulator.at(this.proxy_0.address)
 
             this.permissions_0 = PermissionSheet.at(await this.regulator_0.permissions())
@@ -85,7 +82,7 @@ contract('Regulator Factory creating Regulators', _accounts => {
         })
         describe("Proxy upgradeTo and implentation", function () {
             it('upgrades to next implementation', async function () {
-                await this.logicFactory.createRegulator({from})
+                await this.logicFactory.createRegulator()
 
                 this.model_1 = Regulator.at(await this.logicFactory.regulators((await this.logicFactory.getCount())-1))
     
@@ -100,7 +97,7 @@ contract('Regulator Factory creating Regulators', _accounts => {
         describe('Proxy delegates calls to implementation', function () {
             describe('owner calls addValidator', function () {
                 it('adds a validator to validator sheet', async function () {
-                    await this.regulator_0.addValidator(validator, {from:validator})
+                    await this.regulator_0.addValidator(validator, {from})
                     assert(await this.regulator_0.isValidator(validator))
                 })
             })
@@ -111,27 +108,27 @@ contract('Regulator Factory creating Regulators', _accounts => {
             })  
             describe('validator calls addPermission', function () {
                 it('adds permission', async function () {
-                    await this.regulator_0.addValidator(validator, {from:validator})
-                    await this.regulator_0.addPermission(0x12345678, "name","des","contract", {from:validator})
+                    await this.regulator_0.addValidator(validator, {from})
+                    await this.regulator_0.addPermission(0x12345678, "name","des","contract", {from})
                     assert(await this.regulator_0.isPermission(0x12345678))
                 })
             })
             describe('non validator calls addPermission', function () {
                 it('reverts', async function () {
-                    await this.regulator_0.addValidator(validator, {from:validator})
+                    await this.regulator_0.addValidator(validator, {from})
                     await expectRevert(this.regulator_0.addPermission(0x12345678, "name", "des", "contract", {from:minter}))
                 })
             })
             describe('validator sets user permission', function () {
                 beforeEach(async function () {
-                    await this.regulator_0.addValidator(validator, {from:validator})
+                    await this.regulator_0.addValidator(validator, {from})
                 })
                 it('sets a minter', async function () {
-                    await this.regulator_0.setMinter(minter, {from:validator})
+                    await this.regulator_0.setMinter(minter, {from})
                     assert(await this.regulator_0.isMinter(minter))
                 })
                 it('sets a whitelisted user', async function () {
-                    await this.regulator_0.setWhitelistedUser(whitelisted, {from:validator})
+                    await this.regulator_0.setWhitelistedUser(whitelisted, {from})
                     assert(await this.regulator_0.isWhitelistedUser(whitelisted))
                 })
             })
