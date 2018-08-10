@@ -8,8 +8,16 @@ module.exports = function(deployer, network, accounts) {
   let token = accounts[1];
 
   // Testing regular Regulator 
-  PermissionSheetMock.deployed().then(function(permissionSheet) {
-    console.log(permissionSheet)
+  deployer.deploy(PermissionSheetMock, { from: cdRegulatorOwner}).then(function() {
+  deployer.deploy(ValidatorSheet, { from: cdRegulatorOwner }).then(function() {
+  deployer.deploy(CarbonDollarRegulator, PermissionSheetMock.address,
+                                             ValidatorSheet.address, 
+                                             { from: cdRegulatorOwner }).then(function () {
+  deployer.deploy(RegulatorProxy, CarbonDollarRegulator.address, 
+                                  PermissionSheetMock.address, 
+                                  ValidatorSheet.address, 
+                                  { from: cdRegulatorOwner })
+  })
   })
 
 };
