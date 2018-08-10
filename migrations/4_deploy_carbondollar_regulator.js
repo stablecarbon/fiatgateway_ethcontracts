@@ -29,7 +29,7 @@ module.exports = function(deployer, network, accounts) {
         permissionFactoryInstance.getCount().then(function(count) {
           permissionFactoryInstance.getPermissionSheet(count-1).then(function(newSheet) {
             permissionSheetInstance = newSheet
-            console.log('CD: new psheet: ' + validatorSheetInstance)
+            console.log('CD: new psheet: ' + permissionSheetInstance)
           })
         })
       })

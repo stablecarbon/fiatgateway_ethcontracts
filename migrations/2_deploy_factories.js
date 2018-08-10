@@ -10,7 +10,4 @@ module.exports = function(deployer, network, accounts) {
   deployer.deploy(PermissionSheetMockFactory, {from:factoryOwner})
   deployer.deploy(AllowanceSheetFactory, {from:factoryOwner})
   deployer.deploy(BalanceSheetFactory, {from:factoryOwner})
-
-
-
 };
