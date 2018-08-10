@@ -13,7 +13,7 @@ module.exports = function(deployer, network, accounts) {
   deployer.deploy(CarbonDollarRegulator, PermissionSheetMock.address,
                                              ValidatorSheet.address, 
                                              { from: cdRegulatorOwner }).then(function () {
-  deployer.deploy(RegulatorProxy, WhitelistedTokenRegulator.address, 
+  deployer.deploy(RegulatorProxy, CarbonDollarRegulator.address, 
                                   PermissionSheetMock.address, 
                                   ValidatorSheet.address, 
                                   { from: cdRegulatorOwner })
