@@ -22,7 +22,7 @@ contract RegulatorProxyFactory {
     }
 
     // Return the i'th created proxy
-    function getRegulator(uint i) public view returns(address) {
+    function getRegulatorProxy(uint i) public view returns(address) {
         require((i < regulators.length) && (i >= 0), "Invalid index");
         return regulators[i];
     }
@@ -35,7 +35,7 @@ contract RegulatorProxyFactory {
     * @param regulatorImplementation the address of the logic contract that the proxy will initialize its implementation to
     *
     **/
-    function createRegulator(address regulatorImplementation) public {
+    function createRegulatorProxy(address regulatorImplementation) public {
 
         // Store new data storage contracts for regulator proxy
         address permissions = address(new PermissionSheetMock()); // All permissions added
