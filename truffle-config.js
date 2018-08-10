@@ -22,6 +22,7 @@ module.exports = {
       host: "localhost",
       port: 8545,
       network_id: "*", //Listen to all networks,
+      gasLimit: 10000000000000
     },
     coverage: {
       host: "localhost",
@@ -31,12 +32,12 @@ module.exports = {
       gasPrice: 0x01      // <-- Use this low gas price
     },
   },
-  mocha: {
-    reporter: 'eth-gas-reporter',
-    reporterOptions: {
-      gasPrice: 21
-    }
-  },
+  // mocha: {
+  //   reporter: 'eth-gas-reporter',
+  //   reporterOptions: {
+  //     gasPrice: 21
+  //   }
+  // },
   solc: {
     optimizer: {
       enabled: true,

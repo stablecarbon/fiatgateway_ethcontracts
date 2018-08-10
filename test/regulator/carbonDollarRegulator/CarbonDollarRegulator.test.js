@@ -31,11 +31,12 @@ contract('CarbonDollarRegulator', _accounts => {
                     // storing method signatures for testing convenience
                     this.BLACKLISTED_SIG = await this.permissionSheet.BLACKLISTED_SIG();
                     this.CONVERT_CARBON_DOLLAR_SIG = await this.permissionSheet.CONVERT_CARBON_DOLLAR_SIG();
-                    
+                    this.BURN_CARBON_DOLLAR_SIG = await this.permissionSheet.BURN_CARBON_DOLLAR_SIG();
                     // Assert pre-test invariants
                     assert(await this.sheet.isValidator(validator));
                     assert(await this.sheet.isPermission(this.BLACKLISTED_SIG));
                     assert(await this.sheet.isPermission(this.CONVERT_CARBON_DOLLAR_SIG));
+                    assert(await this.sheet.isPermission(this.BURN_CARBON_DOLLAR_SIG));
 
                 });
 
@@ -46,7 +47,7 @@ contract('CarbonDollarRegulator', _accounts => {
                             await this.sheet.setWhitelistedUser(user, { from });
                             assert(await this.sheet.hasUserPermission(user, this.CONVERT_CARBON_DOLLAR_SIG));
                             assert(!(await this.sheet.hasUserPermission(user, this.BLACKLISTED_SIG)));
-
+                            assert(await this.sheet.hasUserPermission(user, this.BURN_CARBON_DOLLAR_SIG));
                         })
                         it('emits a SetWhitelistedUser event', async function () {
                             const { logs } = await this.sheet.setWhitelistedUser(user, { from });
@@ -70,7 +71,7 @@ contract('CarbonDollarRegulator', _accounts => {
                             await this.sheet.setBlacklistedUser(user, { from });
                             assert(!(await this.sheet.hasUserPermission(user, this.CONVERT_CARBON_DOLLAR_SIG)));
                             assert(await this.sheet.hasUserPermission(user, this.BLACKLISTED_SIG));
-
+                            assert(!(await this.sheet.hasUserPermission(user, this.BURN_CARBON_DOLLAR_SIG)));
                         })
                         it('emits a SetBlacklistedUser event', async function () {
                             const { logs } = await this.sheet.setBlacklistedUser(user, { from });
@@ -94,6 +95,7 @@ contract('CarbonDollarRegulator', _accounts => {
                             await this.sheet.setNonlistedUser(user, { from });
                             assert(!(await this.sheet.hasUserPermission(user, this.CONVERT_CARBON_DOLLAR_SIG)));
                             assert(!(await this.sheet.hasUserPermission(user, this.BLACKLISTED_SIG)));
+                            assert(!(await this.sheet.hasUserPermission(user, this.BURN_CARBON_DOLLAR_SIG)));
 
                         })
                         it('emits a SetNonlistedUser event', async function () {
