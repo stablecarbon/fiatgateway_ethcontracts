@@ -15,14 +15,14 @@ module.exports = function(deployer, network, accounts) {
   var whitelistedRegulatorInstance
   var proxyRegulatorInstance
 
-  WhitelistedTokenRegulator.deployed().then(function(regInstance) {
-    whitelistedRegulatorInstance = regInstance
-    RegulatorProxyFactory.deployed().then(function(proxyInstance) {
-        proxyRegulatorInstance = proxyInstance
-        proxyRegulatorInstance.createRegulator(whitelistedRegulatorInstance, {from:wtRegulatorOwner}).then(function() {
-            console.log('created WT regulator')
-        })
-    })
-  })
+  // WhitelistedTokenRegulator.deployed().then(function(regInstance) {
+  //   whitelistedRegulatorInstance = regInstance
+  //   RegulatorProxyFactory.deployed().then(function(proxyInstance) {
+  //       proxyRegulatorInstance = proxyInstance
+  //       proxyRegulatorInstance.createRegulator(whitelistedRegulatorInstance, {from:wtRegulatorOwner}).then(function() {
+  //           console.log('created WT regulator')
+  //       })
+  //   })
+  // })
 
 };

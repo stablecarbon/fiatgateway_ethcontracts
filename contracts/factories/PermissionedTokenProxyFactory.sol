@@ -3,8 +3,6 @@ pragma solidity ^0.4.23;
 import "../tokens/permissionedToken/PermissionedTokenProxy.sol";
 import "../tokens/permissionedToken/dataStorage/BalanceSheet.sol";
 import "../tokens/permissionedToken/dataStorage/AllowanceSheet.sol";
-import "openzeppelin-solidity/contracts/AddressUtils.sol";
-
 
 /**
 *
@@ -40,9 +38,7 @@ contract PermissionedTokenProxyFactory {
     *
     **/
     function createToken(address tokenImplementation, address regulator) public {
-        require(AddressUtils.isContract(regulator), "Cannot set regulator to a non-contract address");
-        require(AddressUtils.isContract(tokenImplementation), "Cannot set a proxy implementation to a non-contract address");
-
+        
         // Store new data storage contracts for token proxy
         address balances = address(new BalanceSheet()); 
         address allowances = address(new AllowanceSheet());
