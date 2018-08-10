@@ -12,7 +12,7 @@ import "../whitelistedToken/WhitelistedToken.sol";
 contract CarbonDollar is MutableCarbonDollarStorage, PermissionedToken {
     // Events
     event ConvertedToWT(address indexed user, uint256 amount);
-
+    event BurnedCUSD(address indexed user, uint256 feedAmount, uint256 chargedFee);
     /**
         Modifiers
     */
@@ -127,13 +127,7 @@ contract CarbonDollar is MutableCarbonDollarStorage, PermissionedToken {
  
         // Send back WT0 to calling user, but with a fee reduction.
         // Transfer this fee into this Carbon account (this contract's address)
-        uint16 feeRate;
-        if (stablecoinFees.isFeeSet(stablecoin)) // If fee for coin is not set
-            feeRate = stablecoinFees.fees(stablecoin);
-        else
-            feeRate = stablecoinFees.defaultFee();
-
-        uint256 chargedFee = stablecoinFees.computeFee(_amount, feeRate);
+        uint256 chargedFee = stablecoinFees.computeFee(_amount, computeFeeRate(stablecoin));
         uint256 feedAmount = _amount.sub(chargedFee);
         _burn(msg.sender, _amount);
         w.transfer(msg.sender, feedAmount);
@@ -141,6 +135,39 @@ contract CarbonDollar is MutableCarbonDollarStorage, PermissionedToken {
         _mint(address(this), chargedFee);
         emit ConvertedToWT(msg.sender, _amount);
         return true;
+    }
+
+     /**
+     * @notice Burns CarbonDollar.
+     * @param stablecoin Represents the stablecoin whose fee will be charged.
+     * @param _amount Amount of CarbonUSD to burn.
+     */
+    function burnCarbonDollar(address stablecoin, uint256 _amount) public requiresPermission returns (bool) {
+        require(stablecoinWhitelist.isWhitelisted(stablecoin), "Stablecoin must be whitelisted prior to setting conversion fee");
+        WhitelistedToken w = WhitelistedToken(stablecoin);
+        require(w.balanceOf(address(this)) >= _amount, "Carbon escrow account in WT0 doesn't have enough tokens for burning");
+ 
+        // Burn user's CUSD, but with a fee reduction.
+        uint256 chargedFee = stablecoinFees.computeFee(_amount, computeFeeRate(stablecoin));
+        uint256 feedAmount = _amount.sub(chargedFee);
+        _burn(msg.sender, _amount);
+        w.burn(_amount);
+        _mint(address(this), chargedFee);
+        emit BurnedCUSD(msg.sender, feedAmount, chargedFee);
+        return true;
+    }
+
+    /** Computes fee percentage associated with burning into a particular stablecoin.
+     * @param stablecoin The stablecoin whose fee will be charged. Precondition: is a whitelisted
+     * stablecoin.
+     * @return The fee that will be charged. If the stablecoin's fee is not set, the default
+     * fee is returned.
+     */
+    function computeFeeRate(address stablecoin) public view returns (uint16 feeRate) {
+        if (stablecoinFees.isFeeSet(stablecoin)) // If fee for coin is not set
+            feeRate = stablecoinFees.fees(stablecoin);
+        else
+            feeRate = stablecoinFees.defaultFee();
     }
 
     /**

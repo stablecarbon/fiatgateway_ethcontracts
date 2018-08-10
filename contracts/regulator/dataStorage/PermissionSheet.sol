@@ -50,6 +50,7 @@ contract PermissionSheet is Ownable {
     bytes4 public constant CONVERT_WT_SIG = bytes4(keccak256("convertWT(uint256)"));
     bytes4 public constant BURN_SIG = bytes4(keccak256("burn(uint256)"));
     bytes4 public constant CONVERT_CARBON_DOLLAR_SIG = bytes4(keccak256("convertCarbonDollar(address,uint256)"));
+    bytes4 public constant BURN_CARBON_DOLLAR_SIG = bytes4(keccak256("burnCarbonDollar(address,uint256)"));
     bytes4 public constant DESTROY_BLACKLISTED_TOKENS_SIG = bytes4(keccak256("destroyBlacklistedTokens(address,uint256)"));
     bytes4 public constant APPROVE_BLACKLISTED_ADDRESS_SPENDER_SIG = bytes4(keccak256("approveBlacklistedAddressSpender(address)"));
     bytes4 public constant BLACKLISTED_SIG = bytes4(keccak256("blacklisted()"));
