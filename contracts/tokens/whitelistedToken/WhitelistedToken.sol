@@ -2,9 +2,10 @@ pragma solidity ^0.4.24;
 
 import "../permissionedToken/PermissionedToken.sol";
 import "../carbonToken/CarbonDollar.sol";
+import "./dataStorage/MutableWhitelistedTokenStorage.sol";
 
-contract WhitelistedToken is PermissionedToken {
-    address public cusdAddress; // Address of the CarbonUSD contract.
+// A whitelisted token can be converted into a CUSD and vice versa
+contract WhitelistedToken is MutableWhitelistedTokenStorage, PermissionedToken {
 
     /**
         Events
@@ -20,9 +21,9 @@ contract WhitelistedToken is PermissionedToken {
     * @param b Address of balance sheet. Passed to base constructor.
     * @param _cusd Address of `CarbonDollar` contract
     */
-    constructor(address r, address b, address a, address _cusd) PermissionedToken(r,b,a) public {
-        cusdAddress = _cusd;
-    }
+    constructor(address r, address b, address a, address _cusd) 
+    PermissionedToken(r,b,a)
+    MutableWhitelistedTokenStorage(_cusd) public {}
 
     /**
     * @notice Mints CarbonUSD for the user. Stores the WT0 that backs the CarbonUSD

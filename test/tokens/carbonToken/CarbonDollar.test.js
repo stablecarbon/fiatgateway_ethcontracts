@@ -19,7 +19,7 @@ contract('CarbonDollar', _accounts => {
     });
 
     describe("Carbon Dollar tests", function () {
-        //carbonDollarStorageInteractionTests(owner, minter);
+        carbonDollarStorageInteractionTests(owner, minter);
         carbonDollarBehaviorTests(owner, user, whitelisted, validator);
     });
 })

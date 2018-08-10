@@ -4,10 +4,10 @@ const PermissionSheet = artifacts.require("PermissionSheet");
 const PermissionSheetMockFactory = artifacts.require("PermissionSheetMockFactory");
 const ValidatorSheet = artifacts.require("ValidatorSheet");
 const ValidatorSheetFactory = artifacts.require("ValidatorSheetFactory");
+const RegulatorStorage = artifacts.require("RegulatorStorage");
 const Regulator = artifacts.require("Regulator");
 const RegulatorProxy = artifacts.require("RegulatorProxy")
 const RegulatorProxyFactory = artifacts.require('RegulatorProxyFactory')
-const RegulatorLogicFactory = artifacts.require('RegulatorLogicFactory')
 
 // PermissionedToken
 const AllowanceSheet = artifacts.require("AllowanceSheet");
@@ -17,12 +17,12 @@ const BalanceSheetFactory = artifacts.require("BalanceSheetFactory")
 const PermissionedToken = artifacts.require("PermissionedToken");
 const PermissionedTokenStorage = artifacts.require("PermissionedTokenStorage");
 const PermissionedTokenProxy = artifacts.require("PermissionedTokenProxy");
-const PermissionedTokenLogicFactory = artifacts.require("PermissionedTokenLogicFactory");
-const PermissionedTokenProxyFactory = artifacts.require("PermissionedTokenProxyFactory");
 
 // WhitelistedToken
 const WhitelistedToken = artifacts.require("WhitelistedToken");
 const WhitelistedTokenRegulator = artifacts.require("WhitelistedTokenRegulator");
+const WhitelistedTokenStorage = artifacts.require("WhitelistedTokenStorage");
+const WhitelistedTokenProxy = artifacts.require("WhitelistedTokenProxy");
 
 // CarbonDollar
 const CarbonDollar = artifacts.require("CarbonDollar");
@@ -31,35 +31,45 @@ const FeeSheet = artifacts.require("FeeSheet");
 const StablecoinWhitelist = artifacts.require("StablecoinWhitelist");
 const CarbonDollarRegulator = artifacts.require("CarbonDollarRegulator");
 const CarbonDollarProxy = artifacts.require("CarbonDollarProxy");
+const CarbonDollarProxyFactory = artifacts.require("CarbonDollarProxyFactory");
 
 // Upgradeability
 const DelayedUpgradeabilityProxy = artifacts.require("DelayedUpgradeabilityProxy");
 
 module.exports = {
+	// Regulator Storage
 	PermissionSheet,
 	ValidatorSheet,
-	ValidatorSheetFactory
+	ValidatorSheetFactory,
 	PermissionSheetMockFactory,
-	BalanceSheetFactory,
-	AllowanceSheetFactory,
+	// Regulator
 	Regulator,
 	RegulatorProxyFactory,
-	RegulatorLogicFactory,
+	RegulatorProxy,
+	RegulatorStorage,
+	// PToken storage
+	BalanceSheetFactory,
+	AllowanceSheetFactory,
 	AllowanceSheet,
 	BalanceSheet,
-	RegulatorProxy,
+	PermissionedTokenStorage,
+	// PToken
 	PermissionedToken,
 	PermissionedTokenStorage,
 	PermissionedTokenProxy,
-	PermissionedTokenLogicFactory,
-	PermissionedTokenProxyFactory,
+	// WToken + Regulator
 	WhitelistedToken,
 	WhitelistedTokenRegulator,
+	WhitelistedTokenStorage,
+	WhitelistedTokenProxy,
+	//CDollar 
 	CarbonDollarProxy,
+	CarbonDollarProxyFactory,
 	CarbonDollar,
 	CarbonDollarStorage,
     FeeSheet,
     StablecoinWhitelist,
 	CarbonDollarRegulator,
+	// Utils
 	DelayedUpgradeabilityProxy
 }

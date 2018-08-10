@@ -1,20 +1,20 @@
 pragma solidity ^0.4.23;
 
-import "../tokens/permissionedToken/PermissionedTokenProxy.sol";
+import "../tokens/whitelistedToken/WhitelistedTokenProxy.sol";
 import "../tokens/permissionedToken/dataStorage/BalanceSheet.sol";
 import "../tokens/permissionedToken/dataStorage/AllowanceSheet.sol";
 
 /**
 *
-* @dev PermissionedTokenProxyFactory creates new PermissionedTokenProxy contracts instantiated with data stores. 
+* @dev WhitelistedTokenProxyFactory creates new WhitelistedTokenProxyFactory contracts instantiated with data stores. 
 *
 **/
-contract PermissionedTokenProxyFactory {
+contract WhitelistedTokenProxyFactory {
     // Parameters
     address[] public tokens;
 
     // Events
-    event CreatedPermissionedTokenProxy(address newToken, uint index);
+    event CreatedWhitelistedTokenProxy(address newToken, uint index);
 
     // Return number of token proxy contracts created so far
     function getCount() public view returns (uint) {
@@ -37,13 +37,13 @@ contract PermissionedTokenProxyFactory {
     * @param tokenImplementation the address of the initial PT token implementation
     *
     **/
-    function createToken(address tokenImplementation, address regulator) public {
+    function createToken(address tokenImplementation, address cusdAddress, address regulator) public {
         
         // Store new data storage contracts for token proxy
         address balances = address(new BalanceSheet()); 
         address allowances = address(new AllowanceSheet());
 
-        address proxy = address(new PermissionedTokenProxy(tokenImplementation, regulator, balances, allowances));
+        address proxy = address(new WhitelistedTokenProxy(tokenImplementation, regulator, balances, allowances, cusdAddress));
 
         // data storages should ultimately point be owned by the proxy, since it will delegate function
         // calls to the latest implementation *in the context of the proxy contract*
@@ -51,10 +51,10 @@ contract PermissionedTokenProxyFactory {
         AllowanceSheet(allowances).transferOwnership(address(proxy));
 
         // The function caller should own the proxy contract
-        PermissionedTokenProxy(proxy).transferOwnership(msg.sender);
+        WhitelistedTokenProxy(proxy).transferOwnership(msg.sender);
 
         tokens.push(proxy);
-        emit CreatedPermissionedTokenProxy(proxy, getCount()-1);
+        emit CreatedWhitelistedTokenProxy(proxy, getCount()-1);
     }
 }
 

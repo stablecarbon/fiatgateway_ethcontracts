@@ -10,38 +10,7 @@ function permissionedTokenStorageTests(owner, tokenHolder, spender, user) {
             await this.allowanceSheet.addAllowance(tokenHolder, spender, 100 * 10 ** 18, { from })
             await this.balanceSheet.addBalance(user, 100 * 10 ** 18, { from: owner })
         })
-        describe("constructor tests", function () {
-            beforeEach(async function() {
-                let validator = spender
-                this.permissionSheet = await PermissionSheetMock.new({ from: owner })
-                this.validatorSheet = await ValidatorSheetMock.new(validator, { from: owner })
-                this.regulator = await Regulator.new(this.permissionSheet.address, this.validatorSheet.address, { from: owner })
-            })
-            describe("regulator provided is not a valid contract address", function () {
-                it("call reverts", async function () {
-                    await expectRevert(PermissionedTokenStorage.new(
-                        ZERO_ADDRESS,
-                        this.balanceSheet.address,
-                        this.allowanceSheet.address, { from: owner }));
-                })
-            })
-            describe("balance sheet provided is not a valid contract address", function () {
-                it("call reverts", async function () {
-                    await expectRevert(PermissionedTokenStorage.new(
-                        this.regulator.address,
-                        ZERO_ADDRESS,
-                        this.allowanceSheet.address, { from: owner }));
-                })
-            })
-            describe("allowance sheet provided is not a valid contract address", function () {
-                it("call reverts", async function () {
-                    await expectRevert(PermissionedTokenStorage.new(
-                        this.regulator.address,
-                        this.balanceSheet.address,
-                        ZERO_ADDRESS, { from: owner }));
-                })
-            })
-        })
+
         describe('Allowances CRUD tests', function () {
             describe('owner calls', function () {
                 const from = owner

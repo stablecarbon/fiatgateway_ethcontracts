@@ -4,6 +4,7 @@ var RegulatorProxyFactory = artifacts.require("./RegulatorProxyFactory")
 var FeeSheet = artifacts.require("./FeeSheet")
 var StablecoinWhitelist = artifacts.require("./StablecoinWhitelist")
 var CarbonDollarProxyFactory = artifacts.require("./CarbonDollarProxyFactory");
+var WhitelistedTokenProxyFactory = artifacts.require("./WhitelistedTokenProxyFactory");
 
 
 // Deploy Factories for data storages
@@ -16,4 +17,6 @@ module.exports = function(deployer, network, accounts) {
   deployer.deploy(FeeSheet, {from:factoryOwner})
   deployer.deploy(StablecoinWhitelist, {from:factoryOwner})
   deployer.deploy(CarbonDollarProxyFactory, {from:factoryOwner})
+  deployer.deploy(WhitelistedTokenProxyFactory, {from:factoryOwner})
+
 };
