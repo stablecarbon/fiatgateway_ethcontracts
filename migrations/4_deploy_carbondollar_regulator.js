@@ -2,6 +2,7 @@ var ValidatorSheetFactory = artifacts.require("./ValidatorSheetFactory");
 var PermissionSheetMockFactory = artifacts.require("./PermissionSheetMockFactory")
 var CarbonDollarRegulator = artifacts.require("./CarbonDollarRegulator");
 
+// Deploy a new CD regulator using new Permission and Validator sheet instances
 module.exports = function(deployer, network, accounts) {
   let cdRegulatorOwner = accounts[0];
 
@@ -29,12 +30,12 @@ module.exports = function(deployer, network, accounts) {
         permissionFactoryInstance.getCount().then(function(count) {
           permissionFactoryInstance.getPermissionSheet(count-1).then(function(newSheet) {
             permissionSheetInstance = newSheet
-            console.log('CD: new psheet: ' + validatorSheetInstance)
+            console.log('CD: new psheet: ' + permissionSheetInstance)
           })
         })
       })
     }).then(function() {
-      deployer.deploy(CarbonDollarRegulator, permissionSheetInstance, validatorSheetInstance, {from:cdRegulatorOwner})
+      deployer.deploy(CarbonDollarRegulator, permissionSheetInstance, validatorSheetInstance, {from:cdRegulatorOwner, gas:10000000})
     })
   })
 
