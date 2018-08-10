@@ -16,6 +16,7 @@ contract PermissionSheetMock is PermissionSheet {
         setMintCUSDPermission();
         setBurnPermission();
         setConvertCarbonDollarPermission();
+        setBurnCarbonDollarPermission();
         setConvertWTPermission();
         setDestroyBlacklistedTokensPermission();
         setApproveBlacklistedAddressSpenderPermission();
@@ -36,6 +37,10 @@ contract PermissionSheetMock is PermissionSheet {
 
     function setConvertCarbonDollarPermission() internal {
         addPermission(CONVERT_CARBON_DOLLAR_SIG, "","","");
+    }
+
+    function setBurnCarbonDollarPermission() internal {
+        addPermission(BURN_CARBON_DOLLAR_SIG, "","","");
     }
 
     function setConvertWTPermission() internal {
