@@ -1,5 +1,3 @@
-var ValidatorSheetFactory = artifacts.require("./ValidatorSheetFactory");
-var PermissionSheetMockFactory = artifacts.require("./PermissionSheetMockFactory")
 var CarbonDollarRegulator = artifacts.require("./CarbonDollarRegulator");
 
 // Deploy a new CD regulator using new Permission and Validator sheet instances
