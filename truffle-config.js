@@ -31,12 +31,12 @@ module.exports = {
       gasPrice: 0x01      // <-- Use this low gas price
     },
   },
-  mocha: {
-    reporter: 'eth-gas-reporter',
-    reporterOptions: {
-      gasPrice: 21
-    }
-  },
+  // mocha: {
+  //   reporter: 'eth-gas-reporter',
+  //   reporterOptions: {
+  //     gasPrice: 21
+  //   }
+  // },
   solc: {
     optimizer: {
       enabled: true,
