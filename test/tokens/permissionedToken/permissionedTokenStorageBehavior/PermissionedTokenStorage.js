@@ -9,6 +9,7 @@ function permissionedTokenStorageTests(owner, tokenHolder, spender, user) {
         beforeEach(async function () {
             await this.allowanceSheet.addAllowance(tokenHolder, spender, 100 * 10 ** 18, { from })
             await this.balanceSheet.addBalance(user, 100 * 10 ** 18, { from: owner })
+            await this.balanceSheet.addTotalSupply(100 * 10 ** 18, { from: owner })
         })
 
         describe('Allowances CRUD tests', function () {
@@ -74,6 +75,37 @@ function permissionedTokenStorageTests(owner, tokenHolder, spender, user) {
                     await expectRevert(this.balanceSheet.addBalance(user, 70 * 10 ** 18, { from }))
                     await expectRevert(this.balanceSheet.subBalance(user, 70 * 10 ** 18, { from }))
                     await expectRevert(this.balanceSheet.setBalance(user, 70 * 10 ** 18, { from }))
+                })
+            })
+        })
+        describe('totalSupply CRUD tests', function () {
+            describe('owner calls', function () {
+                const from = owner
+                it('addTotalSupply', async function () {
+                    await this.balanceSheet.addTotalSupply(70 * 10 ** 18, { from })
+                    const supply = await this.balanceSheet.totalSupply()
+                    assert(supply.eq((100 + 70) * 10 ** 18))
+                })
+                it('subTotalSupply', async function () {
+                    await this.balanceSheet.subTotalSupply(70 * 10 ** 18, { from })
+                    const supply = await this.balanceSheet.totalSupply()
+                    assert(supply.eq((100 - 70) * 10 ** 18))
+                })
+                it('setTotalSupply', async function () {
+                    await this.balanceSheet.setTotalSupply(70 * 10 ** 18, { from })
+                    const supply = await this.balanceSheet.totalSupply()
+                    assert(supply.eq(70 * 10 ** 18))
+                })
+                it('reverts subTotalSupply if going below zero', async function () {
+                    await expectThrow(this.balanceSheet.subTotalSupply(170 * 10 ** 18, { from }))
+                })
+            })
+            describe('non-owner calls', function () {
+                const from = tokenHolder
+                it('reverts all calls', async function () {
+                    await expectRevert(this.balanceSheet.addTotalSupply(70 * 10 ** 18, { from }))
+                    await expectRevert(this.balanceSheet.subTotalSupply(70 * 10 ** 18, { from }))
+                    await expectRevert(this.balanceSheet.setTotalSupply(70 * 10 ** 18, { from }))
                 })
             })
         })
