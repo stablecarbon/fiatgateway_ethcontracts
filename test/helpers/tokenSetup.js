@@ -79,6 +79,7 @@ async function tokenSetup(validator, minter, user, owner, whitelisted, blacklist
     // must whitelist CUSD address to convert from WT into CUSD (used for minting CUSD)
     await this.regulator_w.setWhitelistedUser(this.cdToken.address, { from: validator });
     await this.regulator_c.setWhitelistedUser(this.cdToken.address, { from: validator });
+
 }
 
 module.exports = {

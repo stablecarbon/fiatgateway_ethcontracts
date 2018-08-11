@@ -1,9 +1,7 @@
 
 // Regulator 
 const PermissionSheet = artifacts.require("PermissionSheet");
-const PermissionSheetMockFactory = artifacts.require("PermissionSheetMockFactory");
 const ValidatorSheet = artifacts.require("ValidatorSheet");
-const ValidatorSheetFactory = artifacts.require("ValidatorSheetFactory");
 const RegulatorStorage = artifacts.require("RegulatorStorage");
 const Regulator = artifacts.require("Regulator");
 const RegulatorProxy = artifacts.require("RegulatorProxy")
@@ -11,9 +9,7 @@ const RegulatorProxyFactory = artifacts.require('RegulatorProxyFactory')
 
 // PermissionedToken
 const AllowanceSheet = artifacts.require("AllowanceSheet");
-const AllowanceSheetFactory = artifacts.require("AllowanceSheetFactory")
 const BalanceSheet = artifacts.require("BalanceSheet");
-const BalanceSheetFactory = artifacts.require("BalanceSheetFactory")
 const PermissionedToken = artifacts.require("PermissionedToken");
 const PermissionedTokenStorage = artifacts.require("PermissionedTokenStorage");
 const PermissionedTokenProxy = artifacts.require("PermissionedTokenProxy");
@@ -40,16 +36,12 @@ module.exports = {
 	// Regulator Storage
 	PermissionSheet,
 	ValidatorSheet,
-	ValidatorSheetFactory,
-	PermissionSheetMockFactory,
 	// Regulator
 	Regulator,
 	RegulatorProxyFactory,
 	RegulatorProxy,
 	RegulatorStorage,
 	// PToken storage
-	BalanceSheetFactory,
-	AllowanceSheetFactory,
 	AllowanceSheet,
 	BalanceSheet,
 	PermissionedTokenStorage,
