@@ -154,6 +154,9 @@ contract('CarbonDollar Factory creating CD proxies', _accounts => {
                     await expectRevert(this.token_0.listToken(RANDOM_ADDRESS, {from: other_owner}))
                 })
             })  
+            describe('TODO: need to add more unit tests here !', function () {
+                
+            })
         })
     })
 })
