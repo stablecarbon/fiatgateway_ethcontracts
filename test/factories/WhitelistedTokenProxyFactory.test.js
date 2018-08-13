@@ -137,7 +137,6 @@ contract('WhitelistedToken Factory creating WT proxies', _accounts => {
         })
         describe("Proxy upgradeTo and implentation", function () {
             it('upgrades to next implementation', async function () {
-    
                 this.impl_v1 = await WhitelistedToken.new(ZERO_ADDRESS, ZERO_ADDRESS, ZERO_ADDRESS, ZERO_ADDRESS, {from: other_owner })
                 const { logs } = await this.proxy_0.upgradeTo(this.impl_v1.address, {from: proxy_owner}) 
                 assert.equal(await this.proxy_0.implementation(), this.impl_v1.address) 
@@ -166,8 +165,8 @@ contract('WhitelistedToken Factory creating WT proxies', _accounts => {
                 // Permissions: CD must whitelist WT token, whitelist the mintCUSD() caller, and WT must whitelist the CD address
                 it('minter calls', async function () {
                     await this.token_0.mintCUSD(whitelisted, 10 * 10 ** 18, {from:minter})
-                    assertBalance(this.token_0, this.cusd_0.address, 10 * 10 ** 18)
-                    assertBalance(this.cusd_0, whitelisted, 10 * 10 ** 18)
+                    await assertBalance(this.token_0, this.cusd_0.address, 10 * 10 ** 18)
+                    await assertBalance(this.cusd_0, whitelisted, 10 * 10 ** 18)
                 })
             })
             describe('convertWT', function () {
@@ -176,14 +175,15 @@ contract('WhitelistedToken Factory creating WT proxies', _accounts => {
                     // Mint user some WT tokens for testing purposes
                     await this.token_0.mint(whitelisted, 10 * 10 ** 18, {from:minter})
 
-                    assertBalance(this.token_0, whitelisted, 10 * 10 ** 18)
-                    assertBalance(this.cusd_0, whitelisted, 0)
-                    assertBalance(this.token_0, this.cusd_0.address, 0)
+                    await assertBalance(this.token_0, whitelisted, 10 * 10 ** 18)
+                    await assertBalance(this.cusd_0, whitelisted, 0)
+                    await assertBalance(this.token_0, this.cusd_0.address, 0)
 
                     await this.token_0.convertWT( 5 * 10 ** 18, {from:whitelisted})
 
-                    assertBalance(this.token_0, whitelisted, 5 * 10 ** 18)
-                    assertBalance(this.cusd_0, whitelisted, 5 * 10 ** 18)
+                    await assertBalance(this.token_0, whitelisted, 5 * 10 ** 18)
+                    await assertBalance(this.cusd_0, whitelisted, 5 * 10 ** 18)
+                    await assertBalance(this.token_0, this.cusd_0.address, 5 * 10 ** 18)
                 })
 
             })
