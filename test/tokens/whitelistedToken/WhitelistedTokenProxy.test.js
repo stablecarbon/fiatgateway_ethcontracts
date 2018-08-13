@@ -8,7 +8,7 @@ const { WhitelistedTokenProxy, WhitelistedToken, CarbonDollar, BalanceSheet, All
 
 const { PermissionSheetMock, ValidatorSheetMock } = require('../../helpers/mocks');
 
-contract('CarbonDollarProxy', _accounts => {
+contract('WhitelistedTokenProxy', _accounts => {
     const commonVars = new CommonVariables(_accounts);
     const owner = commonVars.owner;
     const validator = commonVars.validator;
