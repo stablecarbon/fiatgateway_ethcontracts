@@ -1,0 +1,550 @@
+{
+  "contractName": "ValidatorSheetMock",
+  "abi": [
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "_validator",
+          "type": "address"
+        }
+      ],
+      "name": "removeValidator",
+      "outputs": [],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "_validator",
+          "type": "address"
+        }
+      ],
+      "name": "addValidator",
+      "outputs": [],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [],
+      "name": "renounceOwnership",
+      "outputs": [],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "owner",
+      "outputs": [
+        {
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "_newOwner",
+          "type": "address"
+        }
+      ],
+      "name": "transferOwnership",
+      "outputs": [],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [
+        {
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "name": "isValidator",
+      "outputs": [
+        {
+          "name": "",
+          "type": "bool"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "name": "validator",
+          "type": "address"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "constructor"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "name": "validator",
+          "type": "address"
+        }
+      ],
+      "name": "ValidatorAdded",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "name": "validator",
+          "type": "address"
+        }
+      ],
+      "name": "ValidatorRemoved",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "name": "previousOwner",
+          "type": "address"
+        }
+      ],
+      "name": "OwnershipRenounced",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "name": "previousOwner",
+          "type": "address"
+        },
+        {
+          "indexed": true,
+          "name": "newOwner",
+          "type": "address"
+        }
+      ],
+      "name": "OwnershipTransferred",
+      "type": "event"
+    }
+  ],
+  "bytecode": "0x608060405234801561001057600080fd5b5060405160208061057f833981016040525160008054600160a060020a031916331790556100468164010000000061004c810204565b506100c7565b600054600160a060020a0316331461006357600080fd5b61007581640100000000610078810204565b50565b600160a060020a0381166000818152600160208190526040808320805460ff1916909217909155517fe366c1c0452ed8eec96861e9e54141ebff23c9ec89fe27b996b45f5ec38849879190a250565b6104a9806100d66000396000f3006080604052600436106100775763ffffffff7c010000000000000000000000000000000000000000000000000000000060003504166340a141ff811461007c5780634d238c8e146100ac578063715018a6146100da5780638da5cb5b146100ef578063f2fde38b1461012d578063facd743b1461015b575b600080fd5b34801561008857600080fd5b506100aa73ffffffffffffffffffffffffffffffffffffffff6004351661019d565b005b3480156100b857600080fd5b506100aa73ffffffffffffffffffffffffffffffffffffffff60043516610235565b3480156100e657600080fd5b506100aa610265565b3480156100fb57600080fd5b506101046102f6565b6040805173ffffffffffffffffffffffffffffffffffffffff9092168252519081900360200190f35b34801561013957600080fd5b506100aa73ffffffffffffffffffffffffffffffffffffffff60043516610312565b34801561016757600080fd5b5061018973ffffffffffffffffffffffffffffffffffffffff6004351661033f565b604080519115158252519081900360200190f35b60005473ffffffffffffffffffffffffffffffffffffffff1633146101c157600080fd5b73ffffffffffffffffffffffffffffffffffffffff811660008181526001602052604080822080547fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff00169055517fe1434e25d6611e0db941968fdc97811c982ac1602e951637d206f5fdda9dd8f19190a250565b60005473ffffffffffffffffffffffffffffffffffffffff16331461025957600080fd5b61026281610354565b50565b60005473ffffffffffffffffffffffffffffffffffffffff16331461028957600080fd5b6000805460405173ffffffffffffffffffffffffffffffffffffffff909116917ff8df31144d9c2f0f6b59d69b8b98abd5459d07f2742c4df920b25aae33c6482091a2600080547fffffffffffffffffffffffff0000000000000000000000000000000000000000169055565b60005473ffffffffffffffffffffffffffffffffffffffff1681565b60005473ffffffffffffffffffffffffffffffffffffffff16331461033657600080fd5b610262816103ce565b60016020526000908152604090205460ff1681565b73ffffffffffffffffffffffffffffffffffffffff8116600081815260016020819052604080832080547fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff0016909217909155517fe366c1c0452ed8eec96861e9e54141ebff23c9ec89fe27b996b45f5ec38849879190a250565b73ffffffffffffffffffffffffffffffffffffffff811615156103f057600080fd5b6000805460405173ffffffffffffffffffffffffffffffffffffffff808516939216917f8be0079c531659141344cd1fd0a4f28419497f9722a3daafe3b4186f6b6457e091a3600080547fffffffffffffffffffffffff00000000000000000000000000000000000000001673ffffffffffffffffffffffffffffffffffffffff929092169190911790555600a165627a7a7230582000f8a2b35ed62d82f51e1f44a15af99113d342ac4f5acfacdfad34b868220bc70029",
+  "deployedBytecode": "0x6080604052600436106100775763ffffffff7c010000000000000000000000000000000000000000000000000000000060003504166340a141ff811461007c5780634d238c8e146100ac578063715018a6146100da5780638da5cb5b146100ef578063f2fde38b1461012d578063facd743b1461015b575b600080fd5b34801561008857600080fd5b506100aa73ffffffffffffffffffffffffffffffffffffffff6004351661019d565b005b3480156100b857600080fd5b506100aa73ffffffffffffffffffffffffffffffffffffffff60043516610235565b3480156100e657600080fd5b506100aa610265565b3480156100fb57600080fd5b506101046102f6565b6040805173ffffffffffffffffffffffffffffffffffffffff9092168252519081900360200190f35b34801561013957600080fd5b506100aa73ffffffffffffffffffffffffffffffffffffffff60043516610312565b34801561016757600080fd5b5061018973ffffffffffffffffffffffffffffffffffffffff6004351661033f565b604080519115158252519081900360200190f35b60005473ffffffffffffffffffffffffffffffffffffffff1633146101c157600080fd5b73ffffffffffffffffffffffffffffffffffffffff811660008181526001602052604080822080547fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff00169055517fe1434e25d6611e0db941968fdc97811c982ac1602e951637d206f5fdda9dd8f19190a250565b60005473ffffffffffffffffffffffffffffffffffffffff16331461025957600080fd5b61026281610354565b50565b60005473ffffffffffffffffffffffffffffffffffffffff16331461028957600080fd5b6000805460405173ffffffffffffffffffffffffffffffffffffffff909116917ff8df31144d9c2f0f6b59d69b8b98abd5459d07f2742c4df920b25aae33c6482091a2600080547fffffffffffffffffffffffff0000000000000000000000000000000000000000169055565b60005473ffffffffffffffffffffffffffffffffffffffff1681565b60005473ffffffffffffffffffffffffffffffffffffffff16331461033657600080fd5b610262816103ce565b60016020526000908152604090205460ff1681565b73ffffffffffffffffffffffffffffffffffffffff8116600081815260016020819052604080832080547fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff0016909217909155517fe366c1c0452ed8eec96861e9e54141ebff23c9ec89fe27b996b45f5ec38849879190a250565b73ffffffffffffffffffffffffffffffffffffffff811615156103f057600080fd5b6000805460405173ffffffffffffffffffffffffffffffffffffffff808516939216917f8be0079c531659141344cd1fd0a4f28419497f9722a3daafe3b4186f6b6457e091a3600080547fffffffffffffffffffffffff00000000000000000000000000000000000000001673ffffffffffffffffffffffffffffffffffffffff929092169190911790555600a165627a7a7230582000f8a2b35ed62d82f51e1f44a15af99113d342ac4f5acfacdfad34b868220bc70029",
+  "sourceMap": "137:187:12:-;;;243:79;8:9:-1;5:2;;;30:1;27;20:12;5:2;243:79:12;;;;;;;;;;;;;567:5:32;:18;;-1:-1:-1;;;;;;567:18:32;575:10;567:18;;;292:23:12;243:79;292:12;;;;:23;:::i;:::-;243:79;137:187;;594:101:10;719:5:32;;-1:-1:-1;;;;;719:5:32;705:10;:19;697:28;;;;;;663:25:10;677:10;663:13;;;;:25;:::i;:::-;594:101;:::o;705:140::-;-1:-1:-1;;;;;767:23:10;;;;;;793:4;767:23;;;;;;;;:30;;-1:-1:-1;;767:30:10;;;;;;;812:26;;;767:23;812:26;705:140;:::o;137:187:12:-;;;;;;;",
+  "deployedSourceMap": "137:187:12:-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;954:153:10;;8:9:-1;5:2;;;30:1;27;20:12;5:2;-1:-1;954:153:10;;;;;;;;;594:101;;8:9:-1;5:2;;;30:1;27;20:12;5:2;-1:-1;594:101:10;;;;;;;1001:111:32;;8:9:-1;5:2;;;30:1;27;20:12;5:2;1001:111:32;;;;238:20;;8:9:-1;5:2;;;30:1;27;20:12;5:2;238:20:32;;;;;;;;;;;;;;;;;;;;;;;1274:103;;8:9:-1;5:2;;;30:1;27;20:12;5:2;-1:-1;1274:103:32;;;;;;;337:44:10;;8:9:-1;5:2;;;30:1;27;20:12;5:2;-1:-1;337:44:10;;;;;;;;;;;;;;;;;;;;;;;;;954:153;719:5:32;;;;705:10;:19;697:28;;;;;;1026:23:10;;;1052:5;1026:23;;;:11;:23;;;;;;:31;;;;;;1072:28;;;1052:5;1072:28;954:153;:::o;594:101::-;719:5:32;;;;705:10;:19;697:28;;;;;;663:25:10;677:10;663:13;:25::i;:::-;594:101;:::o;1001:111:32:-;719:5;;;;705:10;:19;697:28;;;;;;1077:5;;;1058:25;;1077:5;;;;;1058:25;;;1105:1;1089:18;;;;;;1001:111::o;238:20::-;;;;;;:::o;1274:103::-;719:5;;;;705:10;:19;697:28;;;;;;1343:29;1362:9;1343:18;:29::i;337:44:10:-;;;;;;;;;;;;;;;:::o;705:140::-;767:23;;;;;;;793:4;767:23;;;;;;;;:30;;;;;;;;;;812:26;;;767:23;812:26;705:140;:::o;1512:171:32:-;1582:23;;;;;1574:32;;;;;;1638:5;;;1617:38;;;;;;;1638:5;;;1617:38;;;1661:5;:17;;;;;;;;;;;;;;;1512:171::o",
+  "source": "pragma solidity ^0.4.24;\n\nimport \"../dataStorage/ValidatorSheet.sol\";\n\n/**\n*\n* @dev creates a Validator with a single validator set\n*\n*/\ncontract ValidatorSheetMock is ValidatorSheet {\n    /** \n        @dev Initializes a validator\n     */\n    constructor(address validator)  public {\n        addValidator(validator);\n    }\n}",
+  "sourcePath": "/Users/tanishqaggarwal/Documents/carbon/fiat_gateway/contracts/regulator/mocks/ValidatorSheetMock.sol",
+  "ast": {
+    "absolutePath": "/Users/tanishqaggarwal/Documents/carbon/fiat_gateway/contracts/regulator/mocks/ValidatorSheetMock.sol",
+    "exportedSymbols": {
+      "ValidatorSheetMock": [
+        2148
+      ]
+    },
+    "id": 2149,
+    "nodeType": "SourceUnit",
+    "nodes": [
+      {
+        "id": 2134,
+        "literals": [
+          "solidity",
+          "^",
+          "0.4",
+          ".24"
+        ],
+        "nodeType": "PragmaDirective",
+        "src": "0:24:12"
+      },
+      {
+        "absolutePath": "/Users/tanishqaggarwal/Documents/carbon/fiat_gateway/contracts/regulator/dataStorage/ValidatorSheet.sol",
+        "file": "../dataStorage/ValidatorSheet.sol",
+        "id": 2135,
+        "nodeType": "ImportDirective",
+        "scope": 2149,
+        "sourceUnit": 1997,
+        "src": "26:43:12",
+        "symbolAliases": [],
+        "unitAlias": ""
+      },
+      {
+        "baseContracts": [
+          {
+            "arguments": null,
+            "baseName": {
+              "contractScope": null,
+              "id": 2136,
+              "name": "ValidatorSheet",
+              "nodeType": "UserDefinedTypeName",
+              "referencedDeclaration": 1996,
+              "src": "168:14:12",
+              "typeDescriptions": {
+                "typeIdentifier": "t_contract$_ValidatorSheet_$1996",
+                "typeString": "contract ValidatorSheet"
+              }
+            },
+            "id": 2137,
+            "nodeType": "InheritanceSpecifier",
+            "src": "168:14:12"
+          }
+        ],
+        "contractDependencies": [
+          1996,
+          4811
+        ],
+        "contractKind": "contract",
+        "documentation": "* @dev creates a Validator with a single validator set\n",
+        "fullyImplemented": true,
+        "id": 2148,
+        "linearizedBaseContracts": [
+          2148,
+          1996,
+          4811
+        ],
+        "name": "ValidatorSheetMock",
+        "nodeType": "ContractDefinition",
+        "nodes": [
+          {
+            "body": {
+              "id": 2146,
+              "nodeType": "Block",
+              "src": "282:40:12",
+              "statements": [
+                {
+                  "expression": {
+                    "argumentTypes": null,
+                    "arguments": [
+                      {
+                        "argumentTypes": null,
+                        "id": 2143,
+                        "name": "validator",
+                        "nodeType": "Identifier",
+                        "overloadedDeclarations": [],
+                        "referencedDeclaration": 2139,
+                        "src": "305:9:12",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_address",
+                          "typeString": "address"
+                        }
+                      }
+                    ],
+                    "expression": {
+                      "argumentTypes": [
+                        {
+                          "typeIdentifier": "t_address",
+                          "typeString": "address"
+                        }
+                      ],
+                      "id": 2142,
+                      "name": "addValidator",
+                      "nodeType": "Identifier",
+                      "overloadedDeclarations": [],
+                      "referencedDeclaration": 1961,
+                      "src": "292:12:12",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_function_internal_nonpayable$_t_address_$returns$__$",
+                        "typeString": "function (address)"
+                      }
+                    },
+                    "id": 2144,
+                    "isConstant": false,
+                    "isLValue": false,
+                    "isPure": false,
+                    "kind": "functionCall",
+                    "lValueRequested": false,
+                    "names": [],
+                    "nodeType": "FunctionCall",
+                    "src": "292:23:12",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_tuple$__$",
+                      "typeString": "tuple()"
+                    }
+                  },
+                  "id": 2145,
+                  "nodeType": "ExpressionStatement",
+                  "src": "292:23:12"
+                }
+              ]
+            },
+            "documentation": "@dev Initializes a validator",
+            "id": 2147,
+            "implemented": true,
+            "isConstructor": true,
+            "isDeclaredConst": false,
+            "modifiers": [],
+            "name": "",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 2140,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 2139,
+                  "name": "validator",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 2147,
+                  "src": "255:17:12",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 2138,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "255:7:12",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "254:19:12"
+            },
+            "payable": false,
+            "returnParameters": {
+              "id": 2141,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "282:0:12"
+            },
+            "scope": 2148,
+            "src": "243:79:12",
+            "stateMutability": "nonpayable",
+            "superFunction": null,
+            "visibility": "public"
+          }
+        ],
+        "scope": 2149,
+        "src": "137:187:12"
+      }
+    ],
+    "src": "0:324:12"
+  },
+  "legacyAST": {
+    "absolutePath": "/Users/tanishqaggarwal/Documents/carbon/fiat_gateway/contracts/regulator/mocks/ValidatorSheetMock.sol",
+    "exportedSymbols": {
+      "ValidatorSheetMock": [
+        2148
+      ]
+    },
+    "id": 2149,
+    "nodeType": "SourceUnit",
+    "nodes": [
+      {
+        "id": 2134,
+        "literals": [
+          "solidity",
+          "^",
+          "0.4",
+          ".24"
+        ],
+        "nodeType": "PragmaDirective",
+        "src": "0:24:12"
+      },
+      {
+        "absolutePath": "/Users/tanishqaggarwal/Documents/carbon/fiat_gateway/contracts/regulator/dataStorage/ValidatorSheet.sol",
+        "file": "../dataStorage/ValidatorSheet.sol",
+        "id": 2135,
+        "nodeType": "ImportDirective",
+        "scope": 2149,
+        "sourceUnit": 1997,
+        "src": "26:43:12",
+        "symbolAliases": [],
+        "unitAlias": ""
+      },
+      {
+        "baseContracts": [
+          {
+            "arguments": null,
+            "baseName": {
+              "contractScope": null,
+              "id": 2136,
+              "name": "ValidatorSheet",
+              "nodeType": "UserDefinedTypeName",
+              "referencedDeclaration": 1996,
+              "src": "168:14:12",
+              "typeDescriptions": {
+                "typeIdentifier": "t_contract$_ValidatorSheet_$1996",
+                "typeString": "contract ValidatorSheet"
+              }
+            },
+            "id": 2137,
+            "nodeType": "InheritanceSpecifier",
+            "src": "168:14:12"
+          }
+        ],
+        "contractDependencies": [
+          1996,
+          4811
+        ],
+        "contractKind": "contract",
+        "documentation": "* @dev creates a Validator with a single validator set\n",
+        "fullyImplemented": true,
+        "id": 2148,
+        "linearizedBaseContracts": [
+          2148,
+          1996,
+          4811
+        ],
+        "name": "ValidatorSheetMock",
+        "nodeType": "ContractDefinition",
+        "nodes": [
+          {
+            "body": {
+              "id": 2146,
+              "nodeType": "Block",
+              "src": "282:40:12",
+              "statements": [
+                {
+                  "expression": {
+                    "argumentTypes": null,
+                    "arguments": [
+                      {
+                        "argumentTypes": null,
+                        "id": 2143,
+                        "name": "validator",
+                        "nodeType": "Identifier",
+                        "overloadedDeclarations": [],
+                        "referencedDeclaration": 2139,
+                        "src": "305:9:12",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_address",
+                          "typeString": "address"
+                        }
+                      }
+                    ],
+                    "expression": {
+                      "argumentTypes": [
+                        {
+                          "typeIdentifier": "t_address",
+                          "typeString": "address"
+                        }
+                      ],
+                      "id": 2142,
+                      "name": "addValidator",
+                      "nodeType": "Identifier",
+                      "overloadedDeclarations": [],
+                      "referencedDeclaration": 1961,
+                      "src": "292:12:12",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_function_internal_nonpayable$_t_address_$returns$__$",
+                        "typeString": "function (address)"
+                      }
+                    },
+                    "id": 2144,
+                    "isConstant": false,
+                    "isLValue": false,
+                    "isPure": false,
+                    "kind": "functionCall",
+                    "lValueRequested": false,
+                    "names": [],
+                    "nodeType": "FunctionCall",
+                    "src": "292:23:12",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_tuple$__$",
+                      "typeString": "tuple()"
+                    }
+                  },
+                  "id": 2145,
+                  "nodeType": "ExpressionStatement",
+                  "src": "292:23:12"
+                }
+              ]
+            },
+            "documentation": "@dev Initializes a validator",
+            "id": 2147,
+            "implemented": true,
+            "isConstructor": true,
+            "isDeclaredConst": false,
+            "modifiers": [],
+            "name": "",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 2140,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 2139,
+                  "name": "validator",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 2147,
+                  "src": "255:17:12",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 2138,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "255:7:12",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "254:19:12"
+            },
+            "payable": false,
+            "returnParameters": {
+              "id": 2141,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "282:0:12"
+            },
+            "scope": 2148,
+            "src": "243:79:12",
+            "stateMutability": "nonpayable",
+            "superFunction": null,
+            "visibility": "public"
+          }
+        ],
+        "scope": 2149,
+        "src": "137:187:12"
+      }
+    ],
+    "src": "0:324:12"
+  },
+  "compiler": {
+    "name": "solc",
+    "version": "0.4.24+commit.e67f0147.Emscripten.clang"
+  },
+  "networks": {},
+  "schemaVersion": "2.0.1",
+  "updatedAt": "2018-08-13T20:26:34.617Z"
+}

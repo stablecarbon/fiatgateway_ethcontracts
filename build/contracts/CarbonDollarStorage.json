@@ -1,0 +1,803 @@
+{
+  "contractName": "CarbonDollarStorage",
+  "abi": [
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "stablecoinFees",
+      "outputs": [
+        {
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "stablecoinWhitelist",
+      "outputs": [
+        {
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "name": "feeSheet",
+          "type": "address"
+        },
+        {
+          "name": "whitelist",
+          "type": "address"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "constructor"
+    }
+  ],
+  "bytecode": "0x608060405234801561001057600080fd5b5060405160408061016483398101604052805160209091015160008054600160a060020a03938416600160a060020a0319918216179091556001805493909216921691909117905560fe806100666000396000f30060806040526004361060485763ffffffff7c0100000000000000000000000000000000000000000000000000000000600035041663d96515668114604d578063e14852e3146088575b600080fd5b348015605857600080fd5b50605f609a565b6040805173ffffffffffffffffffffffffffffffffffffffff9092168252519081900360200190f35b348015609357600080fd5b50605f60b6565b60005473ffffffffffffffffffffffffffffffffffffffff1681565b60015473ffffffffffffffffffffffffffffffffffffffff16815600a165627a7a72305820559b7769b82307ab26fec433e321b493ccfeb6881f6f892eb6bab1dbd8810db30029",
+  "deployedBytecode": "0x60806040526004361060485763ffffffff7c0100000000000000000000000000000000000000000000000000000000600035041663d96515668114604d578063e14852e3146088575b600080fd5b348015605857600080fd5b50605f609a565b6040805173ffffffffffffffffffffffffffffffffffffffff9092168252519081900360200190f35b348015609357600080fd5b50605f60b6565b60005473ffffffffffffffffffffffffffffffffffffffff1681565b60015473ffffffffffffffffffffffffffffffffffffffff16815600a165627a7a72305820559b7769b82307ab26fec433e321b493ccfeb6881f6f892eb6bab1dbd8810db30029",
+  "sourceMap": "224:430:15:-;;;481:171;8:9:-1;5:2;;;30:1;27;20:12;5:2;481:171:15;;;;;;;;;;;;;;;;;;;548:14;:35;;-1:-1:-1;;;;;548:35:15;;;-1:-1:-1;;;;;;548:35:15;;;;;;;;593:52;;;;;;;;;;;;;;224:430;;;;;;",
+  "deployedSourceMap": "224:430:15:-;;;;;;;;;;;;;;;;;;;;;;;;;;;;289:30;;8:9:-1;5:2;;;30:1;27;20:12;5:2;289:30:15;;;;;;;;;;;;;;;;;;;;;;;325:46;;8:9:-1;5:2;;;30:1;27;20:12;5:2;325:46:15;;;;289:30;;;;;;:::o;325:46::-;;;;;;:::o",
+  "source": "pragma solidity ^0.4.24;\n\nimport \"./FeeSheet.sol\";\nimport \"./StablecoinWhitelist.sol\";\n\n/**\n* @title CarbonDollarStorage\n* @notice Contains necessary storage contracts for CarbonDollar (FeeSheet and StablecoinWhitelist).\n*/\ncontract CarbonDollarStorage{\n    /**\n        Storage\n    */\n    FeeSheet public stablecoinFees;\n    StablecoinWhitelist public stablecoinWhitelist;\n\n    /**\n    * @dev a CarbonDollarStorage can set its storages only once, on construction\n    *\n    **/\n    constructor (address feeSheet, address whitelist) public {\n        stablecoinFees = FeeSheet(feeSheet);\n        stablecoinWhitelist = StablecoinWhitelist(whitelist);\n    }\n}",
+  "sourcePath": "/Users/tanishqaggarwal/Documents/carbon/fiat_gateway/contracts/tokens/carbonToken/dataStorage/CarbonDollarStorage.sol",
+  "ast": {
+    "absolutePath": "/Users/tanishqaggarwal/Documents/carbon/fiat_gateway/contracts/tokens/carbonToken/dataStorage/CarbonDollarStorage.sol",
+    "exportedSymbols": {
+      "CarbonDollarStorage": [
+        2673
+      ]
+    },
+    "id": 2674,
+    "nodeType": "SourceUnit",
+    "nodes": [
+      {
+        "id": 2646,
+        "literals": [
+          "solidity",
+          "^",
+          "0.4",
+          ".24"
+        ],
+        "nodeType": "PragmaDirective",
+        "src": "0:24:15"
+      },
+      {
+        "absolutePath": "/Users/tanishqaggarwal/Documents/carbon/fiat_gateway/contracts/tokens/carbonToken/dataStorage/FeeSheet.sol",
+        "file": "./FeeSheet.sol",
+        "id": 2647,
+        "nodeType": "ImportDirective",
+        "scope": 2674,
+        "sourceUnit": 2850,
+        "src": "26:24:15",
+        "symbolAliases": [],
+        "unitAlias": ""
+      },
+      {
+        "absolutePath": "/Users/tanishqaggarwal/Documents/carbon/fiat_gateway/contracts/tokens/carbonToken/dataStorage/StablecoinWhitelist.sol",
+        "file": "./StablecoinWhitelist.sol",
+        "id": 2648,
+        "nodeType": "ImportDirective",
+        "scope": 2674,
+        "sourceUnit": 3043,
+        "src": "51:35:15",
+        "symbolAliases": [],
+        "unitAlias": ""
+      },
+      {
+        "baseContracts": [],
+        "contractDependencies": [],
+        "contractKind": "contract",
+        "documentation": "@title CarbonDollarStorage\n@notice Contains necessary storage contracts for CarbonDollar (FeeSheet and StablecoinWhitelist).",
+        "fullyImplemented": true,
+        "id": 2673,
+        "linearizedBaseContracts": [
+          2673
+        ],
+        "name": "CarbonDollarStorage",
+        "nodeType": "ContractDefinition",
+        "nodes": [
+          {
+            "constant": false,
+            "id": 2650,
+            "name": "stablecoinFees",
+            "nodeType": "VariableDeclaration",
+            "scope": 2673,
+            "src": "289:30:15",
+            "stateVariable": true,
+            "storageLocation": "default",
+            "typeDescriptions": {
+              "typeIdentifier": "t_contract$_FeeSheet_$2849",
+              "typeString": "contract FeeSheet"
+            },
+            "typeName": {
+              "contractScope": null,
+              "id": 2649,
+              "name": "FeeSheet",
+              "nodeType": "UserDefinedTypeName",
+              "referencedDeclaration": 2849,
+              "src": "289:8:15",
+              "typeDescriptions": {
+                "typeIdentifier": "t_contract$_FeeSheet_$2849",
+                "typeString": "contract FeeSheet"
+              }
+            },
+            "value": null,
+            "visibility": "public"
+          },
+          {
+            "constant": false,
+            "id": 2652,
+            "name": "stablecoinWhitelist",
+            "nodeType": "VariableDeclaration",
+            "scope": 2673,
+            "src": "325:46:15",
+            "stateVariable": true,
+            "storageLocation": "default",
+            "typeDescriptions": {
+              "typeIdentifier": "t_contract$_StablecoinWhitelist_$3042",
+              "typeString": "contract StablecoinWhitelist"
+            },
+            "typeName": {
+              "contractScope": null,
+              "id": 2651,
+              "name": "StablecoinWhitelist",
+              "nodeType": "UserDefinedTypeName",
+              "referencedDeclaration": 3042,
+              "src": "325:19:15",
+              "typeDescriptions": {
+                "typeIdentifier": "t_contract$_StablecoinWhitelist_$3042",
+                "typeString": "contract StablecoinWhitelist"
+              }
+            },
+            "value": null,
+            "visibility": "public"
+          },
+          {
+            "body": {
+              "id": 2671,
+              "nodeType": "Block",
+              "src": "538:114:15",
+              "statements": [
+                {
+                  "expression": {
+                    "argumentTypes": null,
+                    "id": 2663,
+                    "isConstant": false,
+                    "isLValue": false,
+                    "isPure": false,
+                    "lValueRequested": false,
+                    "leftHandSide": {
+                      "argumentTypes": null,
+                      "id": 2659,
+                      "name": "stablecoinFees",
+                      "nodeType": "Identifier",
+                      "overloadedDeclarations": [],
+                      "referencedDeclaration": 2650,
+                      "src": "548:14:15",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_contract$_FeeSheet_$2849",
+                        "typeString": "contract FeeSheet"
+                      }
+                    },
+                    "nodeType": "Assignment",
+                    "operator": "=",
+                    "rightHandSide": {
+                      "argumentTypes": null,
+                      "arguments": [
+                        {
+                          "argumentTypes": null,
+                          "id": 2661,
+                          "name": "feeSheet",
+                          "nodeType": "Identifier",
+                          "overloadedDeclarations": [],
+                          "referencedDeclaration": 2654,
+                          "src": "574:8:15",
+                          "typeDescriptions": {
+                            "typeIdentifier": "t_address",
+                            "typeString": "address"
+                          }
+                        }
+                      ],
+                      "expression": {
+                        "argumentTypes": [
+                          {
+                            "typeIdentifier": "t_address",
+                            "typeString": "address"
+                          }
+                        ],
+                        "id": 2660,
+                        "name": "FeeSheet",
+                        "nodeType": "Identifier",
+                        "overloadedDeclarations": [],
+                        "referencedDeclaration": 2849,
+                        "src": "565:8:15",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_type$_t_contract$_FeeSheet_$2849_$",
+                          "typeString": "type(contract FeeSheet)"
+                        }
+                      },
+                      "id": 2662,
+                      "isConstant": false,
+                      "isLValue": false,
+                      "isPure": false,
+                      "kind": "typeConversion",
+                      "lValueRequested": false,
+                      "names": [],
+                      "nodeType": "FunctionCall",
+                      "src": "565:18:15",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_contract$_FeeSheet_$2849",
+                        "typeString": "contract FeeSheet"
+                      }
+                    },
+                    "src": "548:35:15",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_contract$_FeeSheet_$2849",
+                      "typeString": "contract FeeSheet"
+                    }
+                  },
+                  "id": 2664,
+                  "nodeType": "ExpressionStatement",
+                  "src": "548:35:15"
+                },
+                {
+                  "expression": {
+                    "argumentTypes": null,
+                    "id": 2669,
+                    "isConstant": false,
+                    "isLValue": false,
+                    "isPure": false,
+                    "lValueRequested": false,
+                    "leftHandSide": {
+                      "argumentTypes": null,
+                      "id": 2665,
+                      "name": "stablecoinWhitelist",
+                      "nodeType": "Identifier",
+                      "overloadedDeclarations": [],
+                      "referencedDeclaration": 2652,
+                      "src": "593:19:15",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_contract$_StablecoinWhitelist_$3042",
+                        "typeString": "contract StablecoinWhitelist"
+                      }
+                    },
+                    "nodeType": "Assignment",
+                    "operator": "=",
+                    "rightHandSide": {
+                      "argumentTypes": null,
+                      "arguments": [
+                        {
+                          "argumentTypes": null,
+                          "id": 2667,
+                          "name": "whitelist",
+                          "nodeType": "Identifier",
+                          "overloadedDeclarations": [],
+                          "referencedDeclaration": 2656,
+                          "src": "635:9:15",
+                          "typeDescriptions": {
+                            "typeIdentifier": "t_address",
+                            "typeString": "address"
+                          }
+                        }
+                      ],
+                      "expression": {
+                        "argumentTypes": [
+                          {
+                            "typeIdentifier": "t_address",
+                            "typeString": "address"
+                          }
+                        ],
+                        "id": 2666,
+                        "name": "StablecoinWhitelist",
+                        "nodeType": "Identifier",
+                        "overloadedDeclarations": [],
+                        "referencedDeclaration": 3042,
+                        "src": "615:19:15",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_type$_t_contract$_StablecoinWhitelist_$3042_$",
+                          "typeString": "type(contract StablecoinWhitelist)"
+                        }
+                      },
+                      "id": 2668,
+                      "isConstant": false,
+                      "isLValue": false,
+                      "isPure": false,
+                      "kind": "typeConversion",
+                      "lValueRequested": false,
+                      "names": [],
+                      "nodeType": "FunctionCall",
+                      "src": "615:30:15",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_contract$_StablecoinWhitelist_$3042",
+                        "typeString": "contract StablecoinWhitelist"
+                      }
+                    },
+                    "src": "593:52:15",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_contract$_StablecoinWhitelist_$3042",
+                      "typeString": "contract StablecoinWhitelist"
+                    }
+                  },
+                  "id": 2670,
+                  "nodeType": "ExpressionStatement",
+                  "src": "593:52:15"
+                }
+              ]
+            },
+            "documentation": "@dev a CarbonDollarStorage can set its storages only once, on construction\n    *",
+            "id": 2672,
+            "implemented": true,
+            "isConstructor": true,
+            "isDeclaredConst": false,
+            "modifiers": [],
+            "name": "",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 2657,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 2654,
+                  "name": "feeSheet",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 2672,
+                  "src": "494:16:15",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 2653,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "494:7:15",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 2656,
+                  "name": "whitelist",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 2672,
+                  "src": "512:17:15",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 2655,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "512:7:15",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "493:37:15"
+            },
+            "payable": false,
+            "returnParameters": {
+              "id": 2658,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "538:0:15"
+            },
+            "scope": 2673,
+            "src": "481:171:15",
+            "stateMutability": "nonpayable",
+            "superFunction": null,
+            "visibility": "public"
+          }
+        ],
+        "scope": 2674,
+        "src": "224:430:15"
+      }
+    ],
+    "src": "0:654:15"
+  },
+  "legacyAST": {
+    "absolutePath": "/Users/tanishqaggarwal/Documents/carbon/fiat_gateway/contracts/tokens/carbonToken/dataStorage/CarbonDollarStorage.sol",
+    "exportedSymbols": {
+      "CarbonDollarStorage": [
+        2673
+      ]
+    },
+    "id": 2674,
+    "nodeType": "SourceUnit",
+    "nodes": [
+      {
+        "id": 2646,
+        "literals": [
+          "solidity",
+          "^",
+          "0.4",
+          ".24"
+        ],
+        "nodeType": "PragmaDirective",
+        "src": "0:24:15"
+      },
+      {
+        "absolutePath": "/Users/tanishqaggarwal/Documents/carbon/fiat_gateway/contracts/tokens/carbonToken/dataStorage/FeeSheet.sol",
+        "file": "./FeeSheet.sol",
+        "id": 2647,
+        "nodeType": "ImportDirective",
+        "scope": 2674,
+        "sourceUnit": 2850,
+        "src": "26:24:15",
+        "symbolAliases": [],
+        "unitAlias": ""
+      },
+      {
+        "absolutePath": "/Users/tanishqaggarwal/Documents/carbon/fiat_gateway/contracts/tokens/carbonToken/dataStorage/StablecoinWhitelist.sol",
+        "file": "./StablecoinWhitelist.sol",
+        "id": 2648,
+        "nodeType": "ImportDirective",
+        "scope": 2674,
+        "sourceUnit": 3043,
+        "src": "51:35:15",
+        "symbolAliases": [],
+        "unitAlias": ""
+      },
+      {
+        "baseContracts": [],
+        "contractDependencies": [],
+        "contractKind": "contract",
+        "documentation": "@title CarbonDollarStorage\n@notice Contains necessary storage contracts for CarbonDollar (FeeSheet and StablecoinWhitelist).",
+        "fullyImplemented": true,
+        "id": 2673,
+        "linearizedBaseContracts": [
+          2673
+        ],
+        "name": "CarbonDollarStorage",
+        "nodeType": "ContractDefinition",
+        "nodes": [
+          {
+            "constant": false,
+            "id": 2650,
+            "name": "stablecoinFees",
+            "nodeType": "VariableDeclaration",
+            "scope": 2673,
+            "src": "289:30:15",
+            "stateVariable": true,
+            "storageLocation": "default",
+            "typeDescriptions": {
+              "typeIdentifier": "t_contract$_FeeSheet_$2849",
+              "typeString": "contract FeeSheet"
+            },
+            "typeName": {
+              "contractScope": null,
+              "id": 2649,
+              "name": "FeeSheet",
+              "nodeType": "UserDefinedTypeName",
+              "referencedDeclaration": 2849,
+              "src": "289:8:15",
+              "typeDescriptions": {
+                "typeIdentifier": "t_contract$_FeeSheet_$2849",
+                "typeString": "contract FeeSheet"
+              }
+            },
+            "value": null,
+            "visibility": "public"
+          },
+          {
+            "constant": false,
+            "id": 2652,
+            "name": "stablecoinWhitelist",
+            "nodeType": "VariableDeclaration",
+            "scope": 2673,
+            "src": "325:46:15",
+            "stateVariable": true,
+            "storageLocation": "default",
+            "typeDescriptions": {
+              "typeIdentifier": "t_contract$_StablecoinWhitelist_$3042",
+              "typeString": "contract StablecoinWhitelist"
+            },
+            "typeName": {
+              "contractScope": null,
+              "id": 2651,
+              "name": "StablecoinWhitelist",
+              "nodeType": "UserDefinedTypeName",
+              "referencedDeclaration": 3042,
+              "src": "325:19:15",
+              "typeDescriptions": {
+                "typeIdentifier": "t_contract$_StablecoinWhitelist_$3042",
+                "typeString": "contract StablecoinWhitelist"
+              }
+            },
+            "value": null,
+            "visibility": "public"
+          },
+          {
+            "body": {
+              "id": 2671,
+              "nodeType": "Block",
+              "src": "538:114:15",
+              "statements": [
+                {
+                  "expression": {
+                    "argumentTypes": null,
+                    "id": 2663,
+                    "isConstant": false,
+                    "isLValue": false,
+                    "isPure": false,
+                    "lValueRequested": false,
+                    "leftHandSide": {
+                      "argumentTypes": null,
+                      "id": 2659,
+                      "name": "stablecoinFees",
+                      "nodeType": "Identifier",
+                      "overloadedDeclarations": [],
+                      "referencedDeclaration": 2650,
+                      "src": "548:14:15",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_contract$_FeeSheet_$2849",
+                        "typeString": "contract FeeSheet"
+                      }
+                    },
+                    "nodeType": "Assignment",
+                    "operator": "=",
+                    "rightHandSide": {
+                      "argumentTypes": null,
+                      "arguments": [
+                        {
+                          "argumentTypes": null,
+                          "id": 2661,
+                          "name": "feeSheet",
+                          "nodeType": "Identifier",
+                          "overloadedDeclarations": [],
+                          "referencedDeclaration": 2654,
+                          "src": "574:8:15",
+                          "typeDescriptions": {
+                            "typeIdentifier": "t_address",
+                            "typeString": "address"
+                          }
+                        }
+                      ],
+                      "expression": {
+                        "argumentTypes": [
+                          {
+                            "typeIdentifier": "t_address",
+                            "typeString": "address"
+                          }
+                        ],
+                        "id": 2660,
+                        "name": "FeeSheet",
+                        "nodeType": "Identifier",
+                        "overloadedDeclarations": [],
+                        "referencedDeclaration": 2849,
+                        "src": "565:8:15",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_type$_t_contract$_FeeSheet_$2849_$",
+                          "typeString": "type(contract FeeSheet)"
+                        }
+                      },
+                      "id": 2662,
+                      "isConstant": false,
+                      "isLValue": false,
+                      "isPure": false,
+                      "kind": "typeConversion",
+                      "lValueRequested": false,
+                      "names": [],
+                      "nodeType": "FunctionCall",
+                      "src": "565:18:15",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_contract$_FeeSheet_$2849",
+                        "typeString": "contract FeeSheet"
+                      }
+                    },
+                    "src": "548:35:15",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_contract$_FeeSheet_$2849",
+                      "typeString": "contract FeeSheet"
+                    }
+                  },
+                  "id": 2664,
+                  "nodeType": "ExpressionStatement",
+                  "src": "548:35:15"
+                },
+                {
+                  "expression": {
+                    "argumentTypes": null,
+                    "id": 2669,
+                    "isConstant": false,
+                    "isLValue": false,
+                    "isPure": false,
+                    "lValueRequested": false,
+                    "leftHandSide": {
+                      "argumentTypes": null,
+                      "id": 2665,
+                      "name": "stablecoinWhitelist",
+                      "nodeType": "Identifier",
+                      "overloadedDeclarations": [],
+                      "referencedDeclaration": 2652,
+                      "src": "593:19:15",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_contract$_StablecoinWhitelist_$3042",
+                        "typeString": "contract StablecoinWhitelist"
+                      }
+                    },
+                    "nodeType": "Assignment",
+                    "operator": "=",
+                    "rightHandSide": {
+                      "argumentTypes": null,
+                      "arguments": [
+                        {
+                          "argumentTypes": null,
+                          "id": 2667,
+                          "name": "whitelist",
+                          "nodeType": "Identifier",
+                          "overloadedDeclarations": [],
+                          "referencedDeclaration": 2656,
+                          "src": "635:9:15",
+                          "typeDescriptions": {
+                            "typeIdentifier": "t_address",
+                            "typeString": "address"
+                          }
+                        }
+                      ],
+                      "expression": {
+                        "argumentTypes": [
+                          {
+                            "typeIdentifier": "t_address",
+                            "typeString": "address"
+                          }
+                        ],
+                        "id": 2666,
+                        "name": "StablecoinWhitelist",
+                        "nodeType": "Identifier",
+                        "overloadedDeclarations": [],
+                        "referencedDeclaration": 3042,
+                        "src": "615:19:15",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_type$_t_contract$_StablecoinWhitelist_$3042_$",
+                          "typeString": "type(contract StablecoinWhitelist)"
+                        }
+                      },
+                      "id": 2668,
+                      "isConstant": false,
+                      "isLValue": false,
+                      "isPure": false,
+                      "kind": "typeConversion",
+                      "lValueRequested": false,
+                      "names": [],
+                      "nodeType": "FunctionCall",
+                      "src": "615:30:15",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_contract$_StablecoinWhitelist_$3042",
+                        "typeString": "contract StablecoinWhitelist"
+                      }
+                    },
+                    "src": "593:52:15",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_contract$_StablecoinWhitelist_$3042",
+                      "typeString": "contract StablecoinWhitelist"
+                    }
+                  },
+                  "id": 2670,
+                  "nodeType": "ExpressionStatement",
+                  "src": "593:52:15"
+                }
+              ]
+            },
+            "documentation": "@dev a CarbonDollarStorage can set its storages only once, on construction\n    *",
+            "id": 2672,
+            "implemented": true,
+            "isConstructor": true,
+            "isDeclaredConst": false,
+            "modifiers": [],
+            "name": "",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 2657,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 2654,
+                  "name": "feeSheet",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 2672,
+                  "src": "494:16:15",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 2653,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "494:7:15",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 2656,
+                  "name": "whitelist",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 2672,
+                  "src": "512:17:15",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 2655,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "512:7:15",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "493:37:15"
+            },
+            "payable": false,
+            "returnParameters": {
+              "id": 2658,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "538:0:15"
+            },
+            "scope": 2673,
+            "src": "481:171:15",
+            "stateMutability": "nonpayable",
+            "superFunction": null,
+            "visibility": "public"
+          }
+        ],
+        "scope": 2674,
+        "src": "224:430:15"
+      }
+    ],
+    "src": "0:654:15"
+  },
+  "compiler": {
+    "name": "solc",
+    "version": "0.4.24+commit.e67f0147.Emscripten.clang"
+  },
+  "networks": {},
+  "schemaVersion": "2.0.1",
+  "updatedAt": "2018-08-13T20:26:34.617Z"
+}

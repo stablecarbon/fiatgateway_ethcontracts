@@ -1,0 +1,2131 @@
+{
+  "contractName": "DelayedUpgradeabilityProxy",
+  "abi": [
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "pendingImplementationIsSet",
+      "outputs": [
+        {
+          "name": "",
+          "type": "bool"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "pendingImplementationApplicationDate",
+      "outputs": [
+        {
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "pendingImplementation",
+      "outputs": [
+        {
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "UPGRADE_DELAY",
+      "outputs": [
+        {
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "name": "i",
+          "type": "address"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "constructor"
+    },
+    {
+      "payable": true,
+      "stateMutability": "payable",
+      "type": "fallback"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "name": "oldPendingImplementation",
+          "type": "address"
+        },
+        {
+          "indexed": true,
+          "name": "newPendingImplementation",
+          "type": "address"
+        }
+      ],
+      "name": "PendingImplementationChanged",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": false,
+          "name": "implementation",
+          "type": "address"
+        }
+      ],
+      "name": "Upgraded",
+      "type": "event"
+    }
+  ],
+  "bytecode": "0x60806040526224ea0060025534801561001757600080fd5b5060405160208061052883398101604081815291517f6f72672e7a657070656c696e6f732e70726f78792e696d706c656d656e74617482527f696f6e00000000000000000000000000000000000000000000000000000000006020830152915190819003602301902081906000805160206105088339815191521461009857fe5b6100aa816401000000006100b1810204565b5050610177565b60006100c98264010000000061034e61016f82021704565b151561015c57604080517f08c379a000000000000000000000000000000000000000000000000000000000815260206004820152603b60248201527f43616e6e6f742073657420612070726f787920696d706c656d656e746174696f60448201527f6e20746f2061206e6f6e2d636f6e747261637420616464726573730000000000606482015290519081900360840190fd5b5060008051602061050883398151915255565b6000903b1190565b610382806101866000396000f3006080604052600436106100615763ffffffff7c01000000000000000000000000000000000000000000000000000000006000350416630fdca7f0811461006b57806312c3c5bd14610094578063396f7b23146100bb57806347fe8b1d146100f9575b61006961010e565b005b34801561007757600080fd5b50610080610128565b604080519115158252519081900360200190f35b3480156100a057600080fd5b506100a9610149565b60408051918252519081900360200190f35b3480156100c757600080fd5b506100d061014f565b6040805173ffffffffffffffffffffffffffffffffffffffff9092168252519081900360200190f35b34801561010557600080fd5b506100a961016b565b610116610171565b6101266101216101ed565b610212565b565b60005474010000000000000000000000000000000000000000900460ff1681565b60015481565b60005473ffffffffffffffffffffffffffffffffffffffff1681565b60025481565b60005474010000000000000000000000000000000000000000900460ff16801561019c575060015442115b15610126576000546101c39073ffffffffffffffffffffffffffffffffffffffff16610236565b600080547fffffffffffffffffffffff00ffffffffffffffffffffffffffffffffffffffff169055565b7f7050c9e0f4ca769c69bd3a8ef740bc37934f8e2c036e5a723fd8ee048ed3f8c35490565b3660008037600080366000845af43d6000803e808015610231573d6000f35b3d6000fd5b61023f8161028b565b6040805173ffffffffffffffffffffffffffffffffffffffff8316815290517fbc7cd75a20ee27fd9adebab32041f755214dbc6bffa90cc0225b39da2e5c2d3b9181900360200190a150565b60006102968261034e565b151561032957604080517f08c379a000000000000000000000000000000000000000000000000000000000815260206004820152603b60248201527f43616e6e6f742073657420612070726f787920696d706c656d656e746174696f60448201527f6e20746f2061206e6f6e2d636f6e747261637420616464726573730000000000606482015290519081900360840190fd5b507f7050c9e0f4ca769c69bd3a8ef740bc37934f8e2c036e5a723fd8ee048ed3f8c355565b6000903b11905600a165627a7a72305820cb9942613e722a655dfc381e8a1c3b2bc17165bd311bda9c6bd14ba684a7b7ff00297050c9e0f4ca769c69bd3a8ef740bc37934f8e2c036e5a723fd8ee048ed3f8c3",
+  "deployedBytecode": "0x6080604052600436106100615763ffffffff7c01000000000000000000000000000000000000000000000000000000006000350416630fdca7f0811461006b57806312c3c5bd14610094578063396f7b23146100bb57806347fe8b1d146100f9575b61006961010e565b005b34801561007757600080fd5b50610080610128565b604080519115158252519081900360200190f35b3480156100a057600080fd5b506100a9610149565b60408051918252519081900360200190f35b3480156100c757600080fd5b506100d061014f565b6040805173ffffffffffffffffffffffffffffffffffffffff9092168252519081900360200190f35b34801561010557600080fd5b506100a961016b565b610116610171565b6101266101216101ed565b610212565b565b60005474010000000000000000000000000000000000000000900460ff1681565b60015481565b60005473ffffffffffffffffffffffffffffffffffffffff1681565b60025481565b60005474010000000000000000000000000000000000000000900460ff16801561019c575060015442115b15610126576000546101c39073ffffffffffffffffffffffffffffffffffffffff16610236565b600080547fffffffffffffffffffffff00ffffffffffffffffffffffffffffffffffffffff169055565b7f7050c9e0f4ca769c69bd3a8ef740bc37934f8e2c036e5a723fd8ee048ed3f8c35490565b3660008037600080366000845af43d6000803e808015610231573d6000f35b3d6000fd5b61023f8161028b565b6040805173ffffffffffffffffffffffffffffffffffffffff8316815290517fbc7cd75a20ee27fd9adebab32041f755214dbc6bffa90cc0225b39da2e5c2d3b9181900360200190a150565b60006102968261034e565b151561032957604080517f08c379a000000000000000000000000000000000000000000000000000000000815260206004820152603b60248201527f43616e6e6f742073657420612070726f787920696d706c656d656e746174696f60448201527f6e20746f2061206e6f6e2d636f6e747261637420616464726573730000000000606482015290519081900360840190fd5b507f7050c9e0f4ca769c69bd3a8ef740bc37934f8e2c036e5a723fd8ee048ed3f8c355565b6000903b11905600a165627a7a72305820cb9942613e722a655dfc381e8a1c3b2bc17165bd311bda9c6bd14ba684a7b7ff0029",
+  "sourceMap": "306:1810:30:-;;;650:7;619:38;;789:55;8:9:-1;5:2;;;30:1;27;20:12;5:2;789:55:30;;;;;;;;;;;;;;;;1043:48:40;;;;789:55:30;1043:48:40;;;;;;;;;;;;;789:55:30;;-1:-1:-1;;;;;;;;;;;1020:71:40;1013:79;;;;1099:35;1118:15;1099:18;;;;:35;:::i;:::-;963:176;789:55:30;306:1810;;1822:289:40;2012:12;1899:42;1923:17;1899:23;;;;;;:42;:::i;:::-;1891:114;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;-1:-1:-1;;;;;;;;;;;;2070:31:40;2062:45::o;437:576:33:-;494:4;969:17;;1000:8;;437:576::o;306:1810:30:-;;;;;;;",
+  "deployedSourceMap": "306:1810:30:-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;454:11:39;:9;:11::i;:::-;306:1810:30;446:38;;8:9:-1;5:2;;;30:1;27;20:12;5:2;446:38:30;;;;;;;;;;;;;;;;;;;;;;490:51;;8:9:-1;5:2;;;30:1;27;20:12;5:2;490:51:30;;;;;;;;;;;;;;;;;;;;404:36;;8:9:-1;5:2;;;30:1;27;20:12;5:2;404:36:30;;;;;;;;;;;;;;;;;;;;;;;619:38;;8:9:-1;5:2;;;30:1;27;20:12;5:2;619:38:30;;;;1953:90:39;1989:15;:13;:15::i;:::-;2010:28;2020:17;:15;:17::i;:::-;2010:9;:28::i;:::-;1953:90::o;446:38:30:-;;;;;;;;;:::o;490:51::-;;;;:::o;404:36::-;;;;;;:::o;619:38::-;;;;:::o;1880:234::-;1928:26;;;;;;;:72;;;;;1964:36;;1958:3;:42;1928:72;1924:184;;;2027:21;;2016:33;;2027:21;;2016:10;:33::i;:::-;2092:5;2063:34;;;;;;1880:234::o;1252:156:40:-;781:66;1387:11;;1371:33::o;879:731:39:-;1181:12;1178:1;1175;1162:32;1371:1;1368;1354:12;1351:1;1335:14;1330:3;1317:56;1435:14;1432:1;1429;1414:36;1465:6;1520:36;;;;1583:14;1580:1;1573:25;1520:36;1539:14;1536:1;1529:25;1543:142:40;1605:37;1624:17;1605:18;:37::i;:::-;1653:27;;;;;;;;;;;;;;;;;;;1543:142;:::o;1822:289::-;2012:12;1899:42;1923:17;1899:23;:42::i;:::-;1891:114;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;-1:-1:-1;781:66:40;2070:31;2062:45::o;437:576:33:-;494:4;969:17;;1000:8;;437:576::o",
+  "source": "pragma solidity ^0.4.24;\n\nimport \"zos-lib/contracts/upgradeability/UpgradeabilityProxy.sol\";\nimport \"openzeppelin-solidity/contracts/math/SafeMath.sol\";\n\n/** \n * @title DelayedUpgradeabilityProxy\n * @notice Implements an upgradeability proxy with the option of\n * introducing pending implementations. \n */\ncontract DelayedUpgradeabilityProxy is UpgradeabilityProxy {\n    using SafeMath for uint256;\n\n    address public pendingImplementation;\n    bool public pendingImplementationIsSet;\n    uint256 public pendingImplementationApplicationDate; // Date on which to switch all contract calls to the new implementation\n    uint256 public UPGRADE_DELAY = 4 weeks;\n\n    event PendingImplementationChanged(address indexed oldPendingImplementation, address indexed newPendingImplementation);\n\n    constructor(address i) UpgradeabilityProxy(i) public {}\n\n    /**\n    * @notice Sets the pending implementation address of the proxy.\n    * This function is internal--uses of this proxy should wrap this function\n    * with a public function in order to make it externally callable.\n    * @param implementation Address of the new implementation.\n    */\n    function _setPendingUpgrade(address implementation) internal {\n        address oldPendingImplementation = pendingImplementation;\n        pendingImplementation = implementation;\n        pendingImplementationIsSet = true;\n        emit PendingImplementationChanged(oldPendingImplementation, implementation);\n        pendingImplementationApplicationDate = now.add(UPGRADE_DELAY);\n    }\n\n    /**\n    * @notice Overrides the _willFallback() function of Proxy, which enables some code to\n    * be executed prior to the fallback function. In this case, the purpose of this code\n    * is to automatically switch the implementation to the pending implementation if the \n    * wait period of UPGRADE_DELAY (28 days) has been satisfied.\n    */\n    function _willFallback() internal {\n        if (pendingImplementationIsSet && now > pendingImplementationApplicationDate) {\n            _upgradeTo(pendingImplementation);\n            pendingImplementationIsSet = false;\n        }\n    }\n}\n",
+  "sourcePath": "/Users/tanishqaggarwal/Documents/carbon/fiat_gateway/contracts/upgradeability/DelayedUpgradeabilityProxy.sol",
+  "ast": {
+    "absolutePath": "/Users/tanishqaggarwal/Documents/carbon/fiat_gateway/contracts/upgradeability/DelayedUpgradeabilityProxy.sol",
+    "exportedSymbols": {
+      "DelayedUpgradeabilityProxy": [
+        4879
+      ]
+    },
+    "id": 4880,
+    "nodeType": "SourceUnit",
+    "nodes": [
+      {
+        "id": 4798,
+        "literals": [
+          "solidity",
+          "^",
+          "0.4",
+          ".24"
+        ],
+        "nodeType": "PragmaDirective",
+        "src": "0:24:30"
+      },
+      {
+        "absolutePath": "zos-lib/contracts/upgradeability/UpgradeabilityProxy.sol",
+        "file": "zos-lib/contracts/upgradeability/UpgradeabilityProxy.sol",
+        "id": 4799,
+        "nodeType": "ImportDirective",
+        "scope": 4880,
+        "sourceUnit": 5388,
+        "src": "26:66:30",
+        "symbolAliases": [],
+        "unitAlias": ""
+      },
+      {
+        "absolutePath": "openzeppelin-solidity/contracts/math/SafeMath.sol",
+        "file": "openzeppelin-solidity/contracts/math/SafeMath.sol",
+        "id": 4800,
+        "nodeType": "ImportDirective",
+        "scope": 4880,
+        "sourceUnit": 5113,
+        "src": "93:59:30",
+        "symbolAliases": [],
+        "unitAlias": ""
+      },
+      {
+        "baseContracts": [
+          {
+            "arguments": null,
+            "baseName": {
+              "contractScope": null,
+              "id": 4801,
+              "name": "UpgradeabilityProxy",
+              "nodeType": "UserDefinedTypeName",
+              "referencedDeclaration": 5387,
+              "src": "345:19:30",
+              "typeDescriptions": {
+                "typeIdentifier": "t_contract$_UpgradeabilityProxy_$5387",
+                "typeString": "contract UpgradeabilityProxy"
+              }
+            },
+            "id": 4802,
+            "nodeType": "InheritanceSpecifier",
+            "src": "345:19:30"
+          }
+        ],
+        "contractDependencies": [
+          5311,
+          5387
+        ],
+        "contractKind": "contract",
+        "documentation": "@title DelayedUpgradeabilityProxy\n@notice Implements an upgradeability proxy with the option of\nintroducing pending implementations. ",
+        "fullyImplemented": true,
+        "id": 4879,
+        "linearizedBaseContracts": [
+          4879,
+          5387,
+          5311
+        ],
+        "name": "DelayedUpgradeabilityProxy",
+        "nodeType": "ContractDefinition",
+        "nodes": [
+          {
+            "id": 4805,
+            "libraryName": {
+              "contractScope": null,
+              "id": 4803,
+              "name": "SafeMath",
+              "nodeType": "UserDefinedTypeName",
+              "referencedDeclaration": 5112,
+              "src": "377:8:30",
+              "typeDescriptions": {
+                "typeIdentifier": "t_contract$_SafeMath_$5112",
+                "typeString": "library SafeMath"
+              }
+            },
+            "nodeType": "UsingForDirective",
+            "src": "371:27:30",
+            "typeName": {
+              "id": 4804,
+              "name": "uint256",
+              "nodeType": "ElementaryTypeName",
+              "src": "390:7:30",
+              "typeDescriptions": {
+                "typeIdentifier": "t_uint256",
+                "typeString": "uint256"
+              }
+            }
+          },
+          {
+            "constant": false,
+            "id": 4807,
+            "name": "pendingImplementation",
+            "nodeType": "VariableDeclaration",
+            "scope": 4879,
+            "src": "404:36:30",
+            "stateVariable": true,
+            "storageLocation": "default",
+            "typeDescriptions": {
+              "typeIdentifier": "t_address",
+              "typeString": "address"
+            },
+            "typeName": {
+              "id": 4806,
+              "name": "address",
+              "nodeType": "ElementaryTypeName",
+              "src": "404:7:30",
+              "typeDescriptions": {
+                "typeIdentifier": "t_address",
+                "typeString": "address"
+              }
+            },
+            "value": null,
+            "visibility": "public"
+          },
+          {
+            "constant": false,
+            "id": 4809,
+            "name": "pendingImplementationIsSet",
+            "nodeType": "VariableDeclaration",
+            "scope": 4879,
+            "src": "446:38:30",
+            "stateVariable": true,
+            "storageLocation": "default",
+            "typeDescriptions": {
+              "typeIdentifier": "t_bool",
+              "typeString": "bool"
+            },
+            "typeName": {
+              "id": 4808,
+              "name": "bool",
+              "nodeType": "ElementaryTypeName",
+              "src": "446:4:30",
+              "typeDescriptions": {
+                "typeIdentifier": "t_bool",
+                "typeString": "bool"
+              }
+            },
+            "value": null,
+            "visibility": "public"
+          },
+          {
+            "constant": false,
+            "id": 4811,
+            "name": "pendingImplementationApplicationDate",
+            "nodeType": "VariableDeclaration",
+            "scope": 4879,
+            "src": "490:51:30",
+            "stateVariable": true,
+            "storageLocation": "default",
+            "typeDescriptions": {
+              "typeIdentifier": "t_uint256",
+              "typeString": "uint256"
+            },
+            "typeName": {
+              "id": 4810,
+              "name": "uint256",
+              "nodeType": "ElementaryTypeName",
+              "src": "490:7:30",
+              "typeDescriptions": {
+                "typeIdentifier": "t_uint256",
+                "typeString": "uint256"
+              }
+            },
+            "value": null,
+            "visibility": "public"
+          },
+          {
+            "constant": false,
+            "id": 4814,
+            "name": "UPGRADE_DELAY",
+            "nodeType": "VariableDeclaration",
+            "scope": 4879,
+            "src": "619:38:30",
+            "stateVariable": true,
+            "storageLocation": "default",
+            "typeDescriptions": {
+              "typeIdentifier": "t_uint256",
+              "typeString": "uint256"
+            },
+            "typeName": {
+              "id": 4812,
+              "name": "uint256",
+              "nodeType": "ElementaryTypeName",
+              "src": "619:7:30",
+              "typeDescriptions": {
+                "typeIdentifier": "t_uint256",
+                "typeString": "uint256"
+              }
+            },
+            "value": {
+              "argumentTypes": null,
+              "hexValue": "34",
+              "id": 4813,
+              "isConstant": false,
+              "isLValue": false,
+              "isPure": true,
+              "kind": "number",
+              "lValueRequested": false,
+              "nodeType": "Literal",
+              "src": "650:7:30",
+              "subdenomination": "weeks",
+              "typeDescriptions": {
+                "typeIdentifier": "t_rational_2419200_by_1",
+                "typeString": "int_const 2419200"
+              },
+              "value": "4"
+            },
+            "visibility": "public"
+          },
+          {
+            "anonymous": false,
+            "documentation": null,
+            "id": 4820,
+            "name": "PendingImplementationChanged",
+            "nodeType": "EventDefinition",
+            "parameters": {
+              "id": 4819,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 4816,
+                  "indexed": true,
+                  "name": "oldPendingImplementation",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 4820,
+                  "src": "699:40:30",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 4815,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "699:7:30",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 4818,
+                  "indexed": true,
+                  "name": "newPendingImplementation",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 4820,
+                  "src": "741:40:30",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 4817,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "741:7:30",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "698:84:30"
+            },
+            "src": "664:119:30"
+          },
+          {
+            "body": {
+              "id": 4828,
+              "nodeType": "Block",
+              "src": "842:2:30",
+              "statements": []
+            },
+            "documentation": null,
+            "id": 4829,
+            "implemented": true,
+            "isConstructor": true,
+            "isDeclaredConst": false,
+            "modifiers": [
+              {
+                "arguments": [
+                  {
+                    "argumentTypes": null,
+                    "id": 4825,
+                    "name": "i",
+                    "nodeType": "Identifier",
+                    "overloadedDeclarations": [],
+                    "referencedDeclaration": 4822,
+                    "src": "832:1:30",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  }
+                ],
+                "id": 4826,
+                "modifierName": {
+                  "argumentTypes": null,
+                  "id": 4824,
+                  "name": "UpgradeabilityProxy",
+                  "nodeType": "Identifier",
+                  "overloadedDeclarations": [],
+                  "referencedDeclaration": 5387,
+                  "src": "812:19:30",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_type$_t_contract$_UpgradeabilityProxy_$5387_$",
+                    "typeString": "type(contract UpgradeabilityProxy)"
+                  }
+                },
+                "nodeType": "ModifierInvocation",
+                "src": "812:22:30"
+              }
+            ],
+            "name": "",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 4823,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 4822,
+                  "name": "i",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 4829,
+                  "src": "801:9:30",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 4821,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "801:7:30",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "800:11:30"
+            },
+            "payable": false,
+            "returnParameters": {
+              "id": 4827,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "842:0:30"
+            },
+            "scope": 4879,
+            "src": "789:55:30",
+            "stateMutability": "nonpayable",
+            "superFunction": null,
+            "visibility": "public"
+          },
+          {
+            "body": {
+              "id": 4858,
+              "nodeType": "Block",
+              "src": "1205:320:30",
+              "statements": [
+                {
+                  "assignments": [
+                    4835
+                  ],
+                  "declarations": [
+                    {
+                      "constant": false,
+                      "id": 4835,
+                      "name": "oldPendingImplementation",
+                      "nodeType": "VariableDeclaration",
+                      "scope": 4859,
+                      "src": "1215:32:30",
+                      "stateVariable": false,
+                      "storageLocation": "default",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_address",
+                        "typeString": "address"
+                      },
+                      "typeName": {
+                        "id": 4834,
+                        "name": "address",
+                        "nodeType": "ElementaryTypeName",
+                        "src": "1215:7:30",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_address",
+                          "typeString": "address"
+                        }
+                      },
+                      "value": null,
+                      "visibility": "internal"
+                    }
+                  ],
+                  "id": 4837,
+                  "initialValue": {
+                    "argumentTypes": null,
+                    "id": 4836,
+                    "name": "pendingImplementation",
+                    "nodeType": "Identifier",
+                    "overloadedDeclarations": [],
+                    "referencedDeclaration": 4807,
+                    "src": "1250:21:30",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "nodeType": "VariableDeclarationStatement",
+                  "src": "1215:56:30"
+                },
+                {
+                  "expression": {
+                    "argumentTypes": null,
+                    "id": 4840,
+                    "isConstant": false,
+                    "isLValue": false,
+                    "isPure": false,
+                    "lValueRequested": false,
+                    "leftHandSide": {
+                      "argumentTypes": null,
+                      "id": 4838,
+                      "name": "pendingImplementation",
+                      "nodeType": "Identifier",
+                      "overloadedDeclarations": [],
+                      "referencedDeclaration": 4807,
+                      "src": "1281:21:30",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_address",
+                        "typeString": "address"
+                      }
+                    },
+                    "nodeType": "Assignment",
+                    "operator": "=",
+                    "rightHandSide": {
+                      "argumentTypes": null,
+                      "id": 4839,
+                      "name": "implementation",
+                      "nodeType": "Identifier",
+                      "overloadedDeclarations": [],
+                      "referencedDeclaration": 4831,
+                      "src": "1305:14:30",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_address",
+                        "typeString": "address"
+                      }
+                    },
+                    "src": "1281:38:30",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "id": 4841,
+                  "nodeType": "ExpressionStatement",
+                  "src": "1281:38:30"
+                },
+                {
+                  "expression": {
+                    "argumentTypes": null,
+                    "id": 4844,
+                    "isConstant": false,
+                    "isLValue": false,
+                    "isPure": false,
+                    "lValueRequested": false,
+                    "leftHandSide": {
+                      "argumentTypes": null,
+                      "id": 4842,
+                      "name": "pendingImplementationIsSet",
+                      "nodeType": "Identifier",
+                      "overloadedDeclarations": [],
+                      "referencedDeclaration": 4809,
+                      "src": "1329:26:30",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_bool",
+                        "typeString": "bool"
+                      }
+                    },
+                    "nodeType": "Assignment",
+                    "operator": "=",
+                    "rightHandSide": {
+                      "argumentTypes": null,
+                      "hexValue": "74727565",
+                      "id": 4843,
+                      "isConstant": false,
+                      "isLValue": false,
+                      "isPure": true,
+                      "kind": "bool",
+                      "lValueRequested": false,
+                      "nodeType": "Literal",
+                      "src": "1358:4:30",
+                      "subdenomination": null,
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_bool",
+                        "typeString": "bool"
+                      },
+                      "value": "true"
+                    },
+                    "src": "1329:33:30",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_bool",
+                      "typeString": "bool"
+                    }
+                  },
+                  "id": 4845,
+                  "nodeType": "ExpressionStatement",
+                  "src": "1329:33:30"
+                },
+                {
+                  "eventCall": {
+                    "argumentTypes": null,
+                    "arguments": [
+                      {
+                        "argumentTypes": null,
+                        "id": 4847,
+                        "name": "oldPendingImplementation",
+                        "nodeType": "Identifier",
+                        "overloadedDeclarations": [],
+                        "referencedDeclaration": 4835,
+                        "src": "1406:24:30",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_address",
+                          "typeString": "address"
+                        }
+                      },
+                      {
+                        "argumentTypes": null,
+                        "id": 4848,
+                        "name": "implementation",
+                        "nodeType": "Identifier",
+                        "overloadedDeclarations": [],
+                        "referencedDeclaration": 4831,
+                        "src": "1432:14:30",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_address",
+                          "typeString": "address"
+                        }
+                      }
+                    ],
+                    "expression": {
+                      "argumentTypes": [
+                        {
+                          "typeIdentifier": "t_address",
+                          "typeString": "address"
+                        },
+                        {
+                          "typeIdentifier": "t_address",
+                          "typeString": "address"
+                        }
+                      ],
+                      "id": 4846,
+                      "name": "PendingImplementationChanged",
+                      "nodeType": "Identifier",
+                      "overloadedDeclarations": [],
+                      "referencedDeclaration": 4820,
+                      "src": "1377:28:30",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_function_event_nonpayable$_t_address_$_t_address_$returns$__$",
+                        "typeString": "function (address,address)"
+                      }
+                    },
+                    "id": 4849,
+                    "isConstant": false,
+                    "isLValue": false,
+                    "isPure": false,
+                    "kind": "functionCall",
+                    "lValueRequested": false,
+                    "names": [],
+                    "nodeType": "FunctionCall",
+                    "src": "1377:70:30",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_tuple$__$",
+                      "typeString": "tuple()"
+                    }
+                  },
+                  "id": 4850,
+                  "nodeType": "EmitStatement",
+                  "src": "1372:75:30"
+                },
+                {
+                  "expression": {
+                    "argumentTypes": null,
+                    "id": 4856,
+                    "isConstant": false,
+                    "isLValue": false,
+                    "isPure": false,
+                    "lValueRequested": false,
+                    "leftHandSide": {
+                      "argumentTypes": null,
+                      "id": 4851,
+                      "name": "pendingImplementationApplicationDate",
+                      "nodeType": "Identifier",
+                      "overloadedDeclarations": [],
+                      "referencedDeclaration": 4811,
+                      "src": "1457:36:30",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_uint256",
+                        "typeString": "uint256"
+                      }
+                    },
+                    "nodeType": "Assignment",
+                    "operator": "=",
+                    "rightHandSide": {
+                      "argumentTypes": null,
+                      "arguments": [
+                        {
+                          "argumentTypes": null,
+                          "id": 4854,
+                          "name": "UPGRADE_DELAY",
+                          "nodeType": "Identifier",
+                          "overloadedDeclarations": [],
+                          "referencedDeclaration": 4814,
+                          "src": "1504:13:30",
+                          "typeDescriptions": {
+                            "typeIdentifier": "t_uint256",
+                            "typeString": "uint256"
+                          }
+                        }
+                      ],
+                      "expression": {
+                        "argumentTypes": [
+                          {
+                            "typeIdentifier": "t_uint256",
+                            "typeString": "uint256"
+                          }
+                        ],
+                        "expression": {
+                          "argumentTypes": null,
+                          "id": 4852,
+                          "name": "now",
+                          "nodeType": "Identifier",
+                          "overloadedDeclarations": [],
+                          "referencedDeclaration": 5404,
+                          "src": "1496:3:30",
+                          "typeDescriptions": {
+                            "typeIdentifier": "t_uint256",
+                            "typeString": "uint256"
+                          }
+                        },
+                        "id": 4853,
+                        "isConstant": false,
+                        "isLValue": false,
+                        "isPure": false,
+                        "lValueRequested": false,
+                        "memberName": "add",
+                        "nodeType": "MemberAccess",
+                        "referencedDeclaration": 5111,
+                        "src": "1496:7:30",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_function_internal_pure$_t_uint256_$_t_uint256_$returns$_t_uint256_$bound_to$_t_uint256_$",
+                          "typeString": "function (uint256,uint256) pure returns (uint256)"
+                        }
+                      },
+                      "id": 4855,
+                      "isConstant": false,
+                      "isLValue": false,
+                      "isPure": false,
+                      "kind": "functionCall",
+                      "lValueRequested": false,
+                      "names": [],
+                      "nodeType": "FunctionCall",
+                      "src": "1496:22:30",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_uint256",
+                        "typeString": "uint256"
+                      }
+                    },
+                    "src": "1457:61:30",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "id": 4857,
+                  "nodeType": "ExpressionStatement",
+                  "src": "1457:61:30"
+                }
+              ]
+            },
+            "documentation": "@notice Sets the pending implementation address of the proxy.\nThis function is internal--uses of this proxy should wrap this function\nwith a public function in order to make it externally callable.\n@param implementation Address of the new implementation.",
+            "id": 4859,
+            "implemented": true,
+            "isConstructor": false,
+            "isDeclaredConst": false,
+            "modifiers": [],
+            "name": "_setPendingUpgrade",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 4832,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 4831,
+                  "name": "implementation",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 4859,
+                  "src": "1172:22:30",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 4830,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "1172:7:30",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "1171:24:30"
+            },
+            "payable": false,
+            "returnParameters": {
+              "id": 4833,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "1205:0:30"
+            },
+            "scope": 4879,
+            "src": "1144:381:30",
+            "stateMutability": "nonpayable",
+            "superFunction": null,
+            "visibility": "internal"
+          },
+          {
+            "body": {
+              "id": 4877,
+              "nodeType": "Block",
+              "src": "1914:200:30",
+              "statements": [
+                {
+                  "condition": {
+                    "argumentTypes": null,
+                    "commonType": {
+                      "typeIdentifier": "t_bool",
+                      "typeString": "bool"
+                    },
+                    "id": 4866,
+                    "isConstant": false,
+                    "isLValue": false,
+                    "isPure": false,
+                    "lValueRequested": false,
+                    "leftExpression": {
+                      "argumentTypes": null,
+                      "id": 4862,
+                      "name": "pendingImplementationIsSet",
+                      "nodeType": "Identifier",
+                      "overloadedDeclarations": [],
+                      "referencedDeclaration": 4809,
+                      "src": "1928:26:30",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_bool",
+                        "typeString": "bool"
+                      }
+                    },
+                    "nodeType": "BinaryOperation",
+                    "operator": "&&",
+                    "rightExpression": {
+                      "argumentTypes": null,
+                      "commonType": {
+                        "typeIdentifier": "t_uint256",
+                        "typeString": "uint256"
+                      },
+                      "id": 4865,
+                      "isConstant": false,
+                      "isLValue": false,
+                      "isPure": false,
+                      "lValueRequested": false,
+                      "leftExpression": {
+                        "argumentTypes": null,
+                        "id": 4863,
+                        "name": "now",
+                        "nodeType": "Identifier",
+                        "overloadedDeclarations": [],
+                        "referencedDeclaration": 5404,
+                        "src": "1958:3:30",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_uint256",
+                          "typeString": "uint256"
+                        }
+                      },
+                      "nodeType": "BinaryOperation",
+                      "operator": ">",
+                      "rightExpression": {
+                        "argumentTypes": null,
+                        "id": 4864,
+                        "name": "pendingImplementationApplicationDate",
+                        "nodeType": "Identifier",
+                        "overloadedDeclarations": [],
+                        "referencedDeclaration": 4811,
+                        "src": "1964:36:30",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_uint256",
+                          "typeString": "uint256"
+                        }
+                      },
+                      "src": "1958:42:30",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_bool",
+                        "typeString": "bool"
+                      }
+                    },
+                    "src": "1928:72:30",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_bool",
+                      "typeString": "bool"
+                    }
+                  },
+                  "falseBody": null,
+                  "id": 4876,
+                  "nodeType": "IfStatement",
+                  "src": "1924:184:30",
+                  "trueBody": {
+                    "id": 4875,
+                    "nodeType": "Block",
+                    "src": "2002:106:30",
+                    "statements": [
+                      {
+                        "expression": {
+                          "argumentTypes": null,
+                          "arguments": [
+                            {
+                              "argumentTypes": null,
+                              "id": 4868,
+                              "name": "pendingImplementation",
+                              "nodeType": "Identifier",
+                              "overloadedDeclarations": [],
+                              "referencedDeclaration": 4807,
+                              "src": "2027:21:30",
+                              "typeDescriptions": {
+                                "typeIdentifier": "t_address",
+                                "typeString": "address"
+                              }
+                            }
+                          ],
+                          "expression": {
+                            "argumentTypes": [
+                              {
+                                "typeIdentifier": "t_address",
+                                "typeString": "address"
+                              }
+                            ],
+                            "id": 4867,
+                            "name": "_upgradeTo",
+                            "nodeType": "Identifier",
+                            "overloadedDeclarations": [],
+                            "referencedDeclaration": 5367,
+                            "src": "2016:10:30",
+                            "typeDescriptions": {
+                              "typeIdentifier": "t_function_internal_nonpayable$_t_address_$returns$__$",
+                              "typeString": "function (address)"
+                            }
+                          },
+                          "id": 4869,
+                          "isConstant": false,
+                          "isLValue": false,
+                          "isPure": false,
+                          "kind": "functionCall",
+                          "lValueRequested": false,
+                          "names": [],
+                          "nodeType": "FunctionCall",
+                          "src": "2016:33:30",
+                          "typeDescriptions": {
+                            "typeIdentifier": "t_tuple$__$",
+                            "typeString": "tuple()"
+                          }
+                        },
+                        "id": 4870,
+                        "nodeType": "ExpressionStatement",
+                        "src": "2016:33:30"
+                      },
+                      {
+                        "expression": {
+                          "argumentTypes": null,
+                          "id": 4873,
+                          "isConstant": false,
+                          "isLValue": false,
+                          "isPure": false,
+                          "lValueRequested": false,
+                          "leftHandSide": {
+                            "argumentTypes": null,
+                            "id": 4871,
+                            "name": "pendingImplementationIsSet",
+                            "nodeType": "Identifier",
+                            "overloadedDeclarations": [],
+                            "referencedDeclaration": 4809,
+                            "src": "2063:26:30",
+                            "typeDescriptions": {
+                              "typeIdentifier": "t_bool",
+                              "typeString": "bool"
+                            }
+                          },
+                          "nodeType": "Assignment",
+                          "operator": "=",
+                          "rightHandSide": {
+                            "argumentTypes": null,
+                            "hexValue": "66616c7365",
+                            "id": 4872,
+                            "isConstant": false,
+                            "isLValue": false,
+                            "isPure": true,
+                            "kind": "bool",
+                            "lValueRequested": false,
+                            "nodeType": "Literal",
+                            "src": "2092:5:30",
+                            "subdenomination": null,
+                            "typeDescriptions": {
+                              "typeIdentifier": "t_bool",
+                              "typeString": "bool"
+                            },
+                            "value": "false"
+                          },
+                          "src": "2063:34:30",
+                          "typeDescriptions": {
+                            "typeIdentifier": "t_bool",
+                            "typeString": "bool"
+                          }
+                        },
+                        "id": 4874,
+                        "nodeType": "ExpressionStatement",
+                        "src": "2063:34:30"
+                      }
+                    ]
+                  }
+                }
+              ]
+            },
+            "documentation": "@notice Overrides the _willFallback() function of Proxy, which enables some code to\nbe executed prior to the fallback function. In this case, the purpose of this code\nis to automatically switch the implementation to the pending implementation if the \nwait period of UPGRADE_DELAY (28 days) has been satisfied.",
+            "id": 4878,
+            "implemented": true,
+            "isConstructor": false,
+            "isDeclaredConst": false,
+            "modifiers": [],
+            "name": "_willFallback",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 4860,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "1902:2:30"
+            },
+            "payable": false,
+            "returnParameters": {
+              "id": 4861,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "1914:0:30"
+            },
+            "scope": 4879,
+            "src": "1880:234:30",
+            "stateMutability": "nonpayable",
+            "superFunction": 5298,
+            "visibility": "internal"
+          }
+        ],
+        "scope": 4880,
+        "src": "306:1810:30"
+      }
+    ],
+    "src": "0:2117:30"
+  },
+  "legacyAST": {
+    "absolutePath": "/Users/tanishqaggarwal/Documents/carbon/fiat_gateway/contracts/upgradeability/DelayedUpgradeabilityProxy.sol",
+    "exportedSymbols": {
+      "DelayedUpgradeabilityProxy": [
+        4879
+      ]
+    },
+    "id": 4880,
+    "nodeType": "SourceUnit",
+    "nodes": [
+      {
+        "id": 4798,
+        "literals": [
+          "solidity",
+          "^",
+          "0.4",
+          ".24"
+        ],
+        "nodeType": "PragmaDirective",
+        "src": "0:24:30"
+      },
+      {
+        "absolutePath": "zos-lib/contracts/upgradeability/UpgradeabilityProxy.sol",
+        "file": "zos-lib/contracts/upgradeability/UpgradeabilityProxy.sol",
+        "id": 4799,
+        "nodeType": "ImportDirective",
+        "scope": 4880,
+        "sourceUnit": 5388,
+        "src": "26:66:30",
+        "symbolAliases": [],
+        "unitAlias": ""
+      },
+      {
+        "absolutePath": "openzeppelin-solidity/contracts/math/SafeMath.sol",
+        "file": "openzeppelin-solidity/contracts/math/SafeMath.sol",
+        "id": 4800,
+        "nodeType": "ImportDirective",
+        "scope": 4880,
+        "sourceUnit": 5113,
+        "src": "93:59:30",
+        "symbolAliases": [],
+        "unitAlias": ""
+      },
+      {
+        "baseContracts": [
+          {
+            "arguments": null,
+            "baseName": {
+              "contractScope": null,
+              "id": 4801,
+              "name": "UpgradeabilityProxy",
+              "nodeType": "UserDefinedTypeName",
+              "referencedDeclaration": 5387,
+              "src": "345:19:30",
+              "typeDescriptions": {
+                "typeIdentifier": "t_contract$_UpgradeabilityProxy_$5387",
+                "typeString": "contract UpgradeabilityProxy"
+              }
+            },
+            "id": 4802,
+            "nodeType": "InheritanceSpecifier",
+            "src": "345:19:30"
+          }
+        ],
+        "contractDependencies": [
+          5311,
+          5387
+        ],
+        "contractKind": "contract",
+        "documentation": "@title DelayedUpgradeabilityProxy\n@notice Implements an upgradeability proxy with the option of\nintroducing pending implementations. ",
+        "fullyImplemented": true,
+        "id": 4879,
+        "linearizedBaseContracts": [
+          4879,
+          5387,
+          5311
+        ],
+        "name": "DelayedUpgradeabilityProxy",
+        "nodeType": "ContractDefinition",
+        "nodes": [
+          {
+            "id": 4805,
+            "libraryName": {
+              "contractScope": null,
+              "id": 4803,
+              "name": "SafeMath",
+              "nodeType": "UserDefinedTypeName",
+              "referencedDeclaration": 5112,
+              "src": "377:8:30",
+              "typeDescriptions": {
+                "typeIdentifier": "t_contract$_SafeMath_$5112",
+                "typeString": "library SafeMath"
+              }
+            },
+            "nodeType": "UsingForDirective",
+            "src": "371:27:30",
+            "typeName": {
+              "id": 4804,
+              "name": "uint256",
+              "nodeType": "ElementaryTypeName",
+              "src": "390:7:30",
+              "typeDescriptions": {
+                "typeIdentifier": "t_uint256",
+                "typeString": "uint256"
+              }
+            }
+          },
+          {
+            "constant": false,
+            "id": 4807,
+            "name": "pendingImplementation",
+            "nodeType": "VariableDeclaration",
+            "scope": 4879,
+            "src": "404:36:30",
+            "stateVariable": true,
+            "storageLocation": "default",
+            "typeDescriptions": {
+              "typeIdentifier": "t_address",
+              "typeString": "address"
+            },
+            "typeName": {
+              "id": 4806,
+              "name": "address",
+              "nodeType": "ElementaryTypeName",
+              "src": "404:7:30",
+              "typeDescriptions": {
+                "typeIdentifier": "t_address",
+                "typeString": "address"
+              }
+            },
+            "value": null,
+            "visibility": "public"
+          },
+          {
+            "constant": false,
+            "id": 4809,
+            "name": "pendingImplementationIsSet",
+            "nodeType": "VariableDeclaration",
+            "scope": 4879,
+            "src": "446:38:30",
+            "stateVariable": true,
+            "storageLocation": "default",
+            "typeDescriptions": {
+              "typeIdentifier": "t_bool",
+              "typeString": "bool"
+            },
+            "typeName": {
+              "id": 4808,
+              "name": "bool",
+              "nodeType": "ElementaryTypeName",
+              "src": "446:4:30",
+              "typeDescriptions": {
+                "typeIdentifier": "t_bool",
+                "typeString": "bool"
+              }
+            },
+            "value": null,
+            "visibility": "public"
+          },
+          {
+            "constant": false,
+            "id": 4811,
+            "name": "pendingImplementationApplicationDate",
+            "nodeType": "VariableDeclaration",
+            "scope": 4879,
+            "src": "490:51:30",
+            "stateVariable": true,
+            "storageLocation": "default",
+            "typeDescriptions": {
+              "typeIdentifier": "t_uint256",
+              "typeString": "uint256"
+            },
+            "typeName": {
+              "id": 4810,
+              "name": "uint256",
+              "nodeType": "ElementaryTypeName",
+              "src": "490:7:30",
+              "typeDescriptions": {
+                "typeIdentifier": "t_uint256",
+                "typeString": "uint256"
+              }
+            },
+            "value": null,
+            "visibility": "public"
+          },
+          {
+            "constant": false,
+            "id": 4814,
+            "name": "UPGRADE_DELAY",
+            "nodeType": "VariableDeclaration",
+            "scope": 4879,
+            "src": "619:38:30",
+            "stateVariable": true,
+            "storageLocation": "default",
+            "typeDescriptions": {
+              "typeIdentifier": "t_uint256",
+              "typeString": "uint256"
+            },
+            "typeName": {
+              "id": 4812,
+              "name": "uint256",
+              "nodeType": "ElementaryTypeName",
+              "src": "619:7:30",
+              "typeDescriptions": {
+                "typeIdentifier": "t_uint256",
+                "typeString": "uint256"
+              }
+            },
+            "value": {
+              "argumentTypes": null,
+              "hexValue": "34",
+              "id": 4813,
+              "isConstant": false,
+              "isLValue": false,
+              "isPure": true,
+              "kind": "number",
+              "lValueRequested": false,
+              "nodeType": "Literal",
+              "src": "650:7:30",
+              "subdenomination": "weeks",
+              "typeDescriptions": {
+                "typeIdentifier": "t_rational_2419200_by_1",
+                "typeString": "int_const 2419200"
+              },
+              "value": "4"
+            },
+            "visibility": "public"
+          },
+          {
+            "anonymous": false,
+            "documentation": null,
+            "id": 4820,
+            "name": "PendingImplementationChanged",
+            "nodeType": "EventDefinition",
+            "parameters": {
+              "id": 4819,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 4816,
+                  "indexed": true,
+                  "name": "oldPendingImplementation",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 4820,
+                  "src": "699:40:30",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 4815,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "699:7:30",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 4818,
+                  "indexed": true,
+                  "name": "newPendingImplementation",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 4820,
+                  "src": "741:40:30",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 4817,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "741:7:30",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "698:84:30"
+            },
+            "src": "664:119:30"
+          },
+          {
+            "body": {
+              "id": 4828,
+              "nodeType": "Block",
+              "src": "842:2:30",
+              "statements": []
+            },
+            "documentation": null,
+            "id": 4829,
+            "implemented": true,
+            "isConstructor": true,
+            "isDeclaredConst": false,
+            "modifiers": [
+              {
+                "arguments": [
+                  {
+                    "argumentTypes": null,
+                    "id": 4825,
+                    "name": "i",
+                    "nodeType": "Identifier",
+                    "overloadedDeclarations": [],
+                    "referencedDeclaration": 4822,
+                    "src": "832:1:30",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  }
+                ],
+                "id": 4826,
+                "modifierName": {
+                  "argumentTypes": null,
+                  "id": 4824,
+                  "name": "UpgradeabilityProxy",
+                  "nodeType": "Identifier",
+                  "overloadedDeclarations": [],
+                  "referencedDeclaration": 5387,
+                  "src": "812:19:30",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_type$_t_contract$_UpgradeabilityProxy_$5387_$",
+                    "typeString": "type(contract UpgradeabilityProxy)"
+                  }
+                },
+                "nodeType": "ModifierInvocation",
+                "src": "812:22:30"
+              }
+            ],
+            "name": "",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 4823,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 4822,
+                  "name": "i",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 4829,
+                  "src": "801:9:30",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 4821,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "801:7:30",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "800:11:30"
+            },
+            "payable": false,
+            "returnParameters": {
+              "id": 4827,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "842:0:30"
+            },
+            "scope": 4879,
+            "src": "789:55:30",
+            "stateMutability": "nonpayable",
+            "superFunction": null,
+            "visibility": "public"
+          },
+          {
+            "body": {
+              "id": 4858,
+              "nodeType": "Block",
+              "src": "1205:320:30",
+              "statements": [
+                {
+                  "assignments": [
+                    4835
+                  ],
+                  "declarations": [
+                    {
+                      "constant": false,
+                      "id": 4835,
+                      "name": "oldPendingImplementation",
+                      "nodeType": "VariableDeclaration",
+                      "scope": 4859,
+                      "src": "1215:32:30",
+                      "stateVariable": false,
+                      "storageLocation": "default",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_address",
+                        "typeString": "address"
+                      },
+                      "typeName": {
+                        "id": 4834,
+                        "name": "address",
+                        "nodeType": "ElementaryTypeName",
+                        "src": "1215:7:30",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_address",
+                          "typeString": "address"
+                        }
+                      },
+                      "value": null,
+                      "visibility": "internal"
+                    }
+                  ],
+                  "id": 4837,
+                  "initialValue": {
+                    "argumentTypes": null,
+                    "id": 4836,
+                    "name": "pendingImplementation",
+                    "nodeType": "Identifier",
+                    "overloadedDeclarations": [],
+                    "referencedDeclaration": 4807,
+                    "src": "1250:21:30",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "nodeType": "VariableDeclarationStatement",
+                  "src": "1215:56:30"
+                },
+                {
+                  "expression": {
+                    "argumentTypes": null,
+                    "id": 4840,
+                    "isConstant": false,
+                    "isLValue": false,
+                    "isPure": false,
+                    "lValueRequested": false,
+                    "leftHandSide": {
+                      "argumentTypes": null,
+                      "id": 4838,
+                      "name": "pendingImplementation",
+                      "nodeType": "Identifier",
+                      "overloadedDeclarations": [],
+                      "referencedDeclaration": 4807,
+                      "src": "1281:21:30",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_address",
+                        "typeString": "address"
+                      }
+                    },
+                    "nodeType": "Assignment",
+                    "operator": "=",
+                    "rightHandSide": {
+                      "argumentTypes": null,
+                      "id": 4839,
+                      "name": "implementation",
+                      "nodeType": "Identifier",
+                      "overloadedDeclarations": [],
+                      "referencedDeclaration": 4831,
+                      "src": "1305:14:30",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_address",
+                        "typeString": "address"
+                      }
+                    },
+                    "src": "1281:38:30",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "id": 4841,
+                  "nodeType": "ExpressionStatement",
+                  "src": "1281:38:30"
+                },
+                {
+                  "expression": {
+                    "argumentTypes": null,
+                    "id": 4844,
+                    "isConstant": false,
+                    "isLValue": false,
+                    "isPure": false,
+                    "lValueRequested": false,
+                    "leftHandSide": {
+                      "argumentTypes": null,
+                      "id": 4842,
+                      "name": "pendingImplementationIsSet",
+                      "nodeType": "Identifier",
+                      "overloadedDeclarations": [],
+                      "referencedDeclaration": 4809,
+                      "src": "1329:26:30",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_bool",
+                        "typeString": "bool"
+                      }
+                    },
+                    "nodeType": "Assignment",
+                    "operator": "=",
+                    "rightHandSide": {
+                      "argumentTypes": null,
+                      "hexValue": "74727565",
+                      "id": 4843,
+                      "isConstant": false,
+                      "isLValue": false,
+                      "isPure": true,
+                      "kind": "bool",
+                      "lValueRequested": false,
+                      "nodeType": "Literal",
+                      "src": "1358:4:30",
+                      "subdenomination": null,
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_bool",
+                        "typeString": "bool"
+                      },
+                      "value": "true"
+                    },
+                    "src": "1329:33:30",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_bool",
+                      "typeString": "bool"
+                    }
+                  },
+                  "id": 4845,
+                  "nodeType": "ExpressionStatement",
+                  "src": "1329:33:30"
+                },
+                {
+                  "eventCall": {
+                    "argumentTypes": null,
+                    "arguments": [
+                      {
+                        "argumentTypes": null,
+                        "id": 4847,
+                        "name": "oldPendingImplementation",
+                        "nodeType": "Identifier",
+                        "overloadedDeclarations": [],
+                        "referencedDeclaration": 4835,
+                        "src": "1406:24:30",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_address",
+                          "typeString": "address"
+                        }
+                      },
+                      {
+                        "argumentTypes": null,
+                        "id": 4848,
+                        "name": "implementation",
+                        "nodeType": "Identifier",
+                        "overloadedDeclarations": [],
+                        "referencedDeclaration": 4831,
+                        "src": "1432:14:30",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_address",
+                          "typeString": "address"
+                        }
+                      }
+                    ],
+                    "expression": {
+                      "argumentTypes": [
+                        {
+                          "typeIdentifier": "t_address",
+                          "typeString": "address"
+                        },
+                        {
+                          "typeIdentifier": "t_address",
+                          "typeString": "address"
+                        }
+                      ],
+                      "id": 4846,
+                      "name": "PendingImplementationChanged",
+                      "nodeType": "Identifier",
+                      "overloadedDeclarations": [],
+                      "referencedDeclaration": 4820,
+                      "src": "1377:28:30",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_function_event_nonpayable$_t_address_$_t_address_$returns$__$",
+                        "typeString": "function (address,address)"
+                      }
+                    },
+                    "id": 4849,
+                    "isConstant": false,
+                    "isLValue": false,
+                    "isPure": false,
+                    "kind": "functionCall",
+                    "lValueRequested": false,
+                    "names": [],
+                    "nodeType": "FunctionCall",
+                    "src": "1377:70:30",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_tuple$__$",
+                      "typeString": "tuple()"
+                    }
+                  },
+                  "id": 4850,
+                  "nodeType": "EmitStatement",
+                  "src": "1372:75:30"
+                },
+                {
+                  "expression": {
+                    "argumentTypes": null,
+                    "id": 4856,
+                    "isConstant": false,
+                    "isLValue": false,
+                    "isPure": false,
+                    "lValueRequested": false,
+                    "leftHandSide": {
+                      "argumentTypes": null,
+                      "id": 4851,
+                      "name": "pendingImplementationApplicationDate",
+                      "nodeType": "Identifier",
+                      "overloadedDeclarations": [],
+                      "referencedDeclaration": 4811,
+                      "src": "1457:36:30",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_uint256",
+                        "typeString": "uint256"
+                      }
+                    },
+                    "nodeType": "Assignment",
+                    "operator": "=",
+                    "rightHandSide": {
+                      "argumentTypes": null,
+                      "arguments": [
+                        {
+                          "argumentTypes": null,
+                          "id": 4854,
+                          "name": "UPGRADE_DELAY",
+                          "nodeType": "Identifier",
+                          "overloadedDeclarations": [],
+                          "referencedDeclaration": 4814,
+                          "src": "1504:13:30",
+                          "typeDescriptions": {
+                            "typeIdentifier": "t_uint256",
+                            "typeString": "uint256"
+                          }
+                        }
+                      ],
+                      "expression": {
+                        "argumentTypes": [
+                          {
+                            "typeIdentifier": "t_uint256",
+                            "typeString": "uint256"
+                          }
+                        ],
+                        "expression": {
+                          "argumentTypes": null,
+                          "id": 4852,
+                          "name": "now",
+                          "nodeType": "Identifier",
+                          "overloadedDeclarations": [],
+                          "referencedDeclaration": 5404,
+                          "src": "1496:3:30",
+                          "typeDescriptions": {
+                            "typeIdentifier": "t_uint256",
+                            "typeString": "uint256"
+                          }
+                        },
+                        "id": 4853,
+                        "isConstant": false,
+                        "isLValue": false,
+                        "isPure": false,
+                        "lValueRequested": false,
+                        "memberName": "add",
+                        "nodeType": "MemberAccess",
+                        "referencedDeclaration": 5111,
+                        "src": "1496:7:30",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_function_internal_pure$_t_uint256_$_t_uint256_$returns$_t_uint256_$bound_to$_t_uint256_$",
+                          "typeString": "function (uint256,uint256) pure returns (uint256)"
+                        }
+                      },
+                      "id": 4855,
+                      "isConstant": false,
+                      "isLValue": false,
+                      "isPure": false,
+                      "kind": "functionCall",
+                      "lValueRequested": false,
+                      "names": [],
+                      "nodeType": "FunctionCall",
+                      "src": "1496:22:30",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_uint256",
+                        "typeString": "uint256"
+                      }
+                    },
+                    "src": "1457:61:30",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "id": 4857,
+                  "nodeType": "ExpressionStatement",
+                  "src": "1457:61:30"
+                }
+              ]
+            },
+            "documentation": "@notice Sets the pending implementation address of the proxy.\nThis function is internal--uses of this proxy should wrap this function\nwith a public function in order to make it externally callable.\n@param implementation Address of the new implementation.",
+            "id": 4859,
+            "implemented": true,
+            "isConstructor": false,
+            "isDeclaredConst": false,
+            "modifiers": [],
+            "name": "_setPendingUpgrade",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 4832,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 4831,
+                  "name": "implementation",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 4859,
+                  "src": "1172:22:30",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 4830,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "1172:7:30",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "1171:24:30"
+            },
+            "payable": false,
+            "returnParameters": {
+              "id": 4833,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "1205:0:30"
+            },
+            "scope": 4879,
+            "src": "1144:381:30",
+            "stateMutability": "nonpayable",
+            "superFunction": null,
+            "visibility": "internal"
+          },
+          {
+            "body": {
+              "id": 4877,
+              "nodeType": "Block",
+              "src": "1914:200:30",
+              "statements": [
+                {
+                  "condition": {
+                    "argumentTypes": null,
+                    "commonType": {
+                      "typeIdentifier": "t_bool",
+                      "typeString": "bool"
+                    },
+                    "id": 4866,
+                    "isConstant": false,
+                    "isLValue": false,
+                    "isPure": false,
+                    "lValueRequested": false,
+                    "leftExpression": {
+                      "argumentTypes": null,
+                      "id": 4862,
+                      "name": "pendingImplementationIsSet",
+                      "nodeType": "Identifier",
+                      "overloadedDeclarations": [],
+                      "referencedDeclaration": 4809,
+                      "src": "1928:26:30",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_bool",
+                        "typeString": "bool"
+                      }
+                    },
+                    "nodeType": "BinaryOperation",
+                    "operator": "&&",
+                    "rightExpression": {
+                      "argumentTypes": null,
+                      "commonType": {
+                        "typeIdentifier": "t_uint256",
+                        "typeString": "uint256"
+                      },
+                      "id": 4865,
+                      "isConstant": false,
+                      "isLValue": false,
+                      "isPure": false,
+                      "lValueRequested": false,
+                      "leftExpression": {
+                        "argumentTypes": null,
+                        "id": 4863,
+                        "name": "now",
+                        "nodeType": "Identifier",
+                        "overloadedDeclarations": [],
+                        "referencedDeclaration": 5404,
+                        "src": "1958:3:30",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_uint256",
+                          "typeString": "uint256"
+                        }
+                      },
+                      "nodeType": "BinaryOperation",
+                      "operator": ">",
+                      "rightExpression": {
+                        "argumentTypes": null,
+                        "id": 4864,
+                        "name": "pendingImplementationApplicationDate",
+                        "nodeType": "Identifier",
+                        "overloadedDeclarations": [],
+                        "referencedDeclaration": 4811,
+                        "src": "1964:36:30",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_uint256",
+                          "typeString": "uint256"
+                        }
+                      },
+                      "src": "1958:42:30",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_bool",
+                        "typeString": "bool"
+                      }
+                    },
+                    "src": "1928:72:30",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_bool",
+                      "typeString": "bool"
+                    }
+                  },
+                  "falseBody": null,
+                  "id": 4876,
+                  "nodeType": "IfStatement",
+                  "src": "1924:184:30",
+                  "trueBody": {
+                    "id": 4875,
+                    "nodeType": "Block",
+                    "src": "2002:106:30",
+                    "statements": [
+                      {
+                        "expression": {
+                          "argumentTypes": null,
+                          "arguments": [
+                            {
+                              "argumentTypes": null,
+                              "id": 4868,
+                              "name": "pendingImplementation",
+                              "nodeType": "Identifier",
+                              "overloadedDeclarations": [],
+                              "referencedDeclaration": 4807,
+                              "src": "2027:21:30",
+                              "typeDescriptions": {
+                                "typeIdentifier": "t_address",
+                                "typeString": "address"
+                              }
+                            }
+                          ],
+                          "expression": {
+                            "argumentTypes": [
+                              {
+                                "typeIdentifier": "t_address",
+                                "typeString": "address"
+                              }
+                            ],
+                            "id": 4867,
+                            "name": "_upgradeTo",
+                            "nodeType": "Identifier",
+                            "overloadedDeclarations": [],
+                            "referencedDeclaration": 5367,
+                            "src": "2016:10:30",
+                            "typeDescriptions": {
+                              "typeIdentifier": "t_function_internal_nonpayable$_t_address_$returns$__$",
+                              "typeString": "function (address)"
+                            }
+                          },
+                          "id": 4869,
+                          "isConstant": false,
+                          "isLValue": false,
+                          "isPure": false,
+                          "kind": "functionCall",
+                          "lValueRequested": false,
+                          "names": [],
+                          "nodeType": "FunctionCall",
+                          "src": "2016:33:30",
+                          "typeDescriptions": {
+                            "typeIdentifier": "t_tuple$__$",
+                            "typeString": "tuple()"
+                          }
+                        },
+                        "id": 4870,
+                        "nodeType": "ExpressionStatement",
+                        "src": "2016:33:30"
+                      },
+                      {
+                        "expression": {
+                          "argumentTypes": null,
+                          "id": 4873,
+                          "isConstant": false,
+                          "isLValue": false,
+                          "isPure": false,
+                          "lValueRequested": false,
+                          "leftHandSide": {
+                            "argumentTypes": null,
+                            "id": 4871,
+                            "name": "pendingImplementationIsSet",
+                            "nodeType": "Identifier",
+                            "overloadedDeclarations": [],
+                            "referencedDeclaration": 4809,
+                            "src": "2063:26:30",
+                            "typeDescriptions": {
+                              "typeIdentifier": "t_bool",
+                              "typeString": "bool"
+                            }
+                          },
+                          "nodeType": "Assignment",
+                          "operator": "=",
+                          "rightHandSide": {
+                            "argumentTypes": null,
+                            "hexValue": "66616c7365",
+                            "id": 4872,
+                            "isConstant": false,
+                            "isLValue": false,
+                            "isPure": true,
+                            "kind": "bool",
+                            "lValueRequested": false,
+                            "nodeType": "Literal",
+                            "src": "2092:5:30",
+                            "subdenomination": null,
+                            "typeDescriptions": {
+                              "typeIdentifier": "t_bool",
+                              "typeString": "bool"
+                            },
+                            "value": "false"
+                          },
+                          "src": "2063:34:30",
+                          "typeDescriptions": {
+                            "typeIdentifier": "t_bool",
+                            "typeString": "bool"
+                          }
+                        },
+                        "id": 4874,
+                        "nodeType": "ExpressionStatement",
+                        "src": "2063:34:30"
+                      }
+                    ]
+                  }
+                }
+              ]
+            },
+            "documentation": "@notice Overrides the _willFallback() function of Proxy, which enables some code to\nbe executed prior to the fallback function. In this case, the purpose of this code\nis to automatically switch the implementation to the pending implementation if the \nwait period of UPGRADE_DELAY (28 days) has been satisfied.",
+            "id": 4878,
+            "implemented": true,
+            "isConstructor": false,
+            "isDeclaredConst": false,
+            "modifiers": [],
+            "name": "_willFallback",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 4860,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "1902:2:30"
+            },
+            "payable": false,
+            "returnParameters": {
+              "id": 4861,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "1914:0:30"
+            },
+            "scope": 4879,
+            "src": "1880:234:30",
+            "stateMutability": "nonpayable",
+            "superFunction": 5298,
+            "visibility": "internal"
+          }
+        ],
+        "scope": 4880,
+        "src": "306:1810:30"
+      }
+    ],
+    "src": "0:2117:30"
+  },
+  "compiler": {
+    "name": "solc",
+    "version": "0.4.24+commit.e67f0147.Emscripten.clang"
+  },
+  "networks": {},
+  "schemaVersion": "2.0.1",
+  "updatedAt": "2018-08-13T13:49:18.901Z"
+}

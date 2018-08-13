@@ -1,0 +1,3837 @@
+{
+  "contractName": "MutableCarbonDollarStorage",
+  "abi": [
+    {
+      "constant": false,
+      "inputs": [],
+      "name": "renounceOwnership",
+      "outputs": [],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "owner",
+      "outputs": [
+        {
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "stablecoinFees",
+      "outputs": [
+        {
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "stablecoinWhitelist",
+      "outputs": [
+        {
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "_newOwner",
+          "type": "address"
+        }
+      ],
+      "name": "transferOwnership",
+      "outputs": [],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "name": "f",
+          "type": "address"
+        },
+        {
+          "name": "w",
+          "type": "address"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "constructor"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "name": "oldSheet",
+          "type": "address"
+        },
+        {
+          "indexed": true,
+          "name": "newSheet",
+          "type": "address"
+        }
+      ],
+      "name": "FeeSheetChanged",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "name": "oldWhitelist",
+          "type": "address"
+        },
+        {
+          "indexed": true,
+          "name": "newWhitelist",
+          "type": "address"
+        }
+      ],
+      "name": "StablecoinWhitelistChanged",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "name": "previousOwner",
+          "type": "address"
+        }
+      ],
+      "name": "OwnershipRenounced",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "name": "previousOwner",
+          "type": "address"
+        },
+        {
+          "indexed": true,
+          "name": "newOwner",
+          "type": "address"
+        }
+      ],
+      "name": "OwnershipTransferred",
+      "type": "event"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "_whitelist",
+          "type": "address"
+        }
+      ],
+      "name": "setStablecoinWhitelist",
+      "outputs": [],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "_sheet",
+          "type": "address"
+        }
+      ],
+      "name": "setFeeSheet",
+      "outputs": [],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function"
+    }
+  ],
+  "bytecode": "0x608060405234801561001057600080fd5b5060405160408061077083398101604052805160209091015160008054600160a060020a0319908116331790915560018054600160a060020a03948516908316179055600280549390921692169190911790556106fe806100726000396000f3006080604052600436106100825763ffffffff7c010000000000000000000000000000000000000000000000000000000060003504166360814fe88114610087578063715018a6146100b75780638da5cb5b146100cc578063d1a15eba1461010a578063d965156614610138578063e14852e31461014d578063f2fde38b14610162575b600080fd5b34801561009357600080fd5b506100b573ffffffffffffffffffffffffffffffffffffffff60043516610190565b005b3480156100c357600080fd5b506100b56101c0565b3480156100d857600080fd5b506100e1610251565b6040805173ffffffffffffffffffffffffffffffffffffffff9092168252519081900360200190f35b34801561011657600080fd5b506100b573ffffffffffffffffffffffffffffffffffffffff6004351661026d565b34801561014457600080fd5b506100e161029a565b34801561015957600080fd5b506100e16102b6565b34801561016e57600080fd5b506100b573ffffffffffffffffffffffffffffffffffffffff600435166102d2565b60005473ffffffffffffffffffffffffffffffffffffffff1633146101b457600080fd5b6101bd816102ff565b50565b60005473ffffffffffffffffffffffffffffffffffffffff1633146101e457600080fd5b6000805460405173ffffffffffffffffffffffffffffffffffffffff909116917ff8df31144d9c2f0f6b59d69b8b98abd5459d07f2742c4df920b25aae33c6482091a2600080547fffffffffffffffffffffffff0000000000000000000000000000000000000000169055565b60005473ffffffffffffffffffffffffffffffffffffffff1681565b60005473ffffffffffffffffffffffffffffffffffffffff16331461029157600080fd5b6101bd8161047a565b60015473ffffffffffffffffffffffffffffffffffffffff1681565b60025473ffffffffffffffffffffffffffffffffffffffff1681565b60005473ffffffffffffffffffffffffffffffffffffffff1633146102f657600080fd5b6101bd8161061b565b60015460009073ffffffffffffffffffffffffffffffffffffffff8381169116141561038c57604080517f08c379a000000000000000000000000000000000000000000000000000000000815260206004820152601760248201527f4d7573742062652061206e657720666565207368656574000000000000000000604482015290519081900360640190fd5b610395826106ca565b151561040257604080517f08c379a000000000000000000000000000000000000000000000000000000000815260206004820152601a60248201527f4d75737420626520616e2061637475616c20636f6e7472616374000000000000604482015290519081900360640190fd5b506001805473ffffffffffffffffffffffffffffffffffffffff8381167fffffffffffffffffffffffff0000000000000000000000000000000000000000831681179093556040519116919082907ffa50850a9a205a6eab44ae568df104b00a5fd26ba0ded7dd81d4879c6a27d29b90600090a35050565b60025460009073ffffffffffffffffffffffffffffffffffffffff8381169116141561052d57604080517f08c379a000000000000000000000000000000000000000000000000000000000815260206004820152602260248201527f4d7573742062652061206e657720737461626c65636f696e2077686974656c6960448201527f7374000000000000000000000000000000000000000000000000000000000000606482015290519081900360840190fd5b610536826106ca565b15156105a357604080517f08c379a000000000000000000000000000000000000000000000000000000000815260206004820152601a60248201527f4d75737420626520616e2061637475616c20636f6e7472616374000000000000604482015290519081900360640190fd5b506002805473ffffffffffffffffffffffffffffffffffffffff8381167fffffffffffffffffffffffff0000000000000000000000000000000000000000831681179093556040519116919082907f9d4cc8ae350dd03b669fc5b6d399ea6b56438abd19c07b3e71abd09552bafe3490600090a35050565b73ffffffffffffffffffffffffffffffffffffffff8116151561063d57600080fd5b6000805460405173ffffffffffffffffffffffffffffffffffffffff808516939216917f8be0079c531659141344cd1fd0a4f28419497f9722a3daafe3b4186f6b6457e091a3600080547fffffffffffffffffffffffff00000000000000000000000000000000000000001673ffffffffffffffffffffffffffffffffffffffff92909216919091179055565b6000903b11905600a165627a7a7230582098b93f8adae51aab71e91aca3f39cdd2e21c810eb356813063cad06d6e8c9f400029",
+  "deployedBytecode": "0x6080604052600436106100825763ffffffff7c010000000000000000000000000000000000000000000000000000000060003504166360814fe88114610087578063715018a6146100b75780638da5cb5b146100cc578063d1a15eba1461010a578063d965156614610138578063e14852e31461014d578063f2fde38b14610162575b600080fd5b34801561009357600080fd5b506100b573ffffffffffffffffffffffffffffffffffffffff60043516610190565b005b3480156100c357600080fd5b506100b56101c0565b3480156100d857600080fd5b506100e1610251565b6040805173ffffffffffffffffffffffffffffffffffffffff9092168252519081900360200190f35b34801561011657600080fd5b506100b573ffffffffffffffffffffffffffffffffffffffff6004351661026d565b34801561014457600080fd5b506100e161029a565b34801561015957600080fd5b506100e16102b6565b34801561016e57600080fd5b506100b573ffffffffffffffffffffffffffffffffffffffff600435166102d2565b60005473ffffffffffffffffffffffffffffffffffffffff1633146101b457600080fd5b6101bd816102ff565b50565b60005473ffffffffffffffffffffffffffffffffffffffff1633146101e457600080fd5b6000805460405173ffffffffffffffffffffffffffffffffffffffff909116917ff8df31144d9c2f0f6b59d69b8b98abd5459d07f2742c4df920b25aae33c6482091a2600080547fffffffffffffffffffffffff0000000000000000000000000000000000000000169055565b60005473ffffffffffffffffffffffffffffffffffffffff1681565b60005473ffffffffffffffffffffffffffffffffffffffff16331461029157600080fd5b6101bd8161047a565b60015473ffffffffffffffffffffffffffffffffffffffff1681565b60025473ffffffffffffffffffffffffffffffffffffffff1681565b60005473ffffffffffffffffffffffffffffffffffffffff1633146102f657600080fd5b6101bd8161061b565b60015460009073ffffffffffffffffffffffffffffffffffffffff8381169116141561038c57604080517f08c379a000000000000000000000000000000000000000000000000000000000815260206004820152601760248201527f4d7573742062652061206e657720666565207368656574000000000000000000604482015290519081900360640190fd5b610395826106ca565b151561040257604080517f08c379a000000000000000000000000000000000000000000000000000000000815260206004820152601a60248201527f4d75737420626520616e2061637475616c20636f6e7472616374000000000000604482015290519081900360640190fd5b506001805473ffffffffffffffffffffffffffffffffffffffff8381167fffffffffffffffffffffffff0000000000000000000000000000000000000000831681179093556040519116919082907ffa50850a9a205a6eab44ae568df104b00a5fd26ba0ded7dd81d4879c6a27d29b90600090a35050565b60025460009073ffffffffffffffffffffffffffffffffffffffff8381169116141561052d57604080517f08c379a000000000000000000000000000000000000000000000000000000000815260206004820152602260248201527f4d7573742062652061206e657720737461626c65636f696e2077686974656c6960448201527f7374000000000000000000000000000000000000000000000000000000000000606482015290519081900360840190fd5b610536826106ca565b15156105a357604080517f08c379a000000000000000000000000000000000000000000000000000000000815260206004820152601a60248201527f4d75737420626520616e2061637475616c20636f6e7472616374000000000000604482015290519081900360640190fd5b506002805473ffffffffffffffffffffffffffffffffffffffff8381167fffffffffffffffffffffffff0000000000000000000000000000000000000000831681179093556040519116919082907f9d4cc8ae350dd03b669fc5b6d399ea6b56438abd19c07b3e71abd09552bafe3490600090a35050565b73ffffffffffffffffffffffffffffffffffffffff8116151561063d57600080fd5b6000805460405173ffffffffffffffffffffffffffffffffffffffff808516939216917f8be0079c531659141344cd1fd0a4f28419497f9722a3daafe3b4186f6b6457e091a3600080547fffffffffffffffffffffffff00000000000000000000000000000000000000001673ffffffffffffffffffffffffffffffffffffffff92909216919091179055565b6000903b11905600a165627a7a7230582098b93f8adae51aab71e91aca3f39cdd2e21c810eb356813063cad06d6e8c9f400029",
+  "sourceMap": "329:1746:17:-;;;714:70;8:9:-1;5:2;;;30:1;27;20:12;5:2;714:70:17;;;;;;;;;;;;;;;;;;;567:5:32;:18;;-1:-1:-1;;;;;;567:18:32;;;575:10;567:18;;;;;548:35:15;;-1:-1:-1;;;;;548:35:15;;;;;;;;;593:19;:52;;;;;;;;;;;;;;329:1746:17;;;;;;",
+  "deployedSourceMap": "329:1746:17:-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;1620:91;;8:9:-1;5:2;;;30:1;27;20:12;5:2;-1:-1;1620:91:17;;;;;;;;;1001:111:32;;8:9:-1;5:2;;;30:1;27;20:12;5:2;1001:111:32;;;;238:20;;8:9:-1;5:2;;;30:1;27;20:12;5:2;238:20:32;;;;;;;;;;;;;;;;;;;;;;;931:121:17;;8:9:-1;5:2;;;30:1;27;20:12;5:2;-1:-1;931:121:17;;;;;;;289:30:15;;8:9:-1;5:2;;;30:1;27;20:12;5:2;289:30:15;;;;325:46;;8:9:-1;5:2;;;30:1;27;20:12;5:2;325:46:15;;;;1274:103:32;;8:9:-1;5:2;;;30:1;27;20:12;5:2;-1:-1;1274:103:32;;;;;;;1620:91:17;719:5:32;;;;705:10;:19;697:28;;;;;;1684:20:17;1697:6;1684:12;:20::i;:::-;1620:91;:::o;1001:111:32:-;719:5;;;;705:10;:19;697:28;;;;;;1077:5;;;1058:25;;1077:5;;;;;1058:25;;;1105:1;1089:18;;;;;;1001:111::o;238:20::-;;;;;;:::o;931:121:17:-;719:5:32;;;;705:10;:19;697:28;;;;;;1010:35:17;1034:10;1010:23;:35::i;289:30:15:-;;;;;;:::o;325:46::-;;;;;;:::o;1274:103:32:-;719:5;;;;705:10;:19;697:28;;;;;;1343:29;1362:9;1343:18;:29::i;1717:356:17:-;1800:14;;1933:16;;1800:14;1782:33;;;1800:14;;1782:33;;1774:69;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;1861:31;1885:6;1861:23;:31::i;:::-;1853:70;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;-1:-1:-1;1960:14:17;;;;1985:33;;;;;;;;;;;2033;;1960:14;;;1985:33;1960:14;;2033:33;;1960:14;;2033:33;1717:356;;:::o;1058:443::-;1160:19;;1313:20;;1160:19;1138:42;;;1160:19;;1138:42;;1130:89;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;1237:35;1261:10;1237:23;:35::i;:::-;1229:74;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;-1:-1:-1;1344:19:17;;;;1374:53;;;;;;;;;;;1442:52;;1344:19;;;1374:53;1344:19;;1442:52;;1344:19;;1442:52;1058:443;;:::o;1512:171:32:-;1582:23;;;;;1574:32;;;;;;1638:5;;;1617:38;;;;;;;1638:5;;;1617:38;;;1661:5;:17;;;;;;;;;;;;;;;1512:171::o;437:576:29:-;494:4;969:17;;1000:8;;437:576::o",
+  "source": "pragma solidity ^0.4.24;\n\nimport \"./CarbonDollarStorage.sol\";\nimport \"openzeppelin-solidity/contracts/AddressUtils.sol\";\nimport \"openzeppelin-solidity/contracts/ownership/Ownable.sol\";\n\n/**\n* @title MutableCarbonDollarStorage\n* @notice Adds mutability to CarbonDollarStorage (FeeSheet and StablecoinWhitelist can be changed.)\n*/\ncontract MutableCarbonDollarStorage is Ownable, CarbonDollarStorage {\n\t/**\n        Events\n     */\n    event FeeSheetChanged(address indexed oldSheet, address indexed newSheet);\n    event StablecoinWhitelistChanged(address indexed oldWhitelist, address indexed newWhitelist);\n\n\t/**\n    * @dev a PermissionedTokenStorage can set its storages only once, on construction\n    *\n    **/\n    constructor (address f, address w) CarbonDollarStorage(f, w) public {}\n\n    /**\n     * @notice Set the stablecoin whitelist contract.\n     * @param _whitelist Address of the stablecoin whitelist contract.\n     */\n    function setStablecoinWhitelist(address _whitelist) public onlyOwner {\n        _setStablecoinWhitelist(_whitelist);\n    }\n\n    function _setStablecoinWhitelist(address _whitelist) internal {\n        require(_whitelist != address(stablecoinWhitelist), \"Must be a new stablecoin whitelist\");\n        require(AddressUtils.isContract(_whitelist), \"Must be an actual contract\");\n        address oldWhitelist = address(stablecoinWhitelist);\n        stablecoinWhitelist = StablecoinWhitelist(_whitelist);\n        emit StablecoinWhitelistChanged(oldWhitelist, _whitelist);\n    }\n\n\t/**\n     * @notice Set the fee sheet for this CarbonUSD.\n     * @param _sheet Address of the fee sheet.\n     */\n    function setFeeSheet(address _sheet) public onlyOwner {\n        _setFeeSheet(_sheet);\n    }\n\n    function _setFeeSheet(address _sheet) internal {\n        require(_sheet != address(stablecoinFees), \"Must be a new fee sheet\");\n        require(AddressUtils.isContract(_sheet), \"Must be an actual contract\");\n        address oldSheet = address(stablecoinFees);\n        stablecoinFees = FeeSheet(_sheet);\n        emit FeeSheetChanged(oldSheet, _sheet);\n    }\n}",
+  "sourcePath": "/Users/tanishqaggarwal/Documents/carbon/fiat_gateway/contracts/tokens/carbonToken/dataStorage/MutableCarbonDollarStorage.sol",
+  "ast": {
+    "absolutePath": "/Users/tanishqaggarwal/Documents/carbon/fiat_gateway/contracts/tokens/carbonToken/dataStorage/MutableCarbonDollarStorage.sol",
+    "exportedSymbols": {
+      "MutableCarbonDollarStorage": [
+        2987
+      ]
+    },
+    "id": 2988,
+    "nodeType": "SourceUnit",
+    "nodes": [
+      {
+        "id": 2851,
+        "literals": [
+          "solidity",
+          "^",
+          "0.4",
+          ".24"
+        ],
+        "nodeType": "PragmaDirective",
+        "src": "0:24:17"
+      },
+      {
+        "absolutePath": "/Users/tanishqaggarwal/Documents/carbon/fiat_gateway/contracts/tokens/carbonToken/dataStorage/CarbonDollarStorage.sol",
+        "file": "./CarbonDollarStorage.sol",
+        "id": 2852,
+        "nodeType": "ImportDirective",
+        "scope": 2988,
+        "sourceUnit": 2674,
+        "src": "26:35:17",
+        "symbolAliases": [],
+        "unitAlias": ""
+      },
+      {
+        "absolutePath": "openzeppelin-solidity/contracts/AddressUtils.sol",
+        "file": "openzeppelin-solidity/contracts/AddressUtils.sol",
+        "id": 2853,
+        "nodeType": "ImportDirective",
+        "scope": 2988,
+        "sourceUnit": 4572,
+        "src": "62:58:17",
+        "symbolAliases": [],
+        "unitAlias": ""
+      },
+      {
+        "absolutePath": "openzeppelin-solidity/contracts/ownership/Ownable.sol",
+        "file": "openzeppelin-solidity/contracts/ownership/Ownable.sol",
+        "id": 2854,
+        "nodeType": "ImportDirective",
+        "scope": 2988,
+        "sourceUnit": 4812,
+        "src": "121:63:17",
+        "symbolAliases": [],
+        "unitAlias": ""
+      },
+      {
+        "baseContracts": [
+          {
+            "arguments": null,
+            "baseName": {
+              "contractScope": null,
+              "id": 2855,
+              "name": "Ownable",
+              "nodeType": "UserDefinedTypeName",
+              "referencedDeclaration": 4811,
+              "src": "368:7:17",
+              "typeDescriptions": {
+                "typeIdentifier": "t_contract$_Ownable_$4811",
+                "typeString": "contract Ownable"
+              }
+            },
+            "id": 2856,
+            "nodeType": "InheritanceSpecifier",
+            "src": "368:7:17"
+          },
+          {
+            "arguments": null,
+            "baseName": {
+              "contractScope": null,
+              "id": 2857,
+              "name": "CarbonDollarStorage",
+              "nodeType": "UserDefinedTypeName",
+              "referencedDeclaration": 2673,
+              "src": "377:19:17",
+              "typeDescriptions": {
+                "typeIdentifier": "t_contract$_CarbonDollarStorage_$2673",
+                "typeString": "contract CarbonDollarStorage"
+              }
+            },
+            "id": 2858,
+            "nodeType": "InheritanceSpecifier",
+            "src": "377:19:17"
+          }
+        ],
+        "contractDependencies": [
+          2673,
+          4811
+        ],
+        "contractKind": "contract",
+        "documentation": "@title MutableCarbonDollarStorage\n@notice Adds mutability to CarbonDollarStorage (FeeSheet and StablecoinWhitelist can be changed.)",
+        "fullyImplemented": true,
+        "id": 2987,
+        "linearizedBaseContracts": [
+          2987,
+          2673,
+          4811
+        ],
+        "name": "MutableCarbonDollarStorage",
+        "nodeType": "ContractDefinition",
+        "nodes": [
+          {
+            "anonymous": false,
+            "documentation": "Events",
+            "id": 2864,
+            "name": "FeeSheetChanged",
+            "nodeType": "EventDefinition",
+            "parameters": {
+              "id": 2863,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 2860,
+                  "indexed": true,
+                  "name": "oldSheet",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 2864,
+                  "src": "453:24:17",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 2859,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "453:7:17",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 2862,
+                  "indexed": true,
+                  "name": "newSheet",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 2864,
+                  "src": "479:24:17",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 2861,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "479:7:17",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "452:52:17"
+            },
+            "src": "431:74:17"
+          },
+          {
+            "anonymous": false,
+            "documentation": null,
+            "id": 2870,
+            "name": "StablecoinWhitelistChanged",
+            "nodeType": "EventDefinition",
+            "parameters": {
+              "id": 2869,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 2866,
+                  "indexed": true,
+                  "name": "oldWhitelist",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 2870,
+                  "src": "543:28:17",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 2865,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "543:7:17",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 2868,
+                  "indexed": true,
+                  "name": "newWhitelist",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 2870,
+                  "src": "573:28:17",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 2867,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "573:7:17",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "542:60:17"
+            },
+            "src": "510:93:17"
+          },
+          {
+            "body": {
+              "id": 2881,
+              "nodeType": "Block",
+              "src": "782:2:17",
+              "statements": []
+            },
+            "documentation": "@dev a PermissionedTokenStorage can set its storages only once, on construction\n    *",
+            "id": 2882,
+            "implemented": true,
+            "isConstructor": true,
+            "isDeclaredConst": false,
+            "modifiers": [
+              {
+                "arguments": [
+                  {
+                    "argumentTypes": null,
+                    "id": 2877,
+                    "name": "f",
+                    "nodeType": "Identifier",
+                    "overloadedDeclarations": [],
+                    "referencedDeclaration": 2872,
+                    "src": "769:1:17",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  {
+                    "argumentTypes": null,
+                    "id": 2878,
+                    "name": "w",
+                    "nodeType": "Identifier",
+                    "overloadedDeclarations": [],
+                    "referencedDeclaration": 2874,
+                    "src": "772:1:17",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  }
+                ],
+                "id": 2879,
+                "modifierName": {
+                  "argumentTypes": null,
+                  "id": 2876,
+                  "name": "CarbonDollarStorage",
+                  "nodeType": "Identifier",
+                  "overloadedDeclarations": [],
+                  "referencedDeclaration": 2673,
+                  "src": "749:19:17",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_type$_t_contract$_CarbonDollarStorage_$2673_$",
+                    "typeString": "type(contract CarbonDollarStorage)"
+                  }
+                },
+                "nodeType": "ModifierInvocation",
+                "src": "749:25:17"
+              }
+            ],
+            "name": "",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 2875,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 2872,
+                  "name": "f",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 2882,
+                  "src": "727:9:17",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 2871,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "727:7:17",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 2874,
+                  "name": "w",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 2882,
+                  "src": "738:9:17",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 2873,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "738:7:17",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "726:22:17"
+            },
+            "payable": false,
+            "returnParameters": {
+              "id": 2880,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "782:0:17"
+            },
+            "scope": 2987,
+            "src": "714:70:17",
+            "stateMutability": "nonpayable",
+            "superFunction": null,
+            "visibility": "public"
+          },
+          {
+            "body": {
+              "id": 2893,
+              "nodeType": "Block",
+              "src": "1000:52:17",
+              "statements": [
+                {
+                  "expression": {
+                    "argumentTypes": null,
+                    "arguments": [
+                      {
+                        "argumentTypes": null,
+                        "id": 2890,
+                        "name": "_whitelist",
+                        "nodeType": "Identifier",
+                        "overloadedDeclarations": [],
+                        "referencedDeclaration": 2884,
+                        "src": "1034:10:17",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_address",
+                          "typeString": "address"
+                        }
+                      }
+                    ],
+                    "expression": {
+                      "argumentTypes": [
+                        {
+                          "typeIdentifier": "t_address",
+                          "typeString": "address"
+                        }
+                      ],
+                      "id": 2889,
+                      "name": "_setStablecoinWhitelist",
+                      "nodeType": "Identifier",
+                      "overloadedDeclarations": [],
+                      "referencedDeclaration": 2934,
+                      "src": "1010:23:17",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_function_internal_nonpayable$_t_address_$returns$__$",
+                        "typeString": "function (address)"
+                      }
+                    },
+                    "id": 2891,
+                    "isConstant": false,
+                    "isLValue": false,
+                    "isPure": false,
+                    "kind": "functionCall",
+                    "lValueRequested": false,
+                    "names": [],
+                    "nodeType": "FunctionCall",
+                    "src": "1010:35:17",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_tuple$__$",
+                      "typeString": "tuple()"
+                    }
+                  },
+                  "id": 2892,
+                  "nodeType": "ExpressionStatement",
+                  "src": "1010:35:17"
+                }
+              ]
+            },
+            "documentation": "@notice Set the stablecoin whitelist contract.\n@param _whitelist Address of the stablecoin whitelist contract.",
+            "id": 2894,
+            "implemented": true,
+            "isConstructor": false,
+            "isDeclaredConst": false,
+            "modifiers": [
+              {
+                "arguments": null,
+                "id": 2887,
+                "modifierName": {
+                  "argumentTypes": null,
+                  "id": 2886,
+                  "name": "onlyOwner",
+                  "nodeType": "Identifier",
+                  "overloadedDeclarations": [],
+                  "referencedDeclaration": 4759,
+                  "src": "990:9:17",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_modifier$__$",
+                    "typeString": "modifier ()"
+                  }
+                },
+                "nodeType": "ModifierInvocation",
+                "src": "990:9:17"
+              }
+            ],
+            "name": "setStablecoinWhitelist",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 2885,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 2884,
+                  "name": "_whitelist",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 2894,
+                  "src": "963:18:17",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 2883,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "963:7:17",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "962:20:17"
+            },
+            "payable": false,
+            "returnParameters": {
+              "id": 2888,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "1000:0:17"
+            },
+            "scope": 2987,
+            "src": "931:121:17",
+            "stateMutability": "nonpayable",
+            "superFunction": null,
+            "visibility": "public"
+          },
+          {
+            "body": {
+              "id": 2933,
+              "nodeType": "Block",
+              "src": "1120:381:17",
+              "statements": [
+                {
+                  "expression": {
+                    "argumentTypes": null,
+                    "arguments": [
+                      {
+                        "argumentTypes": null,
+                        "commonType": {
+                          "typeIdentifier": "t_address",
+                          "typeString": "address"
+                        },
+                        "id": 2904,
+                        "isConstant": false,
+                        "isLValue": false,
+                        "isPure": false,
+                        "lValueRequested": false,
+                        "leftExpression": {
+                          "argumentTypes": null,
+                          "id": 2900,
+                          "name": "_whitelist",
+                          "nodeType": "Identifier",
+                          "overloadedDeclarations": [],
+                          "referencedDeclaration": 2896,
+                          "src": "1138:10:17",
+                          "typeDescriptions": {
+                            "typeIdentifier": "t_address",
+                            "typeString": "address"
+                          }
+                        },
+                        "nodeType": "BinaryOperation",
+                        "operator": "!=",
+                        "rightExpression": {
+                          "argumentTypes": null,
+                          "arguments": [
+                            {
+                              "argumentTypes": null,
+                              "id": 2902,
+                              "name": "stablecoinWhitelist",
+                              "nodeType": "Identifier",
+                              "overloadedDeclarations": [],
+                              "referencedDeclaration": 2652,
+                              "src": "1160:19:17",
+                              "typeDescriptions": {
+                                "typeIdentifier": "t_contract$_StablecoinWhitelist_$3042",
+                                "typeString": "contract StablecoinWhitelist"
+                              }
+                            }
+                          ],
+                          "expression": {
+                            "argumentTypes": [
+                              {
+                                "typeIdentifier": "t_contract$_StablecoinWhitelist_$3042",
+                                "typeString": "contract StablecoinWhitelist"
+                              }
+                            ],
+                            "id": 2901,
+                            "isConstant": false,
+                            "isLValue": false,
+                            "isPure": true,
+                            "lValueRequested": false,
+                            "nodeType": "ElementaryTypeNameExpression",
+                            "src": "1152:7:17",
+                            "typeDescriptions": {
+                              "typeIdentifier": "t_type$_t_address_$",
+                              "typeString": "type(address)"
+                            },
+                            "typeName": "address"
+                          },
+                          "id": 2903,
+                          "isConstant": false,
+                          "isLValue": false,
+                          "isPure": false,
+                          "kind": "typeConversion",
+                          "lValueRequested": false,
+                          "names": [],
+                          "nodeType": "FunctionCall",
+                          "src": "1152:28:17",
+                          "typeDescriptions": {
+                            "typeIdentifier": "t_address",
+                            "typeString": "address"
+                          }
+                        },
+                        "src": "1138:42:17",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_bool",
+                          "typeString": "bool"
+                        }
+                      },
+                      {
+                        "argumentTypes": null,
+                        "hexValue": "4d7573742062652061206e657720737461626c65636f696e2077686974656c697374",
+                        "id": 2905,
+                        "isConstant": false,
+                        "isLValue": false,
+                        "isPure": true,
+                        "kind": "string",
+                        "lValueRequested": false,
+                        "nodeType": "Literal",
+                        "src": "1182:36:17",
+                        "subdenomination": null,
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_stringliteral_baf5ab5661ae0823c1ca423b89a1cda9a97780b4107d27404dc552a83faef7e8",
+                          "typeString": "literal_string \"Must be a new stablecoin whitelist\""
+                        },
+                        "value": "Must be a new stablecoin whitelist"
+                      }
+                    ],
+                    "expression": {
+                      "argumentTypes": [
+                        {
+                          "typeIdentifier": "t_bool",
+                          "typeString": "bool"
+                        },
+                        {
+                          "typeIdentifier": "t_stringliteral_baf5ab5661ae0823c1ca423b89a1cda9a97780b4107d27404dc552a83faef7e8",
+                          "typeString": "literal_string \"Must be a new stablecoin whitelist\""
+                        }
+                      ],
+                      "id": 2899,
+                      "name": "require",
+                      "nodeType": "Identifier",
+                      "overloadedDeclarations": [
+                        5018,
+                        5019
+                      ],
+                      "referencedDeclaration": 5019,
+                      "src": "1130:7:17",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_function_require_pure$_t_bool_$_t_string_memory_ptr_$returns$__$",
+                        "typeString": "function (bool,string memory) pure"
+                      }
+                    },
+                    "id": 2906,
+                    "isConstant": false,
+                    "isLValue": false,
+                    "isPure": false,
+                    "kind": "functionCall",
+                    "lValueRequested": false,
+                    "names": [],
+                    "nodeType": "FunctionCall",
+                    "src": "1130:89:17",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_tuple$__$",
+                      "typeString": "tuple()"
+                    }
+                  },
+                  "id": 2907,
+                  "nodeType": "ExpressionStatement",
+                  "src": "1130:89:17"
+                },
+                {
+                  "expression": {
+                    "argumentTypes": null,
+                    "arguments": [
+                      {
+                        "argumentTypes": null,
+                        "arguments": [
+                          {
+                            "argumentTypes": null,
+                            "id": 2911,
+                            "name": "_whitelist",
+                            "nodeType": "Identifier",
+                            "overloadedDeclarations": [],
+                            "referencedDeclaration": 2896,
+                            "src": "1261:10:17",
+                            "typeDescriptions": {
+                              "typeIdentifier": "t_address",
+                              "typeString": "address"
+                            }
+                          }
+                        ],
+                        "expression": {
+                          "argumentTypes": [
+                            {
+                              "typeIdentifier": "t_address",
+                              "typeString": "address"
+                            }
+                          ],
+                          "expression": {
+                            "argumentTypes": null,
+                            "id": 2909,
+                            "name": "AddressUtils",
+                            "nodeType": "Identifier",
+                            "overloadedDeclarations": [],
+                            "referencedDeclaration": 4571,
+                            "src": "1237:12:17",
+                            "typeDescriptions": {
+                              "typeIdentifier": "t_type$_t_contract$_AddressUtils_$4571_$",
+                              "typeString": "type(library AddressUtils)"
+                            }
+                          },
+                          "id": 2910,
+                          "isConstant": false,
+                          "isLValue": false,
+                          "isPure": false,
+                          "lValueRequested": false,
+                          "memberName": "isContract",
+                          "nodeType": "MemberAccess",
+                          "referencedDeclaration": 4570,
+                          "src": "1237:23:17",
+                          "typeDescriptions": {
+                            "typeIdentifier": "t_function_internal_view$_t_address_$returns$_t_bool_$",
+                            "typeString": "function (address) view returns (bool)"
+                          }
+                        },
+                        "id": 2912,
+                        "isConstant": false,
+                        "isLValue": false,
+                        "isPure": false,
+                        "kind": "functionCall",
+                        "lValueRequested": false,
+                        "names": [],
+                        "nodeType": "FunctionCall",
+                        "src": "1237:35:17",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_bool",
+                          "typeString": "bool"
+                        }
+                      },
+                      {
+                        "argumentTypes": null,
+                        "hexValue": "4d75737420626520616e2061637475616c20636f6e7472616374",
+                        "id": 2913,
+                        "isConstant": false,
+                        "isLValue": false,
+                        "isPure": true,
+                        "kind": "string",
+                        "lValueRequested": false,
+                        "nodeType": "Literal",
+                        "src": "1274:28:17",
+                        "subdenomination": null,
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_stringliteral_a100930d65ab68752c961b4d791d40ee75b12f6bc9cbc906cc69a8d51d2e79ec",
+                          "typeString": "literal_string \"Must be an actual contract\""
+                        },
+                        "value": "Must be an actual contract"
+                      }
+                    ],
+                    "expression": {
+                      "argumentTypes": [
+                        {
+                          "typeIdentifier": "t_bool",
+                          "typeString": "bool"
+                        },
+                        {
+                          "typeIdentifier": "t_stringliteral_a100930d65ab68752c961b4d791d40ee75b12f6bc9cbc906cc69a8d51d2e79ec",
+                          "typeString": "literal_string \"Must be an actual contract\""
+                        }
+                      ],
+                      "id": 2908,
+                      "name": "require",
+                      "nodeType": "Identifier",
+                      "overloadedDeclarations": [
+                        5018,
+                        5019
+                      ],
+                      "referencedDeclaration": 5019,
+                      "src": "1229:7:17",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_function_require_pure$_t_bool_$_t_string_memory_ptr_$returns$__$",
+                        "typeString": "function (bool,string memory) pure"
+                      }
+                    },
+                    "id": 2914,
+                    "isConstant": false,
+                    "isLValue": false,
+                    "isPure": false,
+                    "kind": "functionCall",
+                    "lValueRequested": false,
+                    "names": [],
+                    "nodeType": "FunctionCall",
+                    "src": "1229:74:17",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_tuple$__$",
+                      "typeString": "tuple()"
+                    }
+                  },
+                  "id": 2915,
+                  "nodeType": "ExpressionStatement",
+                  "src": "1229:74:17"
+                },
+                {
+                  "assignments": [
+                    2917
+                  ],
+                  "declarations": [
+                    {
+                      "constant": false,
+                      "id": 2917,
+                      "name": "oldWhitelist",
+                      "nodeType": "VariableDeclaration",
+                      "scope": 2934,
+                      "src": "1313:20:17",
+                      "stateVariable": false,
+                      "storageLocation": "default",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_address",
+                        "typeString": "address"
+                      },
+                      "typeName": {
+                        "id": 2916,
+                        "name": "address",
+                        "nodeType": "ElementaryTypeName",
+                        "src": "1313:7:17",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_address",
+                          "typeString": "address"
+                        }
+                      },
+                      "value": null,
+                      "visibility": "internal"
+                    }
+                  ],
+                  "id": 2921,
+                  "initialValue": {
+                    "argumentTypes": null,
+                    "arguments": [
+                      {
+                        "argumentTypes": null,
+                        "id": 2919,
+                        "name": "stablecoinWhitelist",
+                        "nodeType": "Identifier",
+                        "overloadedDeclarations": [],
+                        "referencedDeclaration": 2652,
+                        "src": "1344:19:17",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_contract$_StablecoinWhitelist_$3042",
+                          "typeString": "contract StablecoinWhitelist"
+                        }
+                      }
+                    ],
+                    "expression": {
+                      "argumentTypes": [
+                        {
+                          "typeIdentifier": "t_contract$_StablecoinWhitelist_$3042",
+                          "typeString": "contract StablecoinWhitelist"
+                        }
+                      ],
+                      "id": 2918,
+                      "isConstant": false,
+                      "isLValue": false,
+                      "isPure": true,
+                      "lValueRequested": false,
+                      "nodeType": "ElementaryTypeNameExpression",
+                      "src": "1336:7:17",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_type$_t_address_$",
+                        "typeString": "type(address)"
+                      },
+                      "typeName": "address"
+                    },
+                    "id": 2920,
+                    "isConstant": false,
+                    "isLValue": false,
+                    "isPure": false,
+                    "kind": "typeConversion",
+                    "lValueRequested": false,
+                    "names": [],
+                    "nodeType": "FunctionCall",
+                    "src": "1336:28:17",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "nodeType": "VariableDeclarationStatement",
+                  "src": "1313:51:17"
+                },
+                {
+                  "expression": {
+                    "argumentTypes": null,
+                    "id": 2926,
+                    "isConstant": false,
+                    "isLValue": false,
+                    "isPure": false,
+                    "lValueRequested": false,
+                    "leftHandSide": {
+                      "argumentTypes": null,
+                      "id": 2922,
+                      "name": "stablecoinWhitelist",
+                      "nodeType": "Identifier",
+                      "overloadedDeclarations": [],
+                      "referencedDeclaration": 2652,
+                      "src": "1374:19:17",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_contract$_StablecoinWhitelist_$3042",
+                        "typeString": "contract StablecoinWhitelist"
+                      }
+                    },
+                    "nodeType": "Assignment",
+                    "operator": "=",
+                    "rightHandSide": {
+                      "argumentTypes": null,
+                      "arguments": [
+                        {
+                          "argumentTypes": null,
+                          "id": 2924,
+                          "name": "_whitelist",
+                          "nodeType": "Identifier",
+                          "overloadedDeclarations": [],
+                          "referencedDeclaration": 2896,
+                          "src": "1416:10:17",
+                          "typeDescriptions": {
+                            "typeIdentifier": "t_address",
+                            "typeString": "address"
+                          }
+                        }
+                      ],
+                      "expression": {
+                        "argumentTypes": [
+                          {
+                            "typeIdentifier": "t_address",
+                            "typeString": "address"
+                          }
+                        ],
+                        "id": 2923,
+                        "name": "StablecoinWhitelist",
+                        "nodeType": "Identifier",
+                        "overloadedDeclarations": [],
+                        "referencedDeclaration": 3042,
+                        "src": "1396:19:17",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_type$_t_contract$_StablecoinWhitelist_$3042_$",
+                          "typeString": "type(contract StablecoinWhitelist)"
+                        }
+                      },
+                      "id": 2925,
+                      "isConstant": false,
+                      "isLValue": false,
+                      "isPure": false,
+                      "kind": "typeConversion",
+                      "lValueRequested": false,
+                      "names": [],
+                      "nodeType": "FunctionCall",
+                      "src": "1396:31:17",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_contract$_StablecoinWhitelist_$3042",
+                        "typeString": "contract StablecoinWhitelist"
+                      }
+                    },
+                    "src": "1374:53:17",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_contract$_StablecoinWhitelist_$3042",
+                      "typeString": "contract StablecoinWhitelist"
+                    }
+                  },
+                  "id": 2927,
+                  "nodeType": "ExpressionStatement",
+                  "src": "1374:53:17"
+                },
+                {
+                  "eventCall": {
+                    "argumentTypes": null,
+                    "arguments": [
+                      {
+                        "argumentTypes": null,
+                        "id": 2929,
+                        "name": "oldWhitelist",
+                        "nodeType": "Identifier",
+                        "overloadedDeclarations": [],
+                        "referencedDeclaration": 2917,
+                        "src": "1469:12:17",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_address",
+                          "typeString": "address"
+                        }
+                      },
+                      {
+                        "argumentTypes": null,
+                        "id": 2930,
+                        "name": "_whitelist",
+                        "nodeType": "Identifier",
+                        "overloadedDeclarations": [],
+                        "referencedDeclaration": 2896,
+                        "src": "1483:10:17",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_address",
+                          "typeString": "address"
+                        }
+                      }
+                    ],
+                    "expression": {
+                      "argumentTypes": [
+                        {
+                          "typeIdentifier": "t_address",
+                          "typeString": "address"
+                        },
+                        {
+                          "typeIdentifier": "t_address",
+                          "typeString": "address"
+                        }
+                      ],
+                      "id": 2928,
+                      "name": "StablecoinWhitelistChanged",
+                      "nodeType": "Identifier",
+                      "overloadedDeclarations": [],
+                      "referencedDeclaration": 2870,
+                      "src": "1442:26:17",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_function_event_nonpayable$_t_address_$_t_address_$returns$__$",
+                        "typeString": "function (address,address)"
+                      }
+                    },
+                    "id": 2931,
+                    "isConstant": false,
+                    "isLValue": false,
+                    "isPure": false,
+                    "kind": "functionCall",
+                    "lValueRequested": false,
+                    "names": [],
+                    "nodeType": "FunctionCall",
+                    "src": "1442:52:17",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_tuple$__$",
+                      "typeString": "tuple()"
+                    }
+                  },
+                  "id": 2932,
+                  "nodeType": "EmitStatement",
+                  "src": "1437:57:17"
+                }
+              ]
+            },
+            "documentation": null,
+            "id": 2934,
+            "implemented": true,
+            "isConstructor": false,
+            "isDeclaredConst": false,
+            "modifiers": [],
+            "name": "_setStablecoinWhitelist",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 2897,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 2896,
+                  "name": "_whitelist",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 2934,
+                  "src": "1091:18:17",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 2895,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "1091:7:17",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "1090:20:17"
+            },
+            "payable": false,
+            "returnParameters": {
+              "id": 2898,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "1120:0:17"
+            },
+            "scope": 2987,
+            "src": "1058:443:17",
+            "stateMutability": "nonpayable",
+            "superFunction": null,
+            "visibility": "internal"
+          },
+          {
+            "body": {
+              "id": 2945,
+              "nodeType": "Block",
+              "src": "1674:37:17",
+              "statements": [
+                {
+                  "expression": {
+                    "argumentTypes": null,
+                    "arguments": [
+                      {
+                        "argumentTypes": null,
+                        "id": 2942,
+                        "name": "_sheet",
+                        "nodeType": "Identifier",
+                        "overloadedDeclarations": [],
+                        "referencedDeclaration": 2936,
+                        "src": "1697:6:17",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_address",
+                          "typeString": "address"
+                        }
+                      }
+                    ],
+                    "expression": {
+                      "argumentTypes": [
+                        {
+                          "typeIdentifier": "t_address",
+                          "typeString": "address"
+                        }
+                      ],
+                      "id": 2941,
+                      "name": "_setFeeSheet",
+                      "nodeType": "Identifier",
+                      "overloadedDeclarations": [],
+                      "referencedDeclaration": 2986,
+                      "src": "1684:12:17",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_function_internal_nonpayable$_t_address_$returns$__$",
+                        "typeString": "function (address)"
+                      }
+                    },
+                    "id": 2943,
+                    "isConstant": false,
+                    "isLValue": false,
+                    "isPure": false,
+                    "kind": "functionCall",
+                    "lValueRequested": false,
+                    "names": [],
+                    "nodeType": "FunctionCall",
+                    "src": "1684:20:17",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_tuple$__$",
+                      "typeString": "tuple()"
+                    }
+                  },
+                  "id": 2944,
+                  "nodeType": "ExpressionStatement",
+                  "src": "1684:20:17"
+                }
+              ]
+            },
+            "documentation": "@notice Set the fee sheet for this CarbonUSD.\n@param _sheet Address of the fee sheet.",
+            "id": 2946,
+            "implemented": true,
+            "isConstructor": false,
+            "isDeclaredConst": false,
+            "modifiers": [
+              {
+                "arguments": null,
+                "id": 2939,
+                "modifierName": {
+                  "argumentTypes": null,
+                  "id": 2938,
+                  "name": "onlyOwner",
+                  "nodeType": "Identifier",
+                  "overloadedDeclarations": [],
+                  "referencedDeclaration": 4759,
+                  "src": "1664:9:17",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_modifier$__$",
+                    "typeString": "modifier ()"
+                  }
+                },
+                "nodeType": "ModifierInvocation",
+                "src": "1664:9:17"
+              }
+            ],
+            "name": "setFeeSheet",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 2937,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 2936,
+                  "name": "_sheet",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 2946,
+                  "src": "1641:14:17",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 2935,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "1641:7:17",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "1640:16:17"
+            },
+            "payable": false,
+            "returnParameters": {
+              "id": 2940,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "1674:0:17"
+            },
+            "scope": 2987,
+            "src": "1620:91:17",
+            "stateMutability": "nonpayable",
+            "superFunction": null,
+            "visibility": "public"
+          },
+          {
+            "body": {
+              "id": 2985,
+              "nodeType": "Block",
+              "src": "1764:309:17",
+              "statements": [
+                {
+                  "expression": {
+                    "argumentTypes": null,
+                    "arguments": [
+                      {
+                        "argumentTypes": null,
+                        "commonType": {
+                          "typeIdentifier": "t_address",
+                          "typeString": "address"
+                        },
+                        "id": 2956,
+                        "isConstant": false,
+                        "isLValue": false,
+                        "isPure": false,
+                        "lValueRequested": false,
+                        "leftExpression": {
+                          "argumentTypes": null,
+                          "id": 2952,
+                          "name": "_sheet",
+                          "nodeType": "Identifier",
+                          "overloadedDeclarations": [],
+                          "referencedDeclaration": 2948,
+                          "src": "1782:6:17",
+                          "typeDescriptions": {
+                            "typeIdentifier": "t_address",
+                            "typeString": "address"
+                          }
+                        },
+                        "nodeType": "BinaryOperation",
+                        "operator": "!=",
+                        "rightExpression": {
+                          "argumentTypes": null,
+                          "arguments": [
+                            {
+                              "argumentTypes": null,
+                              "id": 2954,
+                              "name": "stablecoinFees",
+                              "nodeType": "Identifier",
+                              "overloadedDeclarations": [],
+                              "referencedDeclaration": 2650,
+                              "src": "1800:14:17",
+                              "typeDescriptions": {
+                                "typeIdentifier": "t_contract$_FeeSheet_$2849",
+                                "typeString": "contract FeeSheet"
+                              }
+                            }
+                          ],
+                          "expression": {
+                            "argumentTypes": [
+                              {
+                                "typeIdentifier": "t_contract$_FeeSheet_$2849",
+                                "typeString": "contract FeeSheet"
+                              }
+                            ],
+                            "id": 2953,
+                            "isConstant": false,
+                            "isLValue": false,
+                            "isPure": true,
+                            "lValueRequested": false,
+                            "nodeType": "ElementaryTypeNameExpression",
+                            "src": "1792:7:17",
+                            "typeDescriptions": {
+                              "typeIdentifier": "t_type$_t_address_$",
+                              "typeString": "type(address)"
+                            },
+                            "typeName": "address"
+                          },
+                          "id": 2955,
+                          "isConstant": false,
+                          "isLValue": false,
+                          "isPure": false,
+                          "kind": "typeConversion",
+                          "lValueRequested": false,
+                          "names": [],
+                          "nodeType": "FunctionCall",
+                          "src": "1792:23:17",
+                          "typeDescriptions": {
+                            "typeIdentifier": "t_address",
+                            "typeString": "address"
+                          }
+                        },
+                        "src": "1782:33:17",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_bool",
+                          "typeString": "bool"
+                        }
+                      },
+                      {
+                        "argumentTypes": null,
+                        "hexValue": "4d7573742062652061206e657720666565207368656574",
+                        "id": 2957,
+                        "isConstant": false,
+                        "isLValue": false,
+                        "isPure": true,
+                        "kind": "string",
+                        "lValueRequested": false,
+                        "nodeType": "Literal",
+                        "src": "1817:25:17",
+                        "subdenomination": null,
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_stringliteral_f86d1b7922161793c33908de34e994b65e1234e66a2dcf82af50637bcabced55",
+                          "typeString": "literal_string \"Must be a new fee sheet\""
+                        },
+                        "value": "Must be a new fee sheet"
+                      }
+                    ],
+                    "expression": {
+                      "argumentTypes": [
+                        {
+                          "typeIdentifier": "t_bool",
+                          "typeString": "bool"
+                        },
+                        {
+                          "typeIdentifier": "t_stringliteral_f86d1b7922161793c33908de34e994b65e1234e66a2dcf82af50637bcabced55",
+                          "typeString": "literal_string \"Must be a new fee sheet\""
+                        }
+                      ],
+                      "id": 2951,
+                      "name": "require",
+                      "nodeType": "Identifier",
+                      "overloadedDeclarations": [
+                        5018,
+                        5019
+                      ],
+                      "referencedDeclaration": 5019,
+                      "src": "1774:7:17",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_function_require_pure$_t_bool_$_t_string_memory_ptr_$returns$__$",
+                        "typeString": "function (bool,string memory) pure"
+                      }
+                    },
+                    "id": 2958,
+                    "isConstant": false,
+                    "isLValue": false,
+                    "isPure": false,
+                    "kind": "functionCall",
+                    "lValueRequested": false,
+                    "names": [],
+                    "nodeType": "FunctionCall",
+                    "src": "1774:69:17",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_tuple$__$",
+                      "typeString": "tuple()"
+                    }
+                  },
+                  "id": 2959,
+                  "nodeType": "ExpressionStatement",
+                  "src": "1774:69:17"
+                },
+                {
+                  "expression": {
+                    "argumentTypes": null,
+                    "arguments": [
+                      {
+                        "argumentTypes": null,
+                        "arguments": [
+                          {
+                            "argumentTypes": null,
+                            "id": 2963,
+                            "name": "_sheet",
+                            "nodeType": "Identifier",
+                            "overloadedDeclarations": [],
+                            "referencedDeclaration": 2948,
+                            "src": "1885:6:17",
+                            "typeDescriptions": {
+                              "typeIdentifier": "t_address",
+                              "typeString": "address"
+                            }
+                          }
+                        ],
+                        "expression": {
+                          "argumentTypes": [
+                            {
+                              "typeIdentifier": "t_address",
+                              "typeString": "address"
+                            }
+                          ],
+                          "expression": {
+                            "argumentTypes": null,
+                            "id": 2961,
+                            "name": "AddressUtils",
+                            "nodeType": "Identifier",
+                            "overloadedDeclarations": [],
+                            "referencedDeclaration": 4571,
+                            "src": "1861:12:17",
+                            "typeDescriptions": {
+                              "typeIdentifier": "t_type$_t_contract$_AddressUtils_$4571_$",
+                              "typeString": "type(library AddressUtils)"
+                            }
+                          },
+                          "id": 2962,
+                          "isConstant": false,
+                          "isLValue": false,
+                          "isPure": false,
+                          "lValueRequested": false,
+                          "memberName": "isContract",
+                          "nodeType": "MemberAccess",
+                          "referencedDeclaration": 4570,
+                          "src": "1861:23:17",
+                          "typeDescriptions": {
+                            "typeIdentifier": "t_function_internal_view$_t_address_$returns$_t_bool_$",
+                            "typeString": "function (address) view returns (bool)"
+                          }
+                        },
+                        "id": 2964,
+                        "isConstant": false,
+                        "isLValue": false,
+                        "isPure": false,
+                        "kind": "functionCall",
+                        "lValueRequested": false,
+                        "names": [],
+                        "nodeType": "FunctionCall",
+                        "src": "1861:31:17",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_bool",
+                          "typeString": "bool"
+                        }
+                      },
+                      {
+                        "argumentTypes": null,
+                        "hexValue": "4d75737420626520616e2061637475616c20636f6e7472616374",
+                        "id": 2965,
+                        "isConstant": false,
+                        "isLValue": false,
+                        "isPure": true,
+                        "kind": "string",
+                        "lValueRequested": false,
+                        "nodeType": "Literal",
+                        "src": "1894:28:17",
+                        "subdenomination": null,
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_stringliteral_a100930d65ab68752c961b4d791d40ee75b12f6bc9cbc906cc69a8d51d2e79ec",
+                          "typeString": "literal_string \"Must be an actual contract\""
+                        },
+                        "value": "Must be an actual contract"
+                      }
+                    ],
+                    "expression": {
+                      "argumentTypes": [
+                        {
+                          "typeIdentifier": "t_bool",
+                          "typeString": "bool"
+                        },
+                        {
+                          "typeIdentifier": "t_stringliteral_a100930d65ab68752c961b4d791d40ee75b12f6bc9cbc906cc69a8d51d2e79ec",
+                          "typeString": "literal_string \"Must be an actual contract\""
+                        }
+                      ],
+                      "id": 2960,
+                      "name": "require",
+                      "nodeType": "Identifier",
+                      "overloadedDeclarations": [
+                        5018,
+                        5019
+                      ],
+                      "referencedDeclaration": 5019,
+                      "src": "1853:7:17",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_function_require_pure$_t_bool_$_t_string_memory_ptr_$returns$__$",
+                        "typeString": "function (bool,string memory) pure"
+                      }
+                    },
+                    "id": 2966,
+                    "isConstant": false,
+                    "isLValue": false,
+                    "isPure": false,
+                    "kind": "functionCall",
+                    "lValueRequested": false,
+                    "names": [],
+                    "nodeType": "FunctionCall",
+                    "src": "1853:70:17",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_tuple$__$",
+                      "typeString": "tuple()"
+                    }
+                  },
+                  "id": 2967,
+                  "nodeType": "ExpressionStatement",
+                  "src": "1853:70:17"
+                },
+                {
+                  "assignments": [
+                    2969
+                  ],
+                  "declarations": [
+                    {
+                      "constant": false,
+                      "id": 2969,
+                      "name": "oldSheet",
+                      "nodeType": "VariableDeclaration",
+                      "scope": 2986,
+                      "src": "1933:16:17",
+                      "stateVariable": false,
+                      "storageLocation": "default",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_address",
+                        "typeString": "address"
+                      },
+                      "typeName": {
+                        "id": 2968,
+                        "name": "address",
+                        "nodeType": "ElementaryTypeName",
+                        "src": "1933:7:17",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_address",
+                          "typeString": "address"
+                        }
+                      },
+                      "value": null,
+                      "visibility": "internal"
+                    }
+                  ],
+                  "id": 2973,
+                  "initialValue": {
+                    "argumentTypes": null,
+                    "arguments": [
+                      {
+                        "argumentTypes": null,
+                        "id": 2971,
+                        "name": "stablecoinFees",
+                        "nodeType": "Identifier",
+                        "overloadedDeclarations": [],
+                        "referencedDeclaration": 2650,
+                        "src": "1960:14:17",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_contract$_FeeSheet_$2849",
+                          "typeString": "contract FeeSheet"
+                        }
+                      }
+                    ],
+                    "expression": {
+                      "argumentTypes": [
+                        {
+                          "typeIdentifier": "t_contract$_FeeSheet_$2849",
+                          "typeString": "contract FeeSheet"
+                        }
+                      ],
+                      "id": 2970,
+                      "isConstant": false,
+                      "isLValue": false,
+                      "isPure": true,
+                      "lValueRequested": false,
+                      "nodeType": "ElementaryTypeNameExpression",
+                      "src": "1952:7:17",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_type$_t_address_$",
+                        "typeString": "type(address)"
+                      },
+                      "typeName": "address"
+                    },
+                    "id": 2972,
+                    "isConstant": false,
+                    "isLValue": false,
+                    "isPure": false,
+                    "kind": "typeConversion",
+                    "lValueRequested": false,
+                    "names": [],
+                    "nodeType": "FunctionCall",
+                    "src": "1952:23:17",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "nodeType": "VariableDeclarationStatement",
+                  "src": "1933:42:17"
+                },
+                {
+                  "expression": {
+                    "argumentTypes": null,
+                    "id": 2978,
+                    "isConstant": false,
+                    "isLValue": false,
+                    "isPure": false,
+                    "lValueRequested": false,
+                    "leftHandSide": {
+                      "argumentTypes": null,
+                      "id": 2974,
+                      "name": "stablecoinFees",
+                      "nodeType": "Identifier",
+                      "overloadedDeclarations": [],
+                      "referencedDeclaration": 2650,
+                      "src": "1985:14:17",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_contract$_FeeSheet_$2849",
+                        "typeString": "contract FeeSheet"
+                      }
+                    },
+                    "nodeType": "Assignment",
+                    "operator": "=",
+                    "rightHandSide": {
+                      "argumentTypes": null,
+                      "arguments": [
+                        {
+                          "argumentTypes": null,
+                          "id": 2976,
+                          "name": "_sheet",
+                          "nodeType": "Identifier",
+                          "overloadedDeclarations": [],
+                          "referencedDeclaration": 2948,
+                          "src": "2011:6:17",
+                          "typeDescriptions": {
+                            "typeIdentifier": "t_address",
+                            "typeString": "address"
+                          }
+                        }
+                      ],
+                      "expression": {
+                        "argumentTypes": [
+                          {
+                            "typeIdentifier": "t_address",
+                            "typeString": "address"
+                          }
+                        ],
+                        "id": 2975,
+                        "name": "FeeSheet",
+                        "nodeType": "Identifier",
+                        "overloadedDeclarations": [],
+                        "referencedDeclaration": 2849,
+                        "src": "2002:8:17",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_type$_t_contract$_FeeSheet_$2849_$",
+                          "typeString": "type(contract FeeSheet)"
+                        }
+                      },
+                      "id": 2977,
+                      "isConstant": false,
+                      "isLValue": false,
+                      "isPure": false,
+                      "kind": "typeConversion",
+                      "lValueRequested": false,
+                      "names": [],
+                      "nodeType": "FunctionCall",
+                      "src": "2002:16:17",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_contract$_FeeSheet_$2849",
+                        "typeString": "contract FeeSheet"
+                      }
+                    },
+                    "src": "1985:33:17",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_contract$_FeeSheet_$2849",
+                      "typeString": "contract FeeSheet"
+                    }
+                  },
+                  "id": 2979,
+                  "nodeType": "ExpressionStatement",
+                  "src": "1985:33:17"
+                },
+                {
+                  "eventCall": {
+                    "argumentTypes": null,
+                    "arguments": [
+                      {
+                        "argumentTypes": null,
+                        "id": 2981,
+                        "name": "oldSheet",
+                        "nodeType": "Identifier",
+                        "overloadedDeclarations": [],
+                        "referencedDeclaration": 2969,
+                        "src": "2049:8:17",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_address",
+                          "typeString": "address"
+                        }
+                      },
+                      {
+                        "argumentTypes": null,
+                        "id": 2982,
+                        "name": "_sheet",
+                        "nodeType": "Identifier",
+                        "overloadedDeclarations": [],
+                        "referencedDeclaration": 2948,
+                        "src": "2059:6:17",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_address",
+                          "typeString": "address"
+                        }
+                      }
+                    ],
+                    "expression": {
+                      "argumentTypes": [
+                        {
+                          "typeIdentifier": "t_address",
+                          "typeString": "address"
+                        },
+                        {
+                          "typeIdentifier": "t_address",
+                          "typeString": "address"
+                        }
+                      ],
+                      "id": 2980,
+                      "name": "FeeSheetChanged",
+                      "nodeType": "Identifier",
+                      "overloadedDeclarations": [],
+                      "referencedDeclaration": 2864,
+                      "src": "2033:15:17",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_function_event_nonpayable$_t_address_$_t_address_$returns$__$",
+                        "typeString": "function (address,address)"
+                      }
+                    },
+                    "id": 2983,
+                    "isConstant": false,
+                    "isLValue": false,
+                    "isPure": false,
+                    "kind": "functionCall",
+                    "lValueRequested": false,
+                    "names": [],
+                    "nodeType": "FunctionCall",
+                    "src": "2033:33:17",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_tuple$__$",
+                      "typeString": "tuple()"
+                    }
+                  },
+                  "id": 2984,
+                  "nodeType": "EmitStatement",
+                  "src": "2028:38:17"
+                }
+              ]
+            },
+            "documentation": null,
+            "id": 2986,
+            "implemented": true,
+            "isConstructor": false,
+            "isDeclaredConst": false,
+            "modifiers": [],
+            "name": "_setFeeSheet",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 2949,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 2948,
+                  "name": "_sheet",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 2986,
+                  "src": "1739:14:17",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 2947,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "1739:7:17",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "1738:16:17"
+            },
+            "payable": false,
+            "returnParameters": {
+              "id": 2950,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "1764:0:17"
+            },
+            "scope": 2987,
+            "src": "1717:356:17",
+            "stateMutability": "nonpayable",
+            "superFunction": null,
+            "visibility": "internal"
+          }
+        ],
+        "scope": 2988,
+        "src": "329:1746:17"
+      }
+    ],
+    "src": "0:2075:17"
+  },
+  "legacyAST": {
+    "absolutePath": "/Users/tanishqaggarwal/Documents/carbon/fiat_gateway/contracts/tokens/carbonToken/dataStorage/MutableCarbonDollarStorage.sol",
+    "exportedSymbols": {
+      "MutableCarbonDollarStorage": [
+        2987
+      ]
+    },
+    "id": 2988,
+    "nodeType": "SourceUnit",
+    "nodes": [
+      {
+        "id": 2851,
+        "literals": [
+          "solidity",
+          "^",
+          "0.4",
+          ".24"
+        ],
+        "nodeType": "PragmaDirective",
+        "src": "0:24:17"
+      },
+      {
+        "absolutePath": "/Users/tanishqaggarwal/Documents/carbon/fiat_gateway/contracts/tokens/carbonToken/dataStorage/CarbonDollarStorage.sol",
+        "file": "./CarbonDollarStorage.sol",
+        "id": 2852,
+        "nodeType": "ImportDirective",
+        "scope": 2988,
+        "sourceUnit": 2674,
+        "src": "26:35:17",
+        "symbolAliases": [],
+        "unitAlias": ""
+      },
+      {
+        "absolutePath": "openzeppelin-solidity/contracts/AddressUtils.sol",
+        "file": "openzeppelin-solidity/contracts/AddressUtils.sol",
+        "id": 2853,
+        "nodeType": "ImportDirective",
+        "scope": 2988,
+        "sourceUnit": 4572,
+        "src": "62:58:17",
+        "symbolAliases": [],
+        "unitAlias": ""
+      },
+      {
+        "absolutePath": "openzeppelin-solidity/contracts/ownership/Ownable.sol",
+        "file": "openzeppelin-solidity/contracts/ownership/Ownable.sol",
+        "id": 2854,
+        "nodeType": "ImportDirective",
+        "scope": 2988,
+        "sourceUnit": 4812,
+        "src": "121:63:17",
+        "symbolAliases": [],
+        "unitAlias": ""
+      },
+      {
+        "baseContracts": [
+          {
+            "arguments": null,
+            "baseName": {
+              "contractScope": null,
+              "id": 2855,
+              "name": "Ownable",
+              "nodeType": "UserDefinedTypeName",
+              "referencedDeclaration": 4811,
+              "src": "368:7:17",
+              "typeDescriptions": {
+                "typeIdentifier": "t_contract$_Ownable_$4811",
+                "typeString": "contract Ownable"
+              }
+            },
+            "id": 2856,
+            "nodeType": "InheritanceSpecifier",
+            "src": "368:7:17"
+          },
+          {
+            "arguments": null,
+            "baseName": {
+              "contractScope": null,
+              "id": 2857,
+              "name": "CarbonDollarStorage",
+              "nodeType": "UserDefinedTypeName",
+              "referencedDeclaration": 2673,
+              "src": "377:19:17",
+              "typeDescriptions": {
+                "typeIdentifier": "t_contract$_CarbonDollarStorage_$2673",
+                "typeString": "contract CarbonDollarStorage"
+              }
+            },
+            "id": 2858,
+            "nodeType": "InheritanceSpecifier",
+            "src": "377:19:17"
+          }
+        ],
+        "contractDependencies": [
+          2673,
+          4811
+        ],
+        "contractKind": "contract",
+        "documentation": "@title MutableCarbonDollarStorage\n@notice Adds mutability to CarbonDollarStorage (FeeSheet and StablecoinWhitelist can be changed.)",
+        "fullyImplemented": true,
+        "id": 2987,
+        "linearizedBaseContracts": [
+          2987,
+          2673,
+          4811
+        ],
+        "name": "MutableCarbonDollarStorage",
+        "nodeType": "ContractDefinition",
+        "nodes": [
+          {
+            "anonymous": false,
+            "documentation": "Events",
+            "id": 2864,
+            "name": "FeeSheetChanged",
+            "nodeType": "EventDefinition",
+            "parameters": {
+              "id": 2863,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 2860,
+                  "indexed": true,
+                  "name": "oldSheet",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 2864,
+                  "src": "453:24:17",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 2859,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "453:7:17",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 2862,
+                  "indexed": true,
+                  "name": "newSheet",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 2864,
+                  "src": "479:24:17",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 2861,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "479:7:17",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "452:52:17"
+            },
+            "src": "431:74:17"
+          },
+          {
+            "anonymous": false,
+            "documentation": null,
+            "id": 2870,
+            "name": "StablecoinWhitelistChanged",
+            "nodeType": "EventDefinition",
+            "parameters": {
+              "id": 2869,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 2866,
+                  "indexed": true,
+                  "name": "oldWhitelist",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 2870,
+                  "src": "543:28:17",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 2865,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "543:7:17",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 2868,
+                  "indexed": true,
+                  "name": "newWhitelist",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 2870,
+                  "src": "573:28:17",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 2867,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "573:7:17",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "542:60:17"
+            },
+            "src": "510:93:17"
+          },
+          {
+            "body": {
+              "id": 2881,
+              "nodeType": "Block",
+              "src": "782:2:17",
+              "statements": []
+            },
+            "documentation": "@dev a PermissionedTokenStorage can set its storages only once, on construction\n    *",
+            "id": 2882,
+            "implemented": true,
+            "isConstructor": true,
+            "isDeclaredConst": false,
+            "modifiers": [
+              {
+                "arguments": [
+                  {
+                    "argumentTypes": null,
+                    "id": 2877,
+                    "name": "f",
+                    "nodeType": "Identifier",
+                    "overloadedDeclarations": [],
+                    "referencedDeclaration": 2872,
+                    "src": "769:1:17",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  {
+                    "argumentTypes": null,
+                    "id": 2878,
+                    "name": "w",
+                    "nodeType": "Identifier",
+                    "overloadedDeclarations": [],
+                    "referencedDeclaration": 2874,
+                    "src": "772:1:17",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  }
+                ],
+                "id": 2879,
+                "modifierName": {
+                  "argumentTypes": null,
+                  "id": 2876,
+                  "name": "CarbonDollarStorage",
+                  "nodeType": "Identifier",
+                  "overloadedDeclarations": [],
+                  "referencedDeclaration": 2673,
+                  "src": "749:19:17",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_type$_t_contract$_CarbonDollarStorage_$2673_$",
+                    "typeString": "type(contract CarbonDollarStorage)"
+                  }
+                },
+                "nodeType": "ModifierInvocation",
+                "src": "749:25:17"
+              }
+            ],
+            "name": "",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 2875,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 2872,
+                  "name": "f",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 2882,
+                  "src": "727:9:17",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 2871,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "727:7:17",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 2874,
+                  "name": "w",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 2882,
+                  "src": "738:9:17",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 2873,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "738:7:17",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "726:22:17"
+            },
+            "payable": false,
+            "returnParameters": {
+              "id": 2880,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "782:0:17"
+            },
+            "scope": 2987,
+            "src": "714:70:17",
+            "stateMutability": "nonpayable",
+            "superFunction": null,
+            "visibility": "public"
+          },
+          {
+            "body": {
+              "id": 2893,
+              "nodeType": "Block",
+              "src": "1000:52:17",
+              "statements": [
+                {
+                  "expression": {
+                    "argumentTypes": null,
+                    "arguments": [
+                      {
+                        "argumentTypes": null,
+                        "id": 2890,
+                        "name": "_whitelist",
+                        "nodeType": "Identifier",
+                        "overloadedDeclarations": [],
+                        "referencedDeclaration": 2884,
+                        "src": "1034:10:17",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_address",
+                          "typeString": "address"
+                        }
+                      }
+                    ],
+                    "expression": {
+                      "argumentTypes": [
+                        {
+                          "typeIdentifier": "t_address",
+                          "typeString": "address"
+                        }
+                      ],
+                      "id": 2889,
+                      "name": "_setStablecoinWhitelist",
+                      "nodeType": "Identifier",
+                      "overloadedDeclarations": [],
+                      "referencedDeclaration": 2934,
+                      "src": "1010:23:17",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_function_internal_nonpayable$_t_address_$returns$__$",
+                        "typeString": "function (address)"
+                      }
+                    },
+                    "id": 2891,
+                    "isConstant": false,
+                    "isLValue": false,
+                    "isPure": false,
+                    "kind": "functionCall",
+                    "lValueRequested": false,
+                    "names": [],
+                    "nodeType": "FunctionCall",
+                    "src": "1010:35:17",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_tuple$__$",
+                      "typeString": "tuple()"
+                    }
+                  },
+                  "id": 2892,
+                  "nodeType": "ExpressionStatement",
+                  "src": "1010:35:17"
+                }
+              ]
+            },
+            "documentation": "@notice Set the stablecoin whitelist contract.\n@param _whitelist Address of the stablecoin whitelist contract.",
+            "id": 2894,
+            "implemented": true,
+            "isConstructor": false,
+            "isDeclaredConst": false,
+            "modifiers": [
+              {
+                "arguments": null,
+                "id": 2887,
+                "modifierName": {
+                  "argumentTypes": null,
+                  "id": 2886,
+                  "name": "onlyOwner",
+                  "nodeType": "Identifier",
+                  "overloadedDeclarations": [],
+                  "referencedDeclaration": 4759,
+                  "src": "990:9:17",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_modifier$__$",
+                    "typeString": "modifier ()"
+                  }
+                },
+                "nodeType": "ModifierInvocation",
+                "src": "990:9:17"
+              }
+            ],
+            "name": "setStablecoinWhitelist",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 2885,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 2884,
+                  "name": "_whitelist",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 2894,
+                  "src": "963:18:17",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 2883,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "963:7:17",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "962:20:17"
+            },
+            "payable": false,
+            "returnParameters": {
+              "id": 2888,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "1000:0:17"
+            },
+            "scope": 2987,
+            "src": "931:121:17",
+            "stateMutability": "nonpayable",
+            "superFunction": null,
+            "visibility": "public"
+          },
+          {
+            "body": {
+              "id": 2933,
+              "nodeType": "Block",
+              "src": "1120:381:17",
+              "statements": [
+                {
+                  "expression": {
+                    "argumentTypes": null,
+                    "arguments": [
+                      {
+                        "argumentTypes": null,
+                        "commonType": {
+                          "typeIdentifier": "t_address",
+                          "typeString": "address"
+                        },
+                        "id": 2904,
+                        "isConstant": false,
+                        "isLValue": false,
+                        "isPure": false,
+                        "lValueRequested": false,
+                        "leftExpression": {
+                          "argumentTypes": null,
+                          "id": 2900,
+                          "name": "_whitelist",
+                          "nodeType": "Identifier",
+                          "overloadedDeclarations": [],
+                          "referencedDeclaration": 2896,
+                          "src": "1138:10:17",
+                          "typeDescriptions": {
+                            "typeIdentifier": "t_address",
+                            "typeString": "address"
+                          }
+                        },
+                        "nodeType": "BinaryOperation",
+                        "operator": "!=",
+                        "rightExpression": {
+                          "argumentTypes": null,
+                          "arguments": [
+                            {
+                              "argumentTypes": null,
+                              "id": 2902,
+                              "name": "stablecoinWhitelist",
+                              "nodeType": "Identifier",
+                              "overloadedDeclarations": [],
+                              "referencedDeclaration": 2652,
+                              "src": "1160:19:17",
+                              "typeDescriptions": {
+                                "typeIdentifier": "t_contract$_StablecoinWhitelist_$3042",
+                                "typeString": "contract StablecoinWhitelist"
+                              }
+                            }
+                          ],
+                          "expression": {
+                            "argumentTypes": [
+                              {
+                                "typeIdentifier": "t_contract$_StablecoinWhitelist_$3042",
+                                "typeString": "contract StablecoinWhitelist"
+                              }
+                            ],
+                            "id": 2901,
+                            "isConstant": false,
+                            "isLValue": false,
+                            "isPure": true,
+                            "lValueRequested": false,
+                            "nodeType": "ElementaryTypeNameExpression",
+                            "src": "1152:7:17",
+                            "typeDescriptions": {
+                              "typeIdentifier": "t_type$_t_address_$",
+                              "typeString": "type(address)"
+                            },
+                            "typeName": "address"
+                          },
+                          "id": 2903,
+                          "isConstant": false,
+                          "isLValue": false,
+                          "isPure": false,
+                          "kind": "typeConversion",
+                          "lValueRequested": false,
+                          "names": [],
+                          "nodeType": "FunctionCall",
+                          "src": "1152:28:17",
+                          "typeDescriptions": {
+                            "typeIdentifier": "t_address",
+                            "typeString": "address"
+                          }
+                        },
+                        "src": "1138:42:17",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_bool",
+                          "typeString": "bool"
+                        }
+                      },
+                      {
+                        "argumentTypes": null,
+                        "hexValue": "4d7573742062652061206e657720737461626c65636f696e2077686974656c697374",
+                        "id": 2905,
+                        "isConstant": false,
+                        "isLValue": false,
+                        "isPure": true,
+                        "kind": "string",
+                        "lValueRequested": false,
+                        "nodeType": "Literal",
+                        "src": "1182:36:17",
+                        "subdenomination": null,
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_stringliteral_baf5ab5661ae0823c1ca423b89a1cda9a97780b4107d27404dc552a83faef7e8",
+                          "typeString": "literal_string \"Must be a new stablecoin whitelist\""
+                        },
+                        "value": "Must be a new stablecoin whitelist"
+                      }
+                    ],
+                    "expression": {
+                      "argumentTypes": [
+                        {
+                          "typeIdentifier": "t_bool",
+                          "typeString": "bool"
+                        },
+                        {
+                          "typeIdentifier": "t_stringliteral_baf5ab5661ae0823c1ca423b89a1cda9a97780b4107d27404dc552a83faef7e8",
+                          "typeString": "literal_string \"Must be a new stablecoin whitelist\""
+                        }
+                      ],
+                      "id": 2899,
+                      "name": "require",
+                      "nodeType": "Identifier",
+                      "overloadedDeclarations": [
+                        5018,
+                        5019
+                      ],
+                      "referencedDeclaration": 5019,
+                      "src": "1130:7:17",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_function_require_pure$_t_bool_$_t_string_memory_ptr_$returns$__$",
+                        "typeString": "function (bool,string memory) pure"
+                      }
+                    },
+                    "id": 2906,
+                    "isConstant": false,
+                    "isLValue": false,
+                    "isPure": false,
+                    "kind": "functionCall",
+                    "lValueRequested": false,
+                    "names": [],
+                    "nodeType": "FunctionCall",
+                    "src": "1130:89:17",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_tuple$__$",
+                      "typeString": "tuple()"
+                    }
+                  },
+                  "id": 2907,
+                  "nodeType": "ExpressionStatement",
+                  "src": "1130:89:17"
+                },
+                {
+                  "expression": {
+                    "argumentTypes": null,
+                    "arguments": [
+                      {
+                        "argumentTypes": null,
+                        "arguments": [
+                          {
+                            "argumentTypes": null,
+                            "id": 2911,
+                            "name": "_whitelist",
+                            "nodeType": "Identifier",
+                            "overloadedDeclarations": [],
+                            "referencedDeclaration": 2896,
+                            "src": "1261:10:17",
+                            "typeDescriptions": {
+                              "typeIdentifier": "t_address",
+                              "typeString": "address"
+                            }
+                          }
+                        ],
+                        "expression": {
+                          "argumentTypes": [
+                            {
+                              "typeIdentifier": "t_address",
+                              "typeString": "address"
+                            }
+                          ],
+                          "expression": {
+                            "argumentTypes": null,
+                            "id": 2909,
+                            "name": "AddressUtils",
+                            "nodeType": "Identifier",
+                            "overloadedDeclarations": [],
+                            "referencedDeclaration": 4571,
+                            "src": "1237:12:17",
+                            "typeDescriptions": {
+                              "typeIdentifier": "t_type$_t_contract$_AddressUtils_$4571_$",
+                              "typeString": "type(library AddressUtils)"
+                            }
+                          },
+                          "id": 2910,
+                          "isConstant": false,
+                          "isLValue": false,
+                          "isPure": false,
+                          "lValueRequested": false,
+                          "memberName": "isContract",
+                          "nodeType": "MemberAccess",
+                          "referencedDeclaration": 4570,
+                          "src": "1237:23:17",
+                          "typeDescriptions": {
+                            "typeIdentifier": "t_function_internal_view$_t_address_$returns$_t_bool_$",
+                            "typeString": "function (address) view returns (bool)"
+                          }
+                        },
+                        "id": 2912,
+                        "isConstant": false,
+                        "isLValue": false,
+                        "isPure": false,
+                        "kind": "functionCall",
+                        "lValueRequested": false,
+                        "names": [],
+                        "nodeType": "FunctionCall",
+                        "src": "1237:35:17",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_bool",
+                          "typeString": "bool"
+                        }
+                      },
+                      {
+                        "argumentTypes": null,
+                        "hexValue": "4d75737420626520616e2061637475616c20636f6e7472616374",
+                        "id": 2913,
+                        "isConstant": false,
+                        "isLValue": false,
+                        "isPure": true,
+                        "kind": "string",
+                        "lValueRequested": false,
+                        "nodeType": "Literal",
+                        "src": "1274:28:17",
+                        "subdenomination": null,
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_stringliteral_a100930d65ab68752c961b4d791d40ee75b12f6bc9cbc906cc69a8d51d2e79ec",
+                          "typeString": "literal_string \"Must be an actual contract\""
+                        },
+                        "value": "Must be an actual contract"
+                      }
+                    ],
+                    "expression": {
+                      "argumentTypes": [
+                        {
+                          "typeIdentifier": "t_bool",
+                          "typeString": "bool"
+                        },
+                        {
+                          "typeIdentifier": "t_stringliteral_a100930d65ab68752c961b4d791d40ee75b12f6bc9cbc906cc69a8d51d2e79ec",
+                          "typeString": "literal_string \"Must be an actual contract\""
+                        }
+                      ],
+                      "id": 2908,
+                      "name": "require",
+                      "nodeType": "Identifier",
+                      "overloadedDeclarations": [
+                        5018,
+                        5019
+                      ],
+                      "referencedDeclaration": 5019,
+                      "src": "1229:7:17",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_function_require_pure$_t_bool_$_t_string_memory_ptr_$returns$__$",
+                        "typeString": "function (bool,string memory) pure"
+                      }
+                    },
+                    "id": 2914,
+                    "isConstant": false,
+                    "isLValue": false,
+                    "isPure": false,
+                    "kind": "functionCall",
+                    "lValueRequested": false,
+                    "names": [],
+                    "nodeType": "FunctionCall",
+                    "src": "1229:74:17",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_tuple$__$",
+                      "typeString": "tuple()"
+                    }
+                  },
+                  "id": 2915,
+                  "nodeType": "ExpressionStatement",
+                  "src": "1229:74:17"
+                },
+                {
+                  "assignments": [
+                    2917
+                  ],
+                  "declarations": [
+                    {
+                      "constant": false,
+                      "id": 2917,
+                      "name": "oldWhitelist",
+                      "nodeType": "VariableDeclaration",
+                      "scope": 2934,
+                      "src": "1313:20:17",
+                      "stateVariable": false,
+                      "storageLocation": "default",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_address",
+                        "typeString": "address"
+                      },
+                      "typeName": {
+                        "id": 2916,
+                        "name": "address",
+                        "nodeType": "ElementaryTypeName",
+                        "src": "1313:7:17",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_address",
+                          "typeString": "address"
+                        }
+                      },
+                      "value": null,
+                      "visibility": "internal"
+                    }
+                  ],
+                  "id": 2921,
+                  "initialValue": {
+                    "argumentTypes": null,
+                    "arguments": [
+                      {
+                        "argumentTypes": null,
+                        "id": 2919,
+                        "name": "stablecoinWhitelist",
+                        "nodeType": "Identifier",
+                        "overloadedDeclarations": [],
+                        "referencedDeclaration": 2652,
+                        "src": "1344:19:17",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_contract$_StablecoinWhitelist_$3042",
+                          "typeString": "contract StablecoinWhitelist"
+                        }
+                      }
+                    ],
+                    "expression": {
+                      "argumentTypes": [
+                        {
+                          "typeIdentifier": "t_contract$_StablecoinWhitelist_$3042",
+                          "typeString": "contract StablecoinWhitelist"
+                        }
+                      ],
+                      "id": 2918,
+                      "isConstant": false,
+                      "isLValue": false,
+                      "isPure": true,
+                      "lValueRequested": false,
+                      "nodeType": "ElementaryTypeNameExpression",
+                      "src": "1336:7:17",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_type$_t_address_$",
+                        "typeString": "type(address)"
+                      },
+                      "typeName": "address"
+                    },
+                    "id": 2920,
+                    "isConstant": false,
+                    "isLValue": false,
+                    "isPure": false,
+                    "kind": "typeConversion",
+                    "lValueRequested": false,
+                    "names": [],
+                    "nodeType": "FunctionCall",
+                    "src": "1336:28:17",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "nodeType": "VariableDeclarationStatement",
+                  "src": "1313:51:17"
+                },
+                {
+                  "expression": {
+                    "argumentTypes": null,
+                    "id": 2926,
+                    "isConstant": false,
+                    "isLValue": false,
+                    "isPure": false,
+                    "lValueRequested": false,
+                    "leftHandSide": {
+                      "argumentTypes": null,
+                      "id": 2922,
+                      "name": "stablecoinWhitelist",
+                      "nodeType": "Identifier",
+                      "overloadedDeclarations": [],
+                      "referencedDeclaration": 2652,
+                      "src": "1374:19:17",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_contract$_StablecoinWhitelist_$3042",
+                        "typeString": "contract StablecoinWhitelist"
+                      }
+                    },
+                    "nodeType": "Assignment",
+                    "operator": "=",
+                    "rightHandSide": {
+                      "argumentTypes": null,
+                      "arguments": [
+                        {
+                          "argumentTypes": null,
+                          "id": 2924,
+                          "name": "_whitelist",
+                          "nodeType": "Identifier",
+                          "overloadedDeclarations": [],
+                          "referencedDeclaration": 2896,
+                          "src": "1416:10:17",
+                          "typeDescriptions": {
+                            "typeIdentifier": "t_address",
+                            "typeString": "address"
+                          }
+                        }
+                      ],
+                      "expression": {
+                        "argumentTypes": [
+                          {
+                            "typeIdentifier": "t_address",
+                            "typeString": "address"
+                          }
+                        ],
+                        "id": 2923,
+                        "name": "StablecoinWhitelist",
+                        "nodeType": "Identifier",
+                        "overloadedDeclarations": [],
+                        "referencedDeclaration": 3042,
+                        "src": "1396:19:17",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_type$_t_contract$_StablecoinWhitelist_$3042_$",
+                          "typeString": "type(contract StablecoinWhitelist)"
+                        }
+                      },
+                      "id": 2925,
+                      "isConstant": false,
+                      "isLValue": false,
+                      "isPure": false,
+                      "kind": "typeConversion",
+                      "lValueRequested": false,
+                      "names": [],
+                      "nodeType": "FunctionCall",
+                      "src": "1396:31:17",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_contract$_StablecoinWhitelist_$3042",
+                        "typeString": "contract StablecoinWhitelist"
+                      }
+                    },
+                    "src": "1374:53:17",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_contract$_StablecoinWhitelist_$3042",
+                      "typeString": "contract StablecoinWhitelist"
+                    }
+                  },
+                  "id": 2927,
+                  "nodeType": "ExpressionStatement",
+                  "src": "1374:53:17"
+                },
+                {
+                  "eventCall": {
+                    "argumentTypes": null,
+                    "arguments": [
+                      {
+                        "argumentTypes": null,
+                        "id": 2929,
+                        "name": "oldWhitelist",
+                        "nodeType": "Identifier",
+                        "overloadedDeclarations": [],
+                        "referencedDeclaration": 2917,
+                        "src": "1469:12:17",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_address",
+                          "typeString": "address"
+                        }
+                      },
+                      {
+                        "argumentTypes": null,
+                        "id": 2930,
+                        "name": "_whitelist",
+                        "nodeType": "Identifier",
+                        "overloadedDeclarations": [],
+                        "referencedDeclaration": 2896,
+                        "src": "1483:10:17",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_address",
+                          "typeString": "address"
+                        }
+                      }
+                    ],
+                    "expression": {
+                      "argumentTypes": [
+                        {
+                          "typeIdentifier": "t_address",
+                          "typeString": "address"
+                        },
+                        {
+                          "typeIdentifier": "t_address",
+                          "typeString": "address"
+                        }
+                      ],
+                      "id": 2928,
+                      "name": "StablecoinWhitelistChanged",
+                      "nodeType": "Identifier",
+                      "overloadedDeclarations": [],
+                      "referencedDeclaration": 2870,
+                      "src": "1442:26:17",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_function_event_nonpayable$_t_address_$_t_address_$returns$__$",
+                        "typeString": "function (address,address)"
+                      }
+                    },
+                    "id": 2931,
+                    "isConstant": false,
+                    "isLValue": false,
+                    "isPure": false,
+                    "kind": "functionCall",
+                    "lValueRequested": false,
+                    "names": [],
+                    "nodeType": "FunctionCall",
+                    "src": "1442:52:17",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_tuple$__$",
+                      "typeString": "tuple()"
+                    }
+                  },
+                  "id": 2932,
+                  "nodeType": "EmitStatement",
+                  "src": "1437:57:17"
+                }
+              ]
+            },
+            "documentation": null,
+            "id": 2934,
+            "implemented": true,
+            "isConstructor": false,
+            "isDeclaredConst": false,
+            "modifiers": [],
+            "name": "_setStablecoinWhitelist",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 2897,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 2896,
+                  "name": "_whitelist",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 2934,
+                  "src": "1091:18:17",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 2895,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "1091:7:17",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "1090:20:17"
+            },
+            "payable": false,
+            "returnParameters": {
+              "id": 2898,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "1120:0:17"
+            },
+            "scope": 2987,
+            "src": "1058:443:17",
+            "stateMutability": "nonpayable",
+            "superFunction": null,
+            "visibility": "internal"
+          },
+          {
+            "body": {
+              "id": 2945,
+              "nodeType": "Block",
+              "src": "1674:37:17",
+              "statements": [
+                {
+                  "expression": {
+                    "argumentTypes": null,
+                    "arguments": [
+                      {
+                        "argumentTypes": null,
+                        "id": 2942,
+                        "name": "_sheet",
+                        "nodeType": "Identifier",
+                        "overloadedDeclarations": [],
+                        "referencedDeclaration": 2936,
+                        "src": "1697:6:17",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_address",
+                          "typeString": "address"
+                        }
+                      }
+                    ],
+                    "expression": {
+                      "argumentTypes": [
+                        {
+                          "typeIdentifier": "t_address",
+                          "typeString": "address"
+                        }
+                      ],
+                      "id": 2941,
+                      "name": "_setFeeSheet",
+                      "nodeType": "Identifier",
+                      "overloadedDeclarations": [],
+                      "referencedDeclaration": 2986,
+                      "src": "1684:12:17",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_function_internal_nonpayable$_t_address_$returns$__$",
+                        "typeString": "function (address)"
+                      }
+                    },
+                    "id": 2943,
+                    "isConstant": false,
+                    "isLValue": false,
+                    "isPure": false,
+                    "kind": "functionCall",
+                    "lValueRequested": false,
+                    "names": [],
+                    "nodeType": "FunctionCall",
+                    "src": "1684:20:17",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_tuple$__$",
+                      "typeString": "tuple()"
+                    }
+                  },
+                  "id": 2944,
+                  "nodeType": "ExpressionStatement",
+                  "src": "1684:20:17"
+                }
+              ]
+            },
+            "documentation": "@notice Set the fee sheet for this CarbonUSD.\n@param _sheet Address of the fee sheet.",
+            "id": 2946,
+            "implemented": true,
+            "isConstructor": false,
+            "isDeclaredConst": false,
+            "modifiers": [
+              {
+                "arguments": null,
+                "id": 2939,
+                "modifierName": {
+                  "argumentTypes": null,
+                  "id": 2938,
+                  "name": "onlyOwner",
+                  "nodeType": "Identifier",
+                  "overloadedDeclarations": [],
+                  "referencedDeclaration": 4759,
+                  "src": "1664:9:17",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_modifier$__$",
+                    "typeString": "modifier ()"
+                  }
+                },
+                "nodeType": "ModifierInvocation",
+                "src": "1664:9:17"
+              }
+            ],
+            "name": "setFeeSheet",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 2937,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 2936,
+                  "name": "_sheet",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 2946,
+                  "src": "1641:14:17",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 2935,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "1641:7:17",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "1640:16:17"
+            },
+            "payable": false,
+            "returnParameters": {
+              "id": 2940,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "1674:0:17"
+            },
+            "scope": 2987,
+            "src": "1620:91:17",
+            "stateMutability": "nonpayable",
+            "superFunction": null,
+            "visibility": "public"
+          },
+          {
+            "body": {
+              "id": 2985,
+              "nodeType": "Block",
+              "src": "1764:309:17",
+              "statements": [
+                {
+                  "expression": {
+                    "argumentTypes": null,
+                    "arguments": [
+                      {
+                        "argumentTypes": null,
+                        "commonType": {
+                          "typeIdentifier": "t_address",
+                          "typeString": "address"
+                        },
+                        "id": 2956,
+                        "isConstant": false,
+                        "isLValue": false,
+                        "isPure": false,
+                        "lValueRequested": false,
+                        "leftExpression": {
+                          "argumentTypes": null,
+                          "id": 2952,
+                          "name": "_sheet",
+                          "nodeType": "Identifier",
+                          "overloadedDeclarations": [],
+                          "referencedDeclaration": 2948,
+                          "src": "1782:6:17",
+                          "typeDescriptions": {
+                            "typeIdentifier": "t_address",
+                            "typeString": "address"
+                          }
+                        },
+                        "nodeType": "BinaryOperation",
+                        "operator": "!=",
+                        "rightExpression": {
+                          "argumentTypes": null,
+                          "arguments": [
+                            {
+                              "argumentTypes": null,
+                              "id": 2954,
+                              "name": "stablecoinFees",
+                              "nodeType": "Identifier",
+                              "overloadedDeclarations": [],
+                              "referencedDeclaration": 2650,
+                              "src": "1800:14:17",
+                              "typeDescriptions": {
+                                "typeIdentifier": "t_contract$_FeeSheet_$2849",
+                                "typeString": "contract FeeSheet"
+                              }
+                            }
+                          ],
+                          "expression": {
+                            "argumentTypes": [
+                              {
+                                "typeIdentifier": "t_contract$_FeeSheet_$2849",
+                                "typeString": "contract FeeSheet"
+                              }
+                            ],
+                            "id": 2953,
+                            "isConstant": false,
+                            "isLValue": false,
+                            "isPure": true,
+                            "lValueRequested": false,
+                            "nodeType": "ElementaryTypeNameExpression",
+                            "src": "1792:7:17",
+                            "typeDescriptions": {
+                              "typeIdentifier": "t_type$_t_address_$",
+                              "typeString": "type(address)"
+                            },
+                            "typeName": "address"
+                          },
+                          "id": 2955,
+                          "isConstant": false,
+                          "isLValue": false,
+                          "isPure": false,
+                          "kind": "typeConversion",
+                          "lValueRequested": false,
+                          "names": [],
+                          "nodeType": "FunctionCall",
+                          "src": "1792:23:17",
+                          "typeDescriptions": {
+                            "typeIdentifier": "t_address",
+                            "typeString": "address"
+                          }
+                        },
+                        "src": "1782:33:17",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_bool",
+                          "typeString": "bool"
+                        }
+                      },
+                      {
+                        "argumentTypes": null,
+                        "hexValue": "4d7573742062652061206e657720666565207368656574",
+                        "id": 2957,
+                        "isConstant": false,
+                        "isLValue": false,
+                        "isPure": true,
+                        "kind": "string",
+                        "lValueRequested": false,
+                        "nodeType": "Literal",
+                        "src": "1817:25:17",
+                        "subdenomination": null,
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_stringliteral_f86d1b7922161793c33908de34e994b65e1234e66a2dcf82af50637bcabced55",
+                          "typeString": "literal_string \"Must be a new fee sheet\""
+                        },
+                        "value": "Must be a new fee sheet"
+                      }
+                    ],
+                    "expression": {
+                      "argumentTypes": [
+                        {
+                          "typeIdentifier": "t_bool",
+                          "typeString": "bool"
+                        },
+                        {
+                          "typeIdentifier": "t_stringliteral_f86d1b7922161793c33908de34e994b65e1234e66a2dcf82af50637bcabced55",
+                          "typeString": "literal_string \"Must be a new fee sheet\""
+                        }
+                      ],
+                      "id": 2951,
+                      "name": "require",
+                      "nodeType": "Identifier",
+                      "overloadedDeclarations": [
+                        5018,
+                        5019
+                      ],
+                      "referencedDeclaration": 5019,
+                      "src": "1774:7:17",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_function_require_pure$_t_bool_$_t_string_memory_ptr_$returns$__$",
+                        "typeString": "function (bool,string memory) pure"
+                      }
+                    },
+                    "id": 2958,
+                    "isConstant": false,
+                    "isLValue": false,
+                    "isPure": false,
+                    "kind": "functionCall",
+                    "lValueRequested": false,
+                    "names": [],
+                    "nodeType": "FunctionCall",
+                    "src": "1774:69:17",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_tuple$__$",
+                      "typeString": "tuple()"
+                    }
+                  },
+                  "id": 2959,
+                  "nodeType": "ExpressionStatement",
+                  "src": "1774:69:17"
+                },
+                {
+                  "expression": {
+                    "argumentTypes": null,
+                    "arguments": [
+                      {
+                        "argumentTypes": null,
+                        "arguments": [
+                          {
+                            "argumentTypes": null,
+                            "id": 2963,
+                            "name": "_sheet",
+                            "nodeType": "Identifier",
+                            "overloadedDeclarations": [],
+                            "referencedDeclaration": 2948,
+                            "src": "1885:6:17",
+                            "typeDescriptions": {
+                              "typeIdentifier": "t_address",
+                              "typeString": "address"
+                            }
+                          }
+                        ],
+                        "expression": {
+                          "argumentTypes": [
+                            {
+                              "typeIdentifier": "t_address",
+                              "typeString": "address"
+                            }
+                          ],
+                          "expression": {
+                            "argumentTypes": null,
+                            "id": 2961,
+                            "name": "AddressUtils",
+                            "nodeType": "Identifier",
+                            "overloadedDeclarations": [],
+                            "referencedDeclaration": 4571,
+                            "src": "1861:12:17",
+                            "typeDescriptions": {
+                              "typeIdentifier": "t_type$_t_contract$_AddressUtils_$4571_$",
+                              "typeString": "type(library AddressUtils)"
+                            }
+                          },
+                          "id": 2962,
+                          "isConstant": false,
+                          "isLValue": false,
+                          "isPure": false,
+                          "lValueRequested": false,
+                          "memberName": "isContract",
+                          "nodeType": "MemberAccess",
+                          "referencedDeclaration": 4570,
+                          "src": "1861:23:17",
+                          "typeDescriptions": {
+                            "typeIdentifier": "t_function_internal_view$_t_address_$returns$_t_bool_$",
+                            "typeString": "function (address) view returns (bool)"
+                          }
+                        },
+                        "id": 2964,
+                        "isConstant": false,
+                        "isLValue": false,
+                        "isPure": false,
+                        "kind": "functionCall",
+                        "lValueRequested": false,
+                        "names": [],
+                        "nodeType": "FunctionCall",
+                        "src": "1861:31:17",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_bool",
+                          "typeString": "bool"
+                        }
+                      },
+                      {
+                        "argumentTypes": null,
+                        "hexValue": "4d75737420626520616e2061637475616c20636f6e7472616374",
+                        "id": 2965,
+                        "isConstant": false,
+                        "isLValue": false,
+                        "isPure": true,
+                        "kind": "string",
+                        "lValueRequested": false,
+                        "nodeType": "Literal",
+                        "src": "1894:28:17",
+                        "subdenomination": null,
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_stringliteral_a100930d65ab68752c961b4d791d40ee75b12f6bc9cbc906cc69a8d51d2e79ec",
+                          "typeString": "literal_string \"Must be an actual contract\""
+                        },
+                        "value": "Must be an actual contract"
+                      }
+                    ],
+                    "expression": {
+                      "argumentTypes": [
+                        {
+                          "typeIdentifier": "t_bool",
+                          "typeString": "bool"
+                        },
+                        {
+                          "typeIdentifier": "t_stringliteral_a100930d65ab68752c961b4d791d40ee75b12f6bc9cbc906cc69a8d51d2e79ec",
+                          "typeString": "literal_string \"Must be an actual contract\""
+                        }
+                      ],
+                      "id": 2960,
+                      "name": "require",
+                      "nodeType": "Identifier",
+                      "overloadedDeclarations": [
+                        5018,
+                        5019
+                      ],
+                      "referencedDeclaration": 5019,
+                      "src": "1853:7:17",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_function_require_pure$_t_bool_$_t_string_memory_ptr_$returns$__$",
+                        "typeString": "function (bool,string memory) pure"
+                      }
+                    },
+                    "id": 2966,
+                    "isConstant": false,
+                    "isLValue": false,
+                    "isPure": false,
+                    "kind": "functionCall",
+                    "lValueRequested": false,
+                    "names": [],
+                    "nodeType": "FunctionCall",
+                    "src": "1853:70:17",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_tuple$__$",
+                      "typeString": "tuple()"
+                    }
+                  },
+                  "id": 2967,
+                  "nodeType": "ExpressionStatement",
+                  "src": "1853:70:17"
+                },
+                {
+                  "assignments": [
+                    2969
+                  ],
+                  "declarations": [
+                    {
+                      "constant": false,
+                      "id": 2969,
+                      "name": "oldSheet",
+                      "nodeType": "VariableDeclaration",
+                      "scope": 2986,
+                      "src": "1933:16:17",
+                      "stateVariable": false,
+                      "storageLocation": "default",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_address",
+                        "typeString": "address"
+                      },
+                      "typeName": {
+                        "id": 2968,
+                        "name": "address",
+                        "nodeType": "ElementaryTypeName",
+                        "src": "1933:7:17",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_address",
+                          "typeString": "address"
+                        }
+                      },
+                      "value": null,
+                      "visibility": "internal"
+                    }
+                  ],
+                  "id": 2973,
+                  "initialValue": {
+                    "argumentTypes": null,
+                    "arguments": [
+                      {
+                        "argumentTypes": null,
+                        "id": 2971,
+                        "name": "stablecoinFees",
+                        "nodeType": "Identifier",
+                        "overloadedDeclarations": [],
+                        "referencedDeclaration": 2650,
+                        "src": "1960:14:17",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_contract$_FeeSheet_$2849",
+                          "typeString": "contract FeeSheet"
+                        }
+                      }
+                    ],
+                    "expression": {
+                      "argumentTypes": [
+                        {
+                          "typeIdentifier": "t_contract$_FeeSheet_$2849",
+                          "typeString": "contract FeeSheet"
+                        }
+                      ],
+                      "id": 2970,
+                      "isConstant": false,
+                      "isLValue": false,
+                      "isPure": true,
+                      "lValueRequested": false,
+                      "nodeType": "ElementaryTypeNameExpression",
+                      "src": "1952:7:17",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_type$_t_address_$",
+                        "typeString": "type(address)"
+                      },
+                      "typeName": "address"
+                    },
+                    "id": 2972,
+                    "isConstant": false,
+                    "isLValue": false,
+                    "isPure": false,
+                    "kind": "typeConversion",
+                    "lValueRequested": false,
+                    "names": [],
+                    "nodeType": "FunctionCall",
+                    "src": "1952:23:17",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "nodeType": "VariableDeclarationStatement",
+                  "src": "1933:42:17"
+                },
+                {
+                  "expression": {
+                    "argumentTypes": null,
+                    "id": 2978,
+                    "isConstant": false,
+                    "isLValue": false,
+                    "isPure": false,
+                    "lValueRequested": false,
+                    "leftHandSide": {
+                      "argumentTypes": null,
+                      "id": 2974,
+                      "name": "stablecoinFees",
+                      "nodeType": "Identifier",
+                      "overloadedDeclarations": [],
+                      "referencedDeclaration": 2650,
+                      "src": "1985:14:17",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_contract$_FeeSheet_$2849",
+                        "typeString": "contract FeeSheet"
+                      }
+                    },
+                    "nodeType": "Assignment",
+                    "operator": "=",
+                    "rightHandSide": {
+                      "argumentTypes": null,
+                      "arguments": [
+                        {
+                          "argumentTypes": null,
+                          "id": 2976,
+                          "name": "_sheet",
+                          "nodeType": "Identifier",
+                          "overloadedDeclarations": [],
+                          "referencedDeclaration": 2948,
+                          "src": "2011:6:17",
+                          "typeDescriptions": {
+                            "typeIdentifier": "t_address",
+                            "typeString": "address"
+                          }
+                        }
+                      ],
+                      "expression": {
+                        "argumentTypes": [
+                          {
+                            "typeIdentifier": "t_address",
+                            "typeString": "address"
+                          }
+                        ],
+                        "id": 2975,
+                        "name": "FeeSheet",
+                        "nodeType": "Identifier",
+                        "overloadedDeclarations": [],
+                        "referencedDeclaration": 2849,
+                        "src": "2002:8:17",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_type$_t_contract$_FeeSheet_$2849_$",
+                          "typeString": "type(contract FeeSheet)"
+                        }
+                      },
+                      "id": 2977,
+                      "isConstant": false,
+                      "isLValue": false,
+                      "isPure": false,
+                      "kind": "typeConversion",
+                      "lValueRequested": false,
+                      "names": [],
+                      "nodeType": "FunctionCall",
+                      "src": "2002:16:17",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_contract$_FeeSheet_$2849",
+                        "typeString": "contract FeeSheet"
+                      }
+                    },
+                    "src": "1985:33:17",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_contract$_FeeSheet_$2849",
+                      "typeString": "contract FeeSheet"
+                    }
+                  },
+                  "id": 2979,
+                  "nodeType": "ExpressionStatement",
+                  "src": "1985:33:17"
+                },
+                {
+                  "eventCall": {
+                    "argumentTypes": null,
+                    "arguments": [
+                      {
+                        "argumentTypes": null,
+                        "id": 2981,
+                        "name": "oldSheet",
+                        "nodeType": "Identifier",
+                        "overloadedDeclarations": [],
+                        "referencedDeclaration": 2969,
+                        "src": "2049:8:17",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_address",
+                          "typeString": "address"
+                        }
+                      },
+                      {
+                        "argumentTypes": null,
+                        "id": 2982,
+                        "name": "_sheet",
+                        "nodeType": "Identifier",
+                        "overloadedDeclarations": [],
+                        "referencedDeclaration": 2948,
+                        "src": "2059:6:17",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_address",
+                          "typeString": "address"
+                        }
+                      }
+                    ],
+                    "expression": {
+                      "argumentTypes": [
+                        {
+                          "typeIdentifier": "t_address",
+                          "typeString": "address"
+                        },
+                        {
+                          "typeIdentifier": "t_address",
+                          "typeString": "address"
+                        }
+                      ],
+                      "id": 2980,
+                      "name": "FeeSheetChanged",
+                      "nodeType": "Identifier",
+                      "overloadedDeclarations": [],
+                      "referencedDeclaration": 2864,
+                      "src": "2033:15:17",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_function_event_nonpayable$_t_address_$_t_address_$returns$__$",
+                        "typeString": "function (address,address)"
+                      }
+                    },
+                    "id": 2983,
+                    "isConstant": false,
+                    "isLValue": false,
+                    "isPure": false,
+                    "kind": "functionCall",
+                    "lValueRequested": false,
+                    "names": [],
+                    "nodeType": "FunctionCall",
+                    "src": "2033:33:17",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_tuple$__$",
+                      "typeString": "tuple()"
+                    }
+                  },
+                  "id": 2984,
+                  "nodeType": "EmitStatement",
+                  "src": "2028:38:17"
+                }
+              ]
+            },
+            "documentation": null,
+            "id": 2986,
+            "implemented": true,
+            "isConstructor": false,
+            "isDeclaredConst": false,
+            "modifiers": [],
+            "name": "_setFeeSheet",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 2949,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 2948,
+                  "name": "_sheet",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 2986,
+                  "src": "1739:14:17",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 2947,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "1739:7:17",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "1738:16:17"
+            },
+            "payable": false,
+            "returnParameters": {
+              "id": 2950,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "1764:0:17"
+            },
+            "scope": 2987,
+            "src": "1717:356:17",
+            "stateMutability": "nonpayable",
+            "superFunction": null,
+            "visibility": "internal"
+          }
+        ],
+        "scope": 2988,
+        "src": "329:1746:17"
+      }
+    ],
+    "src": "0:2075:17"
+  },
+  "compiler": {
+    "name": "solc",
+    "version": "0.4.24+commit.e67f0147.Emscripten.clang"
+  },
+  "networks": {},
+  "schemaVersion": "2.0.1",
+  "updatedAt": "2018-08-13T20:26:34.622Z"
+}

@@ -1,0 +1,879 @@
+{
+  "contractName": "DelayedUpgradeabilityProxyMock",
+  "abi": [
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "pendingImplementationIsSet",
+      "outputs": [
+        {
+          "name": "",
+          "type": "bool"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "pendingImplementationApplicationDate",
+      "outputs": [
+        {
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "pendingImplementation",
+      "outputs": [
+        {
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "UPGRADE_DELAY",
+      "outputs": [
+        {
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [],
+      "name": "renounceOwnership",
+      "outputs": [],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "owner",
+      "outputs": [
+        {
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "_newOwner",
+          "type": "address"
+        }
+      ],
+      "name": "transferOwnership",
+      "outputs": [],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "name": "i",
+          "type": "address"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "constructor"
+    },
+    {
+      "payable": true,
+      "stateMutability": "payable",
+      "type": "fallback"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "name": "previousOwner",
+          "type": "address"
+        }
+      ],
+      "name": "OwnershipRenounced",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "name": "previousOwner",
+          "type": "address"
+        },
+        {
+          "indexed": true,
+          "name": "newOwner",
+          "type": "address"
+        }
+      ],
+      "name": "OwnershipTransferred",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "name": "oldPendingImplementation",
+          "type": "address"
+        },
+        {
+          "indexed": true,
+          "name": "newPendingImplementation",
+          "type": "address"
+        }
+      ],
+      "name": "PendingImplementationChanged",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": false,
+          "name": "implementation",
+          "type": "address"
+        }
+      ],
+      "name": "Upgraded",
+      "type": "event"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "implementation",
+          "type": "address"
+        }
+      ],
+      "name": "upgradeTo",
+      "outputs": [],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function"
+    }
+  ],
+  "bytecode": "0x60806040526224ea0060025534801561001757600080fd5b5060405160208061088583398101604081815291517f6f72672e7a657070656c696e6f732e70726f78792e696d706c656d656e74617482527f696f6e000000000000000000000000000000000000000000000000000000000060208301529151908190036023019020819081906000805160206108658339815191521461009a57fe5b6100ac816401000000006100c6810204565b505060038054600160a060020a031916331790555061018c565b60006100de8264010000000061069661018482021704565b151561017157604080517f08c379a000000000000000000000000000000000000000000000000000000000815260206004820152603b60248201527f43616e6e6f742073657420612070726f787920696d706c656d656e746174696f60448201527f6e20746f2061206e6f6e2d636f6e747261637420616464726573730000000000606482015290519081900360840190fd5b5060008051602061086583398151915255565b6000903b1190565b6106ca8061019b6000396000f30060806040526004361061008d5763ffffffff7c01000000000000000000000000000000000000000000000000000000006000350416630fdca7f0811461009757806312c3c5bd146100c05780633659cfe6146100e7578063396f7b231461011557806347fe8b1d14610153578063715018a6146101685780638da5cb5b1461017d578063f2fde38b14610192575b6100956101c0565b005b3480156100a357600080fd5b506100ac6101da565b604080519115158252519081900360200190f35b3480156100cc57600080fd5b506100d56101fb565b60408051918252519081900360200190f35b3480156100f357600080fd5b5061009573ffffffffffffffffffffffffffffffffffffffff60043516610201565b34801561012157600080fd5b5061012a610231565b6040805173ffffffffffffffffffffffffffffffffffffffff9092168252519081900360200190f35b34801561015f57600080fd5b506100d561024d565b34801561017457600080fd5b50610095610253565b34801561018957600080fd5b5061012a6102e6565b34801561019e57600080fd5b5061009573ffffffffffffffffffffffffffffffffffffffff60043516610302565b6101c861032f565b6101d86101d36103ab565b6103d0565b565b60005474010000000000000000000000000000000000000000900460ff1681565b60015481565b60035473ffffffffffffffffffffffffffffffffffffffff16331461022557600080fd5b61022e816103f4565b50565b60005473ffffffffffffffffffffffffffffffffffffffff1681565b60025481565b60035473ffffffffffffffffffffffffffffffffffffffff16331461027757600080fd5b60035460405173ffffffffffffffffffffffffffffffffffffffff909116907ff8df31144d9c2f0f6b59d69b8b98abd5459d07f2742c4df920b25aae33c6482090600090a2600380547fffffffffffffffffffffffff0000000000000000000000000000000000000000169055565b60035473ffffffffffffffffffffffffffffffffffffffff1681565b60035473ffffffffffffffffffffffffffffffffffffffff16331461032657600080fd5b61022e816104bb565b60005474010000000000000000000000000000000000000000900460ff16801561035a575060015442115b156101d8576000546103819073ffffffffffffffffffffffffffffffffffffffff1661056b565b600080547fffffffffffffffffffffff00ffffffffffffffffffffffffffffffffffffffff169055565b7f7050c9e0f4ca769c69bd3a8ef740bc37934f8e2c036e5a723fd8ee048ed3f8c35490565b3660008037600080366000845af43d6000803e8080156103ef573d6000f35b3d6000fd5b600080547fffffffffffffffffffffff00ffffffffffffffffffffffffffffffffffffffff73ffffffffffffffffffffffffffffffffffffffff8481167fffffffffffffffffffffffff0000000000000000000000000000000000000000841681179290921674010000000000000000000000000000000000000000178455604051921692909183917fd272ea007d56dfdbd4784dc98e326b0e9230a7c8100e10d11c72ab1fdf140d4791a36002546104b490429063ffffffff6105c016565b6001555050565b73ffffffffffffffffffffffffffffffffffffffff811615156104dd57600080fd5b60035460405173ffffffffffffffffffffffffffffffffffffffff8084169216907f8be0079c531659141344cd1fd0a4f28419497f9722a3daafe3b4186f6b6457e090600090a3600380547fffffffffffffffffffffffff00000000000000000000000000000000000000001673ffffffffffffffffffffffffffffffffffffffff92909216919091179055565b610574816105d3565b6040805173ffffffffffffffffffffffffffffffffffffffff8316815290517fbc7cd75a20ee27fd9adebab32041f755214dbc6bffa90cc0225b39da2e5c2d3b9181900360200190a150565b818101828110156105cd57fe5b92915050565b60006105de82610696565b151561067157604080517f08c379a000000000000000000000000000000000000000000000000000000000815260206004820152603b60248201527f43616e6e6f742073657420612070726f787920696d706c656d656e746174696f60448201527f6e20746f2061206e6f6e2d636f6e747261637420616464726573730000000000606482015290519081900360840190fd5b507f7050c9e0f4ca769c69bd3a8ef740bc37934f8e2c036e5a723fd8ee048ed3f8c355565b6000903b11905600a165627a7a7230582054d97d737c197466bab721660e177a8a8ee859c30eb59c1f9891897eab61823e00297050c9e0f4ca769c69bd3a8ef740bc37934f8e2c036e5a723fd8ee048ed3f8c3",
+  "deployedBytecode": "0x60806040526004361061008d5763ffffffff7c01000000000000000000000000000000000000000000000000000000006000350416630fdca7f0811461009757806312c3c5bd146100c05780633659cfe6146100e7578063396f7b231461011557806347fe8b1d14610153578063715018a6146101685780638da5cb5b1461017d578063f2fde38b14610192575b6100956101c0565b005b3480156100a357600080fd5b506100ac6101da565b604080519115158252519081900360200190f35b3480156100cc57600080fd5b506100d56101fb565b60408051918252519081900360200190f35b3480156100f357600080fd5b5061009573ffffffffffffffffffffffffffffffffffffffff60043516610201565b34801561012157600080fd5b5061012a610231565b6040805173ffffffffffffffffffffffffffffffffffffffff9092168252519081900360200190f35b34801561015f57600080fd5b506100d561024d565b34801561017457600080fd5b50610095610253565b34801561018957600080fd5b5061012a6102e6565b34801561019e57600080fd5b5061009573ffffffffffffffffffffffffffffffffffffffff60043516610302565b6101c861032f565b6101d86101d36103ab565b6103d0565b565b60005474010000000000000000000000000000000000000000900460ff1681565b60015481565b60035473ffffffffffffffffffffffffffffffffffffffff16331461022557600080fd5b61022e816103f4565b50565b60005473ffffffffffffffffffffffffffffffffffffffff1681565b60025481565b60035473ffffffffffffffffffffffffffffffffffffffff16331461027757600080fd5b60035460405173ffffffffffffffffffffffffffffffffffffffff909116907ff8df31144d9c2f0f6b59d69b8b98abd5459d07f2742c4df920b25aae33c6482090600090a2600380547fffffffffffffffffffffffff0000000000000000000000000000000000000000169055565b60035473ffffffffffffffffffffffffffffffffffffffff1681565b60035473ffffffffffffffffffffffffffffffffffffffff16331461032657600080fd5b61022e816104bb565b60005474010000000000000000000000000000000000000000900460ff16801561035a575060015442115b156101d8576000546103819073ffffffffffffffffffffffffffffffffffffffff1661056b565b600080547fffffffffffffffffffffff00ffffffffffffffffffffffffffffffffffffffff169055565b7f7050c9e0f4ca769c69bd3a8ef740bc37934f8e2c036e5a723fd8ee048ed3f8c35490565b3660008037600080366000845af43d6000803e8080156103ef573d6000f35b3d6000fd5b600080547fffffffffffffffffffffff00ffffffffffffffffffffffffffffffffffffffff73ffffffffffffffffffffffffffffffffffffffff8481167fffffffffffffffffffffffff0000000000000000000000000000000000000000841681179290921674010000000000000000000000000000000000000000178455604051921692909183917fd272ea007d56dfdbd4784dc98e326b0e9230a7c8100e10d11c72ab1fdf140d4791a36002546104b490429063ffffffff6105c016565b6001555050565b73ffffffffffffffffffffffffffffffffffffffff811615156104dd57600080fd5b60035460405173ffffffffffffffffffffffffffffffffffffffff8084169216907f8be0079c531659141344cd1fd0a4f28419497f9722a3daafe3b4186f6b6457e090600090a3600380547fffffffffffffffffffffffff00000000000000000000000000000000000000001673ffffffffffffffffffffffffffffffffffffffff92909216919091179055565b610574816105d3565b6040805173ffffffffffffffffffffffffffffffffffffffff8316815290517fbc7cd75a20ee27fd9adebab32041f755214dbc6bffa90cc0225b39da2e5c2d3b9181900360200190a150565b818101828110156105cd57fe5b92915050565b60006105de82610696565b151561067157604080517f08c379a000000000000000000000000000000000000000000000000000000000815260206004820152603b60248201527f43616e6e6f742073657420612070726f787920696d706c656d656e746174696f60448201527f6e20746f2061206e6f6e2d636f6e747261637420616464726573730000000000606482015290519081900360840190fd5b507f7050c9e0f4ca769c69bd3a8ef740bc37934f8e2c036e5a723fd8ee048ed3f8c355565b6000903b11905600a165627a7a7230582054d97d737c197466bab721660e177a8a8ee859c30eb59c1f9891897eab61823e0029",
+  "sourceMap": "135:266:31:-;;;650:7:30;619:38;;220:62:31;8:9:-1;5:2;;;30:1;27;20:12;5:2;220:62:31;;;;;;;;;;;;;;;;1043:48:40;;;;220:62:31;1043:48:40;;;;;;;;;;;;;220:62:31;;;;-1:-1:-1;;;;;;;;;;;1020:71:40;1013:79;;;;1099:35;1118:15;1099:18;;;;:35;:::i;:::-;-1:-1:-1;;567:5:36;:18;;-1:-1:-1;;;;;;567:18:36;575:10;567:18;;;-1:-1:-1;135:266:31;;1822:289:40;2012:12;1899:42;1923:17;1899:23;;;;;;:42;:::i;:::-;1891:114;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;-1:-1:-1;;;;;;;;;;;;2070:31:40;2062:45::o;437:576:33:-;494:4;969:17;;1000:8;;437:576::o;135:266:31:-;;;;;;;",
+  "deployedSourceMap": "135:266:31:-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;454:11:39;:9;:11::i;:::-;135:266:31;446:38:30;;8:9:-1;5:2;;;30:1;27;20:12;5:2;446:38:30;;;;;;;;;;;;;;;;;;;;;;490:51;;8:9:-1;5:2;;;30:1;27;20:12;5:2;490:51:30;;;;;;;;;;;;;;;;;;;;288:111:31;;8:9:-1;5:2;;;30:1;27;20:12;5:2;-1:-1;288:111:31;;;;;;;404:36:30;;8:9:-1;5:2;;;30:1;27;20:12;5:2;404:36:30;;;;;;;;;;;;;;;;;;;;;;;619:38;;8:9:-1;5:2;;;30:1;27;20:12;5:2;619:38:30;;;;1001:111:36;;8:9:-1;5:2;;;30:1;27;20:12;5:2;1001:111:36;;;;238:20;;8:9:-1;5:2;;;30:1;27;20:12;5:2;238:20:36;;;;1274:103;;8:9:-1;5:2;;;30:1;27;20:12;5:2;-1:-1;1274:103:36;;;;;;;1953:90:39;1989:15;:13;:15::i;:::-;2010:28;2020:17;:15;:17::i;:::-;2010:9;:28::i;:::-;1953:90::o;446:38:30:-;;;;;;;;;:::o;490:51::-;;;;:::o;288:111:31:-;719:5:36;;;;705:10;:19;697:28;;;;;;358:34:31;377:14;358:18;:34::i;:::-;288:111;:::o;404:36:30:-;;;;;;:::o;619:38::-;;;;:::o;1001:111:36:-;719:5;;;;705:10;:19;697:28;;;;;;1077:5;;1058:25;;1077:5;;;;;1058:25;;1077:5;;1058:25;1089:5;:18;;;;;;1001:111::o;238:20::-;;;;;;:::o;1274:103::-;719:5;;;;705:10;:19;697:28;;;;;;1343:29;1362:9;1343:18;:29::i;1880:234:30:-;1928:26;;;;;;;:72;;;;;1964:36;;1958:3;:42;1928:72;1924:184;;;2027:21;;2016:33;;2027:21;;2016:10;:33::i;:::-;2092:5;2063:34;;;;;;1880:234::o;1252:156:40:-;781:66;1387:11;;1371:33::o;879:731:39:-;1181:12;1178:1;1175;1162:32;1371:1;1368;1354:12;1351:1;1335:14;1330:3;1317:56;1435:14;1432:1;1429;1414:36;1465:6;1520:36;;;;1583:14;1580:1;1573:25;1520:36;1539:14;1536:1;1529:25;1144:381:30;1215:32;1250:21;;1329:33;1250:21;1281:38;;;;;;;;1329:33;;;;;;;;1377:70;;1250:21;;;1281:38;;1250:21;;1377:70;;;1504:13;;1496:22;;:3;;:22;:7;:22;:::i;:::-;1457:36;:61;-1:-1:-1;;1144:381:30:o;1512:171:36:-;1582:23;;;;;1574:32;;;;;;1638:5;;1617:38;;;;;;;1638:5;;1617:38;;1638:5;;1617:38;1661:5;:17;;;;;;;;;;;;;;;1512:171::o;1543:142:40:-;1605:37;1624:17;1605:18;:37::i;:::-;1653:27;;;;;;;;;;;;;;;;;;;1543:142;:::o;1214:123:35:-;1293:5;;;1311:6;;;;1304:14;;;;1214:123;;;;:::o;1822:289:40:-;2012:12;1899:42;1923:17;1899:23;:42::i;:::-;1891:114;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;-1:-1:-1;781:66:40;2070:31;2062:45::o;437:576:33:-;494:4;969:17;;1000:8;;437:576::o",
+  "source": "pragma solidity ^0.4.24;\n\nimport \"../DelayedUpgradeabilityProxy.sol\";\nimport \"openzeppelin-solidity/contracts/ownership/Ownable.sol\";\n\ncontract DelayedUpgradeabilityProxyMock is DelayedUpgradeabilityProxy, Ownable {\n    constructor(address i) DelayedUpgradeabilityProxy(i) public {}\n\n    function upgradeTo(address implementation) public onlyOwner {\n        _setPendingUpgrade(implementation);\n    }\n}",
+  "sourcePath": "/Users/tanishqaggarwal/Documents/carbon/fiat_gateway/contracts/upgradeability/mocks/DelayedUpgradeabilityProxyMock.sol",
+  "ast": {
+    "absolutePath": "/Users/tanishqaggarwal/Documents/carbon/fiat_gateway/contracts/upgradeability/mocks/DelayedUpgradeabilityProxyMock.sol",
+    "exportedSymbols": {
+      "DelayedUpgradeabilityProxyMock": [
+        4909
+      ]
+    },
+    "id": 4910,
+    "nodeType": "SourceUnit",
+    "nodes": [
+      {
+        "id": 4881,
+        "literals": [
+          "solidity",
+          "^",
+          "0.4",
+          ".24"
+        ],
+        "nodeType": "PragmaDirective",
+        "src": "0:24:31"
+      },
+      {
+        "absolutePath": "/Users/tanishqaggarwal/Documents/carbon/fiat_gateway/contracts/upgradeability/DelayedUpgradeabilityProxy.sol",
+        "file": "../DelayedUpgradeabilityProxy.sol",
+        "id": 4882,
+        "nodeType": "ImportDirective",
+        "scope": 4910,
+        "sourceUnit": 4880,
+        "src": "26:43:31",
+        "symbolAliases": [],
+        "unitAlias": ""
+      },
+      {
+        "absolutePath": "openzeppelin-solidity/contracts/ownership/Ownable.sol",
+        "file": "openzeppelin-solidity/contracts/ownership/Ownable.sol",
+        "id": 4883,
+        "nodeType": "ImportDirective",
+        "scope": 4910,
+        "sourceUnit": 5199,
+        "src": "70:63:31",
+        "symbolAliases": [],
+        "unitAlias": ""
+      },
+      {
+        "baseContracts": [
+          {
+            "arguments": null,
+            "baseName": {
+              "contractScope": null,
+              "id": 4884,
+              "name": "DelayedUpgradeabilityProxy",
+              "nodeType": "UserDefinedTypeName",
+              "referencedDeclaration": 4879,
+              "src": "178:26:31",
+              "typeDescriptions": {
+                "typeIdentifier": "t_contract$_DelayedUpgradeabilityProxy_$4879",
+                "typeString": "contract DelayedUpgradeabilityProxy"
+              }
+            },
+            "id": 4885,
+            "nodeType": "InheritanceSpecifier",
+            "src": "178:26:31"
+          },
+          {
+            "arguments": null,
+            "baseName": {
+              "contractScope": null,
+              "id": 4886,
+              "name": "Ownable",
+              "nodeType": "UserDefinedTypeName",
+              "referencedDeclaration": 5198,
+              "src": "206:7:31",
+              "typeDescriptions": {
+                "typeIdentifier": "t_contract$_Ownable_$5198",
+                "typeString": "contract Ownable"
+              }
+            },
+            "id": 4887,
+            "nodeType": "InheritanceSpecifier",
+            "src": "206:7:31"
+          }
+        ],
+        "contractDependencies": [
+          4879,
+          5198,
+          5311,
+          5387
+        ],
+        "contractKind": "contract",
+        "documentation": null,
+        "fullyImplemented": true,
+        "id": 4909,
+        "linearizedBaseContracts": [
+          4909,
+          5198,
+          4879,
+          5387,
+          5311
+        ],
+        "name": "DelayedUpgradeabilityProxyMock",
+        "nodeType": "ContractDefinition",
+        "nodes": [
+          {
+            "body": {
+              "id": 4895,
+              "nodeType": "Block",
+              "src": "280:2:31",
+              "statements": []
+            },
+            "documentation": null,
+            "id": 4896,
+            "implemented": true,
+            "isConstructor": true,
+            "isDeclaredConst": false,
+            "modifiers": [
+              {
+                "arguments": [
+                  {
+                    "argumentTypes": null,
+                    "id": 4892,
+                    "name": "i",
+                    "nodeType": "Identifier",
+                    "overloadedDeclarations": [],
+                    "referencedDeclaration": 4889,
+                    "src": "270:1:31",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  }
+                ],
+                "id": 4893,
+                "modifierName": {
+                  "argumentTypes": null,
+                  "id": 4891,
+                  "name": "DelayedUpgradeabilityProxy",
+                  "nodeType": "Identifier",
+                  "overloadedDeclarations": [],
+                  "referencedDeclaration": 4879,
+                  "src": "243:26:31",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_type$_t_contract$_DelayedUpgradeabilityProxy_$4879_$",
+                    "typeString": "type(contract DelayedUpgradeabilityProxy)"
+                  }
+                },
+                "nodeType": "ModifierInvocation",
+                "src": "243:29:31"
+              }
+            ],
+            "name": "",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 4890,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 4889,
+                  "name": "i",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 4896,
+                  "src": "232:9:31",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 4888,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "232:7:31",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "231:11:31"
+            },
+            "payable": false,
+            "returnParameters": {
+              "id": 4894,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "280:0:31"
+            },
+            "scope": 4909,
+            "src": "220:62:31",
+            "stateMutability": "nonpayable",
+            "superFunction": null,
+            "visibility": "public"
+          },
+          {
+            "body": {
+              "id": 4907,
+              "nodeType": "Block",
+              "src": "348:51:31",
+              "statements": [
+                {
+                  "expression": {
+                    "argumentTypes": null,
+                    "arguments": [
+                      {
+                        "argumentTypes": null,
+                        "id": 4904,
+                        "name": "implementation",
+                        "nodeType": "Identifier",
+                        "overloadedDeclarations": [],
+                        "referencedDeclaration": 4898,
+                        "src": "377:14:31",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_address",
+                          "typeString": "address"
+                        }
+                      }
+                    ],
+                    "expression": {
+                      "argumentTypes": [
+                        {
+                          "typeIdentifier": "t_address",
+                          "typeString": "address"
+                        }
+                      ],
+                      "id": 4903,
+                      "name": "_setPendingUpgrade",
+                      "nodeType": "Identifier",
+                      "overloadedDeclarations": [],
+                      "referencedDeclaration": 4859,
+                      "src": "358:18:31",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_function_internal_nonpayable$_t_address_$returns$__$",
+                        "typeString": "function (address)"
+                      }
+                    },
+                    "id": 4905,
+                    "isConstant": false,
+                    "isLValue": false,
+                    "isPure": false,
+                    "kind": "functionCall",
+                    "lValueRequested": false,
+                    "names": [],
+                    "nodeType": "FunctionCall",
+                    "src": "358:34:31",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_tuple$__$",
+                      "typeString": "tuple()"
+                    }
+                  },
+                  "id": 4906,
+                  "nodeType": "ExpressionStatement",
+                  "src": "358:34:31"
+                }
+              ]
+            },
+            "documentation": null,
+            "id": 4908,
+            "implemented": true,
+            "isConstructor": false,
+            "isDeclaredConst": false,
+            "modifiers": [
+              {
+                "arguments": null,
+                "id": 4901,
+                "modifierName": {
+                  "argumentTypes": null,
+                  "id": 4900,
+                  "name": "onlyOwner",
+                  "nodeType": "Identifier",
+                  "overloadedDeclarations": [],
+                  "referencedDeclaration": 5146,
+                  "src": "338:9:31",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_modifier$__$",
+                    "typeString": "modifier ()"
+                  }
+                },
+                "nodeType": "ModifierInvocation",
+                "src": "338:9:31"
+              }
+            ],
+            "name": "upgradeTo",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 4899,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 4898,
+                  "name": "implementation",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 4908,
+                  "src": "307:22:31",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 4897,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "307:7:31",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "306:24:31"
+            },
+            "payable": false,
+            "returnParameters": {
+              "id": 4902,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "348:0:31"
+            },
+            "scope": 4909,
+            "src": "288:111:31",
+            "stateMutability": "nonpayable",
+            "superFunction": null,
+            "visibility": "public"
+          }
+        ],
+        "scope": 4910,
+        "src": "135:266:31"
+      }
+    ],
+    "src": "0:401:31"
+  },
+  "legacyAST": {
+    "absolutePath": "/Users/tanishqaggarwal/Documents/carbon/fiat_gateway/contracts/upgradeability/mocks/DelayedUpgradeabilityProxyMock.sol",
+    "exportedSymbols": {
+      "DelayedUpgradeabilityProxyMock": [
+        4909
+      ]
+    },
+    "id": 4910,
+    "nodeType": "SourceUnit",
+    "nodes": [
+      {
+        "id": 4881,
+        "literals": [
+          "solidity",
+          "^",
+          "0.4",
+          ".24"
+        ],
+        "nodeType": "PragmaDirective",
+        "src": "0:24:31"
+      },
+      {
+        "absolutePath": "/Users/tanishqaggarwal/Documents/carbon/fiat_gateway/contracts/upgradeability/DelayedUpgradeabilityProxy.sol",
+        "file": "../DelayedUpgradeabilityProxy.sol",
+        "id": 4882,
+        "nodeType": "ImportDirective",
+        "scope": 4910,
+        "sourceUnit": 4880,
+        "src": "26:43:31",
+        "symbolAliases": [],
+        "unitAlias": ""
+      },
+      {
+        "absolutePath": "openzeppelin-solidity/contracts/ownership/Ownable.sol",
+        "file": "openzeppelin-solidity/contracts/ownership/Ownable.sol",
+        "id": 4883,
+        "nodeType": "ImportDirective",
+        "scope": 4910,
+        "sourceUnit": 5199,
+        "src": "70:63:31",
+        "symbolAliases": [],
+        "unitAlias": ""
+      },
+      {
+        "baseContracts": [
+          {
+            "arguments": null,
+            "baseName": {
+              "contractScope": null,
+              "id": 4884,
+              "name": "DelayedUpgradeabilityProxy",
+              "nodeType": "UserDefinedTypeName",
+              "referencedDeclaration": 4879,
+              "src": "178:26:31",
+              "typeDescriptions": {
+                "typeIdentifier": "t_contract$_DelayedUpgradeabilityProxy_$4879",
+                "typeString": "contract DelayedUpgradeabilityProxy"
+              }
+            },
+            "id": 4885,
+            "nodeType": "InheritanceSpecifier",
+            "src": "178:26:31"
+          },
+          {
+            "arguments": null,
+            "baseName": {
+              "contractScope": null,
+              "id": 4886,
+              "name": "Ownable",
+              "nodeType": "UserDefinedTypeName",
+              "referencedDeclaration": 5198,
+              "src": "206:7:31",
+              "typeDescriptions": {
+                "typeIdentifier": "t_contract$_Ownable_$5198",
+                "typeString": "contract Ownable"
+              }
+            },
+            "id": 4887,
+            "nodeType": "InheritanceSpecifier",
+            "src": "206:7:31"
+          }
+        ],
+        "contractDependencies": [
+          4879,
+          5198,
+          5311,
+          5387
+        ],
+        "contractKind": "contract",
+        "documentation": null,
+        "fullyImplemented": true,
+        "id": 4909,
+        "linearizedBaseContracts": [
+          4909,
+          5198,
+          4879,
+          5387,
+          5311
+        ],
+        "name": "DelayedUpgradeabilityProxyMock",
+        "nodeType": "ContractDefinition",
+        "nodes": [
+          {
+            "body": {
+              "id": 4895,
+              "nodeType": "Block",
+              "src": "280:2:31",
+              "statements": []
+            },
+            "documentation": null,
+            "id": 4896,
+            "implemented": true,
+            "isConstructor": true,
+            "isDeclaredConst": false,
+            "modifiers": [
+              {
+                "arguments": [
+                  {
+                    "argumentTypes": null,
+                    "id": 4892,
+                    "name": "i",
+                    "nodeType": "Identifier",
+                    "overloadedDeclarations": [],
+                    "referencedDeclaration": 4889,
+                    "src": "270:1:31",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  }
+                ],
+                "id": 4893,
+                "modifierName": {
+                  "argumentTypes": null,
+                  "id": 4891,
+                  "name": "DelayedUpgradeabilityProxy",
+                  "nodeType": "Identifier",
+                  "overloadedDeclarations": [],
+                  "referencedDeclaration": 4879,
+                  "src": "243:26:31",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_type$_t_contract$_DelayedUpgradeabilityProxy_$4879_$",
+                    "typeString": "type(contract DelayedUpgradeabilityProxy)"
+                  }
+                },
+                "nodeType": "ModifierInvocation",
+                "src": "243:29:31"
+              }
+            ],
+            "name": "",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 4890,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 4889,
+                  "name": "i",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 4896,
+                  "src": "232:9:31",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 4888,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "232:7:31",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "231:11:31"
+            },
+            "payable": false,
+            "returnParameters": {
+              "id": 4894,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "280:0:31"
+            },
+            "scope": 4909,
+            "src": "220:62:31",
+            "stateMutability": "nonpayable",
+            "superFunction": null,
+            "visibility": "public"
+          },
+          {
+            "body": {
+              "id": 4907,
+              "nodeType": "Block",
+              "src": "348:51:31",
+              "statements": [
+                {
+                  "expression": {
+                    "argumentTypes": null,
+                    "arguments": [
+                      {
+                        "argumentTypes": null,
+                        "id": 4904,
+                        "name": "implementation",
+                        "nodeType": "Identifier",
+                        "overloadedDeclarations": [],
+                        "referencedDeclaration": 4898,
+                        "src": "377:14:31",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_address",
+                          "typeString": "address"
+                        }
+                      }
+                    ],
+                    "expression": {
+                      "argumentTypes": [
+                        {
+                          "typeIdentifier": "t_address",
+                          "typeString": "address"
+                        }
+                      ],
+                      "id": 4903,
+                      "name": "_setPendingUpgrade",
+                      "nodeType": "Identifier",
+                      "overloadedDeclarations": [],
+                      "referencedDeclaration": 4859,
+                      "src": "358:18:31",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_function_internal_nonpayable$_t_address_$returns$__$",
+                        "typeString": "function (address)"
+                      }
+                    },
+                    "id": 4905,
+                    "isConstant": false,
+                    "isLValue": false,
+                    "isPure": false,
+                    "kind": "functionCall",
+                    "lValueRequested": false,
+                    "names": [],
+                    "nodeType": "FunctionCall",
+                    "src": "358:34:31",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_tuple$__$",
+                      "typeString": "tuple()"
+                    }
+                  },
+                  "id": 4906,
+                  "nodeType": "ExpressionStatement",
+                  "src": "358:34:31"
+                }
+              ]
+            },
+            "documentation": null,
+            "id": 4908,
+            "implemented": true,
+            "isConstructor": false,
+            "isDeclaredConst": false,
+            "modifiers": [
+              {
+                "arguments": null,
+                "id": 4901,
+                "modifierName": {
+                  "argumentTypes": null,
+                  "id": 4900,
+                  "name": "onlyOwner",
+                  "nodeType": "Identifier",
+                  "overloadedDeclarations": [],
+                  "referencedDeclaration": 5146,
+                  "src": "338:9:31",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_modifier$__$",
+                    "typeString": "modifier ()"
+                  }
+                },
+                "nodeType": "ModifierInvocation",
+                "src": "338:9:31"
+              }
+            ],
+            "name": "upgradeTo",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 4899,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 4898,
+                  "name": "implementation",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 4908,
+                  "src": "307:22:31",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 4897,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "307:7:31",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "306:24:31"
+            },
+            "payable": false,
+            "returnParameters": {
+              "id": 4902,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "348:0:31"
+            },
+            "scope": 4909,
+            "src": "288:111:31",
+            "stateMutability": "nonpayable",
+            "superFunction": null,
+            "visibility": "public"
+          }
+        ],
+        "scope": 4910,
+        "src": "135:266:31"
+      }
+    ],
+    "src": "0:401:31"
+  },
+  "compiler": {
+    "name": "solc",
+    "version": "0.4.24+commit.e67f0147.Emscripten.clang"
+  },
+  "networks": {},
+  "schemaVersion": "2.0.1",
+  "updatedAt": "2018-08-13T13:49:18.901Z"
+}

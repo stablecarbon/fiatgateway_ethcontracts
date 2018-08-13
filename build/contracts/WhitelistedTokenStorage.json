@@ -1,0 +1,393 @@
+{
+  "contractName": "WhitelistedTokenStorage",
+  "abi": [
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "cusdAddress",
+      "outputs": [
+        {
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "name": "_cusdAddress",
+          "type": "address"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "constructor"
+    }
+  ],
+  "bytecode": "0x608060405234801561001057600080fd5b50604051602080610117833981016040525160008054600160a060020a03909216600160a060020a031990921691909117905560c6806100516000396000f300608060405260043610603e5763ffffffff7c0100000000000000000000000000000000000000000000000000000000600035041663636f0cf881146043575b600080fd5b348015604e57600080fd5b506055607e565b6040805173ffffffffffffffffffffffffffffffffffffffff9092168252519081900360200190f35b60005473ffffffffffffffffffffffffffffffffffffffff16815600a165627a7a723058200aef1c7aa0da425a9943c469dcf1908f4b79f8ca25a586c4c53d31350e7fe1750029",
+  "deployedBytecode": "0x608060405260043610603e5763ffffffff7c0100000000000000000000000000000000000000000000000000000000600035041663636f0cf881146043575b600080fd5b348015604e57600080fd5b506055607e565b6040805173ffffffffffffffffffffffffffffffffffffffff9092168252519081900360200190f35b60005473ffffffffffffffffffffffffffffffffffffffff16815600a165627a7a723058200aef1c7aa0da425a9943c469dcf1908f4b79f8ca25a586c4c53d31350e7fe1750029",
+  "sourceMap": "135:296:28:-;;;344:85;8:9:-1;5:2;;;30:1;27;20:12;5:2;344:85:28;;;;;;;;;;;;;396:11;:26;;-1:-1:-1;;;;;396:26:28;;;-1:-1:-1;;;;;;396:26:28;;;;;;;;;135:296;;;;;;",
+  "deployedSourceMap": "135:296:28:-;;;;;;;;;;;;;;;;;;;;;;;204:26;;8:9:-1;5:2;;;30:1;27;20:12;5:2;204:26:28;;;;;;;;;;;;;;;;;;;;;;;;;;;;;:::o",
+  "source": "pragma solidity ^0.4.24;\n\n/**\n* @title WhitelistedTokenStorage\n* @notice Contains necessary storage contracts for WhitelistedToken.\n*/\ncontract WhitelistedTokenStorage{\n    /**\n        Storage\n    */\n    address public cusdAddress;\n\n    /**\n    * @dev a WhitelistedTokenStorage can set its storages only once, on construction\n    *\n    **/\n    constructor (address _cusdAddress) public {\n        cusdAddress = _cusdAddress;\n    }\n}",
+  "sourcePath": "/Users/tanishqaggarwal/Documents/carbon/fiat_gateway/contracts/tokens/whitelistedToken/dataStorage/WhitelistedTokenStorage.sol",
+  "ast": {
+    "absolutePath": "/Users/tanishqaggarwal/Documents/carbon/fiat_gateway/contracts/tokens/whitelistedToken/dataStorage/WhitelistedTokenStorage.sol",
+    "exportedSymbols": {
+      "WhitelistedTokenStorage": [
+        4552
+      ]
+    },
+    "id": 4553,
+    "nodeType": "SourceUnit",
+    "nodes": [
+      {
+        "id": 4539,
+        "literals": [
+          "solidity",
+          "^",
+          "0.4",
+          ".24"
+        ],
+        "nodeType": "PragmaDirective",
+        "src": "0:24:28"
+      },
+      {
+        "baseContracts": [],
+        "contractDependencies": [],
+        "contractKind": "contract",
+        "documentation": "@title WhitelistedTokenStorage\n@notice Contains necessary storage contracts for WhitelistedToken.",
+        "fullyImplemented": true,
+        "id": 4552,
+        "linearizedBaseContracts": [
+          4552
+        ],
+        "name": "WhitelistedTokenStorage",
+        "nodeType": "ContractDefinition",
+        "nodes": [
+          {
+            "constant": false,
+            "id": 4541,
+            "name": "cusdAddress",
+            "nodeType": "VariableDeclaration",
+            "scope": 4552,
+            "src": "204:26:28",
+            "stateVariable": true,
+            "storageLocation": "default",
+            "typeDescriptions": {
+              "typeIdentifier": "t_address",
+              "typeString": "address"
+            },
+            "typeName": {
+              "id": 4540,
+              "name": "address",
+              "nodeType": "ElementaryTypeName",
+              "src": "204:7:28",
+              "typeDescriptions": {
+                "typeIdentifier": "t_address",
+                "typeString": "address"
+              }
+            },
+            "value": null,
+            "visibility": "public"
+          },
+          {
+            "body": {
+              "id": 4550,
+              "nodeType": "Block",
+              "src": "386:43:28",
+              "statements": [
+                {
+                  "expression": {
+                    "argumentTypes": null,
+                    "id": 4548,
+                    "isConstant": false,
+                    "isLValue": false,
+                    "isPure": false,
+                    "lValueRequested": false,
+                    "leftHandSide": {
+                      "argumentTypes": null,
+                      "id": 4546,
+                      "name": "cusdAddress",
+                      "nodeType": "Identifier",
+                      "overloadedDeclarations": [],
+                      "referencedDeclaration": 4541,
+                      "src": "396:11:28",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_address",
+                        "typeString": "address"
+                      }
+                    },
+                    "nodeType": "Assignment",
+                    "operator": "=",
+                    "rightHandSide": {
+                      "argumentTypes": null,
+                      "id": 4547,
+                      "name": "_cusdAddress",
+                      "nodeType": "Identifier",
+                      "overloadedDeclarations": [],
+                      "referencedDeclaration": 4543,
+                      "src": "410:12:28",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_address",
+                        "typeString": "address"
+                      }
+                    },
+                    "src": "396:26:28",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "id": 4549,
+                  "nodeType": "ExpressionStatement",
+                  "src": "396:26:28"
+                }
+              ]
+            },
+            "documentation": "@dev a WhitelistedTokenStorage can set its storages only once, on construction\n    *",
+            "id": 4551,
+            "implemented": true,
+            "isConstructor": true,
+            "isDeclaredConst": false,
+            "modifiers": [],
+            "name": "",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 4544,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 4543,
+                  "name": "_cusdAddress",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 4551,
+                  "src": "357:20:28",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 4542,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "357:7:28",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "356:22:28"
+            },
+            "payable": false,
+            "returnParameters": {
+              "id": 4545,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "386:0:28"
+            },
+            "scope": 4552,
+            "src": "344:85:28",
+            "stateMutability": "nonpayable",
+            "superFunction": null,
+            "visibility": "public"
+          }
+        ],
+        "scope": 4553,
+        "src": "135:296:28"
+      }
+    ],
+    "src": "0:431:28"
+  },
+  "legacyAST": {
+    "absolutePath": "/Users/tanishqaggarwal/Documents/carbon/fiat_gateway/contracts/tokens/whitelistedToken/dataStorage/WhitelistedTokenStorage.sol",
+    "exportedSymbols": {
+      "WhitelistedTokenStorage": [
+        4552
+      ]
+    },
+    "id": 4553,
+    "nodeType": "SourceUnit",
+    "nodes": [
+      {
+        "id": 4539,
+        "literals": [
+          "solidity",
+          "^",
+          "0.4",
+          ".24"
+        ],
+        "nodeType": "PragmaDirective",
+        "src": "0:24:28"
+      },
+      {
+        "baseContracts": [],
+        "contractDependencies": [],
+        "contractKind": "contract",
+        "documentation": "@title WhitelistedTokenStorage\n@notice Contains necessary storage contracts for WhitelistedToken.",
+        "fullyImplemented": true,
+        "id": 4552,
+        "linearizedBaseContracts": [
+          4552
+        ],
+        "name": "WhitelistedTokenStorage",
+        "nodeType": "ContractDefinition",
+        "nodes": [
+          {
+            "constant": false,
+            "id": 4541,
+            "name": "cusdAddress",
+            "nodeType": "VariableDeclaration",
+            "scope": 4552,
+            "src": "204:26:28",
+            "stateVariable": true,
+            "storageLocation": "default",
+            "typeDescriptions": {
+              "typeIdentifier": "t_address",
+              "typeString": "address"
+            },
+            "typeName": {
+              "id": 4540,
+              "name": "address",
+              "nodeType": "ElementaryTypeName",
+              "src": "204:7:28",
+              "typeDescriptions": {
+                "typeIdentifier": "t_address",
+                "typeString": "address"
+              }
+            },
+            "value": null,
+            "visibility": "public"
+          },
+          {
+            "body": {
+              "id": 4550,
+              "nodeType": "Block",
+              "src": "386:43:28",
+              "statements": [
+                {
+                  "expression": {
+                    "argumentTypes": null,
+                    "id": 4548,
+                    "isConstant": false,
+                    "isLValue": false,
+                    "isPure": false,
+                    "lValueRequested": false,
+                    "leftHandSide": {
+                      "argumentTypes": null,
+                      "id": 4546,
+                      "name": "cusdAddress",
+                      "nodeType": "Identifier",
+                      "overloadedDeclarations": [],
+                      "referencedDeclaration": 4541,
+                      "src": "396:11:28",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_address",
+                        "typeString": "address"
+                      }
+                    },
+                    "nodeType": "Assignment",
+                    "operator": "=",
+                    "rightHandSide": {
+                      "argumentTypes": null,
+                      "id": 4547,
+                      "name": "_cusdAddress",
+                      "nodeType": "Identifier",
+                      "overloadedDeclarations": [],
+                      "referencedDeclaration": 4543,
+                      "src": "410:12:28",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_address",
+                        "typeString": "address"
+                      }
+                    },
+                    "src": "396:26:28",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "id": 4549,
+                  "nodeType": "ExpressionStatement",
+                  "src": "396:26:28"
+                }
+              ]
+            },
+            "documentation": "@dev a WhitelistedTokenStorage can set its storages only once, on construction\n    *",
+            "id": 4551,
+            "implemented": true,
+            "isConstructor": true,
+            "isDeclaredConst": false,
+            "modifiers": [],
+            "name": "",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 4544,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 4543,
+                  "name": "_cusdAddress",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 4551,
+                  "src": "357:20:28",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 4542,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "357:7:28",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "356:22:28"
+            },
+            "payable": false,
+            "returnParameters": {
+              "id": 4545,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "386:0:28"
+            },
+            "scope": 4552,
+            "src": "344:85:28",
+            "stateMutability": "nonpayable",
+            "superFunction": null,
+            "visibility": "public"
+          }
+        ],
+        "scope": 4553,
+        "src": "135:296:28"
+      }
+    ],
+    "src": "0:431:28"
+  },
+  "compiler": {
+    "name": "solc",
+    "version": "0.4.24+commit.e67f0147.Emscripten.clang"
+  },
+  "networks": {},
+  "schemaVersion": "2.0.1",
+  "updatedAt": "2018-08-13T20:26:34.645Z"
+}

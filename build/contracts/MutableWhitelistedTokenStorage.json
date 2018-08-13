@@ -1,0 +1,2064 @@
+{
+  "contractName": "MutableWhitelistedTokenStorage",
+  "abi": [
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "cusdAddress",
+      "outputs": [
+        {
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [],
+      "name": "renounceOwnership",
+      "outputs": [],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "owner",
+      "outputs": [
+        {
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "_newOwner",
+          "type": "address"
+        }
+      ],
+      "name": "transferOwnership",
+      "outputs": [],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "name": "cusd",
+          "type": "address"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "constructor"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "name": "oldCUSD",
+          "type": "address"
+        },
+        {
+          "indexed": true,
+          "name": "newCUSD",
+          "type": "address"
+        }
+      ],
+      "name": "CUSDAddressChanged",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "name": "previousOwner",
+          "type": "address"
+        }
+      ],
+      "name": "OwnershipRenounced",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "name": "previousOwner",
+          "type": "address"
+        },
+        {
+          "indexed": true,
+          "name": "newOwner",
+          "type": "address"
+        }
+      ],
+      "name": "OwnershipTransferred",
+      "type": "event"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "_cusd",
+          "type": "address"
+        }
+      ],
+      "name": "setCUSDAddress",
+      "outputs": [],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function"
+    }
+  ],
+  "bytecode": "0x608060405234801561001057600080fd5b5060405160208061051a833981016040525160008054600160a060020a0319908116331790915560018054600160a060020a03909316929091169190911790556104bb8061005f6000396000f30060806040526004361061006c5763ffffffff7c0100000000000000000000000000000000000000000000000000000000600035041663636f0cf88114610071578063715018a6146100af5780638da5cb5b146100c6578063a00d7740146100db578063f2fde38b14610109575b600080fd5b34801561007d57600080fd5b50610086610137565b6040805173ffffffffffffffffffffffffffffffffffffffff9092168252519081900360200190f35b3480156100bb57600080fd5b506100c4610153565b005b3480156100d257600080fd5b506100866101e4565b3480156100e757600080fd5b506100c473ffffffffffffffffffffffffffffffffffffffff60043516610200565b34801561011557600080fd5b506100c473ffffffffffffffffffffffffffffffffffffffff60043516610230565b60015473ffffffffffffffffffffffffffffffffffffffff1681565b60005473ffffffffffffffffffffffffffffffffffffffff16331461017757600080fd5b6000805460405173ffffffffffffffffffffffffffffffffffffffff909116917ff8df31144d9c2f0f6b59d69b8b98abd5459d07f2742c4df920b25aae33c6482091a2600080547fffffffffffffffffffffffff0000000000000000000000000000000000000000169055565b60005473ffffffffffffffffffffffffffffffffffffffff1681565b60005473ffffffffffffffffffffffffffffffffffffffff16331461022457600080fd5b61022d8161025d565b50565b60005473ffffffffffffffffffffffffffffffffffffffff16331461025457600080fd5b61022d816103d8565b60015460009073ffffffffffffffffffffffffffffffffffffffff838116911614156102ea57604080517f08c379a000000000000000000000000000000000000000000000000000000000815260206004820152601a60248201527f4d7573742062652061206e657720637573642061646472657373000000000000604482015290519081900360640190fd5b6102f382610487565b151561036057604080517f08c379a000000000000000000000000000000000000000000000000000000000815260206004820152601a60248201527f4d75737420626520616e2061637475616c20636f6e7472616374000000000000604482015290519081900360640190fd5b506001805473ffffffffffffffffffffffffffffffffffffffff8381167fffffffffffffffffffffffff0000000000000000000000000000000000000000831681179093556040519116919082907f0ec1b8e8ba02bcff9ae905a36374bb7e8f3bbd8ac86b05d99e881092f538a0aa90600090a35050565b73ffffffffffffffffffffffffffffffffffffffff811615156103fa57600080fd5b6000805460405173ffffffffffffffffffffffffffffffffffffffff808516939216917f8be0079c531659141344cd1fd0a4f28419497f9722a3daafe3b4186f6b6457e091a3600080547fffffffffffffffffffffffff00000000000000000000000000000000000000001673ffffffffffffffffffffffffffffffffffffffff92909216919091179055565b6000903b11905600a165627a7a72305820f4c52dfffd4599e79217bc26459606d6d9d7dc7bc7197e93996794b686085b020029",
+  "deployedBytecode": "0x60806040526004361061006c5763ffffffff7c0100000000000000000000000000000000000000000000000000000000600035041663636f0cf88114610071578063715018a6146100af5780638da5cb5b146100c6578063a00d7740146100db578063f2fde38b14610109575b600080fd5b34801561007d57600080fd5b50610086610137565b6040805173ffffffffffffffffffffffffffffffffffffffff9092168252519081900360200190f35b3480156100bb57600080fd5b506100c4610153565b005b3480156100d257600080fd5b506100866101e4565b3480156100e757600080fd5b506100c473ffffffffffffffffffffffffffffffffffffffff60043516610200565b34801561011557600080fd5b506100c473ffffffffffffffffffffffffffffffffffffffff60043516610230565b60015473ffffffffffffffffffffffffffffffffffffffff1681565b60005473ffffffffffffffffffffffffffffffffffffffff16331461017757600080fd5b6000805460405173ffffffffffffffffffffffffffffffffffffffff909116917ff8df31144d9c2f0f6b59d69b8b98abd5459d07f2742c4df920b25aae33c6482091a2600080547fffffffffffffffffffffffff0000000000000000000000000000000000000000169055565b60005473ffffffffffffffffffffffffffffffffffffffff1681565b60005473ffffffffffffffffffffffffffffffffffffffff16331461022457600080fd5b61022d8161025d565b50565b60005473ffffffffffffffffffffffffffffffffffffffff16331461025457600080fd5b61022d816103d8565b60015460009073ffffffffffffffffffffffffffffffffffffffff838116911614156102ea57604080517f08c379a000000000000000000000000000000000000000000000000000000000815260206004820152601a60248201527f4d7573742062652061206e657720637573642061646472657373000000000000604482015290519081900360640190fd5b6102f382610487565b151561036057604080517f08c379a000000000000000000000000000000000000000000000000000000000815260206004820152601a60248201527f4d75737420626520616e2061637475616c20636f6e7472616374000000000000604482015290519081900360640190fd5b506001805473ffffffffffffffffffffffffffffffffffffffff8381167fffffffffffffffffffffffff0000000000000000000000000000000000000000831681179093556040519116919082907f0ec1b8e8ba02bcff9ae905a36374bb7e8f3bbd8ac86b05d99e881092f538a0aa90600090a35050565b73ffffffffffffffffffffffffffffffffffffffff811615156103fa57600080fd5b6000805460405173ffffffffffffffffffffffffffffffffffffffff808516939216917f8be0079c531659141344cd1fd0a4f28419497f9722a3daafe3b4186f6b6457e091a3600080547fffffffffffffffffffffffff00000000000000000000000000000000000000001673ffffffffffffffffffffffffffffffffffffffff92909216919091179055565b6000903b11905600a165627a7a72305820f4c52dfffd4599e79217bc26459606d6d9d7dc7bc7197e93996794b686085b020029",
+  "sourceMap": "313:799:27:-;;;504:66;8:9:-1;5:2;;;30:1;27;20:12;5:2;504:66:27;;;;;;;;;;;;;567:5:32;:18;;-1:-1:-1;;;;;;567:18:32;;;575:10;567:18;;;;;396:26:28;;-1:-1:-1;;;;;396:26:28;;;;;;;;;;;;;313:799:27;;;;;;",
+  "deployedSourceMap": "313:799:27:-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;204:26:28;;8:9:-1;5:2;;;30:1;27;20:12;5:2;204:26:28;;;;;;;;;;;;;;;;;;;;;;;1001:111:32;;8:9:-1;5:2;;;30:1;27;20:12;5:2;1001:111:32;;;;;;238:20;;8:9:-1;5:2;;;30:1;27;20:12;5:2;238:20:32;;;;670:95:27;;8:9:-1;5:2;;;30:1;27;20:12;5:2;-1:-1;670:95:27;;;;;;;1274:103:32;;8:9:-1;5:2;;;30:1;27;20:12;5:2;-1:-1;1274:103:32;;;;;;;204:26:28;;;;;;:::o;1001:111:32:-;719:5;;;;705:10;:19;697:28;;;;;;1077:5;;;1058:25;;1077:5;;;;;1058:25;;;1105:1;1089:18;;;;;;1001:111::o;238:20::-;;;;;;:::o;670:95:27:-;719:5:32;;;;705:10;:19;697:28;;;;;;736:22:27;752:5;736:15;:22::i;:::-;670:95;:::o;1274:103:32:-;719:5;;;;705:10;:19;697:28;;;;;;1343:29;1362:9;1343:18;:29::i;771:339:27:-;855:11;;987:15;;855:11;838:29;;;855:11;;838:29;;830:68;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;916:30;940:5;916:23;:30::i;:::-;908:69;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;-1:-1:-1;1013:11:27;;;;1035:19;;;;;;;;;;;1069:34;;1013:11;;;1035:19;1013:11;;1069:34;;1013:11;;1069:34;771:339;;:::o;1512:171:32:-;1582:23;;;;;1574:32;;;;;;1638:5;;;1617:38;;;;;;;1638:5;;;1617:38;;;1661:5;:17;;;;;;;;;;;;;;;1512:171::o;437:576:29:-;494:4;969:17;;1000:8;;437:576::o",
+  "source": "pragma solidity ^0.4.24;\n\nimport \"./WhitelistedTokenStorage.sol\";\nimport \"openzeppelin-solidity/contracts/AddressUtils.sol\";\nimport \"openzeppelin-solidity/contracts/ownership/Ownable.sol\";\n\n/**\n* @title MutableWhitelistedTokenStorage\n* @notice Adds mutability to WhitelistedTokenStorage (cusd can be changed.)\n*/\ncontract MutableWhitelistedTokenStorage is Ownable, WhitelistedTokenStorage {\n\t/**\n        Events\n     */\n    event CUSDAddressChanged(address indexed oldCUSD, address indexed newCUSD);\n\n    constructor (address cusd) WhitelistedTokenStorage(cusd) public {}\n\n    /**\n     * @notice Change the cusd address.\n     * @param _cusd the cusd address.\n     */\n    function setCUSDAddress(address _cusd) public onlyOwner {\n        _setCUSDAddress(_cusd);\n    }\n\n    function _setCUSDAddress(address _cusd) internal {\n        require(_cusd != address(cusdAddress), \"Must be a new cusd address\");\n        require(AddressUtils.isContract(_cusd), \"Must be an actual contract\");\n        address oldCUSD = address(cusdAddress);\n        cusdAddress = _cusd;\n        emit CUSDAddressChanged(oldCUSD, _cusd);\n    }\n}",
+  "sourcePath": "/Users/tanishqaggarwal/Documents/carbon/fiat_gateway/contracts/tokens/whitelistedToken/dataStorage/MutableWhitelistedTokenStorage.sol",
+  "ast": {
+    "absolutePath": "/Users/tanishqaggarwal/Documents/carbon/fiat_gateway/contracts/tokens/whitelistedToken/dataStorage/MutableWhitelistedTokenStorage.sol",
+    "exportedSymbols": {
+      "MutableWhitelistedTokenStorage": [
+        4537
+      ]
+    },
+    "id": 4538,
+    "nodeType": "SourceUnit",
+    "nodes": [
+      {
+        "id": 4464,
+        "literals": [
+          "solidity",
+          "^",
+          "0.4",
+          ".24"
+        ],
+        "nodeType": "PragmaDirective",
+        "src": "0:24:27"
+      },
+      {
+        "absolutePath": "/Users/tanishqaggarwal/Documents/carbon/fiat_gateway/contracts/tokens/whitelistedToken/dataStorage/WhitelistedTokenStorage.sol",
+        "file": "./WhitelistedTokenStorage.sol",
+        "id": 4465,
+        "nodeType": "ImportDirective",
+        "scope": 4538,
+        "sourceUnit": 4553,
+        "src": "26:39:27",
+        "symbolAliases": [],
+        "unitAlias": ""
+      },
+      {
+        "absolutePath": "openzeppelin-solidity/contracts/AddressUtils.sol",
+        "file": "openzeppelin-solidity/contracts/AddressUtils.sol",
+        "id": 4466,
+        "nodeType": "ImportDirective",
+        "scope": 4538,
+        "sourceUnit": 4572,
+        "src": "66:58:27",
+        "symbolAliases": [],
+        "unitAlias": ""
+      },
+      {
+        "absolutePath": "openzeppelin-solidity/contracts/ownership/Ownable.sol",
+        "file": "openzeppelin-solidity/contracts/ownership/Ownable.sol",
+        "id": 4467,
+        "nodeType": "ImportDirective",
+        "scope": 4538,
+        "sourceUnit": 4812,
+        "src": "125:63:27",
+        "symbolAliases": [],
+        "unitAlias": ""
+      },
+      {
+        "baseContracts": [
+          {
+            "arguments": null,
+            "baseName": {
+              "contractScope": null,
+              "id": 4468,
+              "name": "Ownable",
+              "nodeType": "UserDefinedTypeName",
+              "referencedDeclaration": 4811,
+              "src": "356:7:27",
+              "typeDescriptions": {
+                "typeIdentifier": "t_contract$_Ownable_$4811",
+                "typeString": "contract Ownable"
+              }
+            },
+            "id": 4469,
+            "nodeType": "InheritanceSpecifier",
+            "src": "356:7:27"
+          },
+          {
+            "arguments": null,
+            "baseName": {
+              "contractScope": null,
+              "id": 4470,
+              "name": "WhitelistedTokenStorage",
+              "nodeType": "UserDefinedTypeName",
+              "referencedDeclaration": 4552,
+              "src": "365:23:27",
+              "typeDescriptions": {
+                "typeIdentifier": "t_contract$_WhitelistedTokenStorage_$4552",
+                "typeString": "contract WhitelistedTokenStorage"
+              }
+            },
+            "id": 4471,
+            "nodeType": "InheritanceSpecifier",
+            "src": "365:23:27"
+          }
+        ],
+        "contractDependencies": [
+          4552,
+          4811
+        ],
+        "contractKind": "contract",
+        "documentation": "@title MutableWhitelistedTokenStorage\n@notice Adds mutability to WhitelistedTokenStorage (cusd can be changed.)",
+        "fullyImplemented": true,
+        "id": 4537,
+        "linearizedBaseContracts": [
+          4537,
+          4552,
+          4811
+        ],
+        "name": "MutableWhitelistedTokenStorage",
+        "nodeType": "ContractDefinition",
+        "nodes": [
+          {
+            "anonymous": false,
+            "documentation": "Events",
+            "id": 4477,
+            "name": "CUSDAddressChanged",
+            "nodeType": "EventDefinition",
+            "parameters": {
+              "id": 4476,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 4473,
+                  "indexed": true,
+                  "name": "oldCUSD",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 4477,
+                  "src": "448:23:27",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 4472,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "448:7:27",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 4475,
+                  "indexed": true,
+                  "name": "newCUSD",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 4477,
+                  "src": "473:23:27",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 4474,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "473:7:27",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "447:50:27"
+            },
+            "src": "423:75:27"
+          },
+          {
+            "body": {
+              "id": 4485,
+              "nodeType": "Block",
+              "src": "568:2:27",
+              "statements": []
+            },
+            "documentation": null,
+            "id": 4486,
+            "implemented": true,
+            "isConstructor": true,
+            "isDeclaredConst": false,
+            "modifiers": [
+              {
+                "arguments": [
+                  {
+                    "argumentTypes": null,
+                    "id": 4482,
+                    "name": "cusd",
+                    "nodeType": "Identifier",
+                    "overloadedDeclarations": [],
+                    "referencedDeclaration": 4479,
+                    "src": "555:4:27",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  }
+                ],
+                "id": 4483,
+                "modifierName": {
+                  "argumentTypes": null,
+                  "id": 4481,
+                  "name": "WhitelistedTokenStorage",
+                  "nodeType": "Identifier",
+                  "overloadedDeclarations": [],
+                  "referencedDeclaration": 4552,
+                  "src": "531:23:27",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_type$_t_contract$_WhitelistedTokenStorage_$4552_$",
+                    "typeString": "type(contract WhitelistedTokenStorage)"
+                  }
+                },
+                "nodeType": "ModifierInvocation",
+                "src": "531:29:27"
+              }
+            ],
+            "name": "",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 4480,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 4479,
+                  "name": "cusd",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 4486,
+                  "src": "517:12:27",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 4478,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "517:7:27",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "516:14:27"
+            },
+            "payable": false,
+            "returnParameters": {
+              "id": 4484,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "568:0:27"
+            },
+            "scope": 4537,
+            "src": "504:66:27",
+            "stateMutability": "nonpayable",
+            "superFunction": null,
+            "visibility": "public"
+          },
+          {
+            "body": {
+              "id": 4497,
+              "nodeType": "Block",
+              "src": "726:39:27",
+              "statements": [
+                {
+                  "expression": {
+                    "argumentTypes": null,
+                    "arguments": [
+                      {
+                        "argumentTypes": null,
+                        "id": 4494,
+                        "name": "_cusd",
+                        "nodeType": "Identifier",
+                        "overloadedDeclarations": [],
+                        "referencedDeclaration": 4488,
+                        "src": "752:5:27",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_address",
+                          "typeString": "address"
+                        }
+                      }
+                    ],
+                    "expression": {
+                      "argumentTypes": [
+                        {
+                          "typeIdentifier": "t_address",
+                          "typeString": "address"
+                        }
+                      ],
+                      "id": 4493,
+                      "name": "_setCUSDAddress",
+                      "nodeType": "Identifier",
+                      "overloadedDeclarations": [],
+                      "referencedDeclaration": 4536,
+                      "src": "736:15:27",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_function_internal_nonpayable$_t_address_$returns$__$",
+                        "typeString": "function (address)"
+                      }
+                    },
+                    "id": 4495,
+                    "isConstant": false,
+                    "isLValue": false,
+                    "isPure": false,
+                    "kind": "functionCall",
+                    "lValueRequested": false,
+                    "names": [],
+                    "nodeType": "FunctionCall",
+                    "src": "736:22:27",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_tuple$__$",
+                      "typeString": "tuple()"
+                    }
+                  },
+                  "id": 4496,
+                  "nodeType": "ExpressionStatement",
+                  "src": "736:22:27"
+                }
+              ]
+            },
+            "documentation": "@notice Change the cusd address.\n@param _cusd the cusd address.",
+            "id": 4498,
+            "implemented": true,
+            "isConstructor": false,
+            "isDeclaredConst": false,
+            "modifiers": [
+              {
+                "arguments": null,
+                "id": 4491,
+                "modifierName": {
+                  "argumentTypes": null,
+                  "id": 4490,
+                  "name": "onlyOwner",
+                  "nodeType": "Identifier",
+                  "overloadedDeclarations": [],
+                  "referencedDeclaration": 4759,
+                  "src": "716:9:27",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_modifier$__$",
+                    "typeString": "modifier ()"
+                  }
+                },
+                "nodeType": "ModifierInvocation",
+                "src": "716:9:27"
+              }
+            ],
+            "name": "setCUSDAddress",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 4489,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 4488,
+                  "name": "_cusd",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 4498,
+                  "src": "694:13:27",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 4487,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "694:7:27",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "693:15:27"
+            },
+            "payable": false,
+            "returnParameters": {
+              "id": 4492,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "726:0:27"
+            },
+            "scope": 4537,
+            "src": "670:95:27",
+            "stateMutability": "nonpayable",
+            "superFunction": null,
+            "visibility": "public"
+          },
+          {
+            "body": {
+              "id": 4535,
+              "nodeType": "Block",
+              "src": "820:290:27",
+              "statements": [
+                {
+                  "expression": {
+                    "argumentTypes": null,
+                    "arguments": [
+                      {
+                        "argumentTypes": null,
+                        "commonType": {
+                          "typeIdentifier": "t_address",
+                          "typeString": "address"
+                        },
+                        "id": 4508,
+                        "isConstant": false,
+                        "isLValue": false,
+                        "isPure": false,
+                        "lValueRequested": false,
+                        "leftExpression": {
+                          "argumentTypes": null,
+                          "id": 4504,
+                          "name": "_cusd",
+                          "nodeType": "Identifier",
+                          "overloadedDeclarations": [],
+                          "referencedDeclaration": 4500,
+                          "src": "838:5:27",
+                          "typeDescriptions": {
+                            "typeIdentifier": "t_address",
+                            "typeString": "address"
+                          }
+                        },
+                        "nodeType": "BinaryOperation",
+                        "operator": "!=",
+                        "rightExpression": {
+                          "argumentTypes": null,
+                          "arguments": [
+                            {
+                              "argumentTypes": null,
+                              "id": 4506,
+                              "name": "cusdAddress",
+                              "nodeType": "Identifier",
+                              "overloadedDeclarations": [],
+                              "referencedDeclaration": 4541,
+                              "src": "855:11:27",
+                              "typeDescriptions": {
+                                "typeIdentifier": "t_address",
+                                "typeString": "address"
+                              }
+                            }
+                          ],
+                          "expression": {
+                            "argumentTypes": [
+                              {
+                                "typeIdentifier": "t_address",
+                                "typeString": "address"
+                              }
+                            ],
+                            "id": 4505,
+                            "isConstant": false,
+                            "isLValue": false,
+                            "isPure": true,
+                            "lValueRequested": false,
+                            "nodeType": "ElementaryTypeNameExpression",
+                            "src": "847:7:27",
+                            "typeDescriptions": {
+                              "typeIdentifier": "t_type$_t_address_$",
+                              "typeString": "type(address)"
+                            },
+                            "typeName": "address"
+                          },
+                          "id": 4507,
+                          "isConstant": false,
+                          "isLValue": false,
+                          "isPure": false,
+                          "kind": "typeConversion",
+                          "lValueRequested": false,
+                          "names": [],
+                          "nodeType": "FunctionCall",
+                          "src": "847:20:27",
+                          "typeDescriptions": {
+                            "typeIdentifier": "t_address",
+                            "typeString": "address"
+                          }
+                        },
+                        "src": "838:29:27",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_bool",
+                          "typeString": "bool"
+                        }
+                      },
+                      {
+                        "argumentTypes": null,
+                        "hexValue": "4d7573742062652061206e657720637573642061646472657373",
+                        "id": 4509,
+                        "isConstant": false,
+                        "isLValue": false,
+                        "isPure": true,
+                        "kind": "string",
+                        "lValueRequested": false,
+                        "nodeType": "Literal",
+                        "src": "869:28:27",
+                        "subdenomination": null,
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_stringliteral_cfd24126784b1f80989509add4289c85a40b11a75fde79e0b0082e56bc0b3098",
+                          "typeString": "literal_string \"Must be a new cusd address\""
+                        },
+                        "value": "Must be a new cusd address"
+                      }
+                    ],
+                    "expression": {
+                      "argumentTypes": [
+                        {
+                          "typeIdentifier": "t_bool",
+                          "typeString": "bool"
+                        },
+                        {
+                          "typeIdentifier": "t_stringliteral_cfd24126784b1f80989509add4289c85a40b11a75fde79e0b0082e56bc0b3098",
+                          "typeString": "literal_string \"Must be a new cusd address\""
+                        }
+                      ],
+                      "id": 4503,
+                      "name": "require",
+                      "nodeType": "Identifier",
+                      "overloadedDeclarations": [
+                        5018,
+                        5019
+                      ],
+                      "referencedDeclaration": 5019,
+                      "src": "830:7:27",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_function_require_pure$_t_bool_$_t_string_memory_ptr_$returns$__$",
+                        "typeString": "function (bool,string memory) pure"
+                      }
+                    },
+                    "id": 4510,
+                    "isConstant": false,
+                    "isLValue": false,
+                    "isPure": false,
+                    "kind": "functionCall",
+                    "lValueRequested": false,
+                    "names": [],
+                    "nodeType": "FunctionCall",
+                    "src": "830:68:27",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_tuple$__$",
+                      "typeString": "tuple()"
+                    }
+                  },
+                  "id": 4511,
+                  "nodeType": "ExpressionStatement",
+                  "src": "830:68:27"
+                },
+                {
+                  "expression": {
+                    "argumentTypes": null,
+                    "arguments": [
+                      {
+                        "argumentTypes": null,
+                        "arguments": [
+                          {
+                            "argumentTypes": null,
+                            "id": 4515,
+                            "name": "_cusd",
+                            "nodeType": "Identifier",
+                            "overloadedDeclarations": [],
+                            "referencedDeclaration": 4500,
+                            "src": "940:5:27",
+                            "typeDescriptions": {
+                              "typeIdentifier": "t_address",
+                              "typeString": "address"
+                            }
+                          }
+                        ],
+                        "expression": {
+                          "argumentTypes": [
+                            {
+                              "typeIdentifier": "t_address",
+                              "typeString": "address"
+                            }
+                          ],
+                          "expression": {
+                            "argumentTypes": null,
+                            "id": 4513,
+                            "name": "AddressUtils",
+                            "nodeType": "Identifier",
+                            "overloadedDeclarations": [],
+                            "referencedDeclaration": 4571,
+                            "src": "916:12:27",
+                            "typeDescriptions": {
+                              "typeIdentifier": "t_type$_t_contract$_AddressUtils_$4571_$",
+                              "typeString": "type(library AddressUtils)"
+                            }
+                          },
+                          "id": 4514,
+                          "isConstant": false,
+                          "isLValue": false,
+                          "isPure": false,
+                          "lValueRequested": false,
+                          "memberName": "isContract",
+                          "nodeType": "MemberAccess",
+                          "referencedDeclaration": 4570,
+                          "src": "916:23:27",
+                          "typeDescriptions": {
+                            "typeIdentifier": "t_function_internal_view$_t_address_$returns$_t_bool_$",
+                            "typeString": "function (address) view returns (bool)"
+                          }
+                        },
+                        "id": 4516,
+                        "isConstant": false,
+                        "isLValue": false,
+                        "isPure": false,
+                        "kind": "functionCall",
+                        "lValueRequested": false,
+                        "names": [],
+                        "nodeType": "FunctionCall",
+                        "src": "916:30:27",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_bool",
+                          "typeString": "bool"
+                        }
+                      },
+                      {
+                        "argumentTypes": null,
+                        "hexValue": "4d75737420626520616e2061637475616c20636f6e7472616374",
+                        "id": 4517,
+                        "isConstant": false,
+                        "isLValue": false,
+                        "isPure": true,
+                        "kind": "string",
+                        "lValueRequested": false,
+                        "nodeType": "Literal",
+                        "src": "948:28:27",
+                        "subdenomination": null,
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_stringliteral_a100930d65ab68752c961b4d791d40ee75b12f6bc9cbc906cc69a8d51d2e79ec",
+                          "typeString": "literal_string \"Must be an actual contract\""
+                        },
+                        "value": "Must be an actual contract"
+                      }
+                    ],
+                    "expression": {
+                      "argumentTypes": [
+                        {
+                          "typeIdentifier": "t_bool",
+                          "typeString": "bool"
+                        },
+                        {
+                          "typeIdentifier": "t_stringliteral_a100930d65ab68752c961b4d791d40ee75b12f6bc9cbc906cc69a8d51d2e79ec",
+                          "typeString": "literal_string \"Must be an actual contract\""
+                        }
+                      ],
+                      "id": 4512,
+                      "name": "require",
+                      "nodeType": "Identifier",
+                      "overloadedDeclarations": [
+                        5018,
+                        5019
+                      ],
+                      "referencedDeclaration": 5019,
+                      "src": "908:7:27",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_function_require_pure$_t_bool_$_t_string_memory_ptr_$returns$__$",
+                        "typeString": "function (bool,string memory) pure"
+                      }
+                    },
+                    "id": 4518,
+                    "isConstant": false,
+                    "isLValue": false,
+                    "isPure": false,
+                    "kind": "functionCall",
+                    "lValueRequested": false,
+                    "names": [],
+                    "nodeType": "FunctionCall",
+                    "src": "908:69:27",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_tuple$__$",
+                      "typeString": "tuple()"
+                    }
+                  },
+                  "id": 4519,
+                  "nodeType": "ExpressionStatement",
+                  "src": "908:69:27"
+                },
+                {
+                  "assignments": [
+                    4521
+                  ],
+                  "declarations": [
+                    {
+                      "constant": false,
+                      "id": 4521,
+                      "name": "oldCUSD",
+                      "nodeType": "VariableDeclaration",
+                      "scope": 4536,
+                      "src": "987:15:27",
+                      "stateVariable": false,
+                      "storageLocation": "default",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_address",
+                        "typeString": "address"
+                      },
+                      "typeName": {
+                        "id": 4520,
+                        "name": "address",
+                        "nodeType": "ElementaryTypeName",
+                        "src": "987:7:27",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_address",
+                          "typeString": "address"
+                        }
+                      },
+                      "value": null,
+                      "visibility": "internal"
+                    }
+                  ],
+                  "id": 4525,
+                  "initialValue": {
+                    "argumentTypes": null,
+                    "arguments": [
+                      {
+                        "argumentTypes": null,
+                        "id": 4523,
+                        "name": "cusdAddress",
+                        "nodeType": "Identifier",
+                        "overloadedDeclarations": [],
+                        "referencedDeclaration": 4541,
+                        "src": "1013:11:27",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_address",
+                          "typeString": "address"
+                        }
+                      }
+                    ],
+                    "expression": {
+                      "argumentTypes": [
+                        {
+                          "typeIdentifier": "t_address",
+                          "typeString": "address"
+                        }
+                      ],
+                      "id": 4522,
+                      "isConstant": false,
+                      "isLValue": false,
+                      "isPure": true,
+                      "lValueRequested": false,
+                      "nodeType": "ElementaryTypeNameExpression",
+                      "src": "1005:7:27",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_type$_t_address_$",
+                        "typeString": "type(address)"
+                      },
+                      "typeName": "address"
+                    },
+                    "id": 4524,
+                    "isConstant": false,
+                    "isLValue": false,
+                    "isPure": false,
+                    "kind": "typeConversion",
+                    "lValueRequested": false,
+                    "names": [],
+                    "nodeType": "FunctionCall",
+                    "src": "1005:20:27",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "nodeType": "VariableDeclarationStatement",
+                  "src": "987:38:27"
+                },
+                {
+                  "expression": {
+                    "argumentTypes": null,
+                    "id": 4528,
+                    "isConstant": false,
+                    "isLValue": false,
+                    "isPure": false,
+                    "lValueRequested": false,
+                    "leftHandSide": {
+                      "argumentTypes": null,
+                      "id": 4526,
+                      "name": "cusdAddress",
+                      "nodeType": "Identifier",
+                      "overloadedDeclarations": [],
+                      "referencedDeclaration": 4541,
+                      "src": "1035:11:27",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_address",
+                        "typeString": "address"
+                      }
+                    },
+                    "nodeType": "Assignment",
+                    "operator": "=",
+                    "rightHandSide": {
+                      "argumentTypes": null,
+                      "id": 4527,
+                      "name": "_cusd",
+                      "nodeType": "Identifier",
+                      "overloadedDeclarations": [],
+                      "referencedDeclaration": 4500,
+                      "src": "1049:5:27",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_address",
+                        "typeString": "address"
+                      }
+                    },
+                    "src": "1035:19:27",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "id": 4529,
+                  "nodeType": "ExpressionStatement",
+                  "src": "1035:19:27"
+                },
+                {
+                  "eventCall": {
+                    "argumentTypes": null,
+                    "arguments": [
+                      {
+                        "argumentTypes": null,
+                        "id": 4531,
+                        "name": "oldCUSD",
+                        "nodeType": "Identifier",
+                        "overloadedDeclarations": [],
+                        "referencedDeclaration": 4521,
+                        "src": "1088:7:27",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_address",
+                          "typeString": "address"
+                        }
+                      },
+                      {
+                        "argumentTypes": null,
+                        "id": 4532,
+                        "name": "_cusd",
+                        "nodeType": "Identifier",
+                        "overloadedDeclarations": [],
+                        "referencedDeclaration": 4500,
+                        "src": "1097:5:27",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_address",
+                          "typeString": "address"
+                        }
+                      }
+                    ],
+                    "expression": {
+                      "argumentTypes": [
+                        {
+                          "typeIdentifier": "t_address",
+                          "typeString": "address"
+                        },
+                        {
+                          "typeIdentifier": "t_address",
+                          "typeString": "address"
+                        }
+                      ],
+                      "id": 4530,
+                      "name": "CUSDAddressChanged",
+                      "nodeType": "Identifier",
+                      "overloadedDeclarations": [],
+                      "referencedDeclaration": 4477,
+                      "src": "1069:18:27",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_function_event_nonpayable$_t_address_$_t_address_$returns$__$",
+                        "typeString": "function (address,address)"
+                      }
+                    },
+                    "id": 4533,
+                    "isConstant": false,
+                    "isLValue": false,
+                    "isPure": false,
+                    "kind": "functionCall",
+                    "lValueRequested": false,
+                    "names": [],
+                    "nodeType": "FunctionCall",
+                    "src": "1069:34:27",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_tuple$__$",
+                      "typeString": "tuple()"
+                    }
+                  },
+                  "id": 4534,
+                  "nodeType": "EmitStatement",
+                  "src": "1064:39:27"
+                }
+              ]
+            },
+            "documentation": null,
+            "id": 4536,
+            "implemented": true,
+            "isConstructor": false,
+            "isDeclaredConst": false,
+            "modifiers": [],
+            "name": "_setCUSDAddress",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 4501,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 4500,
+                  "name": "_cusd",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 4536,
+                  "src": "796:13:27",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 4499,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "796:7:27",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "795:15:27"
+            },
+            "payable": false,
+            "returnParameters": {
+              "id": 4502,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "820:0:27"
+            },
+            "scope": 4537,
+            "src": "771:339:27",
+            "stateMutability": "nonpayable",
+            "superFunction": null,
+            "visibility": "internal"
+          }
+        ],
+        "scope": 4538,
+        "src": "313:799:27"
+      }
+    ],
+    "src": "0:1112:27"
+  },
+  "legacyAST": {
+    "absolutePath": "/Users/tanishqaggarwal/Documents/carbon/fiat_gateway/contracts/tokens/whitelistedToken/dataStorage/MutableWhitelistedTokenStorage.sol",
+    "exportedSymbols": {
+      "MutableWhitelistedTokenStorage": [
+        4537
+      ]
+    },
+    "id": 4538,
+    "nodeType": "SourceUnit",
+    "nodes": [
+      {
+        "id": 4464,
+        "literals": [
+          "solidity",
+          "^",
+          "0.4",
+          ".24"
+        ],
+        "nodeType": "PragmaDirective",
+        "src": "0:24:27"
+      },
+      {
+        "absolutePath": "/Users/tanishqaggarwal/Documents/carbon/fiat_gateway/contracts/tokens/whitelistedToken/dataStorage/WhitelistedTokenStorage.sol",
+        "file": "./WhitelistedTokenStorage.sol",
+        "id": 4465,
+        "nodeType": "ImportDirective",
+        "scope": 4538,
+        "sourceUnit": 4553,
+        "src": "26:39:27",
+        "symbolAliases": [],
+        "unitAlias": ""
+      },
+      {
+        "absolutePath": "openzeppelin-solidity/contracts/AddressUtils.sol",
+        "file": "openzeppelin-solidity/contracts/AddressUtils.sol",
+        "id": 4466,
+        "nodeType": "ImportDirective",
+        "scope": 4538,
+        "sourceUnit": 4572,
+        "src": "66:58:27",
+        "symbolAliases": [],
+        "unitAlias": ""
+      },
+      {
+        "absolutePath": "openzeppelin-solidity/contracts/ownership/Ownable.sol",
+        "file": "openzeppelin-solidity/contracts/ownership/Ownable.sol",
+        "id": 4467,
+        "nodeType": "ImportDirective",
+        "scope": 4538,
+        "sourceUnit": 4812,
+        "src": "125:63:27",
+        "symbolAliases": [],
+        "unitAlias": ""
+      },
+      {
+        "baseContracts": [
+          {
+            "arguments": null,
+            "baseName": {
+              "contractScope": null,
+              "id": 4468,
+              "name": "Ownable",
+              "nodeType": "UserDefinedTypeName",
+              "referencedDeclaration": 4811,
+              "src": "356:7:27",
+              "typeDescriptions": {
+                "typeIdentifier": "t_contract$_Ownable_$4811",
+                "typeString": "contract Ownable"
+              }
+            },
+            "id": 4469,
+            "nodeType": "InheritanceSpecifier",
+            "src": "356:7:27"
+          },
+          {
+            "arguments": null,
+            "baseName": {
+              "contractScope": null,
+              "id": 4470,
+              "name": "WhitelistedTokenStorage",
+              "nodeType": "UserDefinedTypeName",
+              "referencedDeclaration": 4552,
+              "src": "365:23:27",
+              "typeDescriptions": {
+                "typeIdentifier": "t_contract$_WhitelistedTokenStorage_$4552",
+                "typeString": "contract WhitelistedTokenStorage"
+              }
+            },
+            "id": 4471,
+            "nodeType": "InheritanceSpecifier",
+            "src": "365:23:27"
+          }
+        ],
+        "contractDependencies": [
+          4552,
+          4811
+        ],
+        "contractKind": "contract",
+        "documentation": "@title MutableWhitelistedTokenStorage\n@notice Adds mutability to WhitelistedTokenStorage (cusd can be changed.)",
+        "fullyImplemented": true,
+        "id": 4537,
+        "linearizedBaseContracts": [
+          4537,
+          4552,
+          4811
+        ],
+        "name": "MutableWhitelistedTokenStorage",
+        "nodeType": "ContractDefinition",
+        "nodes": [
+          {
+            "anonymous": false,
+            "documentation": "Events",
+            "id": 4477,
+            "name": "CUSDAddressChanged",
+            "nodeType": "EventDefinition",
+            "parameters": {
+              "id": 4476,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 4473,
+                  "indexed": true,
+                  "name": "oldCUSD",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 4477,
+                  "src": "448:23:27",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 4472,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "448:7:27",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 4475,
+                  "indexed": true,
+                  "name": "newCUSD",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 4477,
+                  "src": "473:23:27",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 4474,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "473:7:27",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "447:50:27"
+            },
+            "src": "423:75:27"
+          },
+          {
+            "body": {
+              "id": 4485,
+              "nodeType": "Block",
+              "src": "568:2:27",
+              "statements": []
+            },
+            "documentation": null,
+            "id": 4486,
+            "implemented": true,
+            "isConstructor": true,
+            "isDeclaredConst": false,
+            "modifiers": [
+              {
+                "arguments": [
+                  {
+                    "argumentTypes": null,
+                    "id": 4482,
+                    "name": "cusd",
+                    "nodeType": "Identifier",
+                    "overloadedDeclarations": [],
+                    "referencedDeclaration": 4479,
+                    "src": "555:4:27",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  }
+                ],
+                "id": 4483,
+                "modifierName": {
+                  "argumentTypes": null,
+                  "id": 4481,
+                  "name": "WhitelistedTokenStorage",
+                  "nodeType": "Identifier",
+                  "overloadedDeclarations": [],
+                  "referencedDeclaration": 4552,
+                  "src": "531:23:27",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_type$_t_contract$_WhitelistedTokenStorage_$4552_$",
+                    "typeString": "type(contract WhitelistedTokenStorage)"
+                  }
+                },
+                "nodeType": "ModifierInvocation",
+                "src": "531:29:27"
+              }
+            ],
+            "name": "",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 4480,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 4479,
+                  "name": "cusd",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 4486,
+                  "src": "517:12:27",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 4478,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "517:7:27",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "516:14:27"
+            },
+            "payable": false,
+            "returnParameters": {
+              "id": 4484,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "568:0:27"
+            },
+            "scope": 4537,
+            "src": "504:66:27",
+            "stateMutability": "nonpayable",
+            "superFunction": null,
+            "visibility": "public"
+          },
+          {
+            "body": {
+              "id": 4497,
+              "nodeType": "Block",
+              "src": "726:39:27",
+              "statements": [
+                {
+                  "expression": {
+                    "argumentTypes": null,
+                    "arguments": [
+                      {
+                        "argumentTypes": null,
+                        "id": 4494,
+                        "name": "_cusd",
+                        "nodeType": "Identifier",
+                        "overloadedDeclarations": [],
+                        "referencedDeclaration": 4488,
+                        "src": "752:5:27",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_address",
+                          "typeString": "address"
+                        }
+                      }
+                    ],
+                    "expression": {
+                      "argumentTypes": [
+                        {
+                          "typeIdentifier": "t_address",
+                          "typeString": "address"
+                        }
+                      ],
+                      "id": 4493,
+                      "name": "_setCUSDAddress",
+                      "nodeType": "Identifier",
+                      "overloadedDeclarations": [],
+                      "referencedDeclaration": 4536,
+                      "src": "736:15:27",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_function_internal_nonpayable$_t_address_$returns$__$",
+                        "typeString": "function (address)"
+                      }
+                    },
+                    "id": 4495,
+                    "isConstant": false,
+                    "isLValue": false,
+                    "isPure": false,
+                    "kind": "functionCall",
+                    "lValueRequested": false,
+                    "names": [],
+                    "nodeType": "FunctionCall",
+                    "src": "736:22:27",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_tuple$__$",
+                      "typeString": "tuple()"
+                    }
+                  },
+                  "id": 4496,
+                  "nodeType": "ExpressionStatement",
+                  "src": "736:22:27"
+                }
+              ]
+            },
+            "documentation": "@notice Change the cusd address.\n@param _cusd the cusd address.",
+            "id": 4498,
+            "implemented": true,
+            "isConstructor": false,
+            "isDeclaredConst": false,
+            "modifiers": [
+              {
+                "arguments": null,
+                "id": 4491,
+                "modifierName": {
+                  "argumentTypes": null,
+                  "id": 4490,
+                  "name": "onlyOwner",
+                  "nodeType": "Identifier",
+                  "overloadedDeclarations": [],
+                  "referencedDeclaration": 4759,
+                  "src": "716:9:27",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_modifier$__$",
+                    "typeString": "modifier ()"
+                  }
+                },
+                "nodeType": "ModifierInvocation",
+                "src": "716:9:27"
+              }
+            ],
+            "name": "setCUSDAddress",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 4489,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 4488,
+                  "name": "_cusd",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 4498,
+                  "src": "694:13:27",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 4487,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "694:7:27",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "693:15:27"
+            },
+            "payable": false,
+            "returnParameters": {
+              "id": 4492,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "726:0:27"
+            },
+            "scope": 4537,
+            "src": "670:95:27",
+            "stateMutability": "nonpayable",
+            "superFunction": null,
+            "visibility": "public"
+          },
+          {
+            "body": {
+              "id": 4535,
+              "nodeType": "Block",
+              "src": "820:290:27",
+              "statements": [
+                {
+                  "expression": {
+                    "argumentTypes": null,
+                    "arguments": [
+                      {
+                        "argumentTypes": null,
+                        "commonType": {
+                          "typeIdentifier": "t_address",
+                          "typeString": "address"
+                        },
+                        "id": 4508,
+                        "isConstant": false,
+                        "isLValue": false,
+                        "isPure": false,
+                        "lValueRequested": false,
+                        "leftExpression": {
+                          "argumentTypes": null,
+                          "id": 4504,
+                          "name": "_cusd",
+                          "nodeType": "Identifier",
+                          "overloadedDeclarations": [],
+                          "referencedDeclaration": 4500,
+                          "src": "838:5:27",
+                          "typeDescriptions": {
+                            "typeIdentifier": "t_address",
+                            "typeString": "address"
+                          }
+                        },
+                        "nodeType": "BinaryOperation",
+                        "operator": "!=",
+                        "rightExpression": {
+                          "argumentTypes": null,
+                          "arguments": [
+                            {
+                              "argumentTypes": null,
+                              "id": 4506,
+                              "name": "cusdAddress",
+                              "nodeType": "Identifier",
+                              "overloadedDeclarations": [],
+                              "referencedDeclaration": 4541,
+                              "src": "855:11:27",
+                              "typeDescriptions": {
+                                "typeIdentifier": "t_address",
+                                "typeString": "address"
+                              }
+                            }
+                          ],
+                          "expression": {
+                            "argumentTypes": [
+                              {
+                                "typeIdentifier": "t_address",
+                                "typeString": "address"
+                              }
+                            ],
+                            "id": 4505,
+                            "isConstant": false,
+                            "isLValue": false,
+                            "isPure": true,
+                            "lValueRequested": false,
+                            "nodeType": "ElementaryTypeNameExpression",
+                            "src": "847:7:27",
+                            "typeDescriptions": {
+                              "typeIdentifier": "t_type$_t_address_$",
+                              "typeString": "type(address)"
+                            },
+                            "typeName": "address"
+                          },
+                          "id": 4507,
+                          "isConstant": false,
+                          "isLValue": false,
+                          "isPure": false,
+                          "kind": "typeConversion",
+                          "lValueRequested": false,
+                          "names": [],
+                          "nodeType": "FunctionCall",
+                          "src": "847:20:27",
+                          "typeDescriptions": {
+                            "typeIdentifier": "t_address",
+                            "typeString": "address"
+                          }
+                        },
+                        "src": "838:29:27",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_bool",
+                          "typeString": "bool"
+                        }
+                      },
+                      {
+                        "argumentTypes": null,
+                        "hexValue": "4d7573742062652061206e657720637573642061646472657373",
+                        "id": 4509,
+                        "isConstant": false,
+                        "isLValue": false,
+                        "isPure": true,
+                        "kind": "string",
+                        "lValueRequested": false,
+                        "nodeType": "Literal",
+                        "src": "869:28:27",
+                        "subdenomination": null,
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_stringliteral_cfd24126784b1f80989509add4289c85a40b11a75fde79e0b0082e56bc0b3098",
+                          "typeString": "literal_string \"Must be a new cusd address\""
+                        },
+                        "value": "Must be a new cusd address"
+                      }
+                    ],
+                    "expression": {
+                      "argumentTypes": [
+                        {
+                          "typeIdentifier": "t_bool",
+                          "typeString": "bool"
+                        },
+                        {
+                          "typeIdentifier": "t_stringliteral_cfd24126784b1f80989509add4289c85a40b11a75fde79e0b0082e56bc0b3098",
+                          "typeString": "literal_string \"Must be a new cusd address\""
+                        }
+                      ],
+                      "id": 4503,
+                      "name": "require",
+                      "nodeType": "Identifier",
+                      "overloadedDeclarations": [
+                        5018,
+                        5019
+                      ],
+                      "referencedDeclaration": 5019,
+                      "src": "830:7:27",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_function_require_pure$_t_bool_$_t_string_memory_ptr_$returns$__$",
+                        "typeString": "function (bool,string memory) pure"
+                      }
+                    },
+                    "id": 4510,
+                    "isConstant": false,
+                    "isLValue": false,
+                    "isPure": false,
+                    "kind": "functionCall",
+                    "lValueRequested": false,
+                    "names": [],
+                    "nodeType": "FunctionCall",
+                    "src": "830:68:27",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_tuple$__$",
+                      "typeString": "tuple()"
+                    }
+                  },
+                  "id": 4511,
+                  "nodeType": "ExpressionStatement",
+                  "src": "830:68:27"
+                },
+                {
+                  "expression": {
+                    "argumentTypes": null,
+                    "arguments": [
+                      {
+                        "argumentTypes": null,
+                        "arguments": [
+                          {
+                            "argumentTypes": null,
+                            "id": 4515,
+                            "name": "_cusd",
+                            "nodeType": "Identifier",
+                            "overloadedDeclarations": [],
+                            "referencedDeclaration": 4500,
+                            "src": "940:5:27",
+                            "typeDescriptions": {
+                              "typeIdentifier": "t_address",
+                              "typeString": "address"
+                            }
+                          }
+                        ],
+                        "expression": {
+                          "argumentTypes": [
+                            {
+                              "typeIdentifier": "t_address",
+                              "typeString": "address"
+                            }
+                          ],
+                          "expression": {
+                            "argumentTypes": null,
+                            "id": 4513,
+                            "name": "AddressUtils",
+                            "nodeType": "Identifier",
+                            "overloadedDeclarations": [],
+                            "referencedDeclaration": 4571,
+                            "src": "916:12:27",
+                            "typeDescriptions": {
+                              "typeIdentifier": "t_type$_t_contract$_AddressUtils_$4571_$",
+                              "typeString": "type(library AddressUtils)"
+                            }
+                          },
+                          "id": 4514,
+                          "isConstant": false,
+                          "isLValue": false,
+                          "isPure": false,
+                          "lValueRequested": false,
+                          "memberName": "isContract",
+                          "nodeType": "MemberAccess",
+                          "referencedDeclaration": 4570,
+                          "src": "916:23:27",
+                          "typeDescriptions": {
+                            "typeIdentifier": "t_function_internal_view$_t_address_$returns$_t_bool_$",
+                            "typeString": "function (address) view returns (bool)"
+                          }
+                        },
+                        "id": 4516,
+                        "isConstant": false,
+                        "isLValue": false,
+                        "isPure": false,
+                        "kind": "functionCall",
+                        "lValueRequested": false,
+                        "names": [],
+                        "nodeType": "FunctionCall",
+                        "src": "916:30:27",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_bool",
+                          "typeString": "bool"
+                        }
+                      },
+                      {
+                        "argumentTypes": null,
+                        "hexValue": "4d75737420626520616e2061637475616c20636f6e7472616374",
+                        "id": 4517,
+                        "isConstant": false,
+                        "isLValue": false,
+                        "isPure": true,
+                        "kind": "string",
+                        "lValueRequested": false,
+                        "nodeType": "Literal",
+                        "src": "948:28:27",
+                        "subdenomination": null,
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_stringliteral_a100930d65ab68752c961b4d791d40ee75b12f6bc9cbc906cc69a8d51d2e79ec",
+                          "typeString": "literal_string \"Must be an actual contract\""
+                        },
+                        "value": "Must be an actual contract"
+                      }
+                    ],
+                    "expression": {
+                      "argumentTypes": [
+                        {
+                          "typeIdentifier": "t_bool",
+                          "typeString": "bool"
+                        },
+                        {
+                          "typeIdentifier": "t_stringliteral_a100930d65ab68752c961b4d791d40ee75b12f6bc9cbc906cc69a8d51d2e79ec",
+                          "typeString": "literal_string \"Must be an actual contract\""
+                        }
+                      ],
+                      "id": 4512,
+                      "name": "require",
+                      "nodeType": "Identifier",
+                      "overloadedDeclarations": [
+                        5018,
+                        5019
+                      ],
+                      "referencedDeclaration": 5019,
+                      "src": "908:7:27",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_function_require_pure$_t_bool_$_t_string_memory_ptr_$returns$__$",
+                        "typeString": "function (bool,string memory) pure"
+                      }
+                    },
+                    "id": 4518,
+                    "isConstant": false,
+                    "isLValue": false,
+                    "isPure": false,
+                    "kind": "functionCall",
+                    "lValueRequested": false,
+                    "names": [],
+                    "nodeType": "FunctionCall",
+                    "src": "908:69:27",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_tuple$__$",
+                      "typeString": "tuple()"
+                    }
+                  },
+                  "id": 4519,
+                  "nodeType": "ExpressionStatement",
+                  "src": "908:69:27"
+                },
+                {
+                  "assignments": [
+                    4521
+                  ],
+                  "declarations": [
+                    {
+                      "constant": false,
+                      "id": 4521,
+                      "name": "oldCUSD",
+                      "nodeType": "VariableDeclaration",
+                      "scope": 4536,
+                      "src": "987:15:27",
+                      "stateVariable": false,
+                      "storageLocation": "default",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_address",
+                        "typeString": "address"
+                      },
+                      "typeName": {
+                        "id": 4520,
+                        "name": "address",
+                        "nodeType": "ElementaryTypeName",
+                        "src": "987:7:27",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_address",
+                          "typeString": "address"
+                        }
+                      },
+                      "value": null,
+                      "visibility": "internal"
+                    }
+                  ],
+                  "id": 4525,
+                  "initialValue": {
+                    "argumentTypes": null,
+                    "arguments": [
+                      {
+                        "argumentTypes": null,
+                        "id": 4523,
+                        "name": "cusdAddress",
+                        "nodeType": "Identifier",
+                        "overloadedDeclarations": [],
+                        "referencedDeclaration": 4541,
+                        "src": "1013:11:27",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_address",
+                          "typeString": "address"
+                        }
+                      }
+                    ],
+                    "expression": {
+                      "argumentTypes": [
+                        {
+                          "typeIdentifier": "t_address",
+                          "typeString": "address"
+                        }
+                      ],
+                      "id": 4522,
+                      "isConstant": false,
+                      "isLValue": false,
+                      "isPure": true,
+                      "lValueRequested": false,
+                      "nodeType": "ElementaryTypeNameExpression",
+                      "src": "1005:7:27",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_type$_t_address_$",
+                        "typeString": "type(address)"
+                      },
+                      "typeName": "address"
+                    },
+                    "id": 4524,
+                    "isConstant": false,
+                    "isLValue": false,
+                    "isPure": false,
+                    "kind": "typeConversion",
+                    "lValueRequested": false,
+                    "names": [],
+                    "nodeType": "FunctionCall",
+                    "src": "1005:20:27",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "nodeType": "VariableDeclarationStatement",
+                  "src": "987:38:27"
+                },
+                {
+                  "expression": {
+                    "argumentTypes": null,
+                    "id": 4528,
+                    "isConstant": false,
+                    "isLValue": false,
+                    "isPure": false,
+                    "lValueRequested": false,
+                    "leftHandSide": {
+                      "argumentTypes": null,
+                      "id": 4526,
+                      "name": "cusdAddress",
+                      "nodeType": "Identifier",
+                      "overloadedDeclarations": [],
+                      "referencedDeclaration": 4541,
+                      "src": "1035:11:27",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_address",
+                        "typeString": "address"
+                      }
+                    },
+                    "nodeType": "Assignment",
+                    "operator": "=",
+                    "rightHandSide": {
+                      "argumentTypes": null,
+                      "id": 4527,
+                      "name": "_cusd",
+                      "nodeType": "Identifier",
+                      "overloadedDeclarations": [],
+                      "referencedDeclaration": 4500,
+                      "src": "1049:5:27",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_address",
+                        "typeString": "address"
+                      }
+                    },
+                    "src": "1035:19:27",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "id": 4529,
+                  "nodeType": "ExpressionStatement",
+                  "src": "1035:19:27"
+                },
+                {
+                  "eventCall": {
+                    "argumentTypes": null,
+                    "arguments": [
+                      {
+                        "argumentTypes": null,
+                        "id": 4531,
+                        "name": "oldCUSD",
+                        "nodeType": "Identifier",
+                        "overloadedDeclarations": [],
+                        "referencedDeclaration": 4521,
+                        "src": "1088:7:27",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_address",
+                          "typeString": "address"
+                        }
+                      },
+                      {
+                        "argumentTypes": null,
+                        "id": 4532,
+                        "name": "_cusd",
+                        "nodeType": "Identifier",
+                        "overloadedDeclarations": [],
+                        "referencedDeclaration": 4500,
+                        "src": "1097:5:27",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_address",
+                          "typeString": "address"
+                        }
+                      }
+                    ],
+                    "expression": {
+                      "argumentTypes": [
+                        {
+                          "typeIdentifier": "t_address",
+                          "typeString": "address"
+                        },
+                        {
+                          "typeIdentifier": "t_address",
+                          "typeString": "address"
+                        }
+                      ],
+                      "id": 4530,
+                      "name": "CUSDAddressChanged",
+                      "nodeType": "Identifier",
+                      "overloadedDeclarations": [],
+                      "referencedDeclaration": 4477,
+                      "src": "1069:18:27",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_function_event_nonpayable$_t_address_$_t_address_$returns$__$",
+                        "typeString": "function (address,address)"
+                      }
+                    },
+                    "id": 4533,
+                    "isConstant": false,
+                    "isLValue": false,
+                    "isPure": false,
+                    "kind": "functionCall",
+                    "lValueRequested": false,
+                    "names": [],
+                    "nodeType": "FunctionCall",
+                    "src": "1069:34:27",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_tuple$__$",
+                      "typeString": "tuple()"
+                    }
+                  },
+                  "id": 4534,
+                  "nodeType": "EmitStatement",
+                  "src": "1064:39:27"
+                }
+              ]
+            },
+            "documentation": null,
+            "id": 4536,
+            "implemented": true,
+            "isConstructor": false,
+            "isDeclaredConst": false,
+            "modifiers": [],
+            "name": "_setCUSDAddress",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 4501,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 4500,
+                  "name": "_cusd",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 4536,
+                  "src": "796:13:27",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 4499,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "796:7:27",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "795:15:27"
+            },
+            "payable": false,
+            "returnParameters": {
+              "id": 4502,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "820:0:27"
+            },
+            "scope": 4537,
+            "src": "771:339:27",
+            "stateMutability": "nonpayable",
+            "superFunction": null,
+            "visibility": "internal"
+          }
+        ],
+        "scope": 4538,
+        "src": "313:799:27"
+      }
+    ],
+    "src": "0:1112:27"
+  },
+  "compiler": {
+    "name": "solc",
+    "version": "0.4.24+commit.e67f0147.Emscripten.clang"
+  },
+  "networks": {},
+  "schemaVersion": "2.0.1",
+  "updatedAt": "2018-08-13T20:26:34.644Z"
+}
