@@ -1,6 +1,6 @@
 const { CommonVariables, ZERO_ADDRESS, RANDOM_ADDRESS, expectRevert, assertBalance } = require('../../helpers/common')
 
-const { tokenSetupProxy } = require('../../helpers/tokenSetupProxy')
+const { tokenSetupCDProxy } = require('../../helpers/tokenSetupCDProxy')
 
 const { tokenSetup } = require('../../helpers/tokenSetup')
 
@@ -133,7 +133,7 @@ contract('CarbonDollarProxy', _accounts => {
         })
         describe('call proxy to convertCarbonDollar, relies on PermissionedToken calls working correctly', function () {
             beforeEach(async function () {
-                await tokenSetupProxy.call(this, this.tokenProxy.address, validator, minter, user, owner, whitelisted, blacklisted, nonlisted);
+                await tokenSetupCDProxy.call(this, this.tokenProxy.address, validator, minter, user, owner, whitelisted, blacklisted, nonlisted);
             })
             beforeEach(async function () {  
                 // Whitelist the WT0 contract and add a fee

@@ -17,9 +17,6 @@ import "openzeppelin-solidity/contracts/token/ERC20/ERC20.sol";
 contract PermissionedToken is ERC20, Pausable, MutablePermissionedTokenStorage {
     using SafeMath for uint256;
 
-    /** Variables */
-    uint256 public totalSupply;
-
     /** Events */
     event DestroyedBlacklistedTokens(address indexed account, uint256 amount);
     event ApprovedBlacklistedAddressSpender(address indexed owner, address indexed spender, uint256 value);
@@ -120,7 +117,7 @@ contract PermissionedToken is ERC20, Pausable, MutablePermissionedTokenStorage {
     * @notice Implements totalSupply() as specified in the ERC20 standard.
     */
     function totalSupply() public view returns (uint256) {
-        return totalSupply;
+        return balances.totalSupply();
     }
 
     /**
@@ -136,7 +133,7 @@ contract PermissionedToken is ERC20, Pausable, MutablePermissionedTokenStorage {
     }
     
     function _mint(address _to, uint256 _amount) internal userWhitelisted(_to) returns (bool) {
-        totalSupply = totalSupply.add(_amount);
+        balances.addTotalSupply(_amount);
         balances.addBalance(_to, _amount);
         emit Mint(_to, _amount);
         emit Transfer(address(0), _to, _amount);
@@ -159,7 +156,7 @@ contract PermissionedToken is ERC20, Pausable, MutablePermissionedTokenStorage {
         // no need to require value <= totalSupply, since that would imply the
         // sender's balance is greater than the totalSupply, which *should* be an assertion failure
         balances.subBalance(_tokensOf, _amount);
-        totalSupply = totalSupply.sub(_amount);
+        balances.subTotalSupply(_amount);
         emit Burn(_tokensOf, _amount);
         emit Transfer(_tokensOf, address(0), _amount);
     }
@@ -229,7 +226,7 @@ contract PermissionedToken is ERC20, Pausable, MutablePermissionedTokenStorage {
     */
     function destroyBlacklistedTokens(address _who, uint256 _amount) public userBlacklisted(_who) whenNotPaused requiresPermission {
         balances.subBalance(_who, _amount);
-        totalSupply = totalSupply.sub(_amount);
+        balances.subTotalSupply(_amount);
         emit DestroyedBlacklistedTokens(_who, _amount);
     }
     /**

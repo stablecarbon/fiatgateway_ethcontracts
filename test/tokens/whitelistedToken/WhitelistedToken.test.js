@@ -1,6 +1,8 @@
 const { CommonVariables, ZERO_ADDRESS, expectRevert, assertBalance } = require('../../helpers/common');
 const { tokenSetup } = require('../../helpers/tokenSetup');
 const { WhitelistedToken } = require('../../helpers/artifacts');
+const { whitelistedTokenMutableStorageTests } = require('./whitelistedTokenBehavior/WhitelistedTokenMutableStorage.js')
+
 var BigNumber = require("bignumber.js");
 
 contract('WhitelistedToken', _accounts => {
@@ -84,5 +86,9 @@ contract('WhitelistedToken', _accounts => {
                 });
             });
         });
+    });
+
+    describe("Whitelisted token additional tests", function () {
+        whitelistedTokenMutableStorageTests(owner, user)
     });
 })
