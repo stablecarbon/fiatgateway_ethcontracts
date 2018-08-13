@@ -1,6 +1,7 @@
-const { CommonVariables, ZERO_ADDRESS, expectRevert } = require('../helpers/common');
+const { CommonVariables, ZERO_ADDRESS, RANDOM_ADDRESS, expectRevert } = require('../helpers/common');
 
-const { RegulatorProxyFactory,  
+const { RegulatorProxyFactory, 
+        PermissionSheet,
         BalanceSheet, 
         AllowanceSheet,
         FeeSheet,
@@ -10,149 +11,149 @@ const { RegulatorProxyFactory,
         CarbonDollar,
         CarbonDollarRegulator } = require('../helpers/artifacts');
 
-contract('Regulator Factory creating Regulators', _accounts => {
+contract('CarbonDollar Factory creating CD proxies', _accounts => {
     const commonVars = new CommonVariables(_accounts);
     const proxy_owner = commonVars.owner;
     const other_owner = commonVars.user;
     const validator = commonVars.validator;
     const minter = commonVars.user2;
     const whitelisted = commonVars.user3;
-    const regulator_owner = commonVars.validator2
 
     beforeEach(async function () {
 
         this.proxyFactory = await CarbonDollarProxyFactory.new({from: proxy_owner });
+        this.regulatorFactory = await RegulatorProxyFactory.new({from: proxy_owner });
 
-        this.impl_v0_whitelisted = await WhitelistedTokenRegulator.new(ZERO_ADDRESS, ZERO_ADDRESS, {from: other_owner })
-        this.impl_v0_carbondollar = await CarbonDollarRegulator.new(ZERO_ADDRESS, ZERO_ADDRESS, {from: other_owner })
+        this.regulator_v0 = await CarbonDollarRegulator.new(ZERO_ADDRESS, ZERO_ADDRESS, {from: other_owner })
+        this.impl_v0 = await CarbonDollar.new(ZERO_ADDRESS, ZERO_ADDRESS, ZERO_ADDRESS, ZERO_ADDRESS, ZERO_ADDRESS, {from: other_owner })
 
     })
 
-    describe('Creating brand new Regulator proxies from the factory', function () {
+    describe('Creating brand new CarbonDollar proxies from the factory', function () {
 
         it('initiates the factories', async function () {
             assert.equal(await this.proxyFactory.getCount(), 0)
         })
-        it('proxy creates a new WhitelistedToken regulator', async function () {
-            const { logs } = await this.proxyFactory.createRegulatorProxy(this.impl_v0_whitelisted.address)
+        it('proxy creates a new CarbonDollar', async function () {
+
+            // Create a CD regulator first
+            await this.regulatorFactory.createRegulatorProxy(this.regulator_v0.address, {from: proxy_owner})
+            this.regulatorAddress = await this.regulatorFactory.getRegulatorProxy((await this.regulatorFactory.getCount())-1)
+
+            // Create a CD proxy using factory
+            const { logs } = await this.proxyFactory.createToken(this.impl_v0.address, this.regulatorAddress, {from: proxy_owner})
             assert.equal(logs.length, 1)
-            assert.equal(logs[0].event, "CreatedRegulatorProxy")
-            assert.equal(logs[0].args.newRegulator, await this.proxyFactory.getRegulatorProxy(0))
-            assert.equal(logs[0].args.index, 0)
-            assert.equal(await this.proxyFactory.getCount(), 1)
-        })
-        it('proxy creates a new CarbonDollar regulator', async function () {
-            const { logs } = await this.proxyFactory.createRegulatorProxy(this.impl_v0_carbondollar.address)
-            assert.equal(logs.length, 1)
-            assert.equal(logs[0].event, "CreatedRegulatorProxy")
-            assert.equal(logs[0].args.newRegulator, await this.proxyFactory.getRegulatorProxy(0))
+            assert.equal(logs[0].event, "CreatedCarbonDollarProxy")
+            assert.equal(logs[0].args.newToken, await this.proxyFactory.getToken(0))
             assert.equal(logs[0].args.index, 0)
             assert.equal(await this.proxyFactory.getCount(), 1)
         })
     
     })
 
-    describe('getRegulator', function () {
+    describe('getToken', function () {
         beforeEach(async function () {
-            await this.proxyFactory.createRegulatorProxy(this.impl_v0_whitelisted.address)
-            await this.proxyFactory.createRegulatorProxy(this.impl_v0_carbondollar.address)
+            // Create a CD regulator first
+            await this.regulatorFactory.createRegulatorProxy(this.regulator_v0.address, {from: proxy_owner})
+            this.regulatorAddress = await this.regulatorFactory.getRegulatorProxy((await this.regulatorFactory.getCount())-1)
+
+            // Create a CD proxy using factory
+            await this.proxyFactory.createToken(this.impl_v0.address, this.regulatorAddress, {from: proxy_owner})
 
         })
         it('i is negative, reverts', async function () {
-            await expectRevert(this.proxyFactory.getRegulatorProxy(-1))
+            await expectRevert(this.proxyFactory.getToken(-1))
         })
         it('i is equal to or greater than length, reverts', async function () {
-            await expectRevert(this.proxyFactory.getRegulatorProxy(2))
-            await expectRevert(this.proxyFactory.getRegulatorProxy(3))
+            await expectRevert(this.proxyFactory.getToken(1))
+            await expectRevert(this.proxyFactory.getToken(2))
         })
-        it('i >= 0 and < length, retrieves regulator', async function () {
-            assert.equal(await this.proxyFactory.getRegulatorProxy(1), await this.proxyFactory.regulators(1))
+        it('i >= 0 and < length, retrieves token', async function () {
+            assert.equal(await this.proxyFactory.getToken(0), await this.proxyFactory.tokens(0))
 
         })
     })
 
-    describe('Casting children to Regulator and RegulatorProxy', function () {
+    describe('Casting children to CarbonDollar and CarbonDollarProxy', function () {
         beforeEach(async function () {
-            await this.proxyFactory.createRegulatorProxy(this.impl_v0_whitelisted.address, {from: proxy_owner })
-            this.proxy_0 = RegulatorProxy.at(await this.proxyFactory.getRegulatorProxy((await this.proxyFactory.getCount())-1))
-            this.regulator_0 = WhitelistedTokenRegulator.at(this.proxy_0.address)
+            // Create a CD regulator first
+            await this.regulatorFactory.createRegulatorProxy(this.regulator_v0.address, {from: proxy_owner})
+            this.regulatorAddress = await this.regulatorFactory.getRegulatorProxy((await this.regulatorFactory.getCount())-1)
 
-            this.permissions_0 = PermissionSheet.at(await this.regulator_0.permissions())
-            this.validators_0 = ValidatorSheet.at(await this.regulator_0.validators())
+            // Create a CD proxy using factory
+            await this.proxyFactory.createToken(this.impl_v0.address, this.regulatorAddress, {from: proxy_owner})
+
+            this.proxy_0 = CarbonDollarProxy.at(await this.proxyFactory.getToken((await this.proxyFactory.getCount())-1))
+            this.token_0 = CarbonDollar.at(this.proxy_0.address)
+
+            this.balances_0 = BalanceSheet.at(await this.token_0.balances())
+            this.allowances_0 = AllowanceSheet.at(await this.token_0.allowances())
+            this.fees_0 = FeeSheet.at(await this.token_0.stablecoinFees())
+            this.whitelist_0 = StablecoinWhitelist.at(await this.token_0.stablecoinWhitelist())
+            this.regulator_CD = CarbonDollarRegulator.at(await this.token_0.regulator())
         })
-        it('regulator and proxy have same address', async function () {
-            assert.equal(this.proxy_0.address, this.regulator_0.address)
+        it('token and proxy have same address', async function () {
+            assert.equal(this.proxy_0.address, this.token_0.address)
         })
         it('initial implementation set by the proxy', async function () {
-            assert.equal(await this.proxy_0.implementation(), this.impl_v0_whitelisted.address)
+            assert.equal(await this.proxy_0.implementation(), this.impl_v0.address)
         })  
-        it('proxy is owned by caller of factory createRegulator()', async function () {
+        it('proxy is owned by caller of factory createToken()', async function () {
             assert.equal(await this.proxy_0.owner(), proxy_owner)
-            assert.equal(await this.regulator_0.owner(), proxy_owner)
+            assert.equal(await this.token_0.owner(), proxy_owner)
         }) 
-        it('Proxy data stores are owned by regulator', async function () {
-            assert.equal(await this.permissions_0.owner(), this.regulator_0.address)
-            assert.equal(await this.validators_0.owner(), this.regulator_0.address)
+        it('Proxy data stores are owned by token', async function () {
+            assert.equal(await this.balances_0.owner(), this.token_0.address)
+            assert.equal(await this.allowances_0.owner(), this.token_0.address)
+            assert.equal(await this.fees_0.owner(), this.token_0.address)
+            assert.equal(await this.whitelist_0.owner(), this.token_0.address)
         })
         it('Proxy can change storage', async function () {
-            const newPermissions = await PermissionSheet.new()
-            const newValidators = await ValidatorSheet.new()
+            const newBalances = await BalanceSheet.new()
+            const newAllowances = await AllowanceSheet.new()
+            const newFees = await FeeSheet.new()
+            const newStablecoinWhitelist = await StablecoinWhitelist.new()
 
-            await this.regulator_0.setPermissionStorage(newPermissions.address, {from: proxy_owner})
-            await this.regulator_0.setValidatorStorage(newValidators.address, {from: proxy_owner})
+            await this.regulatorFactory.createRegulatorProxy(this.regulator_v0.address, {from: proxy_owner})
+            const newRegulator = await this.regulatorFactory.getRegulatorProxy((await this.regulatorFactory.getCount())-1)
 
-            assert.equal(newPermissions.address, await this.regulator_0.permissions())
-            assert.equal(newValidators.address, await this.regulator_0.validators())
+            await this.token_0.setBalanceStorage(newBalances.address, {from: proxy_owner})
+            await this.token_0.setAllowanceStorage(newAllowances.address, {from: proxy_owner})
+            await this.token_0.setFeeSheet(newFees.address, {from: proxy_owner})
+            await this.token_0.setStablecoinWhitelist(newStablecoinWhitelist.address, {from: proxy_owner})
+            await this.token_0.setRegulator(newRegulator, {from:proxy_owner})
+
+            assert.equal(newBalances.address, await this.token_0.balances())
+            assert.equal(newAllowances.address, await this.token_0.allowances())
+            assert.equal(newFees.address, await this.token_0.stablecoinFees())
+            assert.equal(newStablecoinWhitelist.address, await this.token_0.stablecoinWhitelist())
+            assert.equal(newRegulator, await this.token_0.regulator())
         })
         describe("Proxy upgradeTo and implentation", function () {
             it('upgrades to next implementation', async function () {
     
-                const { logs } = await this.proxy_0.upgradeTo(this.impl_v0_carbondollar.address, {from: proxy_owner}) 
-                assert.equal(await this.proxy_0.implementation(), this.impl_v0_carbondollar.address) 
+                this.impl_v1 = await CarbonDollar.new(ZERO_ADDRESS, ZERO_ADDRESS, ZERO_ADDRESS, ZERO_ADDRESS, ZERO_ADDRESS, {from: other_owner })
+                const { logs } = await this.proxy_0.upgradeTo(this.impl_v1.address, {from: proxy_owner}) 
+                assert.equal(await this.proxy_0.implementation(), this.impl_v1.address) 
                 assert.equal(logs.length, 1)
                 assert.equal(logs[0].event, "Upgraded")
-                assert.equal(logs[0].args.implementation, this.impl_v0_carbondollar.address)        
+                assert.equal(logs[0].args.implementation, this.impl_v1.address)        
             })
         })
 
         describe('Proxy delegates calls to implementation', function () {
-            describe('owner calls addValidator', function () {
-                it('adds a validator to validator sheet', async function () {
-                    await this.regulator_0.addValidator(validator, {from: proxy_owner})
-                    assert(await this.regulator_0.isValidator(validator))
+
+            describe('owner calls listToken', function () {
+                it('adds a token to CD stablecoin whitelist', async function () {
+                    await this.token_0.listToken(RANDOM_ADDRESS, {from:proxy_owner})
+                    assert(await this.token_0.isWhitelisted(RANDOM_ADDRESS))
                 })
             })
-            describe('non owner calls addValidator', function () {
+            describe('non owner calls listToken', function () {
                 it('reverts', async function () {
-                    await expectRevert(this.regulator_0.addValidator(validator, {from: other_owner}))
+                    await expectRevert(this.token_0.listToken(RANDOM_ADDRESS, {from: other_owner}))
                 })
             })  
-            describe('validator calls addPermission', function () {
-                it('adds permission', async function () {
-                    await this.regulator_0.addValidator(validator, {from: proxy_owner})
-                    await this.regulator_0.addPermission(0x12345678, "name","des","contract", {from: validator})
-                    assert(await this.regulator_0.isPermission(0x12345678))
-                })
-            })
-            describe('non validator calls addPermission', function () {
-                it('reverts', async function () {
-                    await this.regulator_0.addValidator(validator, {from: proxy_owner})
-                    await expectRevert(this.regulator_0.addPermission(0x12345678, "name", "des", "contract", {from:other_owner}))
-                })
-            })
-            describe('validator sets user permission', function () {
-                beforeEach(async function () {
-                    await this.regulator_0.addValidator(validator, {from: proxy_owner})
-                })
-                it('sets a minter', async function () {
-                    await this.regulator_0.setMinter(minter, {from: validator})
-                    assert(await this.regulator_0.isMinter(minter))
-                })
-                it('sets a whitelisted user', async function () {
-                    await this.regulator_0.setWhitelistedUser(whitelisted, {from: validator})
-                    assert(await this.regulator_0.isWhitelistedUser(whitelisted))
-                })
-            })
         })
     })
 })

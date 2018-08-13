@@ -19,6 +19,7 @@ const WhitelistedToken = artifacts.require("WhitelistedToken");
 const WhitelistedTokenRegulator = artifacts.require("WhitelistedTokenRegulator");
 const WhitelistedTokenStorage = artifacts.require("WhitelistedTokenStorage");
 const WhitelistedTokenProxy = artifacts.require("WhitelistedTokenProxy");
+const WhitelistedTokenProxyFactory = artifacts.require("WhitelistedTokenProxyFactory")
 
 // CarbonDollar
 const CarbonDollar = artifacts.require("CarbonDollar");
@@ -54,6 +55,7 @@ module.exports = {
 	WhitelistedTokenRegulator,
 	WhitelistedTokenStorage,
 	WhitelistedTokenProxy,
+	WhitelistedTokenProxyFactory,
 	//CDollar 
 	CarbonDollarProxy,
 	CarbonDollarProxyFactory,
