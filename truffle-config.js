@@ -12,6 +12,9 @@
  *   },
  */
 
+const HDWalletProvider = require("truffle-hdwallet-provider");
+require('dotenv').config()  // Store environment-specific variable from '.env' to process.env
+
 module.exports = {
   // See <http://truffleframework.com/docs/advanced/configuration>
   // to customize your Truffle configuration!
@@ -36,6 +39,7 @@ module.exports = {
           return new HDWalletProvider(process.env.MNEMONIC, "https://rinkeby.infura.io/v3/" + process.env.INFURA_API_KEY)
       },
       network_id: 4,
+      gas: 4712388
     }
   },
   // mocha: {
