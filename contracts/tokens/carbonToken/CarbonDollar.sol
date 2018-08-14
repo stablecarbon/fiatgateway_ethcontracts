@@ -153,7 +153,7 @@ contract CarbonDollar is MutableCarbonDollarStorage, PermissionedToken {
         _burn(msg.sender, _amount);
         w.burn(_amount);
         _mint(address(this), chargedFee);
-        emit BurnedCUSD(msg.sender, feedAmount, chargedFee);
+        emit BurnedCUSD(msg.sender, feedAmount, chargedFee); // Whitelisted trust account should send user feedAmount USD
         return true;
     }
 

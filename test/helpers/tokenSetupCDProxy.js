@@ -1,4 +1,5 @@
-// beforeEach setup function for CarbonDollarTests and WhitelistedToken tests.
+// beforeEach setup function for CarbonDollarProxyTests 
+// Identical to toknSetup except that CD references a proxy address
 
 const { 
     CarbonDollarRegulator, 
