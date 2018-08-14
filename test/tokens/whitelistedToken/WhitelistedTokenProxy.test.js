@@ -1,7 +1,5 @@
 const { CommonVariables, ZERO_ADDRESS, RANDOM_ADDRESS, expectRevert, assertBalance } = require('../../helpers/common')
 
-const { tokenSetupProxy } = require('../../helpers/tokenSetupProxy')
-
 const { tokenSetup } = require('../../helpers/tokenSetup')
 
 const { WhitelistedTokenProxy, WhitelistedToken, CarbonDollar, BalanceSheet, AllowanceSheet, WhitelistedTokenRegulator, PermissionSheet, ValidatorSheet } = require('../../helpers/artifacts');
