@@ -1,6 +1,8 @@
 # fiat_gateway
 Carbon's Crypto-Fiat gateway: smart contracts
 
+To deploy, run:
+truffle migrate --network *testnetwork here* 
 
 Token Roles:
 
@@ -20,7 +22,7 @@ Token Roles:
 		CD Blacklisted: Cannot convert CUSD or trade CUSD. This REPLACES the normal Blacklisted access.
 		WT Blacklisted: Cannot convert WT or trade WT. This ADDS to the normal Blacklisted access.
 
-Regulator Roles: 
+Regulator Roles:
 
 	Validator: account capable of setting user permissions/roles including all the ones listed in this README. Regulator owner is able to set validators.
 
@@ -35,7 +37,7 @@ Architecture
 		Data Storage:
 			FeeSheet
 			StablecoinWhitelist
-	
+
 	WhitelistedToken is a PermissionedToken
 
 	Two-way convertability between: CUSD < -- > WT. Account must be whitelisted by relevant CD or WT regulator.
@@ -55,4 +57,3 @@ Architecture
 		CarbonDollarProxy <-- use this to interact with CD
 		PermissionedTokenProxy <--use this to interact with PT
 		RegulatorProxy <--use this to interact with Regulator
-
