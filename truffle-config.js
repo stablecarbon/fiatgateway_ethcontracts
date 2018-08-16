@@ -14,8 +14,6 @@
 
 const HDWalletProvider = require("truffle-hdwallet-provider");
 require('dotenv').config()  // Store environment-specific variable from '.env' to process.env
-var mnemonic = "indicate stove mention jeans service twelve civil raven ability venue tuna sure";
-
 
 module.exports = {
   // See <http://truffleframework.com/docs/advanced/configuration>
@@ -36,19 +34,6 @@ module.exports = {
       gas: 0xfffffffffff, // <-- Use this high gas value
       gasPrice: 0x01      // <-- Use this low gas price
     },
-    kovan: {
-      provider: function () {
-          return new HDWalletProvider(process.env.MNEMONIC, "https://kovan.infura.io/v3/" + process.env.INFURA_API_KEY)
-      },
-      network_id: 42
-  },
-  ropsten: {
-    provider: function () {
-        return new HDWalletProvider(process.env.MNEMONIC, "https://ropsten.infura.io/v3/" + process.env.INFURA_API_KEY)
-    },
-    network_id: 3,
-    gasLimit: 100000000
-  },
     rinkeby: {
       provider: function () {
           return new HDWalletProvider(process.env.MNEMONIC, "https://rinkeby.infura.io/v3/" + process.env.INFURA_API_KEY)
