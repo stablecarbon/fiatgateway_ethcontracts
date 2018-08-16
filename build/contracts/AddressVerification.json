@@ -54,14 +54,14 @@
       "type": "function"
     }
   ],
-  "bytecode": "0x608060405234801561001057600080fd5b506101d5806100206000396000f3006080604052600436106100565763ffffffff7c0100000000000000000000000000000000000000000000000000000000600035041663612f6c96811461005b5780638bb0949b146100a2578063edb9a6f1146100c2575b600080fd5b34801561006757600080fd5b5061008973ffffffffffffffffffffffffffffffffffffffff60043516610104565b6040805163ffffffff9092168252519081900360200190f35b3480156100ae57600080fd5b506100c063ffffffff6004351661011c565b005b3480156100ce57600080fd5b506100f073ffffffffffffffffffffffffffffffffffffffff60043516610194565b604080519115158252519081900360200190f35b60006020819052908152604090205463ffffffff1681565b3360009081526020818152604080832080547fffffffffffffffffffffffffffffffffffffffffffffffffffffffff000000001663ffffffff959095169490941790935560019081905291902080547fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff00169091179055565b60016020526000908152604090205460ff16815600a165627a7a72305820d2bb51bc13dacafb5621a2d429c30b05a905fd29eae4c7dc0297c0ae1e1d08110029",
-  "deployedBytecode": "0x6080604052600436106100565763ffffffff7c0100000000000000000000000000000000000000000000000000000000600035041663612f6c96811461005b5780638bb0949b146100a2578063edb9a6f1146100c2575b600080fd5b34801561006757600080fd5b5061008973ffffffffffffffffffffffffffffffffffffffff60043516610104565b6040805163ffffffff9092168252519081900360200190f35b3480156100ae57600080fd5b506100c063ffffffff6004351661011c565b005b3480156100ce57600080fd5b506100f073ffffffffffffffffffffffffffffffffffffffff60043516610194565b604080519115158252519081900360200190f35b60006020819052908152604090205463ffffffff1681565b3360009081526020818152604080832080547fffffffffffffffffffffffffffffffffffffffffffffffffffffffff000000001663ffffffff959095169490941790935560019081905291902080547fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff00169091179055565b60016020526000908152604090205460ff16815600a165627a7a72305820d2bb51bc13dacafb5621a2d429c30b05a905fd29eae4c7dc0297c0ae1e1d08110029",
+  "bytecode": "0x608060405234801561001057600080fd5b506101d5806100206000396000f3006080604052600436106100565763ffffffff7c0100000000000000000000000000000000000000000000000000000000600035041663612f6c96811461005b5780638bb0949b146100a2578063edb9a6f1146100c2575b600080fd5b34801561006757600080fd5b5061008973ffffffffffffffffffffffffffffffffffffffff60043516610104565b6040805163ffffffff9092168252519081900360200190f35b3480156100ae57600080fd5b506100c063ffffffff6004351661011c565b005b3480156100ce57600080fd5b506100f073ffffffffffffffffffffffffffffffffffffffff60043516610194565b604080519115158252519081900360200190f35b60006020819052908152604090205463ffffffff1681565b3360009081526020818152604080832080547fffffffffffffffffffffffffffffffffffffffffffffffffffffffff000000001663ffffffff959095169490941790935560019081905291902080547fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff00169091179055565b60016020526000908152604090205460ff16815600a165627a7a723058204cc0c8ec623430bdc1fc8a6221db9606ca1fb4f8092d239f2ac6c1b51b375beb0029",
+  "deployedBytecode": "0x6080604052600436106100565763ffffffff7c0100000000000000000000000000000000000000000000000000000000600035041663612f6c96811461005b5780638bb0949b146100a2578063edb9a6f1146100c2575b600080fd5b34801561006757600080fd5b5061008973ffffffffffffffffffffffffffffffffffffffff60043516610104565b6040805163ffffffff9092168252519081900360200190f35b3480156100ae57600080fd5b506100c063ffffffff6004351661011c565b005b3480156100ce57600080fd5b506100f073ffffffffffffffffffffffffffffffffffffffff60043516610194565b604080519115158252519081900360200190f35b60006020819052908152604090205463ffffffff1681565b3360009081526020818152604080832080547fffffffffffffffffffffffffffffffffffffffffffffffffffffffff000000001663ffffffff959095169490941790935560019081905291902080547fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff00169091179055565b60016020526000908152604090205460ff16815600a165627a7a723058204cc0c8ec623430bdc1fc8a6221db9606ca1fb4f8092d239f2ac6c1b51b375beb0029",
   "sourceMap": "28:538:0:-;;;;8:9:-1;5:2;;;30:1;27;20:12;5:2;28:538:0;;;;;;;",
   "deployedSourceMap": "28:538:0:-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;107:48;;8:9:-1;5:2;;;30:1;27;20:12;5:2;-1:-1;107:48:0;;;;;;;;;;;;;;;;;;;;;;;;;;395:168;;8:9:-1;5:2;;;30:1;27;20:12;5:2;-1:-1;395:168:0;;;;;;;;;224:52;;8:9:-1;5:2;;;30:1;27;20:12;5:2;-1:-1;224:52:0;;;;;;;;;;;;;;;;;;;;;;;;;107:48;;;;;;;;;;;;;;;;:::o;395:168::-;476:10;462:13;:25;;;;;;;;;;;:44;;;;;;;;;;;;;;;;-1:-1:-1;517:31:0;;;;;;;:38;;;;;;;;;395:168::o;224:52::-;;;;;;;;;;;;;;;:::o",
   "source": "pragma solidity ^0.4.24;\r\n\r\ncontract AddressVerification {\r\n    // storage of codes provided by users\r\n    mapping (address => uint32) public address_codes;\r\n\r\n    // stores booleans indicating whetehr user sent a code\r\n    mapping (address => bool) public address_sent_status;\r\n\r\n    /* @dev Emits event for server to verify whether the message\r\n     * sender is a valid address.\r\n     */\r\n    function verifyAddress (uint32 verificationCode) public {\r\n        address_codes[msg.sender] = verificationCode;\r\n        address_sent_status[msg.sender] = true;\r\n    }\r\n}\r\n",
-  "sourcePath": "C:\\Users\\npain\\Projects\\Carbon\\fiat_gateway\\fiat_gateway\\contracts\\AddressVerification.sol",
+  "sourcePath": "C:\\Users\\Max Piasevoli\\Desktop\\Carbon\\fiat_gateway\\contracts\\AddressVerification.sol",
   "ast": {
-    "absolutePath": "/C/Users/npain/Projects/Carbon/fiat_gateway/fiat_gateway/contracts/AddressVerification.sol",
+    "absolutePath": "/C/Users/Max Piasevoli/Desktop/Carbon/fiat_gateway/contracts/AddressVerification.sol",
     "exportedSymbols": {
       "AddressVerification": [
         30
@@ -437,7 +437,7 @@
     "src": "0:568:0"
   },
   "legacyAST": {
-    "absolutePath": "/C/Users/npain/Projects/Carbon/fiat_gateway/fiat_gateway/contracts/AddressVerification.sol",
+    "absolutePath": "/C/Users/Max Piasevoli/Desktop/Carbon/fiat_gateway/contracts/AddressVerification.sol",
     "exportedSymbols": {
       "AddressVerification": [
         30
@@ -817,19 +817,13 @@
     "version": "0.4.24+commit.e67f0147.Emscripten.clang"
   },
   "networks": {
-    "1534191923034": {
+    "4": {
       "events": {},
       "links": {},
-      "address": "0x6e069a71b94b5a6b4ade08b5e444d7184ce0cf8b",
-      "transactionHash": "0xbd43ae1a02c4ef46b57ede918b3bd1a3dc4eaa06d1ffb11b7c5c761240072e35"
-    },
-    "1534199946177": {
-      "events": {},
-      "links": {},
-      "address": "0x615c697d02847f3076af9c12d1b2fc21b7c78ab6",
-      "transactionHash": "0xf462d7be304c6c9f3ef10dcbcbd331605bfc5ff8bca05b2ab26159343714775f"
+      "address": "0xc8ca112adf948f8cec5abe987466917694c5fe56",
+      "transactionHash": "0x4d71ccfb4c727f2137089a2d1ee19475d2c2dd454b124fdb61077109bee6f31b"
     }
   },
   "schemaVersion": "2.0.1",
-  "updatedAt": "2018-08-13T22:39:44.398Z"
+  "updatedAt": "2018-08-16T17:17:22.924Z"
 }

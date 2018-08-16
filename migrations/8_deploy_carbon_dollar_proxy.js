@@ -10,12 +10,12 @@ module.exports = function (deployer, network, accounts) {
             proxyRegulatorInstance.getRegulatorProxy(count - 2).then(function (cdRegulatorInstance) {
                   CarbonDollar.deployed().then(function(carbonDollarImplementation) {
                     CarbonDollarProxyFactory.deployed().then(function(carbonDollarProxyFactory) {
-                        carbonDollarProxyFactory.createToken(carbonDollarImplementation.address, cdRegulatorInstance, {from:cdTokenOwner, gas:10000000})
+                        carbonDollarProxyFactory.createToken(carbonDollarImplementation.address, cdRegulatorInstance, {from:cdTokenOwner})
                     })
                 })
               })
         })
     })
 
-    
+
 };

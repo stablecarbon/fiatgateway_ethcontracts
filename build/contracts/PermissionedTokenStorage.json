@@ -63,14 +63,14 @@
       "type": "constructor"
     }
   ],
-  "bytecode": "0x608060405234801561001057600080fd5b506040516060806101c183398101604090815281516020830151919092015160008054600160a060020a0319908116600160a060020a0395861617825560018054821694861694909417909355600280549093169390911692909217905561014390819061007e90396000f3006080604052600436106100565763ffffffff7c01000000000000000000000000000000000000000000000000000000006000350416633ed10b92811461005b5780637bb98a6814610099578063dd8fee14146100ae575b600080fd5b34801561006757600080fd5b506100706100c3565b6040805173ffffffffffffffffffffffffffffffffffffffff9092168252519081900360200190f35b3480156100a557600080fd5b506100706100df565b3480156100ba57600080fd5b506100706100fb565b60025473ffffffffffffffffffffffffffffffffffffffff1681565b60015473ffffffffffffffffffffffffffffffffffffffff1681565b60005473ffffffffffffffffffffffffffffffffffffffff16815600a165627a7a72305820896def153b453517e5f6066da878b79ac472e688878554d31ca3efe4a7d913670029",
-  "deployedBytecode": "0x6080604052600436106100565763ffffffff7c01000000000000000000000000000000000000000000000000000000006000350416633ed10b92811461005b5780637bb98a6814610099578063dd8fee14146100ae575b600080fd5b34801561006757600080fd5b506100706100c3565b6040805173ffffffffffffffffffffffffffffffffffffffff9092168252519081900360200190f35b3480156100a557600080fd5b506100706100df565b3480156100ba57600080fd5b506100706100fb565b60025473ffffffffffffffffffffffffffffffffffffffff1681565b60015473ffffffffffffffffffffffffffffffffffffffff1681565b60005473ffffffffffffffffffffffffffffffffffffffff16815600a165627a7a72305820896def153b453517e5f6066da878b79ac472e688878554d31ca3efe4a7d913670029",
+  "bytecode": "0x608060405234801561001057600080fd5b506040516060806101c183398101604090815281516020830151919092015160008054600160a060020a0319908116600160a060020a0395861617825560018054821694861694909417909355600280549093169390911692909217905561014390819061007e90396000f3006080604052600436106100565763ffffffff7c01000000000000000000000000000000000000000000000000000000006000350416633ed10b92811461005b5780637bb98a6814610099578063dd8fee14146100ae575b600080fd5b34801561006757600080fd5b506100706100c3565b6040805173ffffffffffffffffffffffffffffffffffffffff9092168252519081900360200190f35b3480156100a557600080fd5b506100706100df565b3480156100ba57600080fd5b506100706100fb565b60025473ffffffffffffffffffffffffffffffffffffffff1681565b60015473ffffffffffffffffffffffffffffffffffffffff1681565b60005473ffffffffffffffffffffffffffffffffffffffff16815600a165627a7a72305820a16149fe784ddba97f06538de6c904f45e91028709aa15b87d2cd61ad5f041c80029",
+  "deployedBytecode": "0x6080604052600436106100565763ffffffff7c01000000000000000000000000000000000000000000000000000000006000350416633ed10b92811461005b5780637bb98a6814610099578063dd8fee14146100ae575b600080fd5b34801561006757600080fd5b506100706100c3565b6040805173ffffffffffffffffffffffffffffffffffffffff9092168252519081900360200190f35b3480156100a557600080fd5b506100706100df565b3480156100ba57600080fd5b506100706100fb565b60025473ffffffffffffffffffffffffffffffffffffffff1681565b60015473ffffffffffffffffffffffffffffffffffffffff1681565b60005473ffffffffffffffffffffffffffffffffffffffff16815600a165627a7a72305820a16149fe784ddba97f06538de6c904f45e91028709aa15b87d2cd61ad5f041c80029",
   "sourceMap": "353:535:26:-;;;657:228;8:9:-1;5:2;;;30:1;27;20:12;5:2;657:228:26;;;;;;;;;;;;;;;;;;;;;;;;;748:9;:33;;-1:-1:-1;;;;;;748:33:26;;;-1:-1:-1;;;;;748:33:26;;;;;;-1:-1:-1;792:34:26;;;;;;;;;;;;;;837:10;:40;;;;;;;;;;;;;;;353:535;;;;;;;;",
   "deployedSourceMap": "353:535:26:-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;496:32;;8:9:-1;5:2;;;30:1;27;20:12;5:2;496:32:26;;;;;;;;;;;;;;;;;;;;;;;461:28;;8:9:-1;5:2;;;30:1;27;20:12;5:2;461:28:26;;;;428:26;;8:9:-1;5:2;;;30:1;27;20:12;5:2;428:26:26;;;;496:32;;;;;;:::o;461:28::-;;;;;;:::o;428:26::-;;;;;;:::o",
   "source": "pragma solidity ^0.4.24;\r\n\r\nimport \"./AllowanceSheet.sol\";\r\nimport \"./BalanceSheet.sol\";\r\nimport \"../../../regulator/Regulator.sol\";\r\n\r\n/**\r\n* @title PermissionedTokenStorage\r\n* @notice a PermissionedTokenStorage is constructed by setting Regulator, BalanceSheet, and AllowanceSheet locations.\r\n* Once the storages are set, they cannot be changed.\r\n*/\r\ncontract PermissionedTokenStorage {\r\n    /**\r\n        Storage\r\n    */\r\n    Regulator public regulator;\r\n    BalanceSheet public balances;\r\n    AllowanceSheet public allowances;\r\n\r\n    /**\r\n    * @dev a PermissionedTokenStorageConsumer can set its storages only once, on construction\r\n    *\r\n    **/\r\n    constructor (address _regulator, address _balances, address _allowances) public {\r\n        regulator = Regulator(_regulator);\r\n        balances = BalanceSheet(_balances);\r\n        allowances = AllowanceSheet(_allowances);\r\n    }\r\n}",
-  "sourcePath": "C:\\Users\\npain\\Projects\\Carbon\\fiat_gateway\\fiat_gateway\\contracts\\tokens\\permissionedToken\\dataStorage\\PermissionedTokenStorage.sol",
+  "sourcePath": "C:\\Users\\Max Piasevoli\\Desktop\\Carbon\\fiat_gateway\\contracts\\tokens\\permissionedToken\\dataStorage\\PermissionedTokenStorage.sol",
   "ast": {
-    "absolutePath": "/C/Users/npain/Projects/Carbon/fiat_gateway/fiat_gateway/contracts/tokens/permissionedToken/dataStorage/PermissionedTokenStorage.sol",
+    "absolutePath": "/C/Users/Max Piasevoli/Desktop/Carbon/fiat_gateway/contracts/tokens/permissionedToken/dataStorage/PermissionedTokenStorage.sol",
     "exportedSymbols": {
       "PermissionedTokenStorage": [
         4571
@@ -91,7 +91,7 @@
         "src": "0:24:26"
       },
       {
-        "absolutePath": "/C/Users/npain/Projects/Carbon/fiat_gateway/fiat_gateway/contracts/tokens/permissionedToken/dataStorage/AllowanceSheet.sol",
+        "absolutePath": "/C/Users/Max Piasevoli/Desktop/Carbon/fiat_gateway/contracts/tokens/permissionedToken/dataStorage/AllowanceSheet.sol",
         "file": "./AllowanceSheet.sol",
         "id": 4534,
         "nodeType": "ImportDirective",
@@ -102,7 +102,7 @@
         "unitAlias": ""
       },
       {
-        "absolutePath": "/C/Users/npain/Projects/Carbon/fiat_gateway/fiat_gateway/contracts/tokens/permissionedToken/dataStorage/BalanceSheet.sol",
+        "absolutePath": "/C/Users/Max Piasevoli/Desktop/Carbon/fiat_gateway/contracts/tokens/permissionedToken/dataStorage/BalanceSheet.sol",
         "file": "./BalanceSheet.sol",
         "id": 4535,
         "nodeType": "ImportDirective",
@@ -113,7 +113,7 @@
         "unitAlias": ""
       },
       {
-        "absolutePath": "/C/Users/npain/Projects/Carbon/fiat_gateway/fiat_gateway/contracts/regulator/Regulator.sol",
+        "absolutePath": "/C/Users/Max Piasevoli/Desktop/Carbon/fiat_gateway/contracts/regulator/Regulator.sol",
         "file": "../../../regulator/Regulator.sol",
         "id": 4536,
         "nodeType": "ImportDirective",
@@ -588,7 +588,7 @@
     "src": "0:888:26"
   },
   "legacyAST": {
-    "absolutePath": "/C/Users/npain/Projects/Carbon/fiat_gateway/fiat_gateway/contracts/tokens/permissionedToken/dataStorage/PermissionedTokenStorage.sol",
+    "absolutePath": "/C/Users/Max Piasevoli/Desktop/Carbon/fiat_gateway/contracts/tokens/permissionedToken/dataStorage/PermissionedTokenStorage.sol",
     "exportedSymbols": {
       "PermissionedTokenStorage": [
         4571
@@ -609,7 +609,7 @@
         "src": "0:24:26"
       },
       {
-        "absolutePath": "/C/Users/npain/Projects/Carbon/fiat_gateway/fiat_gateway/contracts/tokens/permissionedToken/dataStorage/AllowanceSheet.sol",
+        "absolutePath": "/C/Users/Max Piasevoli/Desktop/Carbon/fiat_gateway/contracts/tokens/permissionedToken/dataStorage/AllowanceSheet.sol",
         "file": "./AllowanceSheet.sol",
         "id": 4534,
         "nodeType": "ImportDirective",
@@ -620,7 +620,7 @@
         "unitAlias": ""
       },
       {
-        "absolutePath": "/C/Users/npain/Projects/Carbon/fiat_gateway/fiat_gateway/contracts/tokens/permissionedToken/dataStorage/BalanceSheet.sol",
+        "absolutePath": "/C/Users/Max Piasevoli/Desktop/Carbon/fiat_gateway/contracts/tokens/permissionedToken/dataStorage/BalanceSheet.sol",
         "file": "./BalanceSheet.sol",
         "id": 4535,
         "nodeType": "ImportDirective",
@@ -631,7 +631,7 @@
         "unitAlias": ""
       },
       {
-        "absolutePath": "/C/Users/npain/Projects/Carbon/fiat_gateway/fiat_gateway/contracts/regulator/Regulator.sol",
+        "absolutePath": "/C/Users/Max Piasevoli/Desktop/Carbon/fiat_gateway/contracts/regulator/Regulator.sol",
         "file": "../../../regulator/Regulator.sol",
         "id": 4536,
         "nodeType": "ImportDirective",
@@ -1111,5 +1111,5 @@
   },
   "networks": {},
   "schemaVersion": "2.0.1",
-  "updatedAt": "2018-08-13T22:38:44.056Z"
+  "updatedAt": "2018-08-16T17:04:42.192Z"
 }
