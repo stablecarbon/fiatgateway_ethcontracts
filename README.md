@@ -2,15 +2,24 @@
 Carbon's Crypto-Fiat gateway: smart contracts
 
 Deployment Addresses in Rinkeby:
-Migrations: 0x2cd608ea7c9b8f0d87586c6763640c24e3930ff0
-RegulatorProxyFactory: 0x50025ae42b7fb8fdf691bf619786007e43cb81d6
-CarbonDollarProxyFactory: 0x11d31c460b0c913055d72dcc5fc67c13552e79c9
-WhitelistedTokenProxyFactory: 0x1b66363d6b32765b66fb278eb772438f6d5fdff7
-WhitelistedTokenRegulator: 0xc97c9226322ed5f6b32becf8a4ec0dc7f622f7d3
-CarbonDollarRegulator: 0x3941e490bef14bb531b97701d491e59d7ec04247
-CarbonDollar: 0xaf9023e111c466c986cce1470dbc18a6a24eb105
-WhitelistedToken: 0x35ef0a417914160d38cf256c0fc0259959fc538c
-AddressVerification: 0x33fa5931b1848127064865d0062a038edc9d01d5
+
+	Migrations: 0x2cd608ea7c9b8f0d87586c6763640c24e3930ff0
+
+	RegulatorProxyFactory: 0x50025ae42b7fb8fdf691bf619786007e43cb81d6
+
+	CarbonDollarProxyFactory: 0x11d31c460b0c913055d72dcc5fc67c13552e79c9
+
+	WhitelistedTokenProxyFactory: 0x1b66363d6b32765b66fb278eb772438f6d5fdff7
+
+	WhitelistedTokenRegulator: 0xc97c9226322ed5f6b32becf8a4ec0dc7f622f7d3
+
+	CarbonDollarRegulator: 0x3941e490bef14bb531b97701d491e59d7ec04247
+
+	CarbonDollar: 0xaf9023e111c466c986cce1470dbc18a6a24eb105
+
+	WhitelistedToken: 0x35ef0a417914160d38cf256c0fc0259959fc538c
+
+	AddressVerification: 0x33fa5931b1848127064865d0062a038edc9d01d5
 
 To deploy, run:
 truffle migrate --network *testnetwork here*
