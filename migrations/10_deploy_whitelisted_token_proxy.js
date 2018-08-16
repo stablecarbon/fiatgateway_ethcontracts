@@ -14,16 +14,16 @@ module.exports = function (deployer, network, accounts) {
                         proxyRegulatorInstance.getRegulatorProxy(count - 1).then(function (wtRegulatorInstance) {
                               WhitelistedToken.deployed().then(function(wtImplementation) {
                                 WhitelistedTokenProxyFactory.deployed().then(function(wtProxyFactory) {
-                                    wtProxyFactory.createToken(wtImplementation.address, cdInstance, wtRegulatorInstance, {from:wtTokenOwner, gas:10000000})
+                                    wtProxyFactory.createToken(wtImplementation.address, cdInstance, wtRegulatorInstance, {from:wtTokenOwner})
                                 })
                             })
                           })
                     })
-                })   
+                })
             })
         })
     })
 
 
-    
+
 };
