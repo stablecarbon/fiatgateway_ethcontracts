@@ -43,9 +43,29 @@ contract('DelayedUpgradeabilityProxy', _accounts => {
             beforeEach(async function () {
                 await this.proxy.upgradeTo(this.dummyContractv1.address, { from: owner });
             });
-            it('does not switch to pending implementation before the application date', async function () {
-                timeTravel(TWO_WEEKS);
-                assert.equal(await DummyContractV0.at(this.proxy.address).hello(), "Konichiwa!");
+            describe('does not switch to pending implementation before the application date', function () {
+                
+                it('one hour', async function() {
+                    timeTravel(ONE_HOUR);
+                    assert.equal(await DummyContractV0.at(this.proxy.address).hello(), "Konichiwa!");
+                })
+                it('one day', async function() {
+                    timeTravel(ONE_DAY);
+                    assert.equal(await DummyContractV0.at(this.proxy.address).hello(), "Konichiwa!");
+                })
+                it('one week', async function() {
+                    timeTravel(ONE_WEEK);
+                    assert.equal(await DummyContractV0.at(this.proxy.address).hello(), "Konichiwa!");
+                })
+                it('two weeks', async function() {
+                    timeTravel(TWO_WEEKS);
+                    assert.equal(await DummyContractV0.at(this.proxy.address).hello(), "Konichiwa!");
+                })
+                it('four weeks', async function () {
+                    timeTravel(FOUR_WEEKS);
+                    assert.equal(await DummyContractV0.at(this.proxy.address).hello(), "Konichiwa!");
+
+                })
             });
             it('switches to pending implementation after the application date', async function () {
                 timeTravel(FOUR_WEEKS + ONE_HOUR);

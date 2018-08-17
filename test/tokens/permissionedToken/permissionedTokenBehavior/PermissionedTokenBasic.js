@@ -46,7 +46,7 @@ function permissionedTokenBasicTests(owner, oneHundred, anotherAccount, minter) 
                         const amount = new BigNumber("100000000000000000000")
                         
                         it('transfers the requested amount', async function () {
-                            await this.token.transfer(to, amount, { from: oneHundred })
+                            assert(await this.token.transfer(to, amount, { from: oneHundred }))
                             await assertBalance(this.token, oneHundred, 0)
                             await assertBalance(this.token, to, amount)
                         })
@@ -140,97 +140,111 @@ function permissionedTokenBasicTests(owner, oneHundred, anotherAccount, minter) 
                     describe('when the sender has enough balance', function () {
                         const amount = new BigNumber("100000000000000000000")
                         
-                        it('emits an approval event', async function () {
-                            const { logs } = await this.token.approve(spender, amount, { from: oneHundred })
-                            
-                            assert.equal(logs.length, 1)
-                            assert.equal(logs[0].event, 'Approval')
-                            assert.equal(logs[0].args.owner, oneHundred)
-                            assert.equal(logs[0].args.spender, spender)
-                            assert(logs[0].args.value.eq(amount))
+                        it('should be locked by default', async function () {
+                            await expectRevert(this.token.approve(spender, amount, { from: oneHundred }))
                         })
-                        
-                        describe('when there was no approved amount before', function () {
-                            it('approves the requested amount', async function () {
-                                await this.token.approve(spender, amount, { from: oneHundred })
-                                
-                                const allowance = await this.token.allowance(oneHundred, spender)
-                                assert(allowance.eq(amount))
-                            })
-                        })
-                        
-                        describe('when the spender had an approved amount', function () {
+
+                        describe('when unlocked', function () {
                             beforeEach(async function () {
-                                await this.token.approve(spender, new BigNumber("1000000000000000000"), { from: oneHundred })
+                                await this.token.unlock({ from: owner })
+                            })
+                            it('emits an approval event', async function () {
+                                const { logs } = await this.token.approve(spender, amount, { from: oneHundred })
+                                
+                                assert.equal(logs.length, 1)
+                                assert.equal(logs[0].event, 'Approval')
+                                assert.equal(logs[0].args.owner, oneHundred)
+                                assert.equal(logs[0].args.spender, spender)
+                                assert(logs[0].args.value.eq(amount))
                             })
                             
-                            it('approves the requested amount and replaces the previous one', async function () {
-                                await this.token.approve(spender, amount, { from: oneHundred })
+                            describe('when there was no approved amount before', function () {
+                                it('approves the requested amount', async function () {
+                                    assert(await this.token.approve(spender, amount, { from: oneHundred }))
+                                    
+                                    const allowance = await this.token.allowance(oneHundred, spender)
+                                    assert(allowance.eq(amount))
+                                })
+                            })
+                            
+                            describe('when the spender had an approved amount', function () {
+                                beforeEach(async function () {
+                                    await this.token.approve(spender, new BigNumber("1000000000000000000"), { from: oneHundred })
+                                })
                                 
-                                const allowance = await this.token.allowance(oneHundred, spender)
-                                assert(allowance.eq(amount))
+                                it('approves the requested amount and replaces the previous one', async function () {
+                                    assert(await this.token.approve(spender, amount, { from: oneHundred }))
+                                    
+                                    const allowance = await this.token.allowance(oneHundred, spender)
+                                    assert(allowance.eq(amount))
+                                })
+                            })
+
+                            describe('when the sender does not have enough balance', function () {
+                                const amount = new BigNumber("101000000000000000000")
+                                
+                                it('emits an approval event', async function () {
+                                    const { logs } = await this.token.approve(spender, amount, { from: oneHundred })
+                                    
+                                    assert.equal(logs.length, 1)
+                                    assert.equal(logs[0].event, 'Approval')
+                                    assert.equal(logs[0].args.owner, oneHundred)
+                                    assert.equal(logs[0].args.spender, spender)
+                                    assert(logs[0].args.value.eq(amount))
+                                })
+                                
+                                describe('when there was no approved amount before', function () {
+                                    it('approves the requested amount', async function () {
+                                        assert(await this.token.approve(spender, amount, { from: oneHundred }))
+                                        
+                                        const allowance = await this.token.allowance(oneHundred, spender)
+                                        assert(allowance.eq(amount))
+                                    })
+                                })
+                                
+                                describe('when the spender had an approved amount', function () {
+                                    beforeEach(async function () {
+                                        await this.token.approve(spender, new BigNumber("1000000000000000000"), { from: oneHundred })
+                                    })
+                                    
+                                    it('approves the requested amount and replaces the previous one', async function () {
+                                        assert(await this.token.approve(spender, amount, { from: oneHundred }))
+                                        
+                                        const allowance = await this.token.allowance(oneHundred, spender)
+                                        assert(allowance.eq(amount))
+                                    })
+                                })
+                            })
+
+                            describe('when the spender is the zero address', function () {
+                                const amount = new BigNumber("100000000000000000000")
+                                const spender = ZERO_ADDRESS
+                                
+                                it('approves the requested amount', async function () {
+                                    assert(await this.token.approve(spender, amount, { from: oneHundred }))
+                                    
+                                    const allowance = await this.token.allowance(oneHundred, spender)
+                                    assert(allowance.eq(amount))
+                                })
+                                
+                                it('emits an approval event', async function () {
+                                    const { logs } = await this.token.approve(spender, amount, { from: oneHundred })
+                                    
+                                    assert.equal(logs.length, 1)
+                                    assert.equal(logs[0].event, 'Approval')
+                                    assert.equal(logs[0].args.owner, oneHundred)
+                                    assert.equal(logs[0].args.spender, spender)
+                                    assert(logs[0].args.value.eq(amount))
+                                })
                             })
                         })
+
                     })
                     
-                    describe('when the sender does not have enough balance', function () {
-                        const amount = new BigNumber("101000000000000000000")
-                        
-                        it('emits an approval event', async function () {
-                            const { logs } = await this.token.approve(spender, amount, { from: oneHundred })
-                            
-                            assert.equal(logs.length, 1)
-                            assert.equal(logs[0].event, 'Approval')
-                            assert.equal(logs[0].args.owner, oneHundred)
-                            assert.equal(logs[0].args.spender, spender)
-                            assert(logs[0].args.value.eq(amount))
-                        })
-                        
-                        describe('when there was no approved amount before', function () {
-                            it('approves the requested amount', async function () {
-                                await this.token.approve(spender, amount, { from: oneHundred })
-                                
-                                const allowance = await this.token.allowance(oneHundred, spender)
-                                assert(allowance.eq(amount))
-                            })
-                        })
-                        
-                        describe('when the spender had an approved amount', function () {
-                            beforeEach(async function () {
-                                await this.token.approve(spender, new BigNumber("1000000000000000000"), { from: oneHundred })
-                            })
-                            
-                            it('approves the requested amount and replaces the previous one', async function () {
-                                await this.token.approve(spender, amount, { from: oneHundred })
-                                
-                                const allowance = await this.token.allowance(oneHundred, spender)
-                                assert(allowance.eq(amount))
-                            })
-                        })
-                    })
+
                 })
                 
-                describe('when the spender is the zero address', function () {
-                    const amount = new BigNumber("100000000000000000000")
-                    const spender = ZERO_ADDRESS
-                    
-                    it('approves the requested amount', async function () {
-                        await this.token.approve(spender, amount, { from: oneHundred })
-                        
-                        const allowance = await this.token.allowance(oneHundred, spender)
-                        assert(allowance.eq(amount))
-                    })
-                    
-                    it('emits an approval event', async function () {
-                        const { logs } = await this.token.approve(spender, amount, { from: oneHundred })
-                        
-                        assert.equal(logs.length, 1)
-                        assert.equal(logs[0].event, 'Approval')
-                        assert.equal(logs[0].args.owner, oneHundred)
-                        assert.equal(logs[0].args.spender, spender)
-                        assert(logs[0].args.value.eq(amount))
-                    })
-                })
+
             })
             
             describe('transfer from', function () {
@@ -242,14 +256,14 @@ function permissionedTokenBasicTests(owner, oneHundred, anotherAccount, minter) 
                     
                     describe('when the spender has enough approved balance', function () {
                         beforeEach(async function () {
-                            await this.token.approve(spender, new BigNumber("100000000000000000000"), { from: oneHundred })
+                            await this.token.increaseApproval(spender, new BigNumber("100000000000000000000"), { from: oneHundred })
                         })
                         
                         describe('when the token holder has enough balance', function () {
                             const amount = new BigNumber("100000000000000000000")
                             
                             it('transfers the requested amount', async function () {
-                                await this.token.transferFrom(oneHundred, to, amount, { from: spender })
+                                assert(await this.token.transferFrom(oneHundred, to, amount, { from: spender }))
                                 await assertBalance(this.token, oneHundred, 0)
                                 await assertBalance(this.token, to, amount)
                             })
@@ -285,7 +299,7 @@ function permissionedTokenBasicTests(owner, oneHundred, anotherAccount, minter) 
                     
                     describe('when the spender does not have enough approved balance', function () {
                         beforeEach(async function () {
-                            await this.token.approve(spender,new BigNumber("99000000000000000000"), { from: oneHundred })
+                            await this.token.increaseApproval(spender,new BigNumber("99000000000000000000"), { from: oneHundred })
                         })
                         
                         describe('when the token holder has enough balance', function () {
@@ -311,7 +325,7 @@ function permissionedTokenBasicTests(owner, oneHundred, anotherAccount, minter) 
                     const to = ZERO_ADDRESS
                     
                     beforeEach(async function () {
-                        await this.token.approve(spender, amount, { from: oneHundred })
+                        await this.token.increaseApproval(spender, amount, { from: oneHundred })
                     })
                     
                     it('reverts', async function () {
@@ -340,7 +354,7 @@ function permissionedTokenBasicTests(owner, oneHundred, anotherAccount, minter) 
 
                         describe('when there was no approved amount before', function () {
                             it('keeps the allowance to zero', async function () {
-                                await this.token.decreaseApproval(spender, amount, { from: oneHundred })
+                                assert(await this.token.decreaseApproval(spender, amount, { from: oneHundred }))
                                 
                                 const allowance = await this.token.allowance(oneHundred, spender)
                                 assert(allowance.eq(0))
@@ -349,7 +363,7 @@ function permissionedTokenBasicTests(owner, oneHundred, anotherAccount, minter) 
                         
                         describe('when the spender had an approved amount', function () {
                             beforeEach(async function () {
-                                await this.token.approve(spender, amount.plus(new BigNumber("1000000000000000000")), { from: oneHundred })
+                                await this.token.increaseApproval(spender, amount.plus(new BigNumber("1000000000000000000")), { from: oneHundred })
                             })
                             
                             it('decreases the spender allowance subtracting the requested amount', async function () {
@@ -385,7 +399,7 @@ function permissionedTokenBasicTests(owner, oneHundred, anotherAccount, minter) 
                         
                         describe('when the spender had an approved amount', function () {
                             beforeEach(async function () {
-                                await this.token.approve(spender, amount.plus(new BigNumber("1000000000000000000")), { from: oneHundred })
+                                await this.token.increaseApproval(spender, amount.plus(new BigNumber("1000000000000000000")), { from: oneHundred })
                             })
                             
                             it('decreases the spender allowance subtracting the requested amount', async function () {
@@ -440,7 +454,7 @@ function permissionedTokenBasicTests(owner, oneHundred, anotherAccount, minter) 
                         
                         describe('when there was no approved amount before', function () {
                             it('approves the requested amount', async function () {
-                                await this.token.increaseApproval(spender, amount, { from: oneHundred })
+                                assert(await this.token.increaseApproval(spender, amount, { from: oneHundred }))
                                 
                                 const allowance = await this.token.allowance(oneHundred, spender)
                                 assert(allowance.eq(amount))
@@ -449,7 +463,7 @@ function permissionedTokenBasicTests(owner, oneHundred, anotherAccount, minter) 
                         
                         describe('when the spender had an approved amount', function () {
                             beforeEach(async function () {
-                                await this.token.approve(spender, new BigNumber("1000000000000000000"), { from: oneHundred })
+                                await this.token.increaseApproval(spender, new BigNumber("1000000000000000000"), { from: oneHundred })
                             })
                             
                             it('increases the spender allowance adding the requested amount', async function () {
@@ -485,7 +499,7 @@ function permissionedTokenBasicTests(owner, oneHundred, anotherAccount, minter) 
                         
                         describe('when the spender had an approved amount', function () {
                             beforeEach(async function () {
-                                await this.token.approve(spender, new BigNumber("1000000000000000000"), { from: oneHundred })
+                                await this.token.increaseApproval(spender, new BigNumber("1000000000000000000"), { from: oneHundred })
                             })
                             
                             it('increases the spender allowance adding the requested amount', async function () {

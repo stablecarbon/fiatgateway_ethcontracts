@@ -64,6 +64,10 @@ function carbonDollarBehaviorTests(owner, wtMinter, whitelisted, validator) {
                         assert.equal(this.args.feedAmount, 45 * 10 ** 18)
                         assert.equal(this.args.chargedFee, 5 * 10 ** 18)
                     })
+                    it('reverts when paused', async function () {
+                        await this.token.pause({ from: owner })
+                        await expectRevert(this.token.burnCarbonDollar(this.wtToken.address, 50 * 10 ** 18, { from: whitelisted }));
+                    })
                 })
                 describe('when CUSD escrow account within stablecoin does not hold enough funds', function () {
                     it('reverts call', async function () {
@@ -141,6 +145,10 @@ function carbonDollarBehaviorTests(owner, wtMinter, whitelisted, validator) {
                         assertBalance(this.token, whitelisted, 50 * 10 ** 18); // User's remaining CUSD balance
                         assertBalance(this.token, this.token.address, 25 * 10 ** 17); // Fee deposited into Carbon account for transaction 
                         assertBalance(this.wtToken, this.token.address, 50 * 10 ** 18); // Carbon's remaining WT0 escrowed balance
+                    })
+                    it('reverts when paused', async function () {
+                        await this.token.pause({ from:owner })
+                        await expectRevert(this.token.convertCarbonDollar(this.wtToken.address, 50 * 10 ** 18, { from: whitelisted }));
                     })
                 });
                 describe('when CUSD escrow account within stablecoin does not hold enough funds', function () {

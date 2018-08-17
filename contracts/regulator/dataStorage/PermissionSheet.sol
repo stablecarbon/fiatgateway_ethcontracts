@@ -43,7 +43,8 @@ contract PermissionSheet is Ownable {
     event RemovedUserPermission(address indexed who, bytes4 methodsignature);
 
     /** 
-        Constants: stores method signatures 
+        Constants: stores method signatures. These are potential permissions that a user can have, 
+        and each permission gives the user the ability to call the associated PermissionedToken method signature
     */
     bytes4 public constant MINT_SIG = bytes4(keccak256("mint(address,uint256)"));
     bytes4 public constant MINT_CUSD_SIG = bytes4(keccak256("mintCUSD(address,uint256)"));

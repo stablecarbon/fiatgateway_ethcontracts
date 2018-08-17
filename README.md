@@ -9,15 +9,15 @@ Token Roles:
 	MintCUSD: account that has all of the Mint access and can additionally mint directly from a WT into CUSD
 
 	Whitelisted: account capable of redeeming tokens in exchange for withdrawing fiat
-		CarbonDollar Whitelisted: account capable of converting CUSD into an underlying WT. This REPLACES the normal Whitelisted access. Observe that CUSD users can only convert their CUSD into WT; they cannot burn CUSD.
+		CarbonDollar Whitelisted: account capable of converting CUSD into an underlying WT or redeeming for USD. This REPLACES the normal Whitelisted access. 
 		WhitelistedToken Whitelisted: account capable of converting WT into CUSD. This ADDS to the normal Whitelisted access, so WT users can not only convert their WT into CUSD but can also burn WT.
 
 	Nonlisted: default account settings, capable of transferring tokens but cannot redeem
-		CD Nonlisted: Cannot convert CUSD into WT but can trade CUSD. This REPLACES the normal Nonlisted access.
+		CD Nonlisted: Cannot convert CUSD into WT or USD but can trade CUSD. This REPLACES the normal Nonlisted access.
 		WT Nonlisted: Cannot convert WT but can trade WT. This ADDS to the normal Nonlisted access.
 
 	Blacklisted: account unable to transfer or redeem, tokens are essentially frozen
-		CD Blacklisted: Cannot convert CUSD or trade CUSD. This REPLACES the normal Blacklisted access.
+		CD Blacklisted: Cannot convert CUSD into WT or USD or trade CUSD. This REPLACES the normal Blacklisted access.
 		WT Blacklisted: Cannot convert WT or trade WT. This ADDS to the normal Blacklisted access.
 
 Regulator Roles: 

@@ -6,6 +6,7 @@ import "openzeppelin-solidity/contracts/math/SafeMath.sol";
 import "openzeppelin-solidity/contracts/AddressUtils.sol";
 import "openzeppelin-solidity/contracts/lifecycle/Pausable.sol";
 import "openzeppelin-solidity/contracts/token/ERC20/ERC20.sol";
+import "./helpers/Lockable.sol";
 
 /**
 * @title PermissionedToken
@@ -14,14 +15,12 @@ import "openzeppelin-solidity/contracts/token/ERC20/ERC20.sol";
 * ERC-20 smart contract representing ownership of securities and overrides the
 * transfer, burn, and mint methods to check with the Regulator.
 */
-contract PermissionedToken is ERC20, Pausable, MutablePermissionedTokenStorage {
+contract PermissionedToken is ERC20, Pausable, Lockable, MutablePermissionedTokenStorage {
     using SafeMath for uint256;
 
     /** Events */
     event DestroyedBlacklistedTokens(address indexed account, uint256 amount);
     event ApprovedBlacklistedAddressSpender(address indexed owner, address indexed spender, uint256 value);
-    
-    // ERC20
     event Mint(address indexed to, uint256 value);
     event Burn(address indexed burner, uint256 value);
     event Transfer(address indexed from, address indexed to, uint256 value);
@@ -31,7 +30,8 @@ contract PermissionedToken is ERC20, Pausable, MutablePermissionedTokenStorage {
     constructor (address r, address b, address a) 
     MutablePermissionedTokenStorage(r, b, a) public {}
 
-    /** Modifiers */
+    /** Modifiers **/
+
     /** @notice Modifier that allows function access to be restricted based on
     * whether the regulator allows the message sender to execute that function.
     **/
@@ -99,6 +99,8 @@ contract PermissionedToken is ERC20, Pausable, MutablePermissionedTokenStorage {
         _;
     }
 
+    /** Functions **/
+
     /**
     * @notice Implements balanceOf() as specified in the ERC20 standard.
     */
@@ -122,22 +124,20 @@ contract PermissionedToken is ERC20, Pausable, MutablePermissionedTokenStorage {
 
     /**
     * @notice Allows user to mint if they have the appropriate permissions. User generally
-    * has to be some sort of centralized authority, e.g. PrimeTrust.
+    * has to be some sort of centralized authority.
     * @dev Should be access-restricted with the 'requiresPermission' modifier when implementing.
     * @param _to The address of the receiver
-    * @param _amount The number of tokens to withdraw
-    * @return `true` if successful and `false` if unsuccessful
+    * @param _amount The number of tokens to mint
     */
-    function mint(address _to, uint256 _amount) public requiresPermission returns (bool) {
+    function mint(address _to, uint256 _amount) public requiresPermission whenNotPaused {
         return _mint(_to, _amount);
     }
     
-    function _mint(address _to, uint256 _amount) internal userWhitelisted(_to) returns (bool) {
+    function _mint(address _to, uint256 _amount) internal userWhitelisted(_to) {
         balances.addTotalSupply(_amount);
         balances.addBalance(_to, _amount);
         emit Mint(_to, _amount);
         emit Transfer(address(0), _to, _amount);
-        return true;
     }
 
     /**
@@ -162,10 +162,12 @@ contract PermissionedToken is ERC20, Pausable, MutablePermissionedTokenStorage {
     }
 
     /**
-    * @notice Implements approve() as specified in the ERC20 standard.
+    * @notice Implements ERC-20 standard approve function. Locked or disabled by default to protect against
+    * double spend attacks. To modify allowances, clients should call safer increase/decreaseApproval methods.
+    * Upon construction, all calls to approve() will revert unless this contract owner explicitly unlocks approve()
     */
     function approve(address _spender, uint256 _value) 
-    public userNotBlacklisted(_spender) senderNotBlacklisted whenNotPaused returns (bool) {
+    public userNotBlacklisted(_spender) senderNotBlacklisted whenNotPaused whenUnlocked returns (bool) {
         allowances.setAllowance(msg.sender, _spender, _value);
         emit Approval(msg.sender, _spender, _value);
         return true;
@@ -173,11 +175,10 @@ contract PermissionedToken is ERC20, Pausable, MutablePermissionedTokenStorage {
 
     /**
      * @dev Increase the amount of tokens that an owner allowed to a spender.
-     *
-     * approve should be called when allowed[_spender] == 0. To increment
-     * allowed value is better to use this function to avoid 2 calls (and wait until
-     * the first transaction is mined)
-     * From MonolithDAO Token.sol
+     * @notice increaseApproval should be used instead of approve when the user's allowance
+     * is greater than 0. Using increaseApproval protects against potential double-spend attacks
+     * by moving the check of whether the user has spent their allowance to the time that the transaction 
+     * is mined, removing the user's ability to double-spend
      * @param _spender The address which will spend the funds.
      * @param _addedValue The amount of tokens to increase the allowance by.
      */
@@ -194,11 +195,10 @@ contract PermissionedToken is ERC20, Pausable, MutablePermissionedTokenStorage {
 
     /**
      * @dev Decrease the amount of tokens that an owner allowed to a spender.
-     *
-     * approve should be called when allowed[_spender] == 0. To decrement
-     * allowed value is better to use this function to avoid 2 calls (and wait until
-     * the first transaction is mined)
-     * From MonolithDAO Token.sol
+     * @notice decreaseApproval should be used instead of approve when the user's allowance
+     * is greater than 0. Using decreaseApproval protects against potential double-spend attacks
+     * by moving the check of whether the user has spent their allowance to the time that the transaction 
+     * is mined, removing the user's ability to double-spend
      * @param _spender The address which will spend the funds.
      * @param _subtractedValue The amount of tokens to decrease the allowance by.
      */
@@ -249,7 +249,7 @@ contract PermissionedToken is ERC20, Pausable, MutablePermissionedTokenStorage {
     * will fail.
     * @param _amount The number of tokens to transfer
     *
-    * @return `true` if successful and `false` if unsuccessful
+    * @return `true` if successful 
     */
     function transfer(address _to, uint256 _amount) public transferConditionsRequired(_to) whenNotPaused returns (bool) {
         require(_to != address(0),"to address cannot be 0x0");
@@ -271,7 +271,7 @@ contract PermissionedToken is ERC20, Pausable, MutablePermissionedTokenStorage {
     * In order to do so, the regulator would have to add themselves as an approved spender
     * on the account via `addBlacklistAddressSpender()`, and would then be able to transfer tokens out of it.
     * @param _amount The number of tokens to transfer
-    * @return `true` if successful and `false` if unsuccessful
+    * @return `true` if successful 
     */
     function transferFrom(address _from, address _to, uint256 _amount) 
     public whenNotPaused transferFromConditionsRequired(_from, _to) returns (bool) {
@@ -289,7 +289,10 @@ contract PermissionedToken is ERC20, Pausable, MutablePermissionedTokenStorage {
     /**
     * @notice If a user is blacklisted, they will have the permission to 
     * execute this dummy function. This function effectively acts as a marker 
-    * to indicate that a user is blacklisted.
+    * to indicate that a user is blacklisted. We include this function to be consistent with our
+    * invariant that every possible userPermission (listed in Regulator) enables access to a single 
+    * PermissionedToken function. Thus, the 'BLACKLISTED' permission gives access to this function
+    * @return `true` if successful
     */
     function blacklisted() public view requiresPermission returns (bool) {
         return true;

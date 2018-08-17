@@ -16,10 +16,11 @@ contract CarbonDollarStorage{
 
     /**
     * @dev a CarbonDollarStorage can set its storages only once, on construction
-    *
+    * @param _feesheet address of the new FeeSheet
+    * @param _whitelist address of the new StablecoinWhitelist
     **/
-    constructor (address feeSheet, address whitelist) public {
-        stablecoinFees = FeeSheet(feeSheet);
-        stablecoinWhitelist = StablecoinWhitelist(whitelist);
+    constructor (address _feesheet, address _whitelist) public {
+        stablecoinFees = FeeSheet(_feesheet);
+        stablecoinWhitelist = StablecoinWhitelist(_whitelist);
     }
 }

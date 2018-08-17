@@ -6,7 +6,7 @@ import "openzeppelin-solidity/contracts/ownership/Ownable.sol";
 
 /**
 * @title MutableCarbonDollarStorage
-* @notice Adds mutability to CarbonDollarStorage (FeeSheet and StablecoinWhitelist can be changed.)
+* @notice Adds mutability to CarbonDollarStorage functions
 */
 contract MutableCarbonDollarStorage is Ownable, CarbonDollarStorage {
 	/**
@@ -39,17 +39,17 @@ contract MutableCarbonDollarStorage is Ownable, CarbonDollarStorage {
 
 	/**
      * @notice Set the fee sheet for this CarbonUSD.
-     * @param _sheet Address of the fee sheet.
+     * @param _feesheet Address of the fee sheet.
      */
-    function setFeeSheet(address _sheet) public onlyOwner {
-        _setFeeSheet(_sheet);
+    function setFeeSheet(address _feesheet) public onlyOwner {
+        _setFeeSheet(_feesheet);
     }
 
-    function _setFeeSheet(address _sheet) internal {
-        require(_sheet != address(stablecoinFees), "Must be a new fee sheet");
-        require(AddressUtils.isContract(_sheet), "Must be an actual contract");
+    function _setFeeSheet(address _feesheet) internal {
+        require(_feesheet != address(stablecoinFees), "Must be a new fee sheet");
+        require(AddressUtils.isContract(_feesheet), "Must be an actual contract");
         address oldSheet = address(stablecoinFees);
-        stablecoinFees = FeeSheet(_sheet);
-        emit FeeSheetChanged(oldSheet, _sheet);
+        stablecoinFees = FeeSheet(_feesheet);
+        emit FeeSheetChanged(oldSheet, _feesheet);
     }
 }

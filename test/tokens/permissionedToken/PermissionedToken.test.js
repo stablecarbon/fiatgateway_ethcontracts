@@ -46,7 +46,7 @@ contract('PermissionedToken', _accounts => {
 
     describe("Permissioned Token tests", function () {
         permissionedTokenBasicTests(owner, whitelisted, nonlisted, minter);
-        permissionedTokenMutableStorageTests(owner, user)
+        // permissionedTokenMutableStorageTests(owner, user)
         permissionedTokenBehaviorTests( minter, whitelisted, blacklisted, nonlisted, user, validator, owner );
     });
 })

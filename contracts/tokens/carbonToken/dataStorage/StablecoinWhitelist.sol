@@ -1,18 +1,19 @@
 pragma solidity ^0.4.24;
 
 import "openzeppelin-solidity/contracts/ownership/Ownable.sol";
-import "openzeppelin-solidity/contracts/math/SafeMath.sol";
 
 /**
-* @title FeeSheet
+* @title StablecoinWhitelist
 * @notice Contains a mapping indicating whether or not a token contract
-* is approved to participate on the CarbonUSD network.
+* is approved to participate on the CarbonUSD network. We can also refer
+* to tokens on the whitelist as "stablecoins".
 */
 contract StablecoinWhitelist is Ownable {
     /** 
         Mappings
     */
-    // (stablecoin address => is the stablecoin whitelisted)
+
+    /* is the token address referring to a stablecoin/whitelisted token? */
     mapping (address => bool) public isWhitelisted;
 
     /** 
@@ -21,19 +22,19 @@ contract StablecoinWhitelist is Ownable {
     event StablecoinAdded(address indexed stablecoin);
     event StablecoinRemoved(address indexed stablecoin);
 
-    /** @notice Add a stablecoin to the whitelist.
-        @param stablecoin Address of the stablecoin.
+    /** @notice Add a token to the whitelist.
+        @param _token Address of the new stablecoin.
     */
-    function addStablecoin(address stablecoin) public onlyOwner {
-        isWhitelisted[stablecoin] = true;
-        emit StablecoinAdded(stablecoin);
+    function addStablecoin(address _token) public onlyOwner {
+        isWhitelisted[_token] = true;
+        emit StablecoinAdded(_token);
     }
 
-    /** @notice Removes a stablecoin from the whitelist.
-        @param stablecoin Address of the stablecoin.
+    /** @notice Removes a token from the whitelist.
+        @param _token Address of the ex-stablecoin.
     */
-    function removeStablecoin(address stablecoin) public onlyOwner {
-        isWhitelisted[stablecoin] = false;
-        emit StablecoinRemoved(stablecoin);
+    function removeStablecoin(address _token) public onlyOwner {
+        isWhitelisted[_token] = false;
+        emit StablecoinRemoved(_token);
     }
 }

@@ -19,6 +19,14 @@ contract('CarbonDollarProxy', _accounts => {
     const whitelisted = commonVars.user4
     const nonlisted = commonVars.user5
 
+    // Time travel for delayed upgradeability
+    const ONE_HOUR = 60 * 60; // Number of seconds in one hour
+    const ONE_DAY = 24 * ONE_HOUR; // Number of seconds in one day
+    const ONE_WEEK = 7 * ONE_DAY; // Number of seconds in one week
+    const TWO_WEEKS = 2 * ONE_WEEK; // Number of seconds in two weeks
+    const FOUR_WEEKS = 4 * ONE_WEEK; // Number of seconds in four weeks
+
+
     beforeEach(async function () {
         // Empty Proxy Data storage + fully loaded regulator
         this.proxyBalancesStorage = (await BalanceSheet.new({ from:owner })).address

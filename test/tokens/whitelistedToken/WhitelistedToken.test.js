@@ -27,14 +27,19 @@ contract('WhitelistedToken', _accounts => {
             describe('user has mint CUSD permission', function () {
                 beforeEach(async function () {
                     await this.cdToken.listToken(this.token.address, { from: owner });
-                    await this.token.mintCUSD(whitelisted, hundred, { from: minter });
                 });
                 it('appropriate number of funds end up in Carbon\'s WT0 escrow account', async function () {
+                    await this.token.mintCUSD(whitelisted, hundred, { from: minter });
                     assertBalance(this.token, await this.token.cusdAddress(), hundred);
                 });
                 it('user has appropriate amount of CUSD', async function () {
+                    await this.token.mintCUSD(whitelisted, hundred, { from: minter });
                     assertBalance(this.cdToken, whitelisted, hundred);
                 });
+                it('reverts when paused', async function () {
+                    await this.token.pause({ from: owner })
+                    await expectRevert(this.token.mintCUSD(whitelisted, hundred, { from: minter }))
+                })
             });
             describe('user does not have mint CUSD permission', function () {
                 it('call reverts', async function () {
@@ -53,15 +58,17 @@ contract('WhitelistedToken', _accounts => {
                     beforeEach(async function () {
                         await this.cdToken.listToken(this.token.address, { from: owner });
                         await this.token.mint(whitelisted, hundred, { from: minter });
-                        await this.token.convertWT(fifty, { from: whitelisted });
                     });
                     it('user loses WT0', async function () {
+                        await this.token.convertWT(fifty, { from: whitelisted });
                         assertBalance(this.token, whitelisted, fifty);
                     });
                     it('user gains CUSD', async function () {
+                        await this.token.convertWT(fifty, { from: whitelisted });
                         assertBalance(this.cdToken, whitelisted, fifty);
                     });
                     it('Carbon gains WT0 in escrow', async function () {
+                        await this.token.convertWT(fifty, { from: whitelisted });
                         assertBalance(this.token, await this.token.cusdAddress(), fifty);
                     });
                     it('Burned to CUSD event is emitted', async function () {
@@ -71,6 +78,10 @@ contract('WhitelistedToken', _accounts => {
                         assert.equal(logs[7].args.user, whitelisted);
                         assert(logs[7].args.amount.eq(fifty));
                     });
+                    it('reverts when paused', async function () {
+                        await this.token.pause({ from:owner })
+                        await expectRevert(this.token.convertWT(fifty, { from: whitelisted }))
+                    })
                 });
                 describe('user has insufficient funds', function () {
                     it('reverts', async function () {
