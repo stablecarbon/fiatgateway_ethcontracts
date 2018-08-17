@@ -27,6 +27,9 @@ contract('WhitelistedTokenRegulator', _accounts => {
 
                     await this.permissionSheet.transferOwnership(this.sheet.address, {from:owner})
                     await this.validatorSheet.transferOwnership(this.sheet.address, {from:owner})
+                    await this.sheet.claimPermissionOwnership()
+                    await this.sheet.claimValidatorOwnership()
+
 
                     // storing method signatures for testing convenience
                     this.BLACKLISTED_SIG = await this.permissionSheet.BLACKLISTED_SIG();

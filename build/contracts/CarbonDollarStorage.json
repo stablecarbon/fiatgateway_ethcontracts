@@ -47,22 +47,22 @@
   ],
   "bytecode": "0x608060405234801561001057600080fd5b5060405160408061016483398101604052805160209091015160008054600160a060020a03938416600160a060020a0319918216179091556001805493909216921691909117905560fe806100666000396000f30060806040526004361060485763ffffffff7c0100000000000000000000000000000000000000000000000000000000600035041663d96515668114604d578063e14852e3146088575b600080fd5b348015605857600080fd5b50605f609a565b6040805173ffffffffffffffffffffffffffffffffffffffff9092168252519081900360200190f35b348015609357600080fd5b50605f60b6565b60005473ffffffffffffffffffffffffffffffffffffffff1681565b60015473ffffffffffffffffffffffffffffffffffffffff16815600a165627a7a72305820f1ea8a718424c7e1d453a129c2e0c937fc0de3a60083df029189be9d8b7602300029",
   "deployedBytecode": "0x60806040526004361060485763ffffffff7c0100000000000000000000000000000000000000000000000000000000600035041663d96515668114604d578063e14852e3146088575b600080fd5b348015605857600080fd5b50605f609a565b6040805173ffffffffffffffffffffffffffffffffffffffff9092168252519081900360200190f35b348015609357600080fd5b50605f60b6565b60005473ffffffffffffffffffffffffffffffffffffffff1681565b60015473ffffffffffffffffffffffffffffffffffffffff16815600a165627a7a72305820f1ea8a718424c7e1d453a129c2e0c937fc0de3a60083df029189be9d8b7602300029",
-  "sourceMap": "233:558:6:-;;;610:178;8:9:-1;5:2;;;30:1;27;20:12;5:2;610:178:6;;;;;;;;;;;;;;;;;;;680:14;:36;;-1:-1:-1;;;;;680:36:6;;;-1:-1:-1;;;;;;680:36:6;;;;;;;;727:53;;;;;;;;;;;;;;233:558;;;;;;",
-  "deployedSourceMap": "233:558:6:-;;;;;;;;;;;;;;;;;;;;;;;;;;;;302:30;;8:9:-1;5:2;;;30:1;27;20:12;5:2;302:30:6;;;;;;;;;;;;;;;;;;;;;;;339:46;;8:9:-1;5:2;;;30:1;27;20:12;5:2;339:46:6;;;;302:30;;;;;;:::o;339:46::-;;;;;;:::o",
+  "sourceMap": "233:558:15:-;;;610:178;8:9:-1;5:2;;;30:1;27;20:12;5:2;610:178:15;;;;;;;;;;;;;;;;;;;680:14;:36;;-1:-1:-1;;;;;680:36:15;;;-1:-1:-1;;;;;;680:36:15;;;;;;;;727:53;;;;;;;;;;;;;;233:558;;;;;;",
+  "deployedSourceMap": "233:558:15:-;;;;;;;;;;;;;;;;;;;;;;;;;;;;302:30;;8:9:-1;5:2;;;30:1;27;20:12;5:2;302:30:15;;;;;;;;;;;;;;;;;;;;;;;339:46;;8:9:-1;5:2;;;30:1;27;20:12;5:2;339:46:15;;;;302:30;;;;;;:::o;339:46::-;;;;;;:::o",
   "source": "pragma solidity ^0.4.24;\r\n\r\nimport \"./FeeSheet.sol\";\r\nimport \"./StablecoinWhitelist.sol\";\r\n\r\n/**\r\n* @title CarbonDollarStorage\r\n* @notice Contains necessary storage contracts for CarbonDollar (FeeSheet and StablecoinWhitelist).\r\n*/\r\ncontract CarbonDollarStorage{\r\n    /**\r\n        Storage\r\n    */\r\n    FeeSheet public stablecoinFees;\r\n    StablecoinWhitelist public stablecoinWhitelist;\r\n\r\n    /**\r\n    * @dev a CarbonDollarStorage can set its storages only once, on construction\r\n    * @param _feesheet address of the new FeeSheet\r\n    * @param _whitelist address of the new StablecoinWhitelist\r\n    **/\r\n    constructor (address _feesheet, address _whitelist) public {\r\n        stablecoinFees = FeeSheet(_feesheet);\r\n        stablecoinWhitelist = StablecoinWhitelist(_whitelist);\r\n    }\r\n}",
   "sourcePath": "C:\\Users\\npain\\Projects\\Carbon\\fiat_gateway\\contracts\\tokens\\carbonToken\\dataStorage\\CarbonDollarStorage.sol",
   "ast": {
     "absolutePath": "/C/Users/npain/Projects/Carbon/fiat_gateway/contracts/tokens/carbonToken/dataStorage/CarbonDollarStorage.sol",
     "exportedSymbols": {
       "CarbonDollarStorage": [
-        1650
+        2925
       ]
     },
-    "id": 1651,
+    "id": 2926,
     "nodeType": "SourceUnit",
     "nodes": [
       {
-        "id": 1623,
+        "id": 2898,
         "literals": [
           "solidity",
           "^",
@@ -70,27 +70,27 @@
           ".24"
         ],
         "nodeType": "PragmaDirective",
-        "src": "0:24:6"
+        "src": "0:24:15"
       },
       {
         "absolutePath": "/C/Users/npain/Projects/Carbon/fiat_gateway/contracts/tokens/carbonToken/dataStorage/FeeSheet.sol",
         "file": "./FeeSheet.sol",
-        "id": 1624,
+        "id": 2899,
         "nodeType": "ImportDirective",
-        "scope": 1651,
-        "sourceUnit": 1828,
-        "src": "28:24:6",
+        "scope": 2926,
+        "sourceUnit": 3103,
+        "src": "28:24:15",
         "symbolAliases": [],
         "unitAlias": ""
       },
       {
         "absolutePath": "/C/Users/npain/Projects/Carbon/fiat_gateway/contracts/tokens/carbonToken/dataStorage/StablecoinWhitelist.sol",
         "file": "./StablecoinWhitelist.sol",
-        "id": 1625,
+        "id": 2900,
         "nodeType": "ImportDirective",
-        "scope": 1651,
-        "sourceUnit": 2020,
-        "src": "54:35:6",
+        "scope": 2926,
+        "sourceUnit": 3295,
+        "src": "54:35:15",
         "symbolAliases": [],
         "unitAlias": ""
       },
@@ -100,35 +100,35 @@
         "contractKind": "contract",
         "documentation": "@title CarbonDollarStorage\r\n@notice Contains necessary storage contracts for CarbonDollar (FeeSheet and StablecoinWhitelist).\r",
         "fullyImplemented": true,
-        "id": 1650,
+        "id": 2925,
         "linearizedBaseContracts": [
-          1650
+          2925
         ],
         "name": "CarbonDollarStorage",
         "nodeType": "ContractDefinition",
         "nodes": [
           {
             "constant": false,
-            "id": 1627,
+            "id": 2902,
             "name": "stablecoinFees",
             "nodeType": "VariableDeclaration",
-            "scope": 1650,
-            "src": "302:30:6",
+            "scope": 2925,
+            "src": "302:30:15",
             "stateVariable": true,
             "storageLocation": "default",
             "typeDescriptions": {
-              "typeIdentifier": "t_contract$_FeeSheet_$1827",
+              "typeIdentifier": "t_contract$_FeeSheet_$3102",
               "typeString": "contract FeeSheet"
             },
             "typeName": {
               "contractScope": null,
-              "id": 1626,
+              "id": 2901,
               "name": "FeeSheet",
               "nodeType": "UserDefinedTypeName",
-              "referencedDeclaration": 1827,
-              "src": "302:8:6",
+              "referencedDeclaration": 3102,
+              "src": "302:8:15",
               "typeDescriptions": {
-                "typeIdentifier": "t_contract$_FeeSheet_$1827",
+                "typeIdentifier": "t_contract$_FeeSheet_$3102",
                 "typeString": "contract FeeSheet"
               }
             },
@@ -137,26 +137,26 @@
           },
           {
             "constant": false,
-            "id": 1629,
+            "id": 2904,
             "name": "stablecoinWhitelist",
             "nodeType": "VariableDeclaration",
-            "scope": 1650,
-            "src": "339:46:6",
+            "scope": 2925,
+            "src": "339:46:15",
             "stateVariable": true,
             "storageLocation": "default",
             "typeDescriptions": {
-              "typeIdentifier": "t_contract$_StablecoinWhitelist_$2019",
+              "typeIdentifier": "t_contract$_StablecoinWhitelist_$3294",
               "typeString": "contract StablecoinWhitelist"
             },
             "typeName": {
               "contractScope": null,
-              "id": 1628,
+              "id": 2903,
               "name": "StablecoinWhitelist",
               "nodeType": "UserDefinedTypeName",
-              "referencedDeclaration": 2019,
-              "src": "339:19:6",
+              "referencedDeclaration": 3294,
+              "src": "339:19:15",
               "typeDescriptions": {
-                "typeIdentifier": "t_contract$_StablecoinWhitelist_$2019",
+                "typeIdentifier": "t_contract$_StablecoinWhitelist_$3294",
                 "typeString": "contract StablecoinWhitelist"
               }
             },
@@ -165,28 +165,28 @@
           },
           {
             "body": {
-              "id": 1648,
+              "id": 2923,
               "nodeType": "Block",
-              "src": "669:119:6",
+              "src": "669:119:15",
               "statements": [
                 {
                   "expression": {
                     "argumentTypes": null,
-                    "id": 1640,
+                    "id": 2915,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
                     "lValueRequested": false,
                     "leftHandSide": {
                       "argumentTypes": null,
-                      "id": 1636,
+                      "id": 2911,
                       "name": "stablecoinFees",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 1627,
-                      "src": "680:14:6",
+                      "referencedDeclaration": 2902,
+                      "src": "680:14:15",
                       "typeDescriptions": {
-                        "typeIdentifier": "t_contract$_FeeSheet_$1827",
+                        "typeIdentifier": "t_contract$_FeeSheet_$3102",
                         "typeString": "contract FeeSheet"
                       }
                     },
@@ -197,12 +197,12 @@
                       "arguments": [
                         {
                           "argumentTypes": null,
-                          "id": 1638,
+                          "id": 2913,
                           "name": "_feesheet",
                           "nodeType": "Identifier",
                           "overloadedDeclarations": [],
-                          "referencedDeclaration": 1631,
-                          "src": "706:9:6",
+                          "referencedDeclaration": 2906,
+                          "src": "706:9:15",
                           "typeDescriptions": {
                             "typeIdentifier": "t_address",
                             "typeString": "address"
@@ -216,18 +216,18 @@
                             "typeString": "address"
                           }
                         ],
-                        "id": 1637,
+                        "id": 2912,
                         "name": "FeeSheet",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 1827,
-                        "src": "697:8:6",
+                        "referencedDeclaration": 3102,
+                        "src": "697:8:15",
                         "typeDescriptions": {
-                          "typeIdentifier": "t_type$_t_contract$_FeeSheet_$1827_$",
+                          "typeIdentifier": "t_type$_t_contract$_FeeSheet_$3102_$",
                           "typeString": "type(contract FeeSheet)"
                         }
                       },
-                      "id": 1639,
+                      "id": 2914,
                       "isConstant": false,
                       "isLValue": false,
                       "isPure": false,
@@ -235,40 +235,40 @@
                       "lValueRequested": false,
                       "names": [],
                       "nodeType": "FunctionCall",
-                      "src": "697:19:6",
+                      "src": "697:19:15",
                       "typeDescriptions": {
-                        "typeIdentifier": "t_contract$_FeeSheet_$1827",
+                        "typeIdentifier": "t_contract$_FeeSheet_$3102",
                         "typeString": "contract FeeSheet"
                       }
                     },
-                    "src": "680:36:6",
+                    "src": "680:36:15",
                     "typeDescriptions": {
-                      "typeIdentifier": "t_contract$_FeeSheet_$1827",
+                      "typeIdentifier": "t_contract$_FeeSheet_$3102",
                       "typeString": "contract FeeSheet"
                     }
                   },
-                  "id": 1641,
+                  "id": 2916,
                   "nodeType": "ExpressionStatement",
-                  "src": "680:36:6"
+                  "src": "680:36:15"
                 },
                 {
                   "expression": {
                     "argumentTypes": null,
-                    "id": 1646,
+                    "id": 2921,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
                     "lValueRequested": false,
                     "leftHandSide": {
                       "argumentTypes": null,
-                      "id": 1642,
+                      "id": 2917,
                       "name": "stablecoinWhitelist",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 1629,
-                      "src": "727:19:6",
+                      "referencedDeclaration": 2904,
+                      "src": "727:19:15",
                       "typeDescriptions": {
-                        "typeIdentifier": "t_contract$_StablecoinWhitelist_$2019",
+                        "typeIdentifier": "t_contract$_StablecoinWhitelist_$3294",
                         "typeString": "contract StablecoinWhitelist"
                       }
                     },
@@ -279,12 +279,12 @@
                       "arguments": [
                         {
                           "argumentTypes": null,
-                          "id": 1644,
+                          "id": 2919,
                           "name": "_whitelist",
                           "nodeType": "Identifier",
                           "overloadedDeclarations": [],
-                          "referencedDeclaration": 1633,
-                          "src": "769:10:6",
+                          "referencedDeclaration": 2908,
+                          "src": "769:10:15",
                           "typeDescriptions": {
                             "typeIdentifier": "t_address",
                             "typeString": "address"
@@ -298,18 +298,18 @@
                             "typeString": "address"
                           }
                         ],
-                        "id": 1643,
+                        "id": 2918,
                         "name": "StablecoinWhitelist",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 2019,
-                        "src": "749:19:6",
+                        "referencedDeclaration": 3294,
+                        "src": "749:19:15",
                         "typeDescriptions": {
-                          "typeIdentifier": "t_type$_t_contract$_StablecoinWhitelist_$2019_$",
+                          "typeIdentifier": "t_type$_t_contract$_StablecoinWhitelist_$3294_$",
                           "typeString": "type(contract StablecoinWhitelist)"
                         }
                       },
-                      "id": 1645,
+                      "id": 2920,
                       "isConstant": false,
                       "isLValue": false,
                       "isPure": false,
@@ -317,26 +317,26 @@
                       "lValueRequested": false,
                       "names": [],
                       "nodeType": "FunctionCall",
-                      "src": "749:31:6",
+                      "src": "749:31:15",
                       "typeDescriptions": {
-                        "typeIdentifier": "t_contract$_StablecoinWhitelist_$2019",
+                        "typeIdentifier": "t_contract$_StablecoinWhitelist_$3294",
                         "typeString": "contract StablecoinWhitelist"
                       }
                     },
-                    "src": "727:53:6",
+                    "src": "727:53:15",
                     "typeDescriptions": {
-                      "typeIdentifier": "t_contract$_StablecoinWhitelist_$2019",
+                      "typeIdentifier": "t_contract$_StablecoinWhitelist_$3294",
                       "typeString": "contract StablecoinWhitelist"
                     }
                   },
-                  "id": 1647,
+                  "id": 2922,
                   "nodeType": "ExpressionStatement",
-                  "src": "727:53:6"
+                  "src": "727:53:15"
                 }
               ]
             },
             "documentation": "@dev a CarbonDollarStorage can set its storages only once, on construction\r\n@param _feesheet address of the new FeeSheet\r\n@param _whitelist address of the new StablecoinWhitelist\r*",
-            "id": 1649,
+            "id": 2924,
             "implemented": true,
             "isConstructor": true,
             "isDeclaredConst": false,
@@ -344,16 +344,16 @@
             "name": "",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 1634,
+              "id": 2909,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 1631,
+                  "id": 2906,
                   "name": "_feesheet",
                   "nodeType": "VariableDeclaration",
-                  "scope": 1649,
-                  "src": "623:17:6",
+                  "scope": 2924,
+                  "src": "623:17:15",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -361,10 +361,10 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 1630,
+                    "id": 2905,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
-                    "src": "623:7:6",
+                    "src": "623:7:15",
                     "typeDescriptions": {
                       "typeIdentifier": "t_address",
                       "typeString": "address"
@@ -375,11 +375,11 @@
                 },
                 {
                   "constant": false,
-                  "id": 1633,
+                  "id": 2908,
                   "name": "_whitelist",
                   "nodeType": "VariableDeclaration",
-                  "scope": 1649,
-                  "src": "642:18:6",
+                  "scope": 2924,
+                  "src": "642:18:15",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -387,10 +387,10 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 1632,
+                    "id": 2907,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
-                    "src": "642:7:6",
+                    "src": "642:7:15",
                     "typeDescriptions": {
                       "typeIdentifier": "t_address",
                       "typeString": "address"
@@ -400,40 +400,40 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "622:39:6"
+              "src": "622:39:15"
             },
             "payable": false,
             "returnParameters": {
-              "id": 1635,
+              "id": 2910,
               "nodeType": "ParameterList",
               "parameters": [],
-              "src": "669:0:6"
+              "src": "669:0:15"
             },
-            "scope": 1650,
-            "src": "610:178:6",
+            "scope": 2925,
+            "src": "610:178:15",
             "stateMutability": "nonpayable",
             "superFunction": null,
             "visibility": "public"
           }
         ],
-        "scope": 1651,
-        "src": "233:558:6"
+        "scope": 2926,
+        "src": "233:558:15"
       }
     ],
-    "src": "0:791:6"
+    "src": "0:791:15"
   },
   "legacyAST": {
     "absolutePath": "/C/Users/npain/Projects/Carbon/fiat_gateway/contracts/tokens/carbonToken/dataStorage/CarbonDollarStorage.sol",
     "exportedSymbols": {
       "CarbonDollarStorage": [
-        1650
+        2925
       ]
     },
-    "id": 1651,
+    "id": 2926,
     "nodeType": "SourceUnit",
     "nodes": [
       {
-        "id": 1623,
+        "id": 2898,
         "literals": [
           "solidity",
           "^",
@@ -441,27 +441,27 @@
           ".24"
         ],
         "nodeType": "PragmaDirective",
-        "src": "0:24:6"
+        "src": "0:24:15"
       },
       {
         "absolutePath": "/C/Users/npain/Projects/Carbon/fiat_gateway/contracts/tokens/carbonToken/dataStorage/FeeSheet.sol",
         "file": "./FeeSheet.sol",
-        "id": 1624,
+        "id": 2899,
         "nodeType": "ImportDirective",
-        "scope": 1651,
-        "sourceUnit": 1828,
-        "src": "28:24:6",
+        "scope": 2926,
+        "sourceUnit": 3103,
+        "src": "28:24:15",
         "symbolAliases": [],
         "unitAlias": ""
       },
       {
         "absolutePath": "/C/Users/npain/Projects/Carbon/fiat_gateway/contracts/tokens/carbonToken/dataStorage/StablecoinWhitelist.sol",
         "file": "./StablecoinWhitelist.sol",
-        "id": 1625,
+        "id": 2900,
         "nodeType": "ImportDirective",
-        "scope": 1651,
-        "sourceUnit": 2020,
-        "src": "54:35:6",
+        "scope": 2926,
+        "sourceUnit": 3295,
+        "src": "54:35:15",
         "symbolAliases": [],
         "unitAlias": ""
       },
@@ -471,35 +471,35 @@
         "contractKind": "contract",
         "documentation": "@title CarbonDollarStorage\r\n@notice Contains necessary storage contracts for CarbonDollar (FeeSheet and StablecoinWhitelist).\r",
         "fullyImplemented": true,
-        "id": 1650,
+        "id": 2925,
         "linearizedBaseContracts": [
-          1650
+          2925
         ],
         "name": "CarbonDollarStorage",
         "nodeType": "ContractDefinition",
         "nodes": [
           {
             "constant": false,
-            "id": 1627,
+            "id": 2902,
             "name": "stablecoinFees",
             "nodeType": "VariableDeclaration",
-            "scope": 1650,
-            "src": "302:30:6",
+            "scope": 2925,
+            "src": "302:30:15",
             "stateVariable": true,
             "storageLocation": "default",
             "typeDescriptions": {
-              "typeIdentifier": "t_contract$_FeeSheet_$1827",
+              "typeIdentifier": "t_contract$_FeeSheet_$3102",
               "typeString": "contract FeeSheet"
             },
             "typeName": {
               "contractScope": null,
-              "id": 1626,
+              "id": 2901,
               "name": "FeeSheet",
               "nodeType": "UserDefinedTypeName",
-              "referencedDeclaration": 1827,
-              "src": "302:8:6",
+              "referencedDeclaration": 3102,
+              "src": "302:8:15",
               "typeDescriptions": {
-                "typeIdentifier": "t_contract$_FeeSheet_$1827",
+                "typeIdentifier": "t_contract$_FeeSheet_$3102",
                 "typeString": "contract FeeSheet"
               }
             },
@@ -508,26 +508,26 @@
           },
           {
             "constant": false,
-            "id": 1629,
+            "id": 2904,
             "name": "stablecoinWhitelist",
             "nodeType": "VariableDeclaration",
-            "scope": 1650,
-            "src": "339:46:6",
+            "scope": 2925,
+            "src": "339:46:15",
             "stateVariable": true,
             "storageLocation": "default",
             "typeDescriptions": {
-              "typeIdentifier": "t_contract$_StablecoinWhitelist_$2019",
+              "typeIdentifier": "t_contract$_StablecoinWhitelist_$3294",
               "typeString": "contract StablecoinWhitelist"
             },
             "typeName": {
               "contractScope": null,
-              "id": 1628,
+              "id": 2903,
               "name": "StablecoinWhitelist",
               "nodeType": "UserDefinedTypeName",
-              "referencedDeclaration": 2019,
-              "src": "339:19:6",
+              "referencedDeclaration": 3294,
+              "src": "339:19:15",
               "typeDescriptions": {
-                "typeIdentifier": "t_contract$_StablecoinWhitelist_$2019",
+                "typeIdentifier": "t_contract$_StablecoinWhitelist_$3294",
                 "typeString": "contract StablecoinWhitelist"
               }
             },
@@ -536,28 +536,28 @@
           },
           {
             "body": {
-              "id": 1648,
+              "id": 2923,
               "nodeType": "Block",
-              "src": "669:119:6",
+              "src": "669:119:15",
               "statements": [
                 {
                   "expression": {
                     "argumentTypes": null,
-                    "id": 1640,
+                    "id": 2915,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
                     "lValueRequested": false,
                     "leftHandSide": {
                       "argumentTypes": null,
-                      "id": 1636,
+                      "id": 2911,
                       "name": "stablecoinFees",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 1627,
-                      "src": "680:14:6",
+                      "referencedDeclaration": 2902,
+                      "src": "680:14:15",
                       "typeDescriptions": {
-                        "typeIdentifier": "t_contract$_FeeSheet_$1827",
+                        "typeIdentifier": "t_contract$_FeeSheet_$3102",
                         "typeString": "contract FeeSheet"
                       }
                     },
@@ -568,12 +568,12 @@
                       "arguments": [
                         {
                           "argumentTypes": null,
-                          "id": 1638,
+                          "id": 2913,
                           "name": "_feesheet",
                           "nodeType": "Identifier",
                           "overloadedDeclarations": [],
-                          "referencedDeclaration": 1631,
-                          "src": "706:9:6",
+                          "referencedDeclaration": 2906,
+                          "src": "706:9:15",
                           "typeDescriptions": {
                             "typeIdentifier": "t_address",
                             "typeString": "address"
@@ -587,18 +587,18 @@
                             "typeString": "address"
                           }
                         ],
-                        "id": 1637,
+                        "id": 2912,
                         "name": "FeeSheet",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 1827,
-                        "src": "697:8:6",
+                        "referencedDeclaration": 3102,
+                        "src": "697:8:15",
                         "typeDescriptions": {
-                          "typeIdentifier": "t_type$_t_contract$_FeeSheet_$1827_$",
+                          "typeIdentifier": "t_type$_t_contract$_FeeSheet_$3102_$",
                           "typeString": "type(contract FeeSheet)"
                         }
                       },
-                      "id": 1639,
+                      "id": 2914,
                       "isConstant": false,
                       "isLValue": false,
                       "isPure": false,
@@ -606,40 +606,40 @@
                       "lValueRequested": false,
                       "names": [],
                       "nodeType": "FunctionCall",
-                      "src": "697:19:6",
+                      "src": "697:19:15",
                       "typeDescriptions": {
-                        "typeIdentifier": "t_contract$_FeeSheet_$1827",
+                        "typeIdentifier": "t_contract$_FeeSheet_$3102",
                         "typeString": "contract FeeSheet"
                       }
                     },
-                    "src": "680:36:6",
+                    "src": "680:36:15",
                     "typeDescriptions": {
-                      "typeIdentifier": "t_contract$_FeeSheet_$1827",
+                      "typeIdentifier": "t_contract$_FeeSheet_$3102",
                       "typeString": "contract FeeSheet"
                     }
                   },
-                  "id": 1641,
+                  "id": 2916,
                   "nodeType": "ExpressionStatement",
-                  "src": "680:36:6"
+                  "src": "680:36:15"
                 },
                 {
                   "expression": {
                     "argumentTypes": null,
-                    "id": 1646,
+                    "id": 2921,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
                     "lValueRequested": false,
                     "leftHandSide": {
                       "argumentTypes": null,
-                      "id": 1642,
+                      "id": 2917,
                       "name": "stablecoinWhitelist",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 1629,
-                      "src": "727:19:6",
+                      "referencedDeclaration": 2904,
+                      "src": "727:19:15",
                       "typeDescriptions": {
-                        "typeIdentifier": "t_contract$_StablecoinWhitelist_$2019",
+                        "typeIdentifier": "t_contract$_StablecoinWhitelist_$3294",
                         "typeString": "contract StablecoinWhitelist"
                       }
                     },
@@ -650,12 +650,12 @@
                       "arguments": [
                         {
                           "argumentTypes": null,
-                          "id": 1644,
+                          "id": 2919,
                           "name": "_whitelist",
                           "nodeType": "Identifier",
                           "overloadedDeclarations": [],
-                          "referencedDeclaration": 1633,
-                          "src": "769:10:6",
+                          "referencedDeclaration": 2908,
+                          "src": "769:10:15",
                           "typeDescriptions": {
                             "typeIdentifier": "t_address",
                             "typeString": "address"
@@ -669,18 +669,18 @@
                             "typeString": "address"
                           }
                         ],
-                        "id": 1643,
+                        "id": 2918,
                         "name": "StablecoinWhitelist",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 2019,
-                        "src": "749:19:6",
+                        "referencedDeclaration": 3294,
+                        "src": "749:19:15",
                         "typeDescriptions": {
-                          "typeIdentifier": "t_type$_t_contract$_StablecoinWhitelist_$2019_$",
+                          "typeIdentifier": "t_type$_t_contract$_StablecoinWhitelist_$3294_$",
                           "typeString": "type(contract StablecoinWhitelist)"
                         }
                       },
-                      "id": 1645,
+                      "id": 2920,
                       "isConstant": false,
                       "isLValue": false,
                       "isPure": false,
@@ -688,26 +688,26 @@
                       "lValueRequested": false,
                       "names": [],
                       "nodeType": "FunctionCall",
-                      "src": "749:31:6",
+                      "src": "749:31:15",
                       "typeDescriptions": {
-                        "typeIdentifier": "t_contract$_StablecoinWhitelist_$2019",
+                        "typeIdentifier": "t_contract$_StablecoinWhitelist_$3294",
                         "typeString": "contract StablecoinWhitelist"
                       }
                     },
-                    "src": "727:53:6",
+                    "src": "727:53:15",
                     "typeDescriptions": {
-                      "typeIdentifier": "t_contract$_StablecoinWhitelist_$2019",
+                      "typeIdentifier": "t_contract$_StablecoinWhitelist_$3294",
                       "typeString": "contract StablecoinWhitelist"
                     }
                   },
-                  "id": 1647,
+                  "id": 2922,
                   "nodeType": "ExpressionStatement",
-                  "src": "727:53:6"
+                  "src": "727:53:15"
                 }
               ]
             },
             "documentation": "@dev a CarbonDollarStorage can set its storages only once, on construction\r\n@param _feesheet address of the new FeeSheet\r\n@param _whitelist address of the new StablecoinWhitelist\r*",
-            "id": 1649,
+            "id": 2924,
             "implemented": true,
             "isConstructor": true,
             "isDeclaredConst": false,
@@ -715,16 +715,16 @@
             "name": "",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 1634,
+              "id": 2909,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 1631,
+                  "id": 2906,
                   "name": "_feesheet",
                   "nodeType": "VariableDeclaration",
-                  "scope": 1649,
-                  "src": "623:17:6",
+                  "scope": 2924,
+                  "src": "623:17:15",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -732,10 +732,10 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 1630,
+                    "id": 2905,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
-                    "src": "623:7:6",
+                    "src": "623:7:15",
                     "typeDescriptions": {
                       "typeIdentifier": "t_address",
                       "typeString": "address"
@@ -746,11 +746,11 @@
                 },
                 {
                   "constant": false,
-                  "id": 1633,
+                  "id": 2908,
                   "name": "_whitelist",
                   "nodeType": "VariableDeclaration",
-                  "scope": 1649,
-                  "src": "642:18:6",
+                  "scope": 2924,
+                  "src": "642:18:15",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -758,10 +758,10 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 1632,
+                    "id": 2907,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
-                    "src": "642:7:6",
+                    "src": "642:7:15",
                     "typeDescriptions": {
                       "typeIdentifier": "t_address",
                       "typeString": "address"
@@ -771,27 +771,27 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "622:39:6"
+              "src": "622:39:15"
             },
             "payable": false,
             "returnParameters": {
-              "id": 1635,
+              "id": 2910,
               "nodeType": "ParameterList",
               "parameters": [],
-              "src": "669:0:6"
+              "src": "669:0:15"
             },
-            "scope": 1650,
-            "src": "610:178:6",
+            "scope": 2925,
+            "src": "610:178:15",
             "stateMutability": "nonpayable",
             "superFunction": null,
             "visibility": "public"
           }
         ],
-        "scope": 1651,
-        "src": "233:558:6"
+        "scope": 2926,
+        "src": "233:558:15"
       }
     ],
-    "src": "0:791:6"
+    "src": "0:791:15"
   },
   "compiler": {
     "name": "solc",
@@ -799,5 +799,5 @@
   },
   "networks": {},
   "schemaVersion": "2.0.1",
-  "updatedAt": "2018-08-17T17:50:39.515Z"
+  "updatedAt": "2018-08-17T19:47:36.299Z"
 }

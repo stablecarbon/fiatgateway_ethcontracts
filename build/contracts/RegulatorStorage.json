@@ -43,26 +43,44 @@
       "payable": false,
       "stateMutability": "nonpayable",
       "type": "constructor"
+    },
+    {
+      "constant": false,
+      "inputs": [],
+      "name": "claimPermissionOwnership",
+      "outputs": [],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [],
+      "name": "claimValidatorOwnership",
+      "outputs": [],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function"
     }
   ],
-  "bytecode": "0x608060405234801561001057600080fd5b5060405160408061016483398101604052805160209091015160008054600160a060020a03938416600160a060020a0319918216179091556001805493909216921691909117905560fe806100666000396000f30060806040526004361060485763ffffffff7c0100000000000000000000000000000000000000000000000000000000600035041663ab8c71c08114604d578063ca1e7819146088575b600080fd5b348015605857600080fd5b50605f609a565b6040805173ffffffffffffffffffffffffffffffffffffffff9092168252519081900360200190f35b348015609357600080fd5b50605f60b6565b60005473ffffffffffffffffffffffffffffffffffffffff1681565b60015473ffffffffffffffffffffffffffffffffffffffff16815600a165627a7a7230582050cc9a5c21be788240349567bc58cb7bd266b985ff9e932db74d28dbc6bcb4da0029",
-  "deployedBytecode": "0x60806040526004361060485763ffffffff7c0100000000000000000000000000000000000000000000000000000000600035041663ab8c71c08114604d578063ca1e7819146088575b600080fd5b348015605857600080fd5b50605f609a565b6040805173ffffffffffffffffffffffffffffffffffffffff9092168252519081900360200190f35b348015609357600080fd5b50605f60b6565b60005473ffffffffffffffffffffffffffffffffffffffff1681565b60015473ffffffffffffffffffffffffffffffffffffffff16815600a165627a7a7230582050cc9a5c21be788240349567bc58cb7bd266b985ff9e932db74d28dbc6bcb4da0029",
-  "sourceMap": "166:429:3:-;;;416:176;8:9:-1;5:2;;;30:1;27;20:12;5:2;416:176:3;;;;;;;;;;;;;;;;;;;490:11;:43;;-1:-1:-1;;;;;490:43:3;;;-1:-1:-1;;;;;;490:43:3;;;;;;;;544:40;;;;;;;;;;;;;;166:429;;;;;;",
-  "deployedSourceMap": "166:429:3:-;;;;;;;;;;;;;;;;;;;;;;;;;;;;230:34;;8:9:-1;5:2;;;30:1;27;20:12;5:2;230:34:3;;;;;;;;;;;;;;;;;;;;;;;271:32;;8:9:-1;5:2;;;30:1;27;20:12;5:2;271:32:3;;;;230:34;;;;;;:::o;271:32::-;;;;;;:::o",
-  "source": "pragma solidity ^0.4.24;\r\n\r\nimport \"./PermissionSheet.sol\";\r\nimport \"./ValidatorSheet.sol\";\r\n\r\n/**\r\n*\r\n* @dev contains a PermissionSheet and a ValidatorSheet\r\n*\r\n*/\r\ncontract RegulatorStorage {\r\n    /**\r\n    \tStorage\r\n    */\r\n    PermissionSheet public permissions;\r\n    ValidatorSheet public validators;\r\n\r\n    /**\r\n    * @dev a RegulatorStorage can set its storages only once, on construction\r\n    *\r\n    **/\r\n    constructor (address _permissions, address _validators) public {\r\n        permissions = PermissionSheet(_permissions);\r\n        validators = ValidatorSheet(_validators);\r\n    }\r\n}",
+  "bytecode": "0x608060405234801561001057600080fd5b506040516040806102b783398101604052805160209091015160008054600160a060020a03938416600160a060020a03199182161790915560018054939092169216919091179055610250806100676000396000f3006080604052600436106100615763ffffffff7c01000000000000000000000000000000000000000000000000000000006000350416630bdb3d5a811461006657806385a2785e1461007d578063ab8c71c014610092578063ca1e7819146100d0575b600080fd5b34801561007257600080fd5b5061007b6100e5565b005b34801561008957600080fd5b5061007b610166565b34801561009e57600080fd5b506100a76101ec565b6040805173ffffffffffffffffffffffffffffffffffffffff9092168252519081900360200190f35b3480156100dc57600080fd5b506100a7610208565b60008054604080517f4e71e0c8000000000000000000000000000000000000000000000000000000008152905173ffffffffffffffffffffffffffffffffffffffff90921692634e71e0c89260048084019382900301818387803b15801561014c57600080fd5b505af1158015610160573d6000803e3d6000fd5b50505050565b600160009054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16634e71e0c86040518163ffffffff167c0100000000000000000000000000000000000000000000000000000000028152600401600060405180830381600087803b15801561014c57600080fd5b60005473ffffffffffffffffffffffffffffffffffffffff1681565b60015473ffffffffffffffffffffffffffffffffffffffff16815600a165627a7a723058204fa6287d5c1a0442229b1b32bc0dd01490edc258ddccdd02516d6f982be4f0b50029",
+  "deployedBytecode": "0x6080604052600436106100615763ffffffff7c01000000000000000000000000000000000000000000000000000000006000350416630bdb3d5a811461006657806385a2785e1461007d578063ab8c71c014610092578063ca1e7819146100d0575b600080fd5b34801561007257600080fd5b5061007b6100e5565b005b34801561008957600080fd5b5061007b610166565b34801561009e57600080fd5b506100a76101ec565b6040805173ffffffffffffffffffffffffffffffffffffffff9092168252519081900360200190f35b3480156100dc57600080fd5b506100a7610208565b60008054604080517f4e71e0c8000000000000000000000000000000000000000000000000000000008152905173ffffffffffffffffffffffffffffffffffffffff90921692634e71e0c89260048084019382900301818387803b15801561014c57600080fd5b505af1158015610160573d6000803e3d6000fd5b50505050565b600160009054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16634e71e0c86040518163ffffffff167c0100000000000000000000000000000000000000000000000000000000028152600401600060405180830381600087803b15801561014c57600080fd5b60005473ffffffffffffffffffffffffffffffffffffffff1681565b60015473ffffffffffffffffffffffffffffffffffffffff16815600a165627a7a723058204fa6287d5c1a0442229b1b32bc0dd01490edc258ddccdd02516d6f982be4f0b50029",
+  "sourceMap": "166:804:5:-;;;416:176;8:9:-1;5:2;;;30:1;27;20:12;5:2;416:176:5;;;;;;;;;;;;;;;;;;;490:11;:43;;-1:-1:-1;;;;;490:43:5;;;-1:-1:-1;;;;;;490:43:5;;;;;;;;544:40;;;;;;;;;;;;;;166:804;;;;;;",
+  "deployedSourceMap": "166:804:5:-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;691:90;;8:9:-1;5:2;;;30:1;27;20:12;5:2;691:90:5;;;;;;879:88;;8:9:-1;5:2;;;30:1;27;20:12;5:2;879:88:5;;;;230:34;;8:9:-1;5:2;;;30:1;27;20:12;5:2;230:34:5;;;;;;;;;;;;;;;;;;;;;;;271:32;;8:9:-1;5:2;;;30:1;27;20:12;5:2;271:32:5;;;;691:90;745:11;;;:28;;;;;;;;:11;;;;;:26;;:28;;;;;;;;;;:11;;:28;;;5:2:-1;;;;30:1;27;20:12;5:2;745:28:5;;;;8:9:-1;5:2;;;45:16;42:1;39;24:38;77:16;74:1;67:27;5:2;745:28:5;;;;691:90::o;879:88::-;932:10;;;;;;;;;;;:25;;;:27;;;;;;;;;;;;;;;;;;;;;;;8:9:-1;5:2;;;30:1;27;20:12;230:34:5;;;;;;:::o;271:32::-;;;;;;:::o",
+  "source": "pragma solidity ^0.4.24;\r\n\r\nimport \"./PermissionSheet.sol\";\r\nimport \"./ValidatorSheet.sol\";\r\n\r\n/**\r\n*\r\n* @dev contains a PermissionSheet and a ValidatorSheet\r\n*\r\n*/\r\ncontract RegulatorStorage {\r\n    /**\r\n    \tStorage\r\n    */\r\n    PermissionSheet public permissions;\r\n    ValidatorSheet public validators;\r\n\r\n    /**\r\n    * @dev a RegulatorStorage can set its storages only once, on construction\r\n    *\r\n    **/\r\n    constructor (address _permissions, address _validators) public {\r\n        permissions = PermissionSheet(_permissions);\r\n        validators = ValidatorSheet(_validators);\r\n    }\r\n\r\n    /**\r\n    * @dev claim ownership of permission sheet passed into constructor.\r\n    **/\r\n    function claimPermissionOwnership() public {\r\n        permissions.claimOwnership();\r\n    }\r\n\r\n    /**\r\n    * @dev claim ownership of validator sheet passed into constructor.\r\n    **/\r\n    function claimValidatorOwnership() public {\r\n        validators.claimOwnership();\r\n    }\r\n}",
   "sourcePath": "C:\\Users\\npain\\Projects\\Carbon\\fiat_gateway\\contracts\\regulator\\dataStorage\\RegulatorStorage.sol",
   "ast": {
     "absolutePath": "/C/Users/npain/Projects/Carbon/fiat_gateway/contracts/regulator/dataStorage/RegulatorStorage.sol",
     "exportedSymbols": {
       "RegulatorStorage": [
-        1118
+        1319
       ]
     },
-    "id": 1119,
+    "id": 1320,
     "nodeType": "SourceUnit",
     "nodes": [
       {
-        "id": 1091,
+        "id": 1274,
         "literals": [
           "solidity",
           "^",
@@ -70,27 +88,27 @@
           ".24"
         ],
         "nodeType": "PragmaDirective",
-        "src": "0:24:3"
+        "src": "0:24:5"
       },
       {
         "absolutePath": "/C/Users/npain/Projects/Carbon/fiat_gateway/contracts/regulator/dataStorage/PermissionSheet.sol",
         "file": "./PermissionSheet.sol",
-        "id": 1092,
+        "id": 1275,
         "nodeType": "ImportDirective",
-        "scope": 1119,
-        "sourceUnit": 1090,
-        "src": "28:31:3",
+        "scope": 1320,
+        "sourceUnit": 1273,
+        "src": "28:31:5",
         "symbolAliases": [],
         "unitAlias": ""
       },
       {
         "absolutePath": "/C/Users/npain/Projects/Carbon/fiat_gateway/contracts/regulator/dataStorage/ValidatorSheet.sol",
         "file": "./ValidatorSheet.sol",
-        "id": 1093,
+        "id": 1276,
         "nodeType": "ImportDirective",
-        "scope": 1119,
-        "sourceUnit": 1183,
-        "src": "61:30:3",
+        "scope": 1320,
+        "sourceUnit": 1384,
+        "src": "61:30:5",
         "symbolAliases": [],
         "unitAlias": ""
       },
@@ -100,35 +118,35 @@
         "contractKind": "contract",
         "documentation": "\n* @dev contains a PermissionSheet and a ValidatorSheet\r\n\n",
         "fullyImplemented": true,
-        "id": 1118,
+        "id": 1319,
         "linearizedBaseContracts": [
-          1118
+          1319
         ],
         "name": "RegulatorStorage",
         "nodeType": "ContractDefinition",
         "nodes": [
           {
             "constant": false,
-            "id": 1095,
+            "id": 1278,
             "name": "permissions",
             "nodeType": "VariableDeclaration",
-            "scope": 1118,
-            "src": "230:34:3",
+            "scope": 1319,
+            "src": "230:34:5",
             "stateVariable": true,
             "storageLocation": "default",
             "typeDescriptions": {
-              "typeIdentifier": "t_contract$_PermissionSheet_$1089",
+              "typeIdentifier": "t_contract$_PermissionSheet_$1272",
               "typeString": "contract PermissionSheet"
             },
             "typeName": {
               "contractScope": null,
-              "id": 1094,
+              "id": 1277,
               "name": "PermissionSheet",
               "nodeType": "UserDefinedTypeName",
-              "referencedDeclaration": 1089,
-              "src": "230:15:3",
+              "referencedDeclaration": 1272,
+              "src": "230:15:5",
               "typeDescriptions": {
-                "typeIdentifier": "t_contract$_PermissionSheet_$1089",
+                "typeIdentifier": "t_contract$_PermissionSheet_$1272",
                 "typeString": "contract PermissionSheet"
               }
             },
@@ -137,26 +155,26 @@
           },
           {
             "constant": false,
-            "id": 1097,
+            "id": 1280,
             "name": "validators",
             "nodeType": "VariableDeclaration",
-            "scope": 1118,
-            "src": "271:32:3",
+            "scope": 1319,
+            "src": "271:32:5",
             "stateVariable": true,
             "storageLocation": "default",
             "typeDescriptions": {
-              "typeIdentifier": "t_contract$_ValidatorSheet_$1182",
+              "typeIdentifier": "t_contract$_ValidatorSheet_$1383",
               "typeString": "contract ValidatorSheet"
             },
             "typeName": {
               "contractScope": null,
-              "id": 1096,
+              "id": 1279,
               "name": "ValidatorSheet",
               "nodeType": "UserDefinedTypeName",
-              "referencedDeclaration": 1182,
-              "src": "271:14:3",
+              "referencedDeclaration": 1383,
+              "src": "271:14:5",
               "typeDescriptions": {
-                "typeIdentifier": "t_contract$_ValidatorSheet_$1182",
+                "typeIdentifier": "t_contract$_ValidatorSheet_$1383",
                 "typeString": "contract ValidatorSheet"
               }
             },
@@ -165,28 +183,28 @@
           },
           {
             "body": {
-              "id": 1116,
+              "id": 1299,
               "nodeType": "Block",
-              "src": "479:113:3",
+              "src": "479:113:5",
               "statements": [
                 {
                   "expression": {
                     "argumentTypes": null,
-                    "id": 1108,
+                    "id": 1291,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
                     "lValueRequested": false,
                     "leftHandSide": {
                       "argumentTypes": null,
-                      "id": 1104,
+                      "id": 1287,
                       "name": "permissions",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 1095,
-                      "src": "490:11:3",
+                      "referencedDeclaration": 1278,
+                      "src": "490:11:5",
                       "typeDescriptions": {
-                        "typeIdentifier": "t_contract$_PermissionSheet_$1089",
+                        "typeIdentifier": "t_contract$_PermissionSheet_$1272",
                         "typeString": "contract PermissionSheet"
                       }
                     },
@@ -197,12 +215,12 @@
                       "arguments": [
                         {
                           "argumentTypes": null,
-                          "id": 1106,
+                          "id": 1289,
                           "name": "_permissions",
                           "nodeType": "Identifier",
                           "overloadedDeclarations": [],
-                          "referencedDeclaration": 1099,
-                          "src": "520:12:3",
+                          "referencedDeclaration": 1282,
+                          "src": "520:12:5",
                           "typeDescriptions": {
                             "typeIdentifier": "t_address",
                             "typeString": "address"
@@ -216,18 +234,18 @@
                             "typeString": "address"
                           }
                         ],
-                        "id": 1105,
+                        "id": 1288,
                         "name": "PermissionSheet",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 1089,
-                        "src": "504:15:3",
+                        "referencedDeclaration": 1272,
+                        "src": "504:15:5",
                         "typeDescriptions": {
-                          "typeIdentifier": "t_type$_t_contract$_PermissionSheet_$1089_$",
+                          "typeIdentifier": "t_type$_t_contract$_PermissionSheet_$1272_$",
                           "typeString": "type(contract PermissionSheet)"
                         }
                       },
-                      "id": 1107,
+                      "id": 1290,
                       "isConstant": false,
                       "isLValue": false,
                       "isPure": false,
@@ -235,40 +253,40 @@
                       "lValueRequested": false,
                       "names": [],
                       "nodeType": "FunctionCall",
-                      "src": "504:29:3",
+                      "src": "504:29:5",
                       "typeDescriptions": {
-                        "typeIdentifier": "t_contract$_PermissionSheet_$1089",
+                        "typeIdentifier": "t_contract$_PermissionSheet_$1272",
                         "typeString": "contract PermissionSheet"
                       }
                     },
-                    "src": "490:43:3",
+                    "src": "490:43:5",
                     "typeDescriptions": {
-                      "typeIdentifier": "t_contract$_PermissionSheet_$1089",
+                      "typeIdentifier": "t_contract$_PermissionSheet_$1272",
                       "typeString": "contract PermissionSheet"
                     }
                   },
-                  "id": 1109,
+                  "id": 1292,
                   "nodeType": "ExpressionStatement",
-                  "src": "490:43:3"
+                  "src": "490:43:5"
                 },
                 {
                   "expression": {
                     "argumentTypes": null,
-                    "id": 1114,
+                    "id": 1297,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
                     "lValueRequested": false,
                     "leftHandSide": {
                       "argumentTypes": null,
-                      "id": 1110,
+                      "id": 1293,
                       "name": "validators",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 1097,
-                      "src": "544:10:3",
+                      "referencedDeclaration": 1280,
+                      "src": "544:10:5",
                       "typeDescriptions": {
-                        "typeIdentifier": "t_contract$_ValidatorSheet_$1182",
+                        "typeIdentifier": "t_contract$_ValidatorSheet_$1383",
                         "typeString": "contract ValidatorSheet"
                       }
                     },
@@ -279,12 +297,12 @@
                       "arguments": [
                         {
                           "argumentTypes": null,
-                          "id": 1112,
+                          "id": 1295,
                           "name": "_validators",
                           "nodeType": "Identifier",
                           "overloadedDeclarations": [],
-                          "referencedDeclaration": 1101,
-                          "src": "572:11:3",
+                          "referencedDeclaration": 1284,
+                          "src": "572:11:5",
                           "typeDescriptions": {
                             "typeIdentifier": "t_address",
                             "typeString": "address"
@@ -298,18 +316,18 @@
                             "typeString": "address"
                           }
                         ],
-                        "id": 1111,
+                        "id": 1294,
                         "name": "ValidatorSheet",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 1182,
-                        "src": "557:14:3",
+                        "referencedDeclaration": 1383,
+                        "src": "557:14:5",
                         "typeDescriptions": {
-                          "typeIdentifier": "t_type$_t_contract$_ValidatorSheet_$1182_$",
+                          "typeIdentifier": "t_type$_t_contract$_ValidatorSheet_$1383_$",
                           "typeString": "type(contract ValidatorSheet)"
                         }
                       },
-                      "id": 1113,
+                      "id": 1296,
                       "isConstant": false,
                       "isLValue": false,
                       "isPure": false,
@@ -317,26 +335,26 @@
                       "lValueRequested": false,
                       "names": [],
                       "nodeType": "FunctionCall",
-                      "src": "557:27:3",
+                      "src": "557:27:5",
                       "typeDescriptions": {
-                        "typeIdentifier": "t_contract$_ValidatorSheet_$1182",
+                        "typeIdentifier": "t_contract$_ValidatorSheet_$1383",
                         "typeString": "contract ValidatorSheet"
                       }
                     },
-                    "src": "544:40:3",
+                    "src": "544:40:5",
                     "typeDescriptions": {
-                      "typeIdentifier": "t_contract$_ValidatorSheet_$1182",
+                      "typeIdentifier": "t_contract$_ValidatorSheet_$1383",
                       "typeString": "contract ValidatorSheet"
                     }
                   },
-                  "id": 1115,
+                  "id": 1298,
                   "nodeType": "ExpressionStatement",
-                  "src": "544:40:3"
+                  "src": "544:40:5"
                 }
               ]
             },
             "documentation": "@dev a RegulatorStorage can set its storages only once, on construction\r\n\n    *",
-            "id": 1117,
+            "id": 1300,
             "implemented": true,
             "isConstructor": true,
             "isDeclaredConst": false,
@@ -344,16 +362,16 @@
             "name": "",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 1102,
+              "id": 1285,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 1099,
+                  "id": 1282,
                   "name": "_permissions",
                   "nodeType": "VariableDeclaration",
-                  "scope": 1117,
-                  "src": "429:20:3",
+                  "scope": 1300,
+                  "src": "429:20:5",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -361,10 +379,10 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 1098,
+                    "id": 1281,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
-                    "src": "429:7:3",
+                    "src": "429:7:5",
                     "typeDescriptions": {
                       "typeIdentifier": "t_address",
                       "typeString": "address"
@@ -375,11 +393,11 @@
                 },
                 {
                   "constant": false,
-                  "id": 1101,
+                  "id": 1284,
                   "name": "_validators",
                   "nodeType": "VariableDeclaration",
-                  "scope": 1117,
-                  "src": "451:19:3",
+                  "scope": 1300,
+                  "src": "451:19:5",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -387,10 +405,10 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 1100,
+                    "id": 1283,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
-                    "src": "451:7:3",
+                    "src": "451:7:5",
                     "typeDescriptions": {
                       "typeIdentifier": "t_address",
                       "typeString": "address"
@@ -400,40 +418,212 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "428:43:3"
+              "src": "428:43:5"
             },
             "payable": false,
             "returnParameters": {
-              "id": 1103,
+              "id": 1286,
               "nodeType": "ParameterList",
               "parameters": [],
-              "src": "479:0:3"
+              "src": "479:0:5"
             },
-            "scope": 1118,
-            "src": "416:176:3",
+            "scope": 1319,
+            "src": "416:176:5",
+            "stateMutability": "nonpayable",
+            "superFunction": null,
+            "visibility": "public"
+          },
+          {
+            "body": {
+              "id": 1308,
+              "nodeType": "Block",
+              "src": "734:47:5",
+              "statements": [
+                {
+                  "expression": {
+                    "argumentTypes": null,
+                    "arguments": [],
+                    "expression": {
+                      "argumentTypes": [],
+                      "expression": {
+                        "argumentTypes": null,
+                        "id": 1303,
+                        "name": "permissions",
+                        "nodeType": "Identifier",
+                        "overloadedDeclarations": [],
+                        "referencedDeclaration": 1278,
+                        "src": "745:11:5",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_contract$_PermissionSheet_$1272",
+                          "typeString": "contract PermissionSheet"
+                        }
+                      },
+                      "id": 1305,
+                      "isConstant": false,
+                      "isLValue": false,
+                      "isPure": false,
+                      "lValueRequested": false,
+                      "memberName": "claimOwnership",
+                      "nodeType": "MemberAccess",
+                      "referencedDeclaration": 1605,
+                      "src": "745:26:5",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_function_external_nonpayable$__$returns$__$",
+                        "typeString": "function () external"
+                      }
+                    },
+                    "id": 1306,
+                    "isConstant": false,
+                    "isLValue": false,
+                    "isPure": false,
+                    "kind": "functionCall",
+                    "lValueRequested": false,
+                    "names": [],
+                    "nodeType": "FunctionCall",
+                    "src": "745:28:5",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_tuple$__$",
+                      "typeString": "tuple()"
+                    }
+                  },
+                  "id": 1307,
+                  "nodeType": "ExpressionStatement",
+                  "src": "745:28:5"
+                }
+              ]
+            },
+            "documentation": "@dev claim ownership of permission sheet passed into constructor.\r*",
+            "id": 1309,
+            "implemented": true,
+            "isConstructor": false,
+            "isDeclaredConst": false,
+            "modifiers": [],
+            "name": "claimPermissionOwnership",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 1301,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "724:2:5"
+            },
+            "payable": false,
+            "returnParameters": {
+              "id": 1302,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "734:0:5"
+            },
+            "scope": 1319,
+            "src": "691:90:5",
+            "stateMutability": "nonpayable",
+            "superFunction": null,
+            "visibility": "public"
+          },
+          {
+            "body": {
+              "id": 1317,
+              "nodeType": "Block",
+              "src": "921:46:5",
+              "statements": [
+                {
+                  "expression": {
+                    "argumentTypes": null,
+                    "arguments": [],
+                    "expression": {
+                      "argumentTypes": [],
+                      "expression": {
+                        "argumentTypes": null,
+                        "id": 1312,
+                        "name": "validators",
+                        "nodeType": "Identifier",
+                        "overloadedDeclarations": [],
+                        "referencedDeclaration": 1280,
+                        "src": "932:10:5",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_contract$_ValidatorSheet_$1383",
+                          "typeString": "contract ValidatorSheet"
+                        }
+                      },
+                      "id": 1314,
+                      "isConstant": false,
+                      "isLValue": false,
+                      "isPure": false,
+                      "lValueRequested": false,
+                      "memberName": "claimOwnership",
+                      "nodeType": "MemberAccess",
+                      "referencedDeclaration": 1605,
+                      "src": "932:25:5",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_function_external_nonpayable$__$returns$__$",
+                        "typeString": "function () external"
+                      }
+                    },
+                    "id": 1315,
+                    "isConstant": false,
+                    "isLValue": false,
+                    "isPure": false,
+                    "kind": "functionCall",
+                    "lValueRequested": false,
+                    "names": [],
+                    "nodeType": "FunctionCall",
+                    "src": "932:27:5",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_tuple$__$",
+                      "typeString": "tuple()"
+                    }
+                  },
+                  "id": 1316,
+                  "nodeType": "ExpressionStatement",
+                  "src": "932:27:5"
+                }
+              ]
+            },
+            "documentation": "@dev claim ownership of validator sheet passed into constructor.\r*",
+            "id": 1318,
+            "implemented": true,
+            "isConstructor": false,
+            "isDeclaredConst": false,
+            "modifiers": [],
+            "name": "claimValidatorOwnership",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 1310,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "911:2:5"
+            },
+            "payable": false,
+            "returnParameters": {
+              "id": 1311,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "921:0:5"
+            },
+            "scope": 1319,
+            "src": "879:88:5",
             "stateMutability": "nonpayable",
             "superFunction": null,
             "visibility": "public"
           }
         ],
-        "scope": 1119,
-        "src": "166:429:3"
+        "scope": 1320,
+        "src": "166:804:5"
       }
     ],
-    "src": "0:595:3"
+    "src": "0:970:5"
   },
   "legacyAST": {
     "absolutePath": "/C/Users/npain/Projects/Carbon/fiat_gateway/contracts/regulator/dataStorage/RegulatorStorage.sol",
     "exportedSymbols": {
       "RegulatorStorage": [
-        1118
+        1319
       ]
     },
-    "id": 1119,
+    "id": 1320,
     "nodeType": "SourceUnit",
     "nodes": [
       {
-        "id": 1091,
+        "id": 1274,
         "literals": [
           "solidity",
           "^",
@@ -441,27 +631,27 @@
           ".24"
         ],
         "nodeType": "PragmaDirective",
-        "src": "0:24:3"
+        "src": "0:24:5"
       },
       {
         "absolutePath": "/C/Users/npain/Projects/Carbon/fiat_gateway/contracts/regulator/dataStorage/PermissionSheet.sol",
         "file": "./PermissionSheet.sol",
-        "id": 1092,
+        "id": 1275,
         "nodeType": "ImportDirective",
-        "scope": 1119,
-        "sourceUnit": 1090,
-        "src": "28:31:3",
+        "scope": 1320,
+        "sourceUnit": 1273,
+        "src": "28:31:5",
         "symbolAliases": [],
         "unitAlias": ""
       },
       {
         "absolutePath": "/C/Users/npain/Projects/Carbon/fiat_gateway/contracts/regulator/dataStorage/ValidatorSheet.sol",
         "file": "./ValidatorSheet.sol",
-        "id": 1093,
+        "id": 1276,
         "nodeType": "ImportDirective",
-        "scope": 1119,
-        "sourceUnit": 1183,
-        "src": "61:30:3",
+        "scope": 1320,
+        "sourceUnit": 1384,
+        "src": "61:30:5",
         "symbolAliases": [],
         "unitAlias": ""
       },
@@ -471,35 +661,35 @@
         "contractKind": "contract",
         "documentation": "\n* @dev contains a PermissionSheet and a ValidatorSheet\r\n\n",
         "fullyImplemented": true,
-        "id": 1118,
+        "id": 1319,
         "linearizedBaseContracts": [
-          1118
+          1319
         ],
         "name": "RegulatorStorage",
         "nodeType": "ContractDefinition",
         "nodes": [
           {
             "constant": false,
-            "id": 1095,
+            "id": 1278,
             "name": "permissions",
             "nodeType": "VariableDeclaration",
-            "scope": 1118,
-            "src": "230:34:3",
+            "scope": 1319,
+            "src": "230:34:5",
             "stateVariable": true,
             "storageLocation": "default",
             "typeDescriptions": {
-              "typeIdentifier": "t_contract$_PermissionSheet_$1089",
+              "typeIdentifier": "t_contract$_PermissionSheet_$1272",
               "typeString": "contract PermissionSheet"
             },
             "typeName": {
               "contractScope": null,
-              "id": 1094,
+              "id": 1277,
               "name": "PermissionSheet",
               "nodeType": "UserDefinedTypeName",
-              "referencedDeclaration": 1089,
-              "src": "230:15:3",
+              "referencedDeclaration": 1272,
+              "src": "230:15:5",
               "typeDescriptions": {
-                "typeIdentifier": "t_contract$_PermissionSheet_$1089",
+                "typeIdentifier": "t_contract$_PermissionSheet_$1272",
                 "typeString": "contract PermissionSheet"
               }
             },
@@ -508,26 +698,26 @@
           },
           {
             "constant": false,
-            "id": 1097,
+            "id": 1280,
             "name": "validators",
             "nodeType": "VariableDeclaration",
-            "scope": 1118,
-            "src": "271:32:3",
+            "scope": 1319,
+            "src": "271:32:5",
             "stateVariable": true,
             "storageLocation": "default",
             "typeDescriptions": {
-              "typeIdentifier": "t_contract$_ValidatorSheet_$1182",
+              "typeIdentifier": "t_contract$_ValidatorSheet_$1383",
               "typeString": "contract ValidatorSheet"
             },
             "typeName": {
               "contractScope": null,
-              "id": 1096,
+              "id": 1279,
               "name": "ValidatorSheet",
               "nodeType": "UserDefinedTypeName",
-              "referencedDeclaration": 1182,
-              "src": "271:14:3",
+              "referencedDeclaration": 1383,
+              "src": "271:14:5",
               "typeDescriptions": {
-                "typeIdentifier": "t_contract$_ValidatorSheet_$1182",
+                "typeIdentifier": "t_contract$_ValidatorSheet_$1383",
                 "typeString": "contract ValidatorSheet"
               }
             },
@@ -536,28 +726,28 @@
           },
           {
             "body": {
-              "id": 1116,
+              "id": 1299,
               "nodeType": "Block",
-              "src": "479:113:3",
+              "src": "479:113:5",
               "statements": [
                 {
                   "expression": {
                     "argumentTypes": null,
-                    "id": 1108,
+                    "id": 1291,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
                     "lValueRequested": false,
                     "leftHandSide": {
                       "argumentTypes": null,
-                      "id": 1104,
+                      "id": 1287,
                       "name": "permissions",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 1095,
-                      "src": "490:11:3",
+                      "referencedDeclaration": 1278,
+                      "src": "490:11:5",
                       "typeDescriptions": {
-                        "typeIdentifier": "t_contract$_PermissionSheet_$1089",
+                        "typeIdentifier": "t_contract$_PermissionSheet_$1272",
                         "typeString": "contract PermissionSheet"
                       }
                     },
@@ -568,12 +758,12 @@
                       "arguments": [
                         {
                           "argumentTypes": null,
-                          "id": 1106,
+                          "id": 1289,
                           "name": "_permissions",
                           "nodeType": "Identifier",
                           "overloadedDeclarations": [],
-                          "referencedDeclaration": 1099,
-                          "src": "520:12:3",
+                          "referencedDeclaration": 1282,
+                          "src": "520:12:5",
                           "typeDescriptions": {
                             "typeIdentifier": "t_address",
                             "typeString": "address"
@@ -587,18 +777,18 @@
                             "typeString": "address"
                           }
                         ],
-                        "id": 1105,
+                        "id": 1288,
                         "name": "PermissionSheet",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 1089,
-                        "src": "504:15:3",
+                        "referencedDeclaration": 1272,
+                        "src": "504:15:5",
                         "typeDescriptions": {
-                          "typeIdentifier": "t_type$_t_contract$_PermissionSheet_$1089_$",
+                          "typeIdentifier": "t_type$_t_contract$_PermissionSheet_$1272_$",
                           "typeString": "type(contract PermissionSheet)"
                         }
                       },
-                      "id": 1107,
+                      "id": 1290,
                       "isConstant": false,
                       "isLValue": false,
                       "isPure": false,
@@ -606,40 +796,40 @@
                       "lValueRequested": false,
                       "names": [],
                       "nodeType": "FunctionCall",
-                      "src": "504:29:3",
+                      "src": "504:29:5",
                       "typeDescriptions": {
-                        "typeIdentifier": "t_contract$_PermissionSheet_$1089",
+                        "typeIdentifier": "t_contract$_PermissionSheet_$1272",
                         "typeString": "contract PermissionSheet"
                       }
                     },
-                    "src": "490:43:3",
+                    "src": "490:43:5",
                     "typeDescriptions": {
-                      "typeIdentifier": "t_contract$_PermissionSheet_$1089",
+                      "typeIdentifier": "t_contract$_PermissionSheet_$1272",
                       "typeString": "contract PermissionSheet"
                     }
                   },
-                  "id": 1109,
+                  "id": 1292,
                   "nodeType": "ExpressionStatement",
-                  "src": "490:43:3"
+                  "src": "490:43:5"
                 },
                 {
                   "expression": {
                     "argumentTypes": null,
-                    "id": 1114,
+                    "id": 1297,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
                     "lValueRequested": false,
                     "leftHandSide": {
                       "argumentTypes": null,
-                      "id": 1110,
+                      "id": 1293,
                       "name": "validators",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 1097,
-                      "src": "544:10:3",
+                      "referencedDeclaration": 1280,
+                      "src": "544:10:5",
                       "typeDescriptions": {
-                        "typeIdentifier": "t_contract$_ValidatorSheet_$1182",
+                        "typeIdentifier": "t_contract$_ValidatorSheet_$1383",
                         "typeString": "contract ValidatorSheet"
                       }
                     },
@@ -650,12 +840,12 @@
                       "arguments": [
                         {
                           "argumentTypes": null,
-                          "id": 1112,
+                          "id": 1295,
                           "name": "_validators",
                           "nodeType": "Identifier",
                           "overloadedDeclarations": [],
-                          "referencedDeclaration": 1101,
-                          "src": "572:11:3",
+                          "referencedDeclaration": 1284,
+                          "src": "572:11:5",
                           "typeDescriptions": {
                             "typeIdentifier": "t_address",
                             "typeString": "address"
@@ -669,18 +859,18 @@
                             "typeString": "address"
                           }
                         ],
-                        "id": 1111,
+                        "id": 1294,
                         "name": "ValidatorSheet",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 1182,
-                        "src": "557:14:3",
+                        "referencedDeclaration": 1383,
+                        "src": "557:14:5",
                         "typeDescriptions": {
-                          "typeIdentifier": "t_type$_t_contract$_ValidatorSheet_$1182_$",
+                          "typeIdentifier": "t_type$_t_contract$_ValidatorSheet_$1383_$",
                           "typeString": "type(contract ValidatorSheet)"
                         }
                       },
-                      "id": 1113,
+                      "id": 1296,
                       "isConstant": false,
                       "isLValue": false,
                       "isPure": false,
@@ -688,26 +878,26 @@
                       "lValueRequested": false,
                       "names": [],
                       "nodeType": "FunctionCall",
-                      "src": "557:27:3",
+                      "src": "557:27:5",
                       "typeDescriptions": {
-                        "typeIdentifier": "t_contract$_ValidatorSheet_$1182",
+                        "typeIdentifier": "t_contract$_ValidatorSheet_$1383",
                         "typeString": "contract ValidatorSheet"
                       }
                     },
-                    "src": "544:40:3",
+                    "src": "544:40:5",
                     "typeDescriptions": {
-                      "typeIdentifier": "t_contract$_ValidatorSheet_$1182",
+                      "typeIdentifier": "t_contract$_ValidatorSheet_$1383",
                       "typeString": "contract ValidatorSheet"
                     }
                   },
-                  "id": 1115,
+                  "id": 1298,
                   "nodeType": "ExpressionStatement",
-                  "src": "544:40:3"
+                  "src": "544:40:5"
                 }
               ]
             },
             "documentation": "@dev a RegulatorStorage can set its storages only once, on construction\r\n\n    *",
-            "id": 1117,
+            "id": 1300,
             "implemented": true,
             "isConstructor": true,
             "isDeclaredConst": false,
@@ -715,16 +905,16 @@
             "name": "",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 1102,
+              "id": 1285,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 1099,
+                  "id": 1282,
                   "name": "_permissions",
                   "nodeType": "VariableDeclaration",
-                  "scope": 1117,
-                  "src": "429:20:3",
+                  "scope": 1300,
+                  "src": "429:20:5",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -732,10 +922,10 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 1098,
+                    "id": 1281,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
-                    "src": "429:7:3",
+                    "src": "429:7:5",
                     "typeDescriptions": {
                       "typeIdentifier": "t_address",
                       "typeString": "address"
@@ -746,11 +936,11 @@
                 },
                 {
                   "constant": false,
-                  "id": 1101,
+                  "id": 1284,
                   "name": "_validators",
                   "nodeType": "VariableDeclaration",
-                  "scope": 1117,
-                  "src": "451:19:3",
+                  "scope": 1300,
+                  "src": "451:19:5",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -758,10 +948,10 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 1100,
+                    "id": 1283,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
-                    "src": "451:7:3",
+                    "src": "451:7:5",
                     "typeDescriptions": {
                       "typeIdentifier": "t_address",
                       "typeString": "address"
@@ -771,27 +961,199 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "428:43:3"
+              "src": "428:43:5"
             },
             "payable": false,
             "returnParameters": {
-              "id": 1103,
+              "id": 1286,
               "nodeType": "ParameterList",
               "parameters": [],
-              "src": "479:0:3"
+              "src": "479:0:5"
             },
-            "scope": 1118,
-            "src": "416:176:3",
+            "scope": 1319,
+            "src": "416:176:5",
+            "stateMutability": "nonpayable",
+            "superFunction": null,
+            "visibility": "public"
+          },
+          {
+            "body": {
+              "id": 1308,
+              "nodeType": "Block",
+              "src": "734:47:5",
+              "statements": [
+                {
+                  "expression": {
+                    "argumentTypes": null,
+                    "arguments": [],
+                    "expression": {
+                      "argumentTypes": [],
+                      "expression": {
+                        "argumentTypes": null,
+                        "id": 1303,
+                        "name": "permissions",
+                        "nodeType": "Identifier",
+                        "overloadedDeclarations": [],
+                        "referencedDeclaration": 1278,
+                        "src": "745:11:5",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_contract$_PermissionSheet_$1272",
+                          "typeString": "contract PermissionSheet"
+                        }
+                      },
+                      "id": 1305,
+                      "isConstant": false,
+                      "isLValue": false,
+                      "isPure": false,
+                      "lValueRequested": false,
+                      "memberName": "claimOwnership",
+                      "nodeType": "MemberAccess",
+                      "referencedDeclaration": 1605,
+                      "src": "745:26:5",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_function_external_nonpayable$__$returns$__$",
+                        "typeString": "function () external"
+                      }
+                    },
+                    "id": 1306,
+                    "isConstant": false,
+                    "isLValue": false,
+                    "isPure": false,
+                    "kind": "functionCall",
+                    "lValueRequested": false,
+                    "names": [],
+                    "nodeType": "FunctionCall",
+                    "src": "745:28:5",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_tuple$__$",
+                      "typeString": "tuple()"
+                    }
+                  },
+                  "id": 1307,
+                  "nodeType": "ExpressionStatement",
+                  "src": "745:28:5"
+                }
+              ]
+            },
+            "documentation": "@dev claim ownership of permission sheet passed into constructor.\r*",
+            "id": 1309,
+            "implemented": true,
+            "isConstructor": false,
+            "isDeclaredConst": false,
+            "modifiers": [],
+            "name": "claimPermissionOwnership",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 1301,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "724:2:5"
+            },
+            "payable": false,
+            "returnParameters": {
+              "id": 1302,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "734:0:5"
+            },
+            "scope": 1319,
+            "src": "691:90:5",
+            "stateMutability": "nonpayable",
+            "superFunction": null,
+            "visibility": "public"
+          },
+          {
+            "body": {
+              "id": 1317,
+              "nodeType": "Block",
+              "src": "921:46:5",
+              "statements": [
+                {
+                  "expression": {
+                    "argumentTypes": null,
+                    "arguments": [],
+                    "expression": {
+                      "argumentTypes": [],
+                      "expression": {
+                        "argumentTypes": null,
+                        "id": 1312,
+                        "name": "validators",
+                        "nodeType": "Identifier",
+                        "overloadedDeclarations": [],
+                        "referencedDeclaration": 1280,
+                        "src": "932:10:5",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_contract$_ValidatorSheet_$1383",
+                          "typeString": "contract ValidatorSheet"
+                        }
+                      },
+                      "id": 1314,
+                      "isConstant": false,
+                      "isLValue": false,
+                      "isPure": false,
+                      "lValueRequested": false,
+                      "memberName": "claimOwnership",
+                      "nodeType": "MemberAccess",
+                      "referencedDeclaration": 1605,
+                      "src": "932:25:5",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_function_external_nonpayable$__$returns$__$",
+                        "typeString": "function () external"
+                      }
+                    },
+                    "id": 1315,
+                    "isConstant": false,
+                    "isLValue": false,
+                    "isPure": false,
+                    "kind": "functionCall",
+                    "lValueRequested": false,
+                    "names": [],
+                    "nodeType": "FunctionCall",
+                    "src": "932:27:5",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_tuple$__$",
+                      "typeString": "tuple()"
+                    }
+                  },
+                  "id": 1316,
+                  "nodeType": "ExpressionStatement",
+                  "src": "932:27:5"
+                }
+              ]
+            },
+            "documentation": "@dev claim ownership of validator sheet passed into constructor.\r*",
+            "id": 1318,
+            "implemented": true,
+            "isConstructor": false,
+            "isDeclaredConst": false,
+            "modifiers": [],
+            "name": "claimValidatorOwnership",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 1310,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "911:2:5"
+            },
+            "payable": false,
+            "returnParameters": {
+              "id": 1311,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "921:0:5"
+            },
+            "scope": 1319,
+            "src": "879:88:5",
             "stateMutability": "nonpayable",
             "superFunction": null,
             "visibility": "public"
           }
         ],
-        "scope": 1119,
-        "src": "166:429:3"
+        "scope": 1320,
+        "src": "166:804:5"
       }
     ],
-    "src": "0:595:3"
+    "src": "0:970:5"
   },
   "compiler": {
     "name": "solc",
@@ -799,5 +1161,5 @@
   },
   "networks": {},
   "schemaVersion": "2.0.1",
-  "updatedAt": "2018-08-17T17:50:39.518Z"
+  "updatedAt": "2018-08-17T20:11:37.914Z"
 }

@@ -1,6 +1,6 @@
 pragma solidity ^0.4.24;
 
-import "openzeppelin-solidity/contracts/ownership/Ownable.sol";
+import "openzeppelin-solidity/contracts/ownership/Claimable.sol";
 
 /**
  * @title PermissionSheet
@@ -10,7 +10,7 @@ import "openzeppelin-solidity/contracts/ownership/Ownable.sol";
  *
  */
 
-contract PermissionSheet is Ownable {
+contract PermissionSheet is Claimable {
 	
     /** 
         Mappings 

@@ -1,13 +1,13 @@
 pragma solidity ^0.4.24;
 
-import "openzeppelin-solidity/contracts/ownership/Ownable.sol";
+import "openzeppelin-solidity/contracts/ownership/Claimable.sol";
 
 /**
  * @title ValidatorSheet
  * @dev Stores all validators capable of adding permissions and setting user permissions
  *
  */
-contract ValidatorSheet is Ownable{
+contract ValidatorSheet is Claimable {
     /** 
         Mappings 
     */

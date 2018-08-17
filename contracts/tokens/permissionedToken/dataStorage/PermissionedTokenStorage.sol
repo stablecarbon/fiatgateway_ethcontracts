@@ -26,4 +26,18 @@ contract PermissionedTokenStorage {
         balances = BalanceSheet(_balances);
         allowances = AllowanceSheet(_allowances);
     }
+
+    /**
+    * @dev claim ownership of balance sheet passed into constructor.
+    **/
+    function claimBalanceOwnership() public {
+        balances.claimOwnership();
+    }
+
+    /**
+    * @dev claim ownership of allowance sheet passed into constructor.
+    **/
+    function claimAllowanceOwnership() public {
+        allowances.claimOwnership();
+    }
 }

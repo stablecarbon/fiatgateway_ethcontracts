@@ -20,9 +20,11 @@ function regulatorStorageBasicInteractionsTests(owner, user, validator, attacker
 
                 this.sheet = await Regulator.new(this.permissionSheet.address, this.validatorSheet.address, { from:owner })
 
-                // Must transfer ownership
+                // Must transfer and claim ownership
                 await this.permissionSheet.transferOwnership(this.sheet.address, {from:owner})
                 await this.validatorSheet.transferOwnership(this.sheet.address, {from:owner})
+                await this.sheet.claimPermissionOwnership()
+                await this.sheet.claimValidatorOwnership()
 
                 // Test Permission
                 this.testPermission = 0x12345678;

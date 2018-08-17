@@ -2,7 +2,7 @@ pragma solidity ^0.4.24;
 
 import "./RegulatorStorage.sol";
 import "openzeppelin-solidity/contracts/AddressUtils.sol";
-import "openzeppelin-solidity/contracts/ownership/Ownable.sol";
+import "openzeppelin-solidity/contracts/ownership/Claimable.sol";
 
 
 /**
@@ -10,7 +10,7 @@ import "openzeppelin-solidity/contracts/ownership/Ownable.sol";
 * @dev A MutableRegulatorStorage can upgrade its permission and validator sheet location
 *
 */
-contract MutableRegulatorStorage is Ownable, RegulatorStorage {
+contract MutableRegulatorStorage is Claimable, RegulatorStorage {
     // Events
     event ChangedPermissionStorage(address _old, address _new);
     event ChangedValidatorStorage(address _old, address _new);

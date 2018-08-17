@@ -61,26 +61,44 @@
       "payable": false,
       "stateMutability": "nonpayable",
       "type": "constructor"
+    },
+    {
+      "constant": false,
+      "inputs": [],
+      "name": "claimBalanceOwnership",
+      "outputs": [],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [],
+      "name": "claimAllowanceOwnership",
+      "outputs": [],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function"
     }
   ],
-  "bytecode": "0x608060405234801561001057600080fd5b506040516060806101c183398101604090815281516020830151919092015160008054600160a060020a0319908116600160a060020a0395861617825560018054821694861694909417909355600280549093169390911692909217905561014390819061007e90396000f3006080604052600436106100565763ffffffff7c01000000000000000000000000000000000000000000000000000000006000350416633ed10b92811461005b5780637bb98a6814610099578063dd8fee14146100ae575b600080fd5b34801561006757600080fd5b506100706100c3565b6040805173ffffffffffffffffffffffffffffffffffffffff9092168252519081900360200190f35b3480156100a557600080fd5b506100706100df565b3480156100ba57600080fd5b506100706100fb565b60025473ffffffffffffffffffffffffffffffffffffffff1681565b60015473ffffffffffffffffffffffffffffffffffffffff1681565b60005473ffffffffffffffffffffffffffffffffffffffff16815600a165627a7a723058207dd48c3cdb7b77bbccc20c93dbfc8af44a33d7df12067b5c0d4ef0c670c0b4b90029",
-  "deployedBytecode": "0x6080604052600436106100565763ffffffff7c01000000000000000000000000000000000000000000000000000000006000350416633ed10b92811461005b5780637bb98a6814610099578063dd8fee14146100ae575b600080fd5b34801561006757600080fd5b506100706100c3565b6040805173ffffffffffffffffffffffffffffffffffffffff9092168252519081900360200190f35b3480156100a557600080fd5b506100706100df565b3480156100ba57600080fd5b506100706100fb565b60025473ffffffffffffffffffffffffffffffffffffffff1681565b60015473ffffffffffffffffffffffffffffffffffffffff1681565b60005473ffffffffffffffffffffffffffffffffffffffff16815600a165627a7a723058207dd48c3cdb7b77bbccc20c93dbfc8af44a33d7df12067b5c0d4ef0c670c0b4b90029",
-  "sourceMap": "353:535:14:-;;;657:228;8:9:-1;5:2;;;30:1;27;20:12;5:2;657:228:14;;;;;;;;;;;;;;;;;;;;;;;;;748:9;:33;;-1:-1:-1;;;;;;748:33:14;;;-1:-1:-1;;;;;748:33:14;;;;;;-1:-1:-1;792:34:14;;;;;;;;;;;;;;837:10;:40;;;;;;;;;;;;;;;353:535;;;;;;;;",
-  "deployedSourceMap": "353:535:14:-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;496:32;;8:9:-1;5:2;;;30:1;27;20:12;5:2;496:32:14;;;;;;;;;;;;;;;;;;;;;;;461:28;;8:9:-1;5:2;;;30:1;27;20:12;5:2;461:28:14;;;;428:26;;8:9:-1;5:2;;;30:1;27;20:12;5:2;428:26:14;;;;496:32;;;;;;:::o;461:28::-;;;;;;:::o;428:26::-;;;;;;:::o",
-  "source": "pragma solidity ^0.4.24;\r\n\r\nimport \"./AllowanceSheet.sol\";\r\nimport \"./BalanceSheet.sol\";\r\nimport \"../../../regulator/Regulator.sol\";\r\n\r\n/**\r\n* @title PermissionedTokenStorage\r\n* @notice a PermissionedTokenStorage is constructed by setting Regulator, BalanceSheet, and AllowanceSheet locations.\r\n* Once the storages are set, they cannot be changed.\r\n*/\r\ncontract PermissionedTokenStorage {\r\n    /**\r\n        Storage\r\n    */\r\n    Regulator public regulator;\r\n    BalanceSheet public balances;\r\n    AllowanceSheet public allowances;\r\n\r\n    /**\r\n    * @dev a PermissionedTokenStorageConsumer can set its storages only once, on construction\r\n    *\r\n    **/\r\n    constructor (address _regulator, address _balances, address _allowances) public {\r\n        regulator = Regulator(_regulator);\r\n        balances = BalanceSheet(_balances);\r\n        allowances = AllowanceSheet(_allowances);\r\n    }\r\n}",
+  "bytecode": "0x608060405234801561001057600080fd5b5060405160608061032983398101604090815281516020830151919092015160008054600160a060020a0319908116600160a060020a039586161782556001805482169486169490941790935560028054909316939091169290921790556102ab90819061007e90396000f30060806040526004361061006c5763ffffffff7c01000000000000000000000000000000000000000000000000000000006000350416633ed10b9281146100715780637bb98a68146100af5780638955ed7e146100c45780639b2bdc20146100db578063dd8fee14146100f0575b600080fd5b34801561007d57600080fd5b50610086610105565b6040805173ffffffffffffffffffffffffffffffffffffffff9092168252519081900360200190f35b3480156100bb57600080fd5b50610086610121565b3480156100d057600080fd5b506100d961013d565b005b3480156100e757600080fd5b506100d96101dd565b3480156100fc57600080fd5b50610086610263565b60025473ffffffffffffffffffffffffffffffffffffffff1681565b60015473ffffffffffffffffffffffffffffffffffffffff1681565b600160009054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16634e71e0c86040518163ffffffff167c0100000000000000000000000000000000000000000000000000000000028152600401600060405180830381600087803b1580156101c357600080fd5b505af11580156101d7573d6000803e3d6000fd5b50505050565b600260009054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16634e71e0c86040518163ffffffff167c0100000000000000000000000000000000000000000000000000000000028152600401600060405180830381600087803b1580156101c357600080fd5b60005473ffffffffffffffffffffffffffffffffffffffff16815600a165627a7a72305820f087ca9f02965bbfa9c57c8043c7b03176daf8d306d2129f404cd0c15b4885f90029",
+  "deployedBytecode": "0x60806040526004361061006c5763ffffffff7c01000000000000000000000000000000000000000000000000000000006000350416633ed10b9281146100715780637bb98a68146100af5780638955ed7e146100c45780639b2bdc20146100db578063dd8fee14146100f0575b600080fd5b34801561007d57600080fd5b50610086610105565b6040805173ffffffffffffffffffffffffffffffffffffffff9092168252519081900360200190f35b3480156100bb57600080fd5b50610086610121565b3480156100d057600080fd5b506100d961013d565b005b3480156100e757600080fd5b506100d96101dd565b3480156100fc57600080fd5b50610086610263565b60025473ffffffffffffffffffffffffffffffffffffffff1681565b60015473ffffffffffffffffffffffffffffffffffffffff1681565b600160009054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16634e71e0c86040518163ffffffff167c0100000000000000000000000000000000000000000000000000000000028152600401600060405180830381600087803b1580156101c357600080fd5b505af11580156101d7573d6000803e3d6000fd5b50505050565b600260009054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16634e71e0c86040518163ffffffff167c0100000000000000000000000000000000000000000000000000000000028152600401600060405180830381600087803b1580156101c357600080fd5b60005473ffffffffffffffffffffffffffffffffffffffff16815600a165627a7a72305820f087ca9f02965bbfa9c57c8043c7b03176daf8d306d2129f404cd0c15b4885f90029",
+  "sourceMap": "353:901:24:-;;;657:228;8:9:-1;5:2;;;30:1;27;20:12;5:2;657:228:24;;;;;;;;;;;;;;;;;;;;;;;;;748:9;:33;;-1:-1:-1;;;;;;748:33:24;;;-1:-1:-1;;;;;748:33:24;;;;;;-1:-1:-1;792:34:24;;;;;;;;;;;;;;837:10;:40;;;;;;;;;;;;;;;353:901;;;;;;;;",
+  "deployedSourceMap": "353:901:24:-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;496:32;;8:9:-1;5:2;;;30:1;27;20:12;5:2;496:32:24;;;;;;;;;;;;;;;;;;;;;;;461:28;;8:9:-1;5:2;;;30:1;27;20:12;5:2;461:28:24;;;;981:84;;8:9:-1;5:2;;;30:1;27;20:12;5:2;981:84:24;;;;;;1163:88;;8:9:-1;5:2;;;30:1;27;20:12;5:2;1163:88:24;;;;428:26;;8:9:-1;5:2;;;30:1;27;20:12;5:2;428:26:24;;;;496:32;;;;;;:::o;461:28::-;;;;;;:::o;981:84::-;1032:8;;;;;;;;;;;:23;;;:25;;;;;;;;;;;;;;;;;;;;;;;8:9:-1;5:2;;;30:1;27;20:12;5:2;1032:25:24;;;;8:9:-1;5:2;;;45:16;42:1;39;24:38;77:16;74:1;67:27;5:2;1032:25:24;;;;981:84::o;1163:88::-;1216:10;;;;;;;;;;;:25;;;:27;;;;;;;;;;;;;;;;;;;;;;;8:9:-1;5:2;;;30:1;27;20:12;428:26:24;;;;;;:::o",
+  "source": "pragma solidity ^0.4.24;\r\n\r\nimport \"./AllowanceSheet.sol\";\r\nimport \"./BalanceSheet.sol\";\r\nimport \"../../../regulator/Regulator.sol\";\r\n\r\n/**\r\n* @title PermissionedTokenStorage\r\n* @notice a PermissionedTokenStorage is constructed by setting Regulator, BalanceSheet, and AllowanceSheet locations.\r\n* Once the storages are set, they cannot be changed.\r\n*/\r\ncontract PermissionedTokenStorage {\r\n    /**\r\n        Storage\r\n    */\r\n    Regulator public regulator;\r\n    BalanceSheet public balances;\r\n    AllowanceSheet public allowances;\r\n\r\n    /**\r\n    * @dev a PermissionedTokenStorageConsumer can set its storages only once, on construction\r\n    *\r\n    **/\r\n    constructor (address _regulator, address _balances, address _allowances) public {\r\n        regulator = Regulator(_regulator);\r\n        balances = BalanceSheet(_balances);\r\n        allowances = AllowanceSheet(_allowances);\r\n    }\r\n\r\n    /**\r\n    * @dev claim ownership of balance sheet passed into constructor.\r\n    **/\r\n    function claimBalanceOwnership() public {\r\n        balances.claimOwnership();\r\n    }\r\n\r\n    /**\r\n    * @dev claim ownership of allowance sheet passed into constructor.\r\n    **/\r\n    function claimAllowanceOwnership() public {\r\n        allowances.claimOwnership();\r\n    }\r\n}",
   "sourcePath": "C:\\Users\\npain\\Projects\\Carbon\\fiat_gateway\\contracts\\tokens\\permissionedToken\\dataStorage\\PermissionedTokenStorage.sol",
   "ast": {
     "absolutePath": "/C/Users/npain/Projects/Carbon/fiat_gateway/contracts/tokens/permissionedToken/dataStorage/PermissionedTokenStorage.sol",
     "exportedSymbols": {
       "PermissionedTokenStorage": [
-        3180
+        4526
       ]
     },
-    "id": 3181,
+    "id": 4527,
     "nodeType": "SourceUnit",
     "nodes": [
       {
-        "id": 3142,
+        "id": 4470,
         "literals": [
           "solidity",
           "^",
@@ -88,38 +106,38 @@
           ".24"
         ],
         "nodeType": "PragmaDirective",
-        "src": "0:24:14"
+        "src": "0:24:24"
       },
       {
         "absolutePath": "/C/Users/npain/Projects/Carbon/fiat_gateway/contracts/tokens/permissionedToken/dataStorage/AllowanceSheet.sol",
         "file": "./AllowanceSheet.sol",
-        "id": 3143,
+        "id": 4471,
         "nodeType": "ImportDirective",
-        "scope": 3181,
-        "sourceUnit": 2856,
-        "src": "28:30:14",
+        "scope": 4527,
+        "sourceUnit": 4184,
+        "src": "28:30:24",
         "symbolAliases": [],
         "unitAlias": ""
       },
       {
         "absolutePath": "/C/Users/npain/Projects/Carbon/fiat_gateway/contracts/tokens/permissionedToken/dataStorage/BalanceSheet.sol",
         "file": "./BalanceSheet.sol",
-        "id": 3144,
+        "id": 4472,
         "nodeType": "ImportDirective",
-        "scope": 3181,
-        "sourceUnit": 2972,
-        "src": "60:28:14",
+        "scope": 4527,
+        "sourceUnit": 4300,
+        "src": "60:28:24",
         "symbolAliases": [],
         "unitAlias": ""
       },
       {
         "absolutePath": "/C/Users/npain/Projects/Carbon/fiat_gateway/contracts/regulator/Regulator.sol",
         "file": "../../../regulator/Regulator.sol",
-        "id": 3145,
+        "id": 4473,
         "nodeType": "ImportDirective",
-        "scope": 3181,
-        "sourceUnit": 733,
-        "src": "90:42:14",
+        "scope": 4527,
+        "sourceUnit": 1151,
+        "src": "90:42:24",
         "symbolAliases": [],
         "unitAlias": ""
       },
@@ -129,35 +147,35 @@
         "contractKind": "contract",
         "documentation": "@title PermissionedTokenStorage\r\n@notice a PermissionedTokenStorage is constructed by setting Regulator, BalanceSheet, and AllowanceSheet locations.\r\nOnce the storages are set, they cannot be changed.\r",
         "fullyImplemented": true,
-        "id": 3180,
+        "id": 4526,
         "linearizedBaseContracts": [
-          3180
+          4526
         ],
         "name": "PermissionedTokenStorage",
         "nodeType": "ContractDefinition",
         "nodes": [
           {
             "constant": false,
-            "id": 3147,
+            "id": 4475,
             "name": "regulator",
             "nodeType": "VariableDeclaration",
-            "scope": 3180,
-            "src": "428:26:14",
+            "scope": 4526,
+            "src": "428:26:24",
             "stateVariable": true,
             "storageLocation": "default",
             "typeDescriptions": {
-              "typeIdentifier": "t_contract$_Regulator_$732",
+              "typeIdentifier": "t_contract$_Regulator_$1150",
               "typeString": "contract Regulator"
             },
             "typeName": {
               "contractScope": null,
-              "id": 3146,
+              "id": 4474,
               "name": "Regulator",
               "nodeType": "UserDefinedTypeName",
-              "referencedDeclaration": 732,
-              "src": "428:9:14",
+              "referencedDeclaration": 1150,
+              "src": "428:9:24",
               "typeDescriptions": {
-                "typeIdentifier": "t_contract$_Regulator_$732",
+                "typeIdentifier": "t_contract$_Regulator_$1150",
                 "typeString": "contract Regulator"
               }
             },
@@ -166,26 +184,26 @@
           },
           {
             "constant": false,
-            "id": 3149,
+            "id": 4477,
             "name": "balances",
             "nodeType": "VariableDeclaration",
-            "scope": 3180,
-            "src": "461:28:14",
+            "scope": 4526,
+            "src": "461:28:24",
             "stateVariable": true,
             "storageLocation": "default",
             "typeDescriptions": {
-              "typeIdentifier": "t_contract$_BalanceSheet_$2971",
+              "typeIdentifier": "t_contract$_BalanceSheet_$4299",
               "typeString": "contract BalanceSheet"
             },
             "typeName": {
               "contractScope": null,
-              "id": 3148,
+              "id": 4476,
               "name": "BalanceSheet",
               "nodeType": "UserDefinedTypeName",
-              "referencedDeclaration": 2971,
-              "src": "461:12:14",
+              "referencedDeclaration": 4299,
+              "src": "461:12:24",
               "typeDescriptions": {
-                "typeIdentifier": "t_contract$_BalanceSheet_$2971",
+                "typeIdentifier": "t_contract$_BalanceSheet_$4299",
                 "typeString": "contract BalanceSheet"
               }
             },
@@ -194,26 +212,26 @@
           },
           {
             "constant": false,
-            "id": 3151,
+            "id": 4479,
             "name": "allowances",
             "nodeType": "VariableDeclaration",
-            "scope": 3180,
-            "src": "496:32:14",
+            "scope": 4526,
+            "src": "496:32:24",
             "stateVariable": true,
             "storageLocation": "default",
             "typeDescriptions": {
-              "typeIdentifier": "t_contract$_AllowanceSheet_$2855",
+              "typeIdentifier": "t_contract$_AllowanceSheet_$4183",
               "typeString": "contract AllowanceSheet"
             },
             "typeName": {
               "contractScope": null,
-              "id": 3150,
+              "id": 4478,
               "name": "AllowanceSheet",
               "nodeType": "UserDefinedTypeName",
-              "referencedDeclaration": 2855,
-              "src": "496:14:14",
+              "referencedDeclaration": 4183,
+              "src": "496:14:24",
               "typeDescriptions": {
-                "typeIdentifier": "t_contract$_AllowanceSheet_$2855",
+                "typeIdentifier": "t_contract$_AllowanceSheet_$4183",
                 "typeString": "contract AllowanceSheet"
               }
             },
@@ -222,28 +240,28 @@
           },
           {
             "body": {
-              "id": 3178,
+              "id": 4506,
               "nodeType": "Block",
-              "src": "737:148:14",
+              "src": "737:148:24",
               "statements": [
                 {
                   "expression": {
                     "argumentTypes": null,
-                    "id": 3164,
+                    "id": 4492,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
                     "lValueRequested": false,
                     "leftHandSide": {
                       "argumentTypes": null,
-                      "id": 3160,
+                      "id": 4488,
                       "name": "regulator",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 3147,
-                      "src": "748:9:14",
+                      "referencedDeclaration": 4475,
+                      "src": "748:9:24",
                       "typeDescriptions": {
-                        "typeIdentifier": "t_contract$_Regulator_$732",
+                        "typeIdentifier": "t_contract$_Regulator_$1150",
                         "typeString": "contract Regulator"
                       }
                     },
@@ -254,12 +272,12 @@
                       "arguments": [
                         {
                           "argumentTypes": null,
-                          "id": 3162,
+                          "id": 4490,
                           "name": "_regulator",
                           "nodeType": "Identifier",
                           "overloadedDeclarations": [],
-                          "referencedDeclaration": 3153,
-                          "src": "770:10:14",
+                          "referencedDeclaration": 4481,
+                          "src": "770:10:24",
                           "typeDescriptions": {
                             "typeIdentifier": "t_address",
                             "typeString": "address"
@@ -273,18 +291,18 @@
                             "typeString": "address"
                           }
                         ],
-                        "id": 3161,
+                        "id": 4489,
                         "name": "Regulator",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 732,
-                        "src": "760:9:14",
+                        "referencedDeclaration": 1150,
+                        "src": "760:9:24",
                         "typeDescriptions": {
-                          "typeIdentifier": "t_type$_t_contract$_Regulator_$732_$",
+                          "typeIdentifier": "t_type$_t_contract$_Regulator_$1150_$",
                           "typeString": "type(contract Regulator)"
                         }
                       },
-                      "id": 3163,
+                      "id": 4491,
                       "isConstant": false,
                       "isLValue": false,
                       "isPure": false,
@@ -292,40 +310,40 @@
                       "lValueRequested": false,
                       "names": [],
                       "nodeType": "FunctionCall",
-                      "src": "760:21:14",
+                      "src": "760:21:24",
                       "typeDescriptions": {
-                        "typeIdentifier": "t_contract$_Regulator_$732",
+                        "typeIdentifier": "t_contract$_Regulator_$1150",
                         "typeString": "contract Regulator"
                       }
                     },
-                    "src": "748:33:14",
+                    "src": "748:33:24",
                     "typeDescriptions": {
-                      "typeIdentifier": "t_contract$_Regulator_$732",
+                      "typeIdentifier": "t_contract$_Regulator_$1150",
                       "typeString": "contract Regulator"
                     }
                   },
-                  "id": 3165,
+                  "id": 4493,
                   "nodeType": "ExpressionStatement",
-                  "src": "748:33:14"
+                  "src": "748:33:24"
                 },
                 {
                   "expression": {
                     "argumentTypes": null,
-                    "id": 3170,
+                    "id": 4498,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
                     "lValueRequested": false,
                     "leftHandSide": {
                       "argumentTypes": null,
-                      "id": 3166,
+                      "id": 4494,
                       "name": "balances",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 3149,
-                      "src": "792:8:14",
+                      "referencedDeclaration": 4477,
+                      "src": "792:8:24",
                       "typeDescriptions": {
-                        "typeIdentifier": "t_contract$_BalanceSheet_$2971",
+                        "typeIdentifier": "t_contract$_BalanceSheet_$4299",
                         "typeString": "contract BalanceSheet"
                       }
                     },
@@ -336,12 +354,12 @@
                       "arguments": [
                         {
                           "argumentTypes": null,
-                          "id": 3168,
+                          "id": 4496,
                           "name": "_balances",
                           "nodeType": "Identifier",
                           "overloadedDeclarations": [],
-                          "referencedDeclaration": 3155,
-                          "src": "816:9:14",
+                          "referencedDeclaration": 4483,
+                          "src": "816:9:24",
                           "typeDescriptions": {
                             "typeIdentifier": "t_address",
                             "typeString": "address"
@@ -355,18 +373,18 @@
                             "typeString": "address"
                           }
                         ],
-                        "id": 3167,
+                        "id": 4495,
                         "name": "BalanceSheet",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 2971,
-                        "src": "803:12:14",
+                        "referencedDeclaration": 4299,
+                        "src": "803:12:24",
                         "typeDescriptions": {
-                          "typeIdentifier": "t_type$_t_contract$_BalanceSheet_$2971_$",
+                          "typeIdentifier": "t_type$_t_contract$_BalanceSheet_$4299_$",
                           "typeString": "type(contract BalanceSheet)"
                         }
                       },
-                      "id": 3169,
+                      "id": 4497,
                       "isConstant": false,
                       "isLValue": false,
                       "isPure": false,
@@ -374,40 +392,40 @@
                       "lValueRequested": false,
                       "names": [],
                       "nodeType": "FunctionCall",
-                      "src": "803:23:14",
+                      "src": "803:23:24",
                       "typeDescriptions": {
-                        "typeIdentifier": "t_contract$_BalanceSheet_$2971",
+                        "typeIdentifier": "t_contract$_BalanceSheet_$4299",
                         "typeString": "contract BalanceSheet"
                       }
                     },
-                    "src": "792:34:14",
+                    "src": "792:34:24",
                     "typeDescriptions": {
-                      "typeIdentifier": "t_contract$_BalanceSheet_$2971",
+                      "typeIdentifier": "t_contract$_BalanceSheet_$4299",
                       "typeString": "contract BalanceSheet"
                     }
                   },
-                  "id": 3171,
+                  "id": 4499,
                   "nodeType": "ExpressionStatement",
-                  "src": "792:34:14"
+                  "src": "792:34:24"
                 },
                 {
                   "expression": {
                     "argumentTypes": null,
-                    "id": 3176,
+                    "id": 4504,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
                     "lValueRequested": false,
                     "leftHandSide": {
                       "argumentTypes": null,
-                      "id": 3172,
+                      "id": 4500,
                       "name": "allowances",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 3151,
-                      "src": "837:10:14",
+                      "referencedDeclaration": 4479,
+                      "src": "837:10:24",
                       "typeDescriptions": {
-                        "typeIdentifier": "t_contract$_AllowanceSheet_$2855",
+                        "typeIdentifier": "t_contract$_AllowanceSheet_$4183",
                         "typeString": "contract AllowanceSheet"
                       }
                     },
@@ -418,12 +436,12 @@
                       "arguments": [
                         {
                           "argumentTypes": null,
-                          "id": 3174,
+                          "id": 4502,
                           "name": "_allowances",
                           "nodeType": "Identifier",
                           "overloadedDeclarations": [],
-                          "referencedDeclaration": 3157,
-                          "src": "865:11:14",
+                          "referencedDeclaration": 4485,
+                          "src": "865:11:24",
                           "typeDescriptions": {
                             "typeIdentifier": "t_address",
                             "typeString": "address"
@@ -437,18 +455,18 @@
                             "typeString": "address"
                           }
                         ],
-                        "id": 3173,
+                        "id": 4501,
                         "name": "AllowanceSheet",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 2855,
-                        "src": "850:14:14",
+                        "referencedDeclaration": 4183,
+                        "src": "850:14:24",
                         "typeDescriptions": {
-                          "typeIdentifier": "t_type$_t_contract$_AllowanceSheet_$2855_$",
+                          "typeIdentifier": "t_type$_t_contract$_AllowanceSheet_$4183_$",
                           "typeString": "type(contract AllowanceSheet)"
                         }
                       },
-                      "id": 3175,
+                      "id": 4503,
                       "isConstant": false,
                       "isLValue": false,
                       "isPure": false,
@@ -456,26 +474,26 @@
                       "lValueRequested": false,
                       "names": [],
                       "nodeType": "FunctionCall",
-                      "src": "850:27:14",
+                      "src": "850:27:24",
                       "typeDescriptions": {
-                        "typeIdentifier": "t_contract$_AllowanceSheet_$2855",
+                        "typeIdentifier": "t_contract$_AllowanceSheet_$4183",
                         "typeString": "contract AllowanceSheet"
                       }
                     },
-                    "src": "837:40:14",
+                    "src": "837:40:24",
                     "typeDescriptions": {
-                      "typeIdentifier": "t_contract$_AllowanceSheet_$2855",
+                      "typeIdentifier": "t_contract$_AllowanceSheet_$4183",
                       "typeString": "contract AllowanceSheet"
                     }
                   },
-                  "id": 3177,
+                  "id": 4505,
                   "nodeType": "ExpressionStatement",
-                  "src": "837:40:14"
+                  "src": "837:40:24"
                 }
               ]
             },
             "documentation": "@dev a PermissionedTokenStorageConsumer can set its storages only once, on construction\r\n\n    *",
-            "id": 3179,
+            "id": 4507,
             "implemented": true,
             "isConstructor": true,
             "isDeclaredConst": false,
@@ -483,16 +501,16 @@
             "name": "",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 3158,
+              "id": 4486,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 3153,
+                  "id": 4481,
                   "name": "_regulator",
                   "nodeType": "VariableDeclaration",
-                  "scope": 3179,
-                  "src": "670:18:14",
+                  "scope": 4507,
+                  "src": "670:18:24",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -500,10 +518,10 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 3152,
+                    "id": 4480,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
-                    "src": "670:7:14",
+                    "src": "670:7:24",
                     "typeDescriptions": {
                       "typeIdentifier": "t_address",
                       "typeString": "address"
@@ -514,11 +532,11 @@
                 },
                 {
                   "constant": false,
-                  "id": 3155,
+                  "id": 4483,
                   "name": "_balances",
                   "nodeType": "VariableDeclaration",
-                  "scope": 3179,
-                  "src": "690:17:14",
+                  "scope": 4507,
+                  "src": "690:17:24",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -526,10 +544,10 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 3154,
+                    "id": 4482,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
-                    "src": "690:7:14",
+                    "src": "690:7:24",
                     "typeDescriptions": {
                       "typeIdentifier": "t_address",
                       "typeString": "address"
@@ -540,11 +558,11 @@
                 },
                 {
                   "constant": false,
-                  "id": 3157,
+                  "id": 4485,
                   "name": "_allowances",
                   "nodeType": "VariableDeclaration",
-                  "scope": 3179,
-                  "src": "709:19:14",
+                  "scope": 4507,
+                  "src": "709:19:24",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -552,10 +570,10 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 3156,
+                    "id": 4484,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
-                    "src": "709:7:14",
+                    "src": "709:7:24",
                     "typeDescriptions": {
                       "typeIdentifier": "t_address",
                       "typeString": "address"
@@ -565,40 +583,212 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "669:60:14"
+              "src": "669:60:24"
             },
             "payable": false,
             "returnParameters": {
-              "id": 3159,
+              "id": 4487,
               "nodeType": "ParameterList",
               "parameters": [],
-              "src": "737:0:14"
+              "src": "737:0:24"
             },
-            "scope": 3180,
-            "src": "657:228:14",
+            "scope": 4526,
+            "src": "657:228:24",
+            "stateMutability": "nonpayable",
+            "superFunction": null,
+            "visibility": "public"
+          },
+          {
+            "body": {
+              "id": 4515,
+              "nodeType": "Block",
+              "src": "1021:44:24",
+              "statements": [
+                {
+                  "expression": {
+                    "argumentTypes": null,
+                    "arguments": [],
+                    "expression": {
+                      "argumentTypes": [],
+                      "expression": {
+                        "argumentTypes": null,
+                        "id": 4510,
+                        "name": "balances",
+                        "nodeType": "Identifier",
+                        "overloadedDeclarations": [],
+                        "referencedDeclaration": 4477,
+                        "src": "1032:8:24",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_contract$_BalanceSheet_$4299",
+                          "typeString": "contract BalanceSheet"
+                        }
+                      },
+                      "id": 4512,
+                      "isConstant": false,
+                      "isLValue": false,
+                      "isPure": false,
+                      "lValueRequested": false,
+                      "memberName": "claimOwnership",
+                      "nodeType": "MemberAccess",
+                      "referencedDeclaration": 5080,
+                      "src": "1032:23:24",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_function_external_nonpayable$__$returns$__$",
+                        "typeString": "function () external"
+                      }
+                    },
+                    "id": 4513,
+                    "isConstant": false,
+                    "isLValue": false,
+                    "isPure": false,
+                    "kind": "functionCall",
+                    "lValueRequested": false,
+                    "names": [],
+                    "nodeType": "FunctionCall",
+                    "src": "1032:25:24",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_tuple$__$",
+                      "typeString": "tuple()"
+                    }
+                  },
+                  "id": 4514,
+                  "nodeType": "ExpressionStatement",
+                  "src": "1032:25:24"
+                }
+              ]
+            },
+            "documentation": "@dev claim ownership of balance sheet passed into constructor.\r*",
+            "id": 4516,
+            "implemented": true,
+            "isConstructor": false,
+            "isDeclaredConst": false,
+            "modifiers": [],
+            "name": "claimBalanceOwnership",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 4508,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "1011:2:24"
+            },
+            "payable": false,
+            "returnParameters": {
+              "id": 4509,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "1021:0:24"
+            },
+            "scope": 4526,
+            "src": "981:84:24",
+            "stateMutability": "nonpayable",
+            "superFunction": null,
+            "visibility": "public"
+          },
+          {
+            "body": {
+              "id": 4524,
+              "nodeType": "Block",
+              "src": "1205:46:24",
+              "statements": [
+                {
+                  "expression": {
+                    "argumentTypes": null,
+                    "arguments": [],
+                    "expression": {
+                      "argumentTypes": [],
+                      "expression": {
+                        "argumentTypes": null,
+                        "id": 4519,
+                        "name": "allowances",
+                        "nodeType": "Identifier",
+                        "overloadedDeclarations": [],
+                        "referencedDeclaration": 4479,
+                        "src": "1216:10:24",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_contract$_AllowanceSheet_$4183",
+                          "typeString": "contract AllowanceSheet"
+                        }
+                      },
+                      "id": 4521,
+                      "isConstant": false,
+                      "isLValue": false,
+                      "isPure": false,
+                      "lValueRequested": false,
+                      "memberName": "claimOwnership",
+                      "nodeType": "MemberAccess",
+                      "referencedDeclaration": 5080,
+                      "src": "1216:25:24",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_function_external_nonpayable$__$returns$__$",
+                        "typeString": "function () external"
+                      }
+                    },
+                    "id": 4522,
+                    "isConstant": false,
+                    "isLValue": false,
+                    "isPure": false,
+                    "kind": "functionCall",
+                    "lValueRequested": false,
+                    "names": [],
+                    "nodeType": "FunctionCall",
+                    "src": "1216:27:24",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_tuple$__$",
+                      "typeString": "tuple()"
+                    }
+                  },
+                  "id": 4523,
+                  "nodeType": "ExpressionStatement",
+                  "src": "1216:27:24"
+                }
+              ]
+            },
+            "documentation": "@dev claim ownership of allowance sheet passed into constructor.\r*",
+            "id": 4525,
+            "implemented": true,
+            "isConstructor": false,
+            "isDeclaredConst": false,
+            "modifiers": [],
+            "name": "claimAllowanceOwnership",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 4517,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "1195:2:24"
+            },
+            "payable": false,
+            "returnParameters": {
+              "id": 4518,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "1205:0:24"
+            },
+            "scope": 4526,
+            "src": "1163:88:24",
             "stateMutability": "nonpayable",
             "superFunction": null,
             "visibility": "public"
           }
         ],
-        "scope": 3181,
-        "src": "353:535:14"
+        "scope": 4527,
+        "src": "353:901:24"
       }
     ],
-    "src": "0:888:14"
+    "src": "0:1254:24"
   },
   "legacyAST": {
     "absolutePath": "/C/Users/npain/Projects/Carbon/fiat_gateway/contracts/tokens/permissionedToken/dataStorage/PermissionedTokenStorage.sol",
     "exportedSymbols": {
       "PermissionedTokenStorage": [
-        3180
+        4526
       ]
     },
-    "id": 3181,
+    "id": 4527,
     "nodeType": "SourceUnit",
     "nodes": [
       {
-        "id": 3142,
+        "id": 4470,
         "literals": [
           "solidity",
           "^",
@@ -606,38 +796,38 @@
           ".24"
         ],
         "nodeType": "PragmaDirective",
-        "src": "0:24:14"
+        "src": "0:24:24"
       },
       {
         "absolutePath": "/C/Users/npain/Projects/Carbon/fiat_gateway/contracts/tokens/permissionedToken/dataStorage/AllowanceSheet.sol",
         "file": "./AllowanceSheet.sol",
-        "id": 3143,
+        "id": 4471,
         "nodeType": "ImportDirective",
-        "scope": 3181,
-        "sourceUnit": 2856,
-        "src": "28:30:14",
+        "scope": 4527,
+        "sourceUnit": 4184,
+        "src": "28:30:24",
         "symbolAliases": [],
         "unitAlias": ""
       },
       {
         "absolutePath": "/C/Users/npain/Projects/Carbon/fiat_gateway/contracts/tokens/permissionedToken/dataStorage/BalanceSheet.sol",
         "file": "./BalanceSheet.sol",
-        "id": 3144,
+        "id": 4472,
         "nodeType": "ImportDirective",
-        "scope": 3181,
-        "sourceUnit": 2972,
-        "src": "60:28:14",
+        "scope": 4527,
+        "sourceUnit": 4300,
+        "src": "60:28:24",
         "symbolAliases": [],
         "unitAlias": ""
       },
       {
         "absolutePath": "/C/Users/npain/Projects/Carbon/fiat_gateway/contracts/regulator/Regulator.sol",
         "file": "../../../regulator/Regulator.sol",
-        "id": 3145,
+        "id": 4473,
         "nodeType": "ImportDirective",
-        "scope": 3181,
-        "sourceUnit": 733,
-        "src": "90:42:14",
+        "scope": 4527,
+        "sourceUnit": 1151,
+        "src": "90:42:24",
         "symbolAliases": [],
         "unitAlias": ""
       },
@@ -647,35 +837,35 @@
         "contractKind": "contract",
         "documentation": "@title PermissionedTokenStorage\r\n@notice a PermissionedTokenStorage is constructed by setting Regulator, BalanceSheet, and AllowanceSheet locations.\r\nOnce the storages are set, they cannot be changed.\r",
         "fullyImplemented": true,
-        "id": 3180,
+        "id": 4526,
         "linearizedBaseContracts": [
-          3180
+          4526
         ],
         "name": "PermissionedTokenStorage",
         "nodeType": "ContractDefinition",
         "nodes": [
           {
             "constant": false,
-            "id": 3147,
+            "id": 4475,
             "name": "regulator",
             "nodeType": "VariableDeclaration",
-            "scope": 3180,
-            "src": "428:26:14",
+            "scope": 4526,
+            "src": "428:26:24",
             "stateVariable": true,
             "storageLocation": "default",
             "typeDescriptions": {
-              "typeIdentifier": "t_contract$_Regulator_$732",
+              "typeIdentifier": "t_contract$_Regulator_$1150",
               "typeString": "contract Regulator"
             },
             "typeName": {
               "contractScope": null,
-              "id": 3146,
+              "id": 4474,
               "name": "Regulator",
               "nodeType": "UserDefinedTypeName",
-              "referencedDeclaration": 732,
-              "src": "428:9:14",
+              "referencedDeclaration": 1150,
+              "src": "428:9:24",
               "typeDescriptions": {
-                "typeIdentifier": "t_contract$_Regulator_$732",
+                "typeIdentifier": "t_contract$_Regulator_$1150",
                 "typeString": "contract Regulator"
               }
             },
@@ -684,26 +874,26 @@
           },
           {
             "constant": false,
-            "id": 3149,
+            "id": 4477,
             "name": "balances",
             "nodeType": "VariableDeclaration",
-            "scope": 3180,
-            "src": "461:28:14",
+            "scope": 4526,
+            "src": "461:28:24",
             "stateVariable": true,
             "storageLocation": "default",
             "typeDescriptions": {
-              "typeIdentifier": "t_contract$_BalanceSheet_$2971",
+              "typeIdentifier": "t_contract$_BalanceSheet_$4299",
               "typeString": "contract BalanceSheet"
             },
             "typeName": {
               "contractScope": null,
-              "id": 3148,
+              "id": 4476,
               "name": "BalanceSheet",
               "nodeType": "UserDefinedTypeName",
-              "referencedDeclaration": 2971,
-              "src": "461:12:14",
+              "referencedDeclaration": 4299,
+              "src": "461:12:24",
               "typeDescriptions": {
-                "typeIdentifier": "t_contract$_BalanceSheet_$2971",
+                "typeIdentifier": "t_contract$_BalanceSheet_$4299",
                 "typeString": "contract BalanceSheet"
               }
             },
@@ -712,26 +902,26 @@
           },
           {
             "constant": false,
-            "id": 3151,
+            "id": 4479,
             "name": "allowances",
             "nodeType": "VariableDeclaration",
-            "scope": 3180,
-            "src": "496:32:14",
+            "scope": 4526,
+            "src": "496:32:24",
             "stateVariable": true,
             "storageLocation": "default",
             "typeDescriptions": {
-              "typeIdentifier": "t_contract$_AllowanceSheet_$2855",
+              "typeIdentifier": "t_contract$_AllowanceSheet_$4183",
               "typeString": "contract AllowanceSheet"
             },
             "typeName": {
               "contractScope": null,
-              "id": 3150,
+              "id": 4478,
               "name": "AllowanceSheet",
               "nodeType": "UserDefinedTypeName",
-              "referencedDeclaration": 2855,
-              "src": "496:14:14",
+              "referencedDeclaration": 4183,
+              "src": "496:14:24",
               "typeDescriptions": {
-                "typeIdentifier": "t_contract$_AllowanceSheet_$2855",
+                "typeIdentifier": "t_contract$_AllowanceSheet_$4183",
                 "typeString": "contract AllowanceSheet"
               }
             },
@@ -740,28 +930,28 @@
           },
           {
             "body": {
-              "id": 3178,
+              "id": 4506,
               "nodeType": "Block",
-              "src": "737:148:14",
+              "src": "737:148:24",
               "statements": [
                 {
                   "expression": {
                     "argumentTypes": null,
-                    "id": 3164,
+                    "id": 4492,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
                     "lValueRequested": false,
                     "leftHandSide": {
                       "argumentTypes": null,
-                      "id": 3160,
+                      "id": 4488,
                       "name": "regulator",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 3147,
-                      "src": "748:9:14",
+                      "referencedDeclaration": 4475,
+                      "src": "748:9:24",
                       "typeDescriptions": {
-                        "typeIdentifier": "t_contract$_Regulator_$732",
+                        "typeIdentifier": "t_contract$_Regulator_$1150",
                         "typeString": "contract Regulator"
                       }
                     },
@@ -772,12 +962,12 @@
                       "arguments": [
                         {
                           "argumentTypes": null,
-                          "id": 3162,
+                          "id": 4490,
                           "name": "_regulator",
                           "nodeType": "Identifier",
                           "overloadedDeclarations": [],
-                          "referencedDeclaration": 3153,
-                          "src": "770:10:14",
+                          "referencedDeclaration": 4481,
+                          "src": "770:10:24",
                           "typeDescriptions": {
                             "typeIdentifier": "t_address",
                             "typeString": "address"
@@ -791,18 +981,18 @@
                             "typeString": "address"
                           }
                         ],
-                        "id": 3161,
+                        "id": 4489,
                         "name": "Regulator",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 732,
-                        "src": "760:9:14",
+                        "referencedDeclaration": 1150,
+                        "src": "760:9:24",
                         "typeDescriptions": {
-                          "typeIdentifier": "t_type$_t_contract$_Regulator_$732_$",
+                          "typeIdentifier": "t_type$_t_contract$_Regulator_$1150_$",
                           "typeString": "type(contract Regulator)"
                         }
                       },
-                      "id": 3163,
+                      "id": 4491,
                       "isConstant": false,
                       "isLValue": false,
                       "isPure": false,
@@ -810,40 +1000,40 @@
                       "lValueRequested": false,
                       "names": [],
                       "nodeType": "FunctionCall",
-                      "src": "760:21:14",
+                      "src": "760:21:24",
                       "typeDescriptions": {
-                        "typeIdentifier": "t_contract$_Regulator_$732",
+                        "typeIdentifier": "t_contract$_Regulator_$1150",
                         "typeString": "contract Regulator"
                       }
                     },
-                    "src": "748:33:14",
+                    "src": "748:33:24",
                     "typeDescriptions": {
-                      "typeIdentifier": "t_contract$_Regulator_$732",
+                      "typeIdentifier": "t_contract$_Regulator_$1150",
                       "typeString": "contract Regulator"
                     }
                   },
-                  "id": 3165,
+                  "id": 4493,
                   "nodeType": "ExpressionStatement",
-                  "src": "748:33:14"
+                  "src": "748:33:24"
                 },
                 {
                   "expression": {
                     "argumentTypes": null,
-                    "id": 3170,
+                    "id": 4498,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
                     "lValueRequested": false,
                     "leftHandSide": {
                       "argumentTypes": null,
-                      "id": 3166,
+                      "id": 4494,
                       "name": "balances",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 3149,
-                      "src": "792:8:14",
+                      "referencedDeclaration": 4477,
+                      "src": "792:8:24",
                       "typeDescriptions": {
-                        "typeIdentifier": "t_contract$_BalanceSheet_$2971",
+                        "typeIdentifier": "t_contract$_BalanceSheet_$4299",
                         "typeString": "contract BalanceSheet"
                       }
                     },
@@ -854,12 +1044,12 @@
                       "arguments": [
                         {
                           "argumentTypes": null,
-                          "id": 3168,
+                          "id": 4496,
                           "name": "_balances",
                           "nodeType": "Identifier",
                           "overloadedDeclarations": [],
-                          "referencedDeclaration": 3155,
-                          "src": "816:9:14",
+                          "referencedDeclaration": 4483,
+                          "src": "816:9:24",
                           "typeDescriptions": {
                             "typeIdentifier": "t_address",
                             "typeString": "address"
@@ -873,18 +1063,18 @@
                             "typeString": "address"
                           }
                         ],
-                        "id": 3167,
+                        "id": 4495,
                         "name": "BalanceSheet",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 2971,
-                        "src": "803:12:14",
+                        "referencedDeclaration": 4299,
+                        "src": "803:12:24",
                         "typeDescriptions": {
-                          "typeIdentifier": "t_type$_t_contract$_BalanceSheet_$2971_$",
+                          "typeIdentifier": "t_type$_t_contract$_BalanceSheet_$4299_$",
                           "typeString": "type(contract BalanceSheet)"
                         }
                       },
-                      "id": 3169,
+                      "id": 4497,
                       "isConstant": false,
                       "isLValue": false,
                       "isPure": false,
@@ -892,40 +1082,40 @@
                       "lValueRequested": false,
                       "names": [],
                       "nodeType": "FunctionCall",
-                      "src": "803:23:14",
+                      "src": "803:23:24",
                       "typeDescriptions": {
-                        "typeIdentifier": "t_contract$_BalanceSheet_$2971",
+                        "typeIdentifier": "t_contract$_BalanceSheet_$4299",
                         "typeString": "contract BalanceSheet"
                       }
                     },
-                    "src": "792:34:14",
+                    "src": "792:34:24",
                     "typeDescriptions": {
-                      "typeIdentifier": "t_contract$_BalanceSheet_$2971",
+                      "typeIdentifier": "t_contract$_BalanceSheet_$4299",
                       "typeString": "contract BalanceSheet"
                     }
                   },
-                  "id": 3171,
+                  "id": 4499,
                   "nodeType": "ExpressionStatement",
-                  "src": "792:34:14"
+                  "src": "792:34:24"
                 },
                 {
                   "expression": {
                     "argumentTypes": null,
-                    "id": 3176,
+                    "id": 4504,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
                     "lValueRequested": false,
                     "leftHandSide": {
                       "argumentTypes": null,
-                      "id": 3172,
+                      "id": 4500,
                       "name": "allowances",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 3151,
-                      "src": "837:10:14",
+                      "referencedDeclaration": 4479,
+                      "src": "837:10:24",
                       "typeDescriptions": {
-                        "typeIdentifier": "t_contract$_AllowanceSheet_$2855",
+                        "typeIdentifier": "t_contract$_AllowanceSheet_$4183",
                         "typeString": "contract AllowanceSheet"
                       }
                     },
@@ -936,12 +1126,12 @@
                       "arguments": [
                         {
                           "argumentTypes": null,
-                          "id": 3174,
+                          "id": 4502,
                           "name": "_allowances",
                           "nodeType": "Identifier",
                           "overloadedDeclarations": [],
-                          "referencedDeclaration": 3157,
-                          "src": "865:11:14",
+                          "referencedDeclaration": 4485,
+                          "src": "865:11:24",
                           "typeDescriptions": {
                             "typeIdentifier": "t_address",
                             "typeString": "address"
@@ -955,18 +1145,18 @@
                             "typeString": "address"
                           }
                         ],
-                        "id": 3173,
+                        "id": 4501,
                         "name": "AllowanceSheet",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 2855,
-                        "src": "850:14:14",
+                        "referencedDeclaration": 4183,
+                        "src": "850:14:24",
                         "typeDescriptions": {
-                          "typeIdentifier": "t_type$_t_contract$_AllowanceSheet_$2855_$",
+                          "typeIdentifier": "t_type$_t_contract$_AllowanceSheet_$4183_$",
                           "typeString": "type(contract AllowanceSheet)"
                         }
                       },
-                      "id": 3175,
+                      "id": 4503,
                       "isConstant": false,
                       "isLValue": false,
                       "isPure": false,
@@ -974,26 +1164,26 @@
                       "lValueRequested": false,
                       "names": [],
                       "nodeType": "FunctionCall",
-                      "src": "850:27:14",
+                      "src": "850:27:24",
                       "typeDescriptions": {
-                        "typeIdentifier": "t_contract$_AllowanceSheet_$2855",
+                        "typeIdentifier": "t_contract$_AllowanceSheet_$4183",
                         "typeString": "contract AllowanceSheet"
                       }
                     },
-                    "src": "837:40:14",
+                    "src": "837:40:24",
                     "typeDescriptions": {
-                      "typeIdentifier": "t_contract$_AllowanceSheet_$2855",
+                      "typeIdentifier": "t_contract$_AllowanceSheet_$4183",
                       "typeString": "contract AllowanceSheet"
                     }
                   },
-                  "id": 3177,
+                  "id": 4505,
                   "nodeType": "ExpressionStatement",
-                  "src": "837:40:14"
+                  "src": "837:40:24"
                 }
               ]
             },
             "documentation": "@dev a PermissionedTokenStorageConsumer can set its storages only once, on construction\r\n\n    *",
-            "id": 3179,
+            "id": 4507,
             "implemented": true,
             "isConstructor": true,
             "isDeclaredConst": false,
@@ -1001,16 +1191,16 @@
             "name": "",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 3158,
+              "id": 4486,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 3153,
+                  "id": 4481,
                   "name": "_regulator",
                   "nodeType": "VariableDeclaration",
-                  "scope": 3179,
-                  "src": "670:18:14",
+                  "scope": 4507,
+                  "src": "670:18:24",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -1018,10 +1208,10 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 3152,
+                    "id": 4480,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
-                    "src": "670:7:14",
+                    "src": "670:7:24",
                     "typeDescriptions": {
                       "typeIdentifier": "t_address",
                       "typeString": "address"
@@ -1032,11 +1222,11 @@
                 },
                 {
                   "constant": false,
-                  "id": 3155,
+                  "id": 4483,
                   "name": "_balances",
                   "nodeType": "VariableDeclaration",
-                  "scope": 3179,
-                  "src": "690:17:14",
+                  "scope": 4507,
+                  "src": "690:17:24",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -1044,10 +1234,10 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 3154,
+                    "id": 4482,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
-                    "src": "690:7:14",
+                    "src": "690:7:24",
                     "typeDescriptions": {
                       "typeIdentifier": "t_address",
                       "typeString": "address"
@@ -1058,11 +1248,11 @@
                 },
                 {
                   "constant": false,
-                  "id": 3157,
+                  "id": 4485,
                   "name": "_allowances",
                   "nodeType": "VariableDeclaration",
-                  "scope": 3179,
-                  "src": "709:19:14",
+                  "scope": 4507,
+                  "src": "709:19:24",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -1070,10 +1260,10 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 3156,
+                    "id": 4484,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
-                    "src": "709:7:14",
+                    "src": "709:7:24",
                     "typeDescriptions": {
                       "typeIdentifier": "t_address",
                       "typeString": "address"
@@ -1083,27 +1273,199 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "669:60:14"
+              "src": "669:60:24"
             },
             "payable": false,
             "returnParameters": {
-              "id": 3159,
+              "id": 4487,
               "nodeType": "ParameterList",
               "parameters": [],
-              "src": "737:0:14"
+              "src": "737:0:24"
             },
-            "scope": 3180,
-            "src": "657:228:14",
+            "scope": 4526,
+            "src": "657:228:24",
+            "stateMutability": "nonpayable",
+            "superFunction": null,
+            "visibility": "public"
+          },
+          {
+            "body": {
+              "id": 4515,
+              "nodeType": "Block",
+              "src": "1021:44:24",
+              "statements": [
+                {
+                  "expression": {
+                    "argumentTypes": null,
+                    "arguments": [],
+                    "expression": {
+                      "argumentTypes": [],
+                      "expression": {
+                        "argumentTypes": null,
+                        "id": 4510,
+                        "name": "balances",
+                        "nodeType": "Identifier",
+                        "overloadedDeclarations": [],
+                        "referencedDeclaration": 4477,
+                        "src": "1032:8:24",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_contract$_BalanceSheet_$4299",
+                          "typeString": "contract BalanceSheet"
+                        }
+                      },
+                      "id": 4512,
+                      "isConstant": false,
+                      "isLValue": false,
+                      "isPure": false,
+                      "lValueRequested": false,
+                      "memberName": "claimOwnership",
+                      "nodeType": "MemberAccess",
+                      "referencedDeclaration": 5080,
+                      "src": "1032:23:24",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_function_external_nonpayable$__$returns$__$",
+                        "typeString": "function () external"
+                      }
+                    },
+                    "id": 4513,
+                    "isConstant": false,
+                    "isLValue": false,
+                    "isPure": false,
+                    "kind": "functionCall",
+                    "lValueRequested": false,
+                    "names": [],
+                    "nodeType": "FunctionCall",
+                    "src": "1032:25:24",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_tuple$__$",
+                      "typeString": "tuple()"
+                    }
+                  },
+                  "id": 4514,
+                  "nodeType": "ExpressionStatement",
+                  "src": "1032:25:24"
+                }
+              ]
+            },
+            "documentation": "@dev claim ownership of balance sheet passed into constructor.\r*",
+            "id": 4516,
+            "implemented": true,
+            "isConstructor": false,
+            "isDeclaredConst": false,
+            "modifiers": [],
+            "name": "claimBalanceOwnership",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 4508,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "1011:2:24"
+            },
+            "payable": false,
+            "returnParameters": {
+              "id": 4509,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "1021:0:24"
+            },
+            "scope": 4526,
+            "src": "981:84:24",
+            "stateMutability": "nonpayable",
+            "superFunction": null,
+            "visibility": "public"
+          },
+          {
+            "body": {
+              "id": 4524,
+              "nodeType": "Block",
+              "src": "1205:46:24",
+              "statements": [
+                {
+                  "expression": {
+                    "argumentTypes": null,
+                    "arguments": [],
+                    "expression": {
+                      "argumentTypes": [],
+                      "expression": {
+                        "argumentTypes": null,
+                        "id": 4519,
+                        "name": "allowances",
+                        "nodeType": "Identifier",
+                        "overloadedDeclarations": [],
+                        "referencedDeclaration": 4479,
+                        "src": "1216:10:24",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_contract$_AllowanceSheet_$4183",
+                          "typeString": "contract AllowanceSheet"
+                        }
+                      },
+                      "id": 4521,
+                      "isConstant": false,
+                      "isLValue": false,
+                      "isPure": false,
+                      "lValueRequested": false,
+                      "memberName": "claimOwnership",
+                      "nodeType": "MemberAccess",
+                      "referencedDeclaration": 5080,
+                      "src": "1216:25:24",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_function_external_nonpayable$__$returns$__$",
+                        "typeString": "function () external"
+                      }
+                    },
+                    "id": 4522,
+                    "isConstant": false,
+                    "isLValue": false,
+                    "isPure": false,
+                    "kind": "functionCall",
+                    "lValueRequested": false,
+                    "names": [],
+                    "nodeType": "FunctionCall",
+                    "src": "1216:27:24",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_tuple$__$",
+                      "typeString": "tuple()"
+                    }
+                  },
+                  "id": 4523,
+                  "nodeType": "ExpressionStatement",
+                  "src": "1216:27:24"
+                }
+              ]
+            },
+            "documentation": "@dev claim ownership of allowance sheet passed into constructor.\r*",
+            "id": 4525,
+            "implemented": true,
+            "isConstructor": false,
+            "isDeclaredConst": false,
+            "modifiers": [],
+            "name": "claimAllowanceOwnership",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 4517,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "1195:2:24"
+            },
+            "payable": false,
+            "returnParameters": {
+              "id": 4518,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "1205:0:24"
+            },
+            "scope": 4526,
+            "src": "1163:88:24",
             "stateMutability": "nonpayable",
             "superFunction": null,
             "visibility": "public"
           }
         ],
-        "scope": 3181,
-        "src": "353:535:14"
+        "scope": 4527,
+        "src": "353:901:24"
       }
     ],
-    "src": "0:888:14"
+    "src": "0:1254:24"
   },
   "compiler": {
     "name": "solc",
@@ -1111,5 +1473,5 @@
   },
   "networks": {},
   "schemaVersion": "2.0.1",
-  "updatedAt": "2018-08-17T17:50:39.529Z"
+  "updatedAt": "2018-08-17T19:47:36.314Z"
 }

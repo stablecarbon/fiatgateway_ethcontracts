@@ -51,7 +51,8 @@ function regulatorMutableStorageTests(owner, validator) {
 
                     await this.permissionSheet.transferOwnership(this.sheet.address, {from:owner})
                     await this.validatorSheet.transferOwnership(this.sheet.address, {from:owner})
-
+                    await this.sheet.claimPermissionOwnership()
+                    await this.sheet.claimValidatorOwnership()
 
                 })
                 it('sets new permission and validator storage', async function () {
@@ -143,6 +144,7 @@ function regulatorMutableStorageTests(owner, validator) {
                         beforeEach(async function () {
                             await this.sheet.setValidatorStorage(this.validatorSheet2.address, {from})
                             await this.validatorSheet2.transferOwnership(this.sheet.address, {from})
+                            await this.sheet.claimValidatorOwnership()
                             await this.sheet.addValidator(validator, {from})
                         })
                         it('new sheet has the validator', async function () {

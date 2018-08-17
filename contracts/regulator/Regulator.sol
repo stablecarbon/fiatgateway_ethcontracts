@@ -1,7 +1,6 @@
 pragma solidity ^0.4.24;
 
 import "openzeppelin-solidity/contracts/AddressUtils.sol";
-import "openzeppelin-solidity/contracts/ownership/Ownable.sol";
 import "./dataStorage/MutableRegulatorStorage.sol";
 
 
@@ -13,7 +12,7 @@ import "./dataStorage/MutableRegulatorStorage.sol";
  * for regulatory compliance.
  *
  */
-contract Regulator is Ownable, MutableRegulatorStorage {
+contract Regulator is MutableRegulatorStorage {
     /** 
         Modifiers 
     */
