@@ -15,7 +15,7 @@ contract MutableRegulatorStorage is Ownable, RegulatorStorage {
     event ChangedPermissionStorage(address _old, address _new);
     event ChangedValidatorStorage(address _old, address _new);
 
-    constructor (address permissions, address validators) RegulatorStorage(permissions, validators) public {
+    constructor (address permissions, address validators) public RegulatorStorage(permissions, validators) {
     }
 
     /**

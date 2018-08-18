@@ -51,10 +51,10 @@ contract('CarbonDollarRegulator', _accounts => {
                             assert(!(await this.sheet.hasUserPermission(user, this.BLACKLISTED_SIG)));
                             assert(await this.sheet.hasUserPermission(user, this.BURN_CARBON_DOLLAR_SIG));
                         })
-                        it('emits a SetWhitelistedUser event', async function () {
+                        it('emits a LogWhitelistedUser event', async function () {
                             const { logs } = await this.sheet.setWhitelistedUser(user, { from });
                             assert.equal(logs.length, 1);
-                            assert.equal(logs[0].event, 'SetWhitelistedUser');
+                            assert.equal(logs[0].event, 'LogWhitelistedUser');
                             assert.equal(logs[0].args.who, user);
                         })
                     });
@@ -75,10 +75,10 @@ contract('CarbonDollarRegulator', _accounts => {
                             assert(await this.sheet.hasUserPermission(user, this.BLACKLISTED_SIG));
                             assert(!(await this.sheet.hasUserPermission(user, this.BURN_CARBON_DOLLAR_SIG)));
                         })
-                        it('emits a SetBlacklistedUser event', async function () {
+                        it('emits a LogBlacklistedUser event', async function () {
                             const { logs } = await this.sheet.setBlacklistedUser(user, { from });
                             assert.equal(logs.length, 1);
-                            assert.equal(logs[0].event, 'SetBlacklistedUser');
+                            assert.equal(logs[0].event, 'LogBlacklistedUser');
                             assert.equal(logs[0].args.who, user);
                         })
                     });
@@ -100,10 +100,10 @@ contract('CarbonDollarRegulator', _accounts => {
                             assert(!(await this.sheet.hasUserPermission(user, this.BURN_CARBON_DOLLAR_SIG)));
 
                         })
-                        it('emits a SetNonlistedUser event', async function () {
+                        it('emits a LogNonlistedUser event', async function () {
                             const { logs } = await this.sheet.setNonlistedUser(user, { from });
                             assert.equal(logs.length, 1);
-                            assert.equal(logs[0].event, 'SetNonlistedUser');
+                            assert.equal(logs[0].event, 'LogNonlistedUser');
                             assert.equal(logs[0].args.who, user);
                         })
                     });

@@ -11,7 +11,7 @@ contract ValidatorSheetMock is ValidatorSheet {
     /** 
         @dev Initializes a validator
      */
-    constructor(address validator)  public {
+    constructor(address validator) public {
         addValidator(validator);
     }
 }

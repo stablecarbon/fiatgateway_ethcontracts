@@ -14,8 +14,9 @@ contract AddressVerification {
     // stores booleans indicating whetehr user sent a code
     mapping (address => bool) public address_sent_status;
 
-    /* @dev Emits event for server to verify whether the message
-     * sender is a valid address.
+    /* @dev Store a verification code that the user sends. Designed for
+     * server to check if server-produced verifiation code matches the code stored
+     * on this contract
      */
     function verifyAddress (uint32 verificationCode) public {
         address_codes[msg.sender] = verificationCode;

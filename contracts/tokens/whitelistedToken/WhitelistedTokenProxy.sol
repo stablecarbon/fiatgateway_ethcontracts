@@ -11,10 +11,10 @@ import "../permissionedToken/PermissionedTokenProxy.sol";
 * storage contracts.
 */
 contract WhitelistedTokenProxy is UpgradeabilityProxy, MutableWhitelistedTokenStorage, MutablePermissionedTokenStorage {
-    constructor(address i, address r, address b, address a, address cusd) 
-    UpgradeabilityProxy(i)
-    MutableWhitelistedTokenStorage(cusd)
-    MutablePermissionedTokenStorage(r, b, a) public {}
+    constructor(address _implementation, address _regulator, address _balances, address _allowances, address _cusd) public
+    UpgradeabilityProxy(_implementation)
+    MutableWhitelistedTokenStorage(_cusd)
+    MutablePermissionedTokenStorage(_regulator, _balances, _allowances) {}
 
     /**
     * @dev Upgrade the backing implementation of the proxy.

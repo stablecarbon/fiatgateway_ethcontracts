@@ -1,4 +1,4 @@
-pragma solidity ^0.4.23;
+pragma solidity ^0.4.24;
 
 import "../tokens/carbonToken/CarbonDollarProxy.sol";
 import "../tokens/carbonToken/dataStorage/FeeSheet.sol";
@@ -18,20 +18,8 @@ contract CarbonDollarProxyFactory {
     address[] public tokens;
 
     // Events
-    event CreatedCarbonDollarProxy(address newToken, uint index);
-
-    // Return number of token proxy contracts created so far
-    function getCount() public view returns (uint) {
-        return tokens.length;
-    }
-
-    // Return the i'th created token
-    function getToken(uint i) public view returns(address) {
-        require((i < tokens.length) && (i >= 0), "Invalid index");
-        return tokens[i];
-    }
+    event CreatedCarbonDollarProxy(address newToken, uint256 index);
     
-
     /**
     *
     * @dev generate a new proxy address that users can cast to a PermissionedToken or PermissionedTokenProxy. The
@@ -69,6 +57,17 @@ contract CarbonDollarProxyFactory {
 
         tokens.push(proxy);
         emit CreatedCarbonDollarProxy(proxy, getCount()-1);
+    }
+
+    // Return number of token proxy contracts created so far
+    function getCount() public view returns (uint256) {
+        return tokens.length;
+    }
+
+    // Return the i'th created token
+    function getToken(uint i) public view returns(address) {
+        require((i < tokens.length) && (i >= 0), "Invalid index");
+        return tokens[i];
     }
 }
 

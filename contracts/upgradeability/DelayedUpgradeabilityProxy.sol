@@ -18,7 +18,7 @@ contract DelayedUpgradeabilityProxy is UpgradeabilityProxy {
 
     event PendingImplementationChanged(address indexed oldPendingImplementation, address indexed newPendingImplementation);
 
-    constructor(address i) UpgradeabilityProxy(i) public {}
+    constructor(address _implementation) public UpgradeabilityProxy(_implementation) {}
 
     /**
     * @notice Sets the pending implementation address of the proxy.
@@ -31,7 +31,7 @@ contract DelayedUpgradeabilityProxy is UpgradeabilityProxy {
         pendingImplementation = implementation;
         pendingImplementationIsSet = true;
         emit PendingImplementationChanged(oldPendingImplementation, implementation);
-        pendingImplementationApplicationDate = now.add(UPGRADE_DELAY);
+        pendingImplementationApplicationDate = block.timestamp.add(UPGRADE_DELAY);
     }
 
     /**
@@ -41,7 +41,7 @@ contract DelayedUpgradeabilityProxy is UpgradeabilityProxy {
     * wait period of UPGRADE_DELAY (28 days) has been satisfied.
     */
     function _willFallback() internal {
-        if (pendingImplementationIsSet && now > pendingImplementationApplicationDate) {
+        if (pendingImplementationIsSet && block.timestamp > pendingImplementationApplicationDate) {
             _upgradeTo(pendingImplementation);
             pendingImplementationIsSet = false;
         }

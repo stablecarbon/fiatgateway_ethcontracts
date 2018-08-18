@@ -22,13 +22,14 @@ contract WhitelistedToken is MutableWhitelistedTokenStorage, PermissionedToken {
     * @notice Constructor sets the regulator contract and the address of the
     * CarbonUSD meta-token contract. The latter is necessary in order to make transactions
     * with the CarbonDollar smart contract.
-    * @param a Address of allowance sheet. Passed to base constructor.
-    * @param b Address of balance sheet. Passed to base constructor.
+    * @param _regulator Regulator for WhitelistedToken, should be a WhitelistedTokenRegulator
+    * @param _allowances Address of allowance sheet. Passed to base constructor.
+    * @param _balances Address of balance sheet. Passed to base constructor.
     * @param _cusd Address of `CarbonDollar` contract
     */
-    constructor(address r, address b, address a, address _cusd) 
-    PermissionedToken(r,b,a)
-    MutableWhitelistedTokenStorage(_cusd) public {}
+    constructor(address _regulator, address _balances, address _allowances, address _cusd) public
+    PermissionedToken(_regulator, _balances, _allowances)
+    MutableWhitelistedTokenStorage(_cusd) {}
 
     /**
     * @notice Mints CarbonUSD for the user. Stores the WT0 that backs the CarbonUSD
@@ -38,13 +39,6 @@ contract WhitelistedToken is MutableWhitelistedTokenStorage, PermissionedToken {
     */
     function mintCUSD(address _to, uint256 _amount) public requiresPermission whenNotPaused userWhitelisted(_to) {
         return _mintCUSD(_to, _amount);
-    }
-
-    function _mintCUSD(address _to, uint256 _amount) internal {
-        require(_to != cusdAddress, "Cannot mint to CarbonUSD contract"); // This is to prevent Carbon Labs from printing money out of thin air!
-        CarbonDollar(cusdAddress).mint(_to, _amount);
-        _mint(cusdAddress, _amount);
-        emit MintedToCUSD(_to, _amount);
     }
 
     /**
@@ -57,5 +51,12 @@ contract WhitelistedToken is MutableWhitelistedTokenStorage, PermissionedToken {
         _burn(msg.sender, _amount);
         _mintCUSD(msg.sender, _amount);
         emit ConvertedToCUSD(msg.sender, _amount);
+    }
+
+    function _mintCUSD(address _to, uint256 _amount) internal {
+        require(_to != cusdAddress, "Cannot mint to CarbonUSD contract"); // This is to prevent Carbon Labs from printing money out of thin air!
+        CarbonDollar(cusdAddress).mint(_to, _amount);
+        _mint(cusdAddress, _amount);
+        emit MintedToCUSD(_to, _amount);
     }
 }

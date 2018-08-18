@@ -11,7 +11,32 @@ import "../Regulator.sol";
  *
  */
 contract WhitelistedTokenRegulator is Regulator {
-    constructor(address p, address v) Regulator(p,v) public {}
+    /**
+    * @notice CONSTRUCTOR
+    * @param _permissionSheetAddress initial permission sheet
+    * @param _validatorSheetAddress initial validator sheet
+    **/
+    constructor(address _permissionSheetAddress, address _validatorSheetAddress) public Regulator(_permissionSheetAddress, _validatorSheetAddress) {}
+
+    function isMinter(address _who) public view returns (bool) {
+        return (super.isMinter(_who) && hasUserPermission(_who, permissions.MINT_CUSD_SIG()));
+    }
+
+    // Getters
+
+    function isWhitelistedUser(address _who) public view returns (bool) {
+        return (hasUserPermission(_who, permissions.CONVERT_WT_SIG()) && super.isWhitelistedUser(_who));
+    }
+
+    function isBlacklistedUser(address _who) public view returns (bool) {
+        return (!hasUserPermission(_who, permissions.CONVERT_WT_SIG()) && super.isBlacklistedUser(_who));
+    }
+
+    function isNonlistedUser(address _who) public view returns (bool) {
+        return (!hasUserPermission(_who, permissions.CONVERT_WT_SIG()) && super.isNonlistedUser(_who));
+    }   
+
+    /** Internal functions **/
 
     // A WT minter should have option to either mint directly into CUSD via mintCUSD(), or
     // mint the WT via an ordinary mint() 
@@ -25,10 +50,6 @@ contract WhitelistedTokenRegulator is Regulator {
         require(permissions.isPermission(permissions.MINT_CUSD_SIG()), "Minting to CUSD not supported by token");
         permissions.removeUserPermission(_who, permissions.MINT_CUSD_SIG());
         super._removeMinter(_who);
-    }
-
-    function isMinter(address _who) public view returns (bool) {
-        return (super.isMinter(_who) && hasUserPermission(_who, permissions.MINT_CUSD_SIG()));
     }
 
     // Setters
@@ -53,17 +74,4 @@ contract WhitelistedTokenRegulator is Regulator {
         super._setNonlistedUser(_who);
     }
 
-    // Getters
-
-    function isWhitelistedUser(address _who) public view returns (bool) {
-        return (hasUserPermission(_who, permissions.CONVERT_WT_SIG()) && super.isWhitelistedUser(_who));
-    }
-
-    function isBlacklistedUser(address _who) public view returns (bool) {
-        return (!hasUserPermission(_who, permissions.CONVERT_WT_SIG()) && super.isBlacklistedUser(_who));
-    }
-
-    function isNonlistedUser(address _who) public view returns (bool) {
-        return (!hasUserPermission(_who, permissions.CONVERT_WT_SIG()) && super.isNonlistedUser(_who));
-    }   
 }

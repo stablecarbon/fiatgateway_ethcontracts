@@ -38,8 +38,8 @@ contract PermissionSheet is Ownable {
     */
     event PermissionAdded(bytes4 methodsignature);
     event PermissionRemoved(bytes4 methodsignature);
-    event SetUserPermission(address indexed who, bytes4 methodsignature);
-    event RemovedUserPermission(address indexed who, bytes4 methodsignature);
+    event LogSetUserPermission(address indexed who, bytes4 methodsignature);
+    event LogRemovedUserPermission(address indexed who, bytes4 methodsignature);
 
     /** 
         Constants: stores method signatures. These are potential permissions that a user can have, 
@@ -71,18 +71,6 @@ contract PermissionSheet is Ownable {
         _addPermission(_methodsignature, p);
     }
 
-     /**
-    * @notice Sets a permission within the list of permissions.
-    * @param _methodsignature Signature of the method that this permission controls.
-    * @param _permission A struct containing permission information.
-    */
-    function _addPermission(bytes4 _methodsignature, Permission _permission) internal {
-        permissions[_methodsignature] = _permission;
-        isPermission[_methodsignature] = true;
-        emit PermissionAdded(_methodsignature);
-
-    }
-
     /**
     * @notice Removes a permission the list of permissions.
     * @param _methodsignature Signature of the method that this permission controls.
@@ -99,7 +87,7 @@ contract PermissionSheet is Ownable {
     function setUserPermission(address _who, bytes4 _methodsignature) public onlyOwner {
         require(isPermission[_methodsignature], "Permission being set must be for a valid method signature");
         hasUserPermission[_who][_methodsignature] = true;
-        emit SetUserPermission(_who, _methodsignature);
+        emit LogSetUserPermission(_who, _methodsignature);
     }
 
     /**
@@ -109,6 +97,18 @@ contract PermissionSheet is Ownable {
     function removeUserPermission(address _who, bytes4 _methodsignature) public onlyOwner {
         require(isPermission[_methodsignature], "Permission being removed must be for a valid method signature");
         hasUserPermission[_who][_methodsignature] = false;
-        emit RemovedUserPermission(_who, _methodsignature);
+        emit LogRemovedUserPermission(_who, _methodsignature);
+    }
+
+    /**
+    * @notice Sets a permission within the list of permissions.
+    * @param _methodsignature Signature of the method that this permission controls.
+    * @param _permission A struct containing permission information.
+    */
+    function _addPermission(bytes4 _methodsignature, Permission _permission) internal {
+        permissions[_methodsignature] = _permission;
+        isPermission[_methodsignature] = true;
+        emit PermissionAdded(_methodsignature);
+
     }
 }

@@ -6,15 +6,25 @@ import "../permissionedToken/PermissionedTokenProxy.sol";
 
 /**
 * @title CarbonDollarProxy
-* @notice This contract IS CarbonUSD. All calls to the CarbonUSD contract will
+* @notice This contract will be the public facing CarbonUSD. All calls to the CarbonUSD contract will
 * be routed through this proxy, since this proxy contract is the owner of the
 * storage contracts.
 */
 contract CarbonDollarProxy is UpgradeabilityProxy, MutableCarbonDollarStorage, MutablePermissionedTokenStorage {
-    constructor(address i, address r, address b, address a, address f, address s) 
-    UpgradeabilityProxy(i)
-    MutableCarbonDollarStorage(f, s)
-    MutablePermissionedTokenStorage(r, b, a) public {}
+    
+    /** CONSTRUCTOR
+    * @dev Passes along arguments to base class.
+    * @param _implementation the initial logic implementation
+    * @param _regulator the Regulator, should be a CarbonDollarRegulator 
+    * @param _balances BalanceSheet
+    * @param _allowances AllowanceSheet
+    * @param _fees FeeSheet
+    * @param _stablecoins StablecoinWhitelist
+    */
+    constructor(address _implementation, address _regulator, address _balances, address _allowances, address _fees, address _stablecoins) public
+    UpgradeabilityProxy(_implementation)
+    MutableCarbonDollarStorage(_fees, _stablecoins)
+    MutablePermissionedTokenStorage(_regulator, _balances, _allowances) {}
 
     /**
     * @dev Upgrade the backing implementation of the proxy.

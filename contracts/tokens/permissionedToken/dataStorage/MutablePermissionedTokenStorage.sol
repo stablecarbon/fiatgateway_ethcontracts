@@ -16,7 +16,7 @@ contract MutablePermissionedTokenStorage is Ownable, PermissionedTokenStorage {
     event ChangedBalanceStorage(address _old, address _new);
     event ChangedAllowanceStorage(address _old, address _new);
 
-    constructor (address regulator, address balances, address allowances) PermissionedTokenStorage (regulator, balances, allowances) public {
+    constructor (address regulator, address balances, address allowances) public PermissionedTokenStorage (regulator, balances, allowances) {
     }
 
     /**

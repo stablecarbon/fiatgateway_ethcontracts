@@ -1,4 +1,4 @@
-pragma solidity ^0.4.23;
+pragma solidity ^0.4.24;
 
 import "../regulator/RegulatorProxy.sol";
 import "../regulator/mocks/PermissionSheetMock.sol";
@@ -16,18 +16,7 @@ contract RegulatorProxyFactory {
     address[] public regulators;
 
     // Events
-    event CreatedRegulatorProxy(address newRegulator, uint index);
-
-    // Return number of proxies created 
-    function getCount() public view returns (uint) {
-        return regulators.length;
-    }
-
-    // Return the i'th created proxy. The most recently created proxy will be at position getCount()-1.
-    function getRegulatorProxy(uint i) public view returns(address) {
-        require((i < regulators.length) && (i >= 0), "Invalid index");
-        return regulators[i];
-    }
+    event CreatedRegulatorProxy(address newRegulator, uint256 index);
 
     /**
     *
@@ -58,5 +47,16 @@ contract RegulatorProxyFactory {
 
         regulators.push(proxy);
         emit CreatedRegulatorProxy(proxy, getCount()-1);
+    }
+
+    // Return number of proxies created 
+    function getCount() public view returns (uint256) {
+        return regulators.length;
+    }
+
+    // Return the i'th created proxy. The most recently created proxy will be at position getCount()-1.
+    function getRegulatorProxy(uint256 i) public view returns(address) {
+        require((i < regulators.length) && (i >= 0), "Invalid index");
+        return regulators[i];
     }
 }

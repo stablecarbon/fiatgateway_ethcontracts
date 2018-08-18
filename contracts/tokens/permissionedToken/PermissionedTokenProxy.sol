@@ -8,9 +8,9 @@ import "zos-lib/contracts/upgradeability/UpgradeabilityProxy.sol";
 * @notice A proxy contract that serves the latest implementation of PermissionedToken.
 */
 contract PermissionedTokenProxy is UpgradeabilityProxy, MutablePermissionedTokenStorage {
-    constructor(address i, address r, address b, address a) 
-    UpgradeabilityProxy(i) 
-    MutablePermissionedTokenStorage(r, b, a) public {}
+    constructor(address _implementation, address _regulator, address _balances, address _allowances) 
+    UpgradeabilityProxy(_implementation) 
+    MutablePermissionedTokenStorage(_regulator, _balances, _allowances) public {}
 
     /**
     * @dev Upgrade the backing implementation of the proxy.

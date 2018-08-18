@@ -54,11 +54,11 @@
       "type": "function"
     }
   ],
-  "bytecode": "0x608060405234801561001057600080fd5b506101d5806100206000396000f3006080604052600436106100565763ffffffff7c0100000000000000000000000000000000000000000000000000000000600035041663612f6c96811461005b5780638bb0949b146100a2578063edb9a6f1146100c2575b600080fd5b34801561006757600080fd5b5061008973ffffffffffffffffffffffffffffffffffffffff60043516610104565b6040805163ffffffff9092168252519081900360200190f35b3480156100ae57600080fd5b506100c063ffffffff6004351661011c565b005b3480156100ce57600080fd5b506100f073ffffffffffffffffffffffffffffffffffffffff60043516610194565b604080519115158252519081900360200190f35b60006020819052908152604090205463ffffffff1681565b3360009081526020818152604080832080547fffffffffffffffffffffffffffffffffffffffffffffffffffffffff000000001663ffffffff959095169490941790935560019081905291902080547fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff00169091179055565b60016020526000908152604090205460ff16815600a165627a7a723058207800ebb0ae4c188976c33269c6d1756b7af419bb32130b1f50f5b0a2e2d76d850029",
-  "deployedBytecode": "0x6080604052600436106100565763ffffffff7c0100000000000000000000000000000000000000000000000000000000600035041663612f6c96811461005b5780638bb0949b146100a2578063edb9a6f1146100c2575b600080fd5b34801561006757600080fd5b5061008973ffffffffffffffffffffffffffffffffffffffff60043516610104565b6040805163ffffffff9092168252519081900360200190f35b3480156100ae57600080fd5b506100c063ffffffff6004351661011c565b005b3480156100ce57600080fd5b506100f073ffffffffffffffffffffffffffffffffffffffff60043516610194565b604080519115158252519081900360200190f35b60006020819052908152604090205463ffffffff1681565b3360009081526020818152604080832080547fffffffffffffffffffffffffffffffffffffffffffffffffffffffff000000001663ffffffff959095169490941790935560019081905291902080547fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff00169091179055565b60016020526000908152604090205460ff16815600a165627a7a723058207800ebb0ae4c188976c33269c6d1756b7af419bb32130b1f50f5b0a2e2d76d850029",
-  "sourceMap": "363:544:0:-;;;;8:9:-1;5:2;;;30:1;27;20:12;5:2;363:544:0;;;;;;;",
-  "deployedSourceMap": "363:544:0:-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;448:48;;8:9:-1;5:2;;;30:1;27;20:12;5:2;-1:-1;448:48:0;;;;;;;;;;;;;;;;;;;;;;;;;;736:168;;8:9:-1;5:2;;;30:1;27;20:12;5:2;-1:-1;736:168:0;;;;;;;;;565:52;;8:9:-1;5:2;;;30:1;27;20:12;5:2;-1:-1;565:52:0;;;;;;;;;;;;;;;;;;;;;;;;;448:48;;;;;;;;;;;;;;;;:::o;736:168::-;817:10;803:13;:25;;;;;;;;;;;:44;;;;;;;;;;;;;;;;-1:-1:-1;858:31:0;;;;;;;:38;;;;;;;;;736:168::o;565:52::-;;;;;;;;;;;;;;;:::o",
-  "source": "pragma solidity ^0.4.24;\r\n\r\n/**\r\n* @title AddressVerification\r\n* @notice AddressVerification contains an essentially useless function that allows users to verify that they own an ETH address\r\n* that they claim they own. If a user claims to own the ETH address 0x123..., then they should be able to send a transaction\r\n* to this contract from that public key\r\n*/\r\ncontract AddressVerification {\r\n    \r\n    // storage of codes provided by users\r\n    mapping (address => uint32) public address_codes;\r\n\r\n    // stores booleans indicating whetehr user sent a code\r\n    mapping (address => bool) public address_sent_status;\r\n\r\n    /* @dev Emits event for server to verify whether the message\r\n     * sender is a valid address.\r\n     */\r\n    function verifyAddress (uint32 verificationCode) public {\r\n        address_codes[msg.sender] = verificationCode;\r\n        address_sent_status[msg.sender] = true;\r\n    }\r\n}\r\n",
+  "bytecode": "0x608060405234801561001057600080fd5b506101d5806100206000396000f3006080604052600436106100565763ffffffff7c0100000000000000000000000000000000000000000000000000000000600035041663612f6c96811461005b5780638bb0949b146100a2578063edb9a6f1146100c2575b600080fd5b34801561006757600080fd5b5061008973ffffffffffffffffffffffffffffffffffffffff60043516610104565b6040805163ffffffff9092168252519081900360200190f35b3480156100ae57600080fd5b506100c063ffffffff6004351661011c565b005b3480156100ce57600080fd5b506100f073ffffffffffffffffffffffffffffffffffffffff60043516610194565b604080519115158252519081900360200190f35b60006020819052908152604090205463ffffffff1681565b3360009081526020818152604080832080547fffffffffffffffffffffffffffffffffffffffffffffffffffffffff000000001663ffffffff959095169490941790935560019081905291902080547fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff00169091179055565b60016020526000908152604090205460ff16815600a165627a7a723058205ba2dc5ff39338aa8f826f512c2603cecb4a06f4c96e771c54eab5ebc01e833b0029",
+  "deployedBytecode": "0x6080604052600436106100565763ffffffff7c0100000000000000000000000000000000000000000000000000000000600035041663612f6c96811461005b5780638bb0949b146100a2578063edb9a6f1146100c2575b600080fd5b34801561006757600080fd5b5061008973ffffffffffffffffffffffffffffffffffffffff60043516610104565b6040805163ffffffff9092168252519081900360200190f35b3480156100ae57600080fd5b506100c063ffffffff6004351661011c565b005b3480156100ce57600080fd5b506100f073ffffffffffffffffffffffffffffffffffffffff60043516610194565b604080519115158252519081900360200190f35b60006020819052908152604090205463ffffffff1681565b3360009081526020818152604080832080547fffffffffffffffffffffffffffffffffffffffffffffffffffffffff000000001663ffffffff959095169490941790935560019081905291902080547fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff00169091179055565b60016020526000908152604090205460ff16815600a165627a7a723058205ba2dc5ff39338aa8f826f512c2603cecb4a06f4c96e771c54eab5ebc01e833b0029",
+  "sourceMap": "363:625:0:-;;;;8:9:-1;5:2;;;30:1;27;20:12;5:2;363:625:0;;;;;;;",
+  "deployedSourceMap": "363:625:0:-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;448:48;;8:9:-1;5:2;;;30:1;27;20:12;5:2;-1:-1;448:48:0;;;;;;;;;;;;;;;;;;;;;;;;;;817:168;;8:9:-1;5:2;;;30:1;27;20:12;5:2;-1:-1;817:168:0;;;;;;;;;565:52;;8:9:-1;5:2;;;30:1;27;20:12;5:2;-1:-1;565:52:0;;;;;;;;;;;;;;;;;;;;;;;;;448:48;;;;;;;;;;;;;;;;:::o;817:168::-;898:10;884:13;:25;;;;;;;;;;;:44;;;;;;;;;;;;;;;;-1:-1:-1;939:31:0;;;;;;;:38;;;;;;;;;817:168::o;565:52::-;;;;;;;;;;;;;;;:::o",
+  "source": "pragma solidity ^0.4.24;\r\n\r\n/**\r\n* @title AddressVerification\r\n* @notice AddressVerification contains an essentially useless function that allows users to verify that they own an ETH address\r\n* that they claim they own. If a user claims to own the ETH address 0x123..., then they should be able to send a transaction\r\n* to this contract from that public key\r\n*/\r\ncontract AddressVerification {\r\n    \r\n    // storage of codes provided by users\r\n    mapping (address => uint32) public address_codes;\r\n\r\n    // stores booleans indicating whetehr user sent a code\r\n    mapping (address => bool) public address_sent_status;\r\n\r\n    /* @dev Store a verification code that the user sends. Designed for\r\n     * server to check if server-produced verifiation code matches the code stored\r\n     * on this contract\r\n     */\r\n    function verifyAddress (uint32 verificationCode) public {\r\n        address_codes[msg.sender] = verificationCode;\r\n        address_sent_status[msg.sender] = true;\r\n    }\r\n}\r\n",
   "sourcePath": "C:\\Users\\npain\\Projects\\Carbon\\fiat_gateway\\contracts\\AddressVerification.sol",
   "ast": {
     "absolutePath": "/C/Users/npain/Projects/Carbon/fiat_gateway/contracts/AddressVerification.sol",
@@ -188,7 +188,7 @@
             "body": {
               "id": 28,
               "nodeType": "Block",
-              "src": "792:112:0",
+              "src": "873:112:0",
               "statements": [
                 {
                   "expression": {
@@ -207,7 +207,7 @@
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
                         "referencedDeclaration": 5,
-                        "src": "803:13:0",
+                        "src": "884:13:0",
                         "typeDescriptions": {
                           "typeIdentifier": "t_mapping$_t_address_$_t_uint32_$",
                           "typeString": "mapping(address => uint32)"
@@ -222,8 +222,8 @@
                           "name": "msg",
                           "nodeType": "Identifier",
                           "overloadedDeclarations": [],
-                          "referencedDeclaration": 5625,
-                          "src": "817:3:0",
+                          "referencedDeclaration": 45,
+                          "src": "898:3:0",
                           "typeDescriptions": {
                             "typeIdentifier": "t_magic_message",
                             "typeString": "msg"
@@ -237,7 +237,7 @@
                         "memberName": "sender",
                         "nodeType": "MemberAccess",
                         "referencedDeclaration": null,
-                        "src": "817:10:0",
+                        "src": "898:10:0",
                         "typeDescriptions": {
                           "typeIdentifier": "t_address",
                           "typeString": "address"
@@ -248,7 +248,7 @@
                       "isPure": false,
                       "lValueRequested": true,
                       "nodeType": "IndexAccess",
-                      "src": "803:25:0",
+                      "src": "884:25:0",
                       "typeDescriptions": {
                         "typeIdentifier": "t_uint32",
                         "typeString": "uint32"
@@ -263,13 +263,13 @@
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
                       "referencedDeclaration": 11,
-                      "src": "831:16:0",
+                      "src": "912:16:0",
                       "typeDescriptions": {
                         "typeIdentifier": "t_uint32",
                         "typeString": "uint32"
                       }
                     },
-                    "src": "803:44:0",
+                    "src": "884:44:0",
                     "typeDescriptions": {
                       "typeIdentifier": "t_uint32",
                       "typeString": "uint32"
@@ -277,7 +277,7 @@
                   },
                   "id": 20,
                   "nodeType": "ExpressionStatement",
-                  "src": "803:44:0"
+                  "src": "884:44:0"
                 },
                 {
                   "expression": {
@@ -296,7 +296,7 @@
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
                         "referencedDeclaration": 9,
-                        "src": "858:19:0",
+                        "src": "939:19:0",
                         "typeDescriptions": {
                           "typeIdentifier": "t_mapping$_t_address_$_t_bool_$",
                           "typeString": "mapping(address => bool)"
@@ -311,8 +311,8 @@
                           "name": "msg",
                           "nodeType": "Identifier",
                           "overloadedDeclarations": [],
-                          "referencedDeclaration": 5625,
-                          "src": "878:3:0",
+                          "referencedDeclaration": 45,
+                          "src": "959:3:0",
                           "typeDescriptions": {
                             "typeIdentifier": "t_magic_message",
                             "typeString": "msg"
@@ -326,7 +326,7 @@
                         "memberName": "sender",
                         "nodeType": "MemberAccess",
                         "referencedDeclaration": null,
-                        "src": "878:10:0",
+                        "src": "959:10:0",
                         "typeDescriptions": {
                           "typeIdentifier": "t_address",
                           "typeString": "address"
@@ -337,7 +337,7 @@
                       "isPure": false,
                       "lValueRequested": true,
                       "nodeType": "IndexAccess",
-                      "src": "858:31:0",
+                      "src": "939:31:0",
                       "typeDescriptions": {
                         "typeIdentifier": "t_bool",
                         "typeString": "bool"
@@ -355,7 +355,7 @@
                       "kind": "bool",
                       "lValueRequested": false,
                       "nodeType": "Literal",
-                      "src": "892:4:0",
+                      "src": "973:4:0",
                       "subdenomination": null,
                       "typeDescriptions": {
                         "typeIdentifier": "t_bool",
@@ -363,7 +363,7 @@
                       },
                       "value": "true"
                     },
-                    "src": "858:38:0",
+                    "src": "939:38:0",
                     "typeDescriptions": {
                       "typeIdentifier": "t_bool",
                       "typeString": "bool"
@@ -371,7 +371,7 @@
                   },
                   "id": 27,
                   "nodeType": "ExpressionStatement",
-                  "src": "858:38:0"
+                  "src": "939:38:0"
                 }
               ]
             },
@@ -393,7 +393,7 @@
                   "name": "verificationCode",
                   "nodeType": "VariableDeclaration",
                   "scope": 29,
-                  "src": "760:23:0",
+                  "src": "841:23:0",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -404,7 +404,7 @@
                     "id": 10,
                     "name": "uint32",
                     "nodeType": "ElementaryTypeName",
-                    "src": "760:6:0",
+                    "src": "841:6:0",
                     "typeDescriptions": {
                       "typeIdentifier": "t_uint32",
                       "typeString": "uint32"
@@ -414,27 +414,27 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "759:25:0"
+              "src": "840:25:0"
             },
             "payable": false,
             "returnParameters": {
               "id": 13,
               "nodeType": "ParameterList",
               "parameters": [],
-              "src": "792:0:0"
+              "src": "873:0:0"
             },
             "scope": 30,
-            "src": "736:168:0",
+            "src": "817:168:0",
             "stateMutability": "nonpayable",
             "superFunction": null,
             "visibility": "public"
           }
         ],
         "scope": 31,
-        "src": "363:544:0"
+        "src": "363:625:0"
       }
     ],
-    "src": "0:909:0"
+    "src": "0:990:0"
   },
   "legacyAST": {
     "absolutePath": "/C/Users/npain/Projects/Carbon/fiat_gateway/contracts/AddressVerification.sol",
@@ -564,7 +564,7 @@
             "body": {
               "id": 28,
               "nodeType": "Block",
-              "src": "792:112:0",
+              "src": "873:112:0",
               "statements": [
                 {
                   "expression": {
@@ -583,7 +583,7 @@
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
                         "referencedDeclaration": 5,
-                        "src": "803:13:0",
+                        "src": "884:13:0",
                         "typeDescriptions": {
                           "typeIdentifier": "t_mapping$_t_address_$_t_uint32_$",
                           "typeString": "mapping(address => uint32)"
@@ -598,8 +598,8 @@
                           "name": "msg",
                           "nodeType": "Identifier",
                           "overloadedDeclarations": [],
-                          "referencedDeclaration": 5625,
-                          "src": "817:3:0",
+                          "referencedDeclaration": 45,
+                          "src": "898:3:0",
                           "typeDescriptions": {
                             "typeIdentifier": "t_magic_message",
                             "typeString": "msg"
@@ -613,7 +613,7 @@
                         "memberName": "sender",
                         "nodeType": "MemberAccess",
                         "referencedDeclaration": null,
-                        "src": "817:10:0",
+                        "src": "898:10:0",
                         "typeDescriptions": {
                           "typeIdentifier": "t_address",
                           "typeString": "address"
@@ -624,7 +624,7 @@
                       "isPure": false,
                       "lValueRequested": true,
                       "nodeType": "IndexAccess",
-                      "src": "803:25:0",
+                      "src": "884:25:0",
                       "typeDescriptions": {
                         "typeIdentifier": "t_uint32",
                         "typeString": "uint32"
@@ -639,13 +639,13 @@
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
                       "referencedDeclaration": 11,
-                      "src": "831:16:0",
+                      "src": "912:16:0",
                       "typeDescriptions": {
                         "typeIdentifier": "t_uint32",
                         "typeString": "uint32"
                       }
                     },
-                    "src": "803:44:0",
+                    "src": "884:44:0",
                     "typeDescriptions": {
                       "typeIdentifier": "t_uint32",
                       "typeString": "uint32"
@@ -653,7 +653,7 @@
                   },
                   "id": 20,
                   "nodeType": "ExpressionStatement",
-                  "src": "803:44:0"
+                  "src": "884:44:0"
                 },
                 {
                   "expression": {
@@ -672,7 +672,7 @@
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
                         "referencedDeclaration": 9,
-                        "src": "858:19:0",
+                        "src": "939:19:0",
                         "typeDescriptions": {
                           "typeIdentifier": "t_mapping$_t_address_$_t_bool_$",
                           "typeString": "mapping(address => bool)"
@@ -687,8 +687,8 @@
                           "name": "msg",
                           "nodeType": "Identifier",
                           "overloadedDeclarations": [],
-                          "referencedDeclaration": 5625,
-                          "src": "878:3:0",
+                          "referencedDeclaration": 45,
+                          "src": "959:3:0",
                           "typeDescriptions": {
                             "typeIdentifier": "t_magic_message",
                             "typeString": "msg"
@@ -702,7 +702,7 @@
                         "memberName": "sender",
                         "nodeType": "MemberAccess",
                         "referencedDeclaration": null,
-                        "src": "878:10:0",
+                        "src": "959:10:0",
                         "typeDescriptions": {
                           "typeIdentifier": "t_address",
                           "typeString": "address"
@@ -713,7 +713,7 @@
                       "isPure": false,
                       "lValueRequested": true,
                       "nodeType": "IndexAccess",
-                      "src": "858:31:0",
+                      "src": "939:31:0",
                       "typeDescriptions": {
                         "typeIdentifier": "t_bool",
                         "typeString": "bool"
@@ -731,7 +731,7 @@
                       "kind": "bool",
                       "lValueRequested": false,
                       "nodeType": "Literal",
-                      "src": "892:4:0",
+                      "src": "973:4:0",
                       "subdenomination": null,
                       "typeDescriptions": {
                         "typeIdentifier": "t_bool",
@@ -739,7 +739,7 @@
                       },
                       "value": "true"
                     },
-                    "src": "858:38:0",
+                    "src": "939:38:0",
                     "typeDescriptions": {
                       "typeIdentifier": "t_bool",
                       "typeString": "bool"
@@ -747,7 +747,7 @@
                   },
                   "id": 27,
                   "nodeType": "ExpressionStatement",
-                  "src": "858:38:0"
+                  "src": "939:38:0"
                 }
               ]
             },
@@ -769,7 +769,7 @@
                   "name": "verificationCode",
                   "nodeType": "VariableDeclaration",
                   "scope": 29,
-                  "src": "760:23:0",
+                  "src": "841:23:0",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -780,7 +780,7 @@
                     "id": 10,
                     "name": "uint32",
                     "nodeType": "ElementaryTypeName",
-                    "src": "760:6:0",
+                    "src": "841:6:0",
                     "typeDescriptions": {
                       "typeIdentifier": "t_uint32",
                       "typeString": "uint32"
@@ -790,33 +790,40 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "759:25:0"
+              "src": "840:25:0"
             },
             "payable": false,
             "returnParameters": {
               "id": 13,
               "nodeType": "ParameterList",
               "parameters": [],
-              "src": "792:0:0"
+              "src": "873:0:0"
             },
             "scope": 30,
-            "src": "736:168:0",
+            "src": "817:168:0",
             "stateMutability": "nonpayable",
             "superFunction": null,
             "visibility": "public"
           }
         ],
         "scope": 31,
-        "src": "363:544:0"
+        "src": "363:625:0"
       }
     ],
-    "src": "0:909:0"
+    "src": "0:990:0"
   },
   "compiler": {
     "name": "solc",
     "version": "0.4.24+commit.e67f0147.Emscripten.clang"
   },
-  "networks": {},
+  "networks": {
+    "1534622171854": {
+      "events": {},
+      "links": {},
+      "address": "0x180a7114e6edc2a8118cf9f706bff748d6106152",
+      "transactionHash": "0xc6d11978c9e182100722941462fe644cae8a8292ec56281bf22b4d76f9d80b99"
+    }
+  },
   "schemaVersion": "2.0.1",
-  "updatedAt": "2018-08-18T15:48:20.642Z"
+  "updatedAt": "2018-08-18T21:08:22.565Z"
 }

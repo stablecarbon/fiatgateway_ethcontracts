@@ -113,14 +113,14 @@ function regulatorStorageTests(owner, user, attacker, validator, validator2) {
 
 		                })
 
-		                it('emits a SetUserPermission event', async function () {
+		                it('emits a LogSetUserPermission event', async function () {
 
 		                    assert(await this.permissionSheet.isPermission(this.testPermission));
 
 		                    const {logs} =  await this.permissionSheet.setUserPermission(user, this.testPermission, { from });
 
 		                    assert.equal(logs.length, 1);
-		                    assert.equal(logs[0].event, 'SetUserPermission');
+		                    assert.equal(logs[0].event, 'LogSetUserPermission');
 		                    assert.equal(logs[0].args.who, user);
 		                    assert.equal(logs[0].args.methodsignature, this.testPermission);
 
@@ -181,11 +181,11 @@ function regulatorStorageTests(owner, user, attacker, validator, validator2) {
 
 			            })
 
-			            it('emits a RemovedUserPermission event', async function () {
+			            it('emits a LogRemovedUserPermission event', async function () {
 
 			                const { logs } = await this.permissionSheet.removeUserPermission(user, this.testPermission, { from });
 			                assert.equal(logs.length, 1);
-			                assert.equal(logs[0].event, 'RemovedUserPermission');
+			                assert.equal(logs[0].event, 'LogRemovedUserPermission');
 			                assert.equal(logs[0].args.who, user);
 			                assert.equal(logs[0].args.methodsignature, this.testPermission);
 

@@ -15,11 +15,12 @@ contract MutableCarbonDollarStorage is Ownable, CarbonDollarStorage {
     event FeeSheetChanged(address indexed oldSheet, address indexed newSheet);
     event StablecoinWhitelistChanged(address indexed oldWhitelist, address indexed newWhitelist);
 
-	/**
-    * @dev a PermissionedTokenStorage can set its storages only once, on construction
-    *
+    /**
+    * @dev CONSTRUCTOR
+    * @param _feesheet address of the new FeeSheet
+    * @param _whitelist address of the new StablecoinWhitelist
     **/
-    constructor (address f, address w) CarbonDollarStorage(f, w) public {}
+    constructor (address _feesheet, address _whitelist) CarbonDollarStorage(_feesheet, _whitelist) public {}
 
     /**
      * @notice Set the stablecoin whitelist contract.
@@ -27,14 +28,6 @@ contract MutableCarbonDollarStorage is Ownable, CarbonDollarStorage {
      */
     function setStablecoinWhitelist(address _whitelist) public onlyOwner {
         _setStablecoinWhitelist(_whitelist);
-    }
-
-    function _setStablecoinWhitelist(address _whitelist) internal {
-        require(_whitelist != address(stablecoinWhitelist), "Must be a new stablecoin whitelist");
-        require(AddressUtils.isContract(_whitelist), "Must be an actual contract");
-        address oldWhitelist = address(stablecoinWhitelist);
-        stablecoinWhitelist = StablecoinWhitelist(_whitelist);
-        emit StablecoinWhitelistChanged(oldWhitelist, _whitelist);
     }
 
 	/**
@@ -51,5 +44,13 @@ contract MutableCarbonDollarStorage is Ownable, CarbonDollarStorage {
         address oldSheet = address(stablecoinFees);
         stablecoinFees = FeeSheet(_feesheet);
         emit FeeSheetChanged(oldSheet, _feesheet);
+    }
+
+    function _setStablecoinWhitelist(address _whitelist) internal {
+        require(_whitelist != address(stablecoinWhitelist), "Must be a new stablecoin whitelist");
+        require(AddressUtils.isContract(_whitelist), "Must be an actual contract");
+        address oldWhitelist = address(stablecoinWhitelist);
+        stablecoinWhitelist = StablecoinWhitelist(_whitelist);
+        emit StablecoinWhitelistChanged(oldWhitelist, _whitelist);
     }
 }

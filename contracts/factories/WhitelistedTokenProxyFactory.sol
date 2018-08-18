@@ -1,4 +1,4 @@
-pragma solidity ^0.4.23;
+pragma solidity ^0.4.24;
 
 import "../tokens/whitelistedToken/WhitelistedTokenProxy.sol";
 import "../tokens/permissionedToken/dataStorage/BalanceSheet.sol";
@@ -16,19 +16,7 @@ contract WhitelistedTokenProxyFactory {
     address[] public tokens;
 
     // Events
-    event CreatedWhitelistedTokenProxy(address newToken, uint index);
-
-    // Return number of token proxy contracts created so far
-    function getCount() public view returns (uint) {
-        return tokens.length;
-    }
-
-    // Return the i'th created token
-    function getToken(uint i) public view returns(address) {
-        require((i < tokens.length) && (i >= 0), "Invalid index");
-        return tokens[i];
-    }
-    
+    event CreatedWhitelistedTokenProxy(address newToken, uint256 index);
 
     /**
     *
@@ -59,6 +47,17 @@ contract WhitelistedTokenProxyFactory {
 
         tokens.push(proxy);
         emit CreatedWhitelistedTokenProxy(proxy, getCount()-1);
+    }
+
+    // Return number of token proxy contracts created so far
+    function getCount() public view returns (uint256) {
+        return tokens.length;
+    }
+
+    // Return the i'th created token
+    function getToken(uint256 i) public view returns(address) {
+        require((i < tokens.length) && (i >= 0), "Invalid index");
+        return tokens[i];
     }
 }
 

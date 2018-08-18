@@ -51,10 +51,10 @@ function regulatorUserPermissionsTests(owner, user, validator) {
                         await this.sheet.setMinter(user, { from });
                         assert(await this.sheet.isMinter(user));
                     })
-                    it('emits a SetMinter event', async function () {
+                    it('emits a LogSetMinter event', async function () {
                         const { logs } = await this.sheet.setMinter(user, { from });
                         assert.equal(logs.length, 1);
-                        assert.equal(logs[0].event, 'SetMinter');
+                        assert.equal(logs[0].event, 'LogSetMinter');
                         assert.equal(logs[0].args.who, user);
                     })
                 })
@@ -81,10 +81,10 @@ function regulatorUserPermissionsTests(owner, user, validator) {
                         await this.sheet.removeMinter(user, { from });
                         assert(!(await this.sheet.hasUserPermission(user, this.MINT_SIG)));
                     })
-                    it('emits a RemovedMinter event', async function () {
+                    it('emits a LogRemovedMinter event', async function () {
                         const { logs } = await this.sheet.removeMinter(user, { from })
                         assert.equal(logs.length, 1)
-                        assert.equal(logs[0].event, 'RemovedMinter')
+                        assert.equal(logs[0].event, 'LogRemovedMinter')
                         assert.equal(logs[0].args.who, user)
                     })
                 })
@@ -104,10 +104,10 @@ function regulatorUserPermissionsTests(owner, user, validator) {
                         await this.sheet.setBlacklistDestroyer(user, { from });
                         assert(await this.sheet.isBlacklistDestroyer(user));
                     })
-                    it('emits a SetBlacklistDestroyer event', async function () {
+                    it('emits a LogSetBlacklistDestroyer event', async function () {
                         const { logs } = await this.sheet.setBlacklistDestroyer(user, { from });
                         assert.equal(logs.length, 1);
-                        assert.equal(logs[0].event, 'SetBlacklistDestroyer');
+                        assert.equal(logs[0].event, 'LogSetBlacklistDestroyer');
                         assert.equal(logs[0].args.who, user);
                     })
                 })
@@ -132,10 +132,10 @@ function regulatorUserPermissionsTests(owner, user, validator) {
                         await this.sheet.removeBlacklistDestroyer(user, { from });
                         assert(!(await this.sheet.isBlacklistDestroyer(user)));
                     })
-                    it('emits a RemovedBlacklistDestroyer event', async function () {
+                    it('emits a LogRemovedBlacklistDestroyer event', async function () {
                         const { logs } = await this.sheet.removeBlacklistDestroyer(user, {from})
                         assert.equal(logs.length, 1)
-                        assert.equal(logs[0].event, 'RemovedBlacklistDestroyer')
+                        assert.equal(logs[0].event, 'LogRemovedBlacklistDestroyer')
                         assert.equal(logs[0].args.who, user)
                     })
                 })
@@ -154,10 +154,10 @@ function regulatorUserPermissionsTests(owner, user, validator) {
                         await this.sheet.setBlacklistSpender(user, { from });
                         assert(await this.sheet.isBlacklistSpender(user));
                     })
-                    it('emits a SetBlacklistSpender event', async function () {
+                    it('emits a LogSetBlacklistSpender event', async function () {
                         const { logs } = await this.sheet.setBlacklistSpender(user, { from });
                         assert.equal(logs.length, 1);
-                        assert.equal(logs[0].event, 'SetBlacklistSpender');
+                        assert.equal(logs[0].event, 'LogSetBlacklistSpender');
                         assert.equal(logs[0].args.who, user);
                     })
                 });
@@ -182,10 +182,10 @@ function regulatorUserPermissionsTests(owner, user, validator) {
                         await this.sheet.removeBlacklistSpender(user, { from });
                         assert(!(await this.sheet.isBlacklistSpender(user)));
                     })
-                    it('emits a RemovedBlacklistSpender event', async function () {
+                    it('emits a LogRemovedBlacklistSpender event', async function () {
                         const { logs } = await this.sheet.removeBlacklistSpender(user, {from})
                         assert.equal(logs.length, 1)
-                        assert.equal(logs[0].event, 'RemovedBlacklistSpender')
+                        assert.equal(logs[0].event, 'LogRemovedBlacklistSpender')
                         assert.equal(logs[0].args.who, user)
                     })
                 });
@@ -206,10 +206,10 @@ function regulatorUserPermissionsTests(owner, user, validator) {
                         assert(!(await this.sheet.hasUserPermission(user, this.BLACKLISTED_SIG)));
 
                     })
-                    it('emits a SetWhitelistedUser event', async function () {
+                    it('emits a LogWhitelistedUser event', async function () {
                         const { logs } = await this.sheet.setWhitelistedUser(user, { from });
                         assert.equal(logs.length, 1);
-                        assert.equal(logs[0].event, 'SetWhitelistedUser');
+                        assert.equal(logs[0].event, 'LogWhitelistedUser');
                         assert.equal(logs[0].args.who, user);
                     })
                 });
@@ -230,10 +230,10 @@ function regulatorUserPermissionsTests(owner, user, validator) {
                         assert(await this.sheet.hasUserPermission(user, this.BLACKLISTED_SIG));
 
                     })
-                    it('emits a SetBlacklistedUser event', async function () {
+                    it('emits a LogBlacklistedUser event', async function () {
                         const { logs } = await this.sheet.setBlacklistedUser(user, { from });
                         assert.equal(logs.length, 1);
-                        assert.equal(logs[0].event, 'SetBlacklistedUser');
+                        assert.equal(logs[0].event, 'LogBlacklistedUser');
                         assert.equal(logs[0].args.who, user);
                     })
                 });
@@ -254,10 +254,10 @@ function regulatorUserPermissionsTests(owner, user, validator) {
                         assert(!(await this.sheet.hasUserPermission(user, this.BLACKLISTED_SIG)));
 
                     })
-                    it('emits a SetNonlistedUser event', async function () {
+                    it('emits a LogNonlistedUser event', async function () {
                         const { logs } = await this.sheet.setNonlistedUser(user, { from });
                         assert.equal(logs.length, 1);
-                        assert.equal(logs[0].event, 'SetNonlistedUser');
+                        assert.equal(logs[0].event, 'LogNonlistedUser');
                         assert.equal(logs[0].args.who, user);
                     })
                 });

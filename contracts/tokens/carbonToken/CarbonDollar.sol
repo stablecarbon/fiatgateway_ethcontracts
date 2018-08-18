@@ -16,6 +16,7 @@ contract CarbonDollar is MutableCarbonDollarStorage, PermissionedToken {
 
     event ConvertedToWT(address indexed user, uint256 amount);
     event BurnedCUSD(address indexed user, uint256 feedAmount, uint256 chargedFee);
+    
     /**
         Modifiers
     */
@@ -26,10 +27,15 @@ contract CarbonDollar is MutableCarbonDollarStorage, PermissionedToken {
 
     /** CONSTRUCTOR
     * @dev Passes along arguments to base class.
+    * @param _regulator the Regulator, should be a CarbonDollarRegulator 
+    * @param _balances BalanceSheet
+    * @param _allowances AllowanceSheet
+    * @param _fees FeeSheet
+    * @param _stablecoins StablecoinWhitelist
     */
-    constructor(address r, address b, address a, address f, address s) 
-    PermissionedToken(r, b, a) 
-    MutableCarbonDollarStorage(f, s) public {}
+    constructor(address _regulator, address _balances, address _allowances, address _fees, address _stablecoins) public
+    PermissionedToken(_regulator, _balances, _allowances) 
+    MutableCarbonDollarStorage(_fees, _stablecoins) {}
 
     /**
      * @notice Add new stablecoin to whitelist.
@@ -45,15 +51,6 @@ contract CarbonDollar is MutableCarbonDollarStorage, PermissionedToken {
      */
     function unlistToken(address _stablecoin) public onlyOwner whenNotPaused {
         stablecoinWhitelist.removeStablecoin(_stablecoin);
-    }
-
-    /**
-     * @notice Indicate if stablecoin is whitelisted or not.
-     * @param _stablecoin Address of stablecoin contract.
-     * @return Whether or not the stablecoin is on the whitelist.
-     */
-    function isWhitelisted(address _stablecoin) public view returns (bool) {
-        return stablecoinWhitelist.isWhitelisted(_stablecoin);
     }
 
     /**
@@ -86,23 +83,6 @@ contract CarbonDollar is MutableCarbonDollarStorage, PermissionedToken {
     }
 
     /**
-     * @notice Get the fee associated with going from CarbonUSD to a specific WhitelistedToken.
-     * @param stablecoin The stablecoin whose fee is being checked.
-     * @return The fee associated with the stablecoin.
-     */
-    function getFee(address stablecoin) public view returns (uint256) {
-        return stablecoinFees.fees(stablecoin);
-    }
-
-    /**
-     * @notice Get the default fee associated with going from CarbonUSD to a specific WhitelistedToken.
-     * @return The default fee for stablecoin trades.
-     */
-    function getDefaultFee() public view returns (uint256) {
-        return stablecoinFees.defaultFee();
-    }
-
-    /**
      * @notice Mints CUSD on behalf of a user. Note the use of the "requiresWhitelistedToken"
      * modifier; this means that minting authority does not belong to any personal account; 
      * only whitelisted token contracts can call this function. The intended functionality is that the only
@@ -112,10 +92,6 @@ contract CarbonDollar is MutableCarbonDollarStorage, PermissionedToken {
      */
     function mint(address _to, uint256 _amount) public requiresWhitelistedToken whenNotPaused {
         _mint(_to, _amount);
-    }
-
-    function _mint(address _to, uint256 _amount) internal {
-        super._mint(_to, _amount);
     }
 
     /**
@@ -181,4 +157,36 @@ contract CarbonDollar is MutableCarbonDollarStorage, PermissionedToken {
     function computeStablecoinFee(uint256 amount, address stablecoin) public view returns (uint256) {
         return stablecoinFees.computeStablecoinFee(amount, stablecoin);
     }
+
+    /**
+     * @notice Indicate if stablecoin is whitelisted or not.
+     * @param _stablecoin Address of stablecoin contract.
+     * @return Whether or not the stablecoin is on the whitelist.
+     */
+    function isWhitelisted(address _stablecoin) public view returns (bool) {
+        return stablecoinWhitelist.isWhitelisted(_stablecoin);
+    }
+
+    /**
+     * @notice Get the fee associated with going from CarbonUSD to a specific WhitelistedToken.
+     * @param stablecoin The stablecoin whose fee is being checked.
+     * @return The fee associated with the stablecoin.
+     */
+    function getFee(address stablecoin) public view returns (uint256) {
+        return stablecoinFees.fees(stablecoin);
+    }
+
+    /**
+     * @notice Get the default fee associated with going from CarbonUSD to a specific WhitelistedToken.
+     * @return The default fee for stablecoin trades.
+     */
+    function getDefaultFee() public view returns (uint256) {
+        return stablecoinFees.defaultFee();
+    }
+
+
+    function _mint(address _to, uint256 _amount) internal {
+        super._mint(_to, _amount);
+    }
+
 }

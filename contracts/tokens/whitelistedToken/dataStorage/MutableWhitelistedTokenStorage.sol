@@ -14,7 +14,7 @@ contract MutableWhitelistedTokenStorage is Ownable, WhitelistedTokenStorage {
      */
     event CUSDAddressChanged(address indexed oldCUSD, address indexed newCUSD);
 
-    constructor (address cusd) WhitelistedTokenStorage(cusd) public {}
+    constructor (address cusd) public WhitelistedTokenStorage(cusd) {}
 
     /**
      * @notice Change the cusd address.
