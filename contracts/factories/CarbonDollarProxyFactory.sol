@@ -5,10 +5,12 @@ import "../tokens/carbonToken/dataStorage/FeeSheet.sol";
 import "../tokens/carbonToken/dataStorage/StablecoinWhitelist.sol";
 import "../tokens/permissionedToken/dataStorage/BalanceSheet.sol";
 import "../tokens/permissionedToken/dataStorage/AllowanceSheet.sol";
+import "../tokens/carbonToken/CarbonDollar.sol";
 
 /**
 *
-* @dev PermissionedTokenProxyFactory creates new PermissionedTokenProxy contracts instantiated with data stores. 
+* @dev CarbonDollarProxyFactory creates new CarbonDollarProxy contracts with new data storage sheets, properly configured
+* with ownership, and the proxy logic implementations are based on a user-specified CarbonDollar. 
 *
 **/
 contract CarbonDollarProxyFactory {
@@ -55,6 +57,12 @@ contract CarbonDollarProxyFactory {
         AllowanceSheet(allowances).transferOwnership(address(proxy));
         FeeSheet(fees).transferOwnership(address(proxy));
         StablecoinWhitelist(whitelist).transferOwnership(address(proxy));
+
+        CarbonDollar(proxy).claimBalanceOwnership();
+        CarbonDollar(proxy).claimAllowanceOwnership();
+        CarbonDollar(proxy).claimFeeOwnership();
+        CarbonDollar(proxy).claimWhitelistOwnership();
+
 
         // The function caller should own the proxy contract
         CarbonDollarProxy(proxy).transferOwnership(msg.sender);

@@ -10,7 +10,7 @@ import "../permissionedToken/PermissionedTokenProxy.sol";
 * be routed through this proxy, since this proxy contract is the owner of the
 * storage contracts.
 */
-contract CarbonDollarProxy is UpgradeabilityProxy, Ownable, MutableCarbonDollarStorage, MutablePermissionedTokenStorage {
+contract CarbonDollarProxy is UpgradeabilityProxy, MutableCarbonDollarStorage, MutablePermissionedTokenStorage {
     constructor(address i, address r, address b, address a, address f, address s) 
     UpgradeabilityProxy(i)
     MutableCarbonDollarStorage(f, s)

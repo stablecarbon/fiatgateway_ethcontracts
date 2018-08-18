@@ -23,7 +23,7 @@
     {
       "constant": false,
       "inputs": [],
-      "name": "renounceOwnership",
+      "name": "claimOwnership",
       "outputs": [],
       "payable": false,
       "stateMutability": "nonpayable",
@@ -33,6 +33,20 @@
       "constant": true,
       "inputs": [],
       "name": "owner",
+      "outputs": [
+        {
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "pendingOwner",
       "outputs": [
         {
           "name": "",
@@ -88,18 +102,6 @@
           "indexed": true,
           "name": "previousOwner",
           "type": "address"
-        }
-      ],
-      "name": "OwnershipRenounced",
-      "type": "event"
-    },
-    {
-      "anonymous": false,
-      "inputs": [
-        {
-          "indexed": true,
-          "name": "previousOwner",
-          "type": "address"
         },
         {
           "indexed": true,
@@ -139,24 +141,24 @@
       "type": "function"
     }
   ],
-  "bytecode": "0x608060405260008054600160a060020a031916331790556104a0806100256000396000f3006080604052600436106100775763ffffffff7c01000000000000000000000000000000000000000000000000000000006000350416630418945a811461007c5780633af32abf146100ac5780633b947d2b146100ee578063715018a61461011c5780638da5cb5b14610131578063f2fde38b1461016f575b600080fd5b34801561008857600080fd5b506100aa73ffffffffffffffffffffffffffffffffffffffff6004351661019d565b005b3480156100b857600080fd5b506100da73ffffffffffffffffffffffffffffffffffffffff6004351661023b565b604080519115158252519081900360200190f35b3480156100fa57600080fd5b506100aa73ffffffffffffffffffffffffffffffffffffffff60043516610250565b34801561012857600080fd5b506100aa6102e8565b34801561013d57600080fd5b50610146610379565b6040805173ffffffffffffffffffffffffffffffffffffffff9092168252519081900360200190f35b34801561017b57600080fd5b506100aa73ffffffffffffffffffffffffffffffffffffffff60043516610395565b60005473ffffffffffffffffffffffffffffffffffffffff1633146101c157600080fd5b73ffffffffffffffffffffffffffffffffffffffff8116600081815260016020819052604080832080547fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff0016909217909155517f3db297c09c19972ba6a701ff373ab97e21ff1e4992e863c7abe44e9b2fed08479190a250565b60016020526000908152604090205460ff1681565b60005473ffffffffffffffffffffffffffffffffffffffff16331461027457600080fd5b73ffffffffffffffffffffffffffffffffffffffff811660008181526001602052604080822080547fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff00169055517f3302a1b37f04242bb55603f5449e7ecd690a35eef08ba1353c48c20e2aae9cda9190a250565b60005473ffffffffffffffffffffffffffffffffffffffff16331461030c57600080fd5b6000805460405173ffffffffffffffffffffffffffffffffffffffff909116917ff8df31144d9c2f0f6b59d69b8b98abd5459d07f2742c4df920b25aae33c6482091a2600080547fffffffffffffffffffffffff0000000000000000000000000000000000000000169055565b60005473ffffffffffffffffffffffffffffffffffffffff1681565b60005473ffffffffffffffffffffffffffffffffffffffff1633146103b957600080fd5b6103c2816103c5565b50565b73ffffffffffffffffffffffffffffffffffffffff811615156103e757600080fd5b6000805460405173ffffffffffffffffffffffffffffffffffffffff808516939216917f8be0079c531659141344cd1fd0a4f28419497f9722a3daafe3b4186f6b6457e091a3600080547fffffffffffffffffffffffff00000000000000000000000000000000000000001673ffffffffffffffffffffffffffffffffffffffff929092169190911790555600a165627a7a7230582081a886d930db023aabf5e92dd2c3c26bc6b894f0bc458ace888438ab8c7adab90029",
-  "deployedBytecode": "0x6080604052600436106100775763ffffffff7c01000000000000000000000000000000000000000000000000000000006000350416630418945a811461007c5780633af32abf146100ac5780633b947d2b146100ee578063715018a61461011c5780638da5cb5b14610131578063f2fde38b1461016f575b600080fd5b34801561008857600080fd5b506100aa73ffffffffffffffffffffffffffffffffffffffff6004351661019d565b005b3480156100b857600080fd5b506100da73ffffffffffffffffffffffffffffffffffffffff6004351661023b565b604080519115158252519081900360200190f35b3480156100fa57600080fd5b506100aa73ffffffffffffffffffffffffffffffffffffffff60043516610250565b34801561012857600080fd5b506100aa6102e8565b34801561013d57600080fd5b50610146610379565b6040805173ffffffffffffffffffffffffffffffffffffffff9092168252519081900360200190f35b34801561017b57600080fd5b506100aa73ffffffffffffffffffffffffffffffffffffffff60043516610395565b60005473ffffffffffffffffffffffffffffffffffffffff1633146101c157600080fd5b73ffffffffffffffffffffffffffffffffffffffff8116600081815260016020819052604080832080547fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff0016909217909155517f3db297c09c19972ba6a701ff373ab97e21ff1e4992e863c7abe44e9b2fed08479190a250565b60016020526000908152604090205460ff1681565b60005473ffffffffffffffffffffffffffffffffffffffff16331461027457600080fd5b73ffffffffffffffffffffffffffffffffffffffff811660008181526001602052604080822080547fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff00169055517f3302a1b37f04242bb55603f5449e7ecd690a35eef08ba1353c48c20e2aae9cda9190a250565b60005473ffffffffffffffffffffffffffffffffffffffff16331461030c57600080fd5b6000805460405173ffffffffffffffffffffffffffffffffffffffff909116917ff8df31144d9c2f0f6b59d69b8b98abd5459d07f2742c4df920b25aae33c6482091a2600080547fffffffffffffffffffffffff0000000000000000000000000000000000000000169055565b60005473ffffffffffffffffffffffffffffffffffffffff1681565b60005473ffffffffffffffffffffffffffffffffffffffff1633146103b957600080fd5b6103c2816103c5565b50565b73ffffffffffffffffffffffffffffffffffffffff811615156103e757600080fd5b6000805460405173ffffffffffffffffffffffffffffffffffffffff808516939216917f8be0079c531659141344cd1fd0a4f28419497f9722a3daafe3b4186f6b6457e091a3600080547fffffffffffffffffffffffff00000000000000000000000000000000000000001673ffffffffffffffffffffffffffffffffffffffff929092169190911790555600a165627a7a7230582081a886d930db023aabf5e92dd2c3c26bc6b894f0bc458ace888438ab8c7adab90029",
-  "sourceMap": "329:891:18:-;;;567:5:34;:18;;-1:-1:-1;;;;;;567:18:34;575:10;567:18;;;329:891:18;;;;;;",
-  "deployedSourceMap": "329:891:18:-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;805:142;;8:9:-1;5:2;;;30:1;27;20:12;5:2;-1:-1;805:142:18;;;;;;;;;491:46;;8:9:-1;5:2;;;30:1;27;20:12;5:2;-1:-1;491:46:18;;;;;;;;;;;;;;;;;;;;;;;;;1069:148;;8:9:-1;5:2;;;30:1;27;20:12;5:2;-1:-1;1069:148:18;;;;;;;1001:111:34;;8:9:-1;5:2;;;30:1;27;20:12;5:2;1001:111:34;;;;238:20;;8:9:-1;5:2;;;30:1;27;20:12;5:2;238:20:34;;;;;;;;;;;;;;;;;;;;;;;1274:103;;8:9:-1;5:2;;;30:1;27;20:12;5:2;-1:-1;1274:103:34;;;;;;;805:142:18;719:5:34;;;;705:10;:19;697:28;;;;;;872:21:18;;;;;;;896:4;872:21;;;;;;;;:28;;;;;;;;;;916:23;;;872:21;916:23;805:142;:::o;491:46::-;;;;;;;;;;;;;;;:::o;1069:148::-;719:5:34;;;;705:10;:19;697:28;;;;;;1139:21:18;;;1163:5;1139:21;;;:13;:21;;;;;;:29;;;;;;1184:25;;;1163:5;1184:25;1069:148;:::o;1001:111:34:-;719:5;;;;705:10;:19;697:28;;;;;;1077:5;;;1058:25;;1077:5;;;;;1058:25;;;1105:1;1089:18;;;;;;1001:111::o;238:20::-;;;;;;:::o;1274:103::-;719:5;;;;705:10;:19;697:28;;;;;;1343:29;1362:9;1343:18;:29::i;:::-;1274:103;:::o;1512:171::-;1582:23;;;;;1574:32;;;;;;1638:5;;;1617:38;;;;;;;1638:5;;;1617:38;;;1661:5;:17;;;;;;;;;;;;;;;1512:171::o",
-  "source": "pragma solidity ^0.4.24;\r\n\r\nimport \"openzeppelin-solidity/contracts/ownership/Ownable.sol\";\r\n\r\n/**\r\n* @title StablecoinWhitelist\r\n* @notice Contains a mapping indicating whether or not a token contract\r\n* is approved to participate on the CarbonUSD network. We can also refer\r\n* to tokens on the whitelist as \"stablecoins\".\r\n*/\r\ncontract StablecoinWhitelist is Ownable {\r\n    /** \r\n        Mappings\r\n    */\r\n\r\n    /* is the token address referring to a stablecoin/whitelisted token? */\r\n    mapping (address => bool) public isWhitelisted;\r\n\r\n    /** \r\n        Events\r\n    */\r\n    event StablecoinAdded(address indexed stablecoin);\r\n    event StablecoinRemoved(address indexed stablecoin);\r\n\r\n    /** @notice Add a token to the whitelist.\r\n        @param _token Address of the new stablecoin.\r\n    */\r\n    function addStablecoin(address _token) public onlyOwner {\r\n        isWhitelisted[_token] = true;\r\n        emit StablecoinAdded(_token);\r\n    }\r\n\r\n    /** @notice Removes a token from the whitelist.\r\n        @param _token Address of the ex-stablecoin.\r\n    */\r\n    function removeStablecoin(address _token) public onlyOwner {\r\n        isWhitelisted[_token] = false;\r\n        emit StablecoinRemoved(_token);\r\n    }\r\n}",
+  "bytecode": "0x608060405260008054600160a060020a031990811633179091556001805490911690556104b0806100316000396000f3006080604052600436106100825763ffffffff7c01000000000000000000000000000000000000000000000000000000006000350416630418945a81146100875780633af32abf146100b75780633b947d2b146100f95780634e71e0c8146101275780638da5cb5b1461013c578063e30c39781461017a578063f2fde38b1461018f575b600080fd5b34801561009357600080fd5b506100b573ffffffffffffffffffffffffffffffffffffffff600435166101bd565b005b3480156100c357600080fd5b506100e573ffffffffffffffffffffffffffffffffffffffff60043516610258565b604080519115158252519081900360200190f35b34801561010557600080fd5b506100b573ffffffffffffffffffffffffffffffffffffffff6004351661026d565b34801561013357600080fd5b506100b5610305565b34801561014857600080fd5b506101516103bf565b6040805173ffffffffffffffffffffffffffffffffffffffff9092168252519081900360200190f35b34801561018657600080fd5b506101516103db565b34801561019b57600080fd5b506100b573ffffffffffffffffffffffffffffffffffffffff600435166103f7565b60005473ffffffffffffffffffffffffffffffffffffffff1633146101e157600080fd5b73ffffffffffffffffffffffffffffffffffffffff811660008181526002602052604080822080547fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff00166001179055517f3db297c09c19972ba6a701ff373ab97e21ff1e4992e863c7abe44e9b2fed08479190a250565b60026020526000908152604090205460ff1681565b60005473ffffffffffffffffffffffffffffffffffffffff16331461029157600080fd5b73ffffffffffffffffffffffffffffffffffffffff811660008181526002602052604080822080547fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff00169055517f3302a1b37f04242bb55603f5449e7ecd690a35eef08ba1353c48c20e2aae9cda9190a250565b60015473ffffffffffffffffffffffffffffffffffffffff16331461032957600080fd5b6001546000805460405173ffffffffffffffffffffffffffffffffffffffff93841693909116917f8be0079c531659141344cd1fd0a4f28419497f9722a3daafe3b4186f6b6457e091a360018054600080547fffffffffffffffffffffffff000000000000000000000000000000000000000090811673ffffffffffffffffffffffffffffffffffffffff841617909155169055565b60005473ffffffffffffffffffffffffffffffffffffffff1681565b60015473ffffffffffffffffffffffffffffffffffffffff1681565b60005473ffffffffffffffffffffffffffffffffffffffff16331461041b57600080fd5b73ffffffffffffffffffffffffffffffffffffffff8116151561043d57600080fd5b600180547fffffffffffffffffffffffff00000000000000000000000000000000000000001673ffffffffffffffffffffffffffffffffffffffff929092169190911790555600a165627a7a72305820365306345a29f950fc3b0179911fbc6cdd0f384312ccd3809f64e3daaa5b17540029",
+  "deployedBytecode": "0x6080604052600436106100825763ffffffff7c01000000000000000000000000000000000000000000000000000000006000350416630418945a81146100875780633af32abf146100b75780633b947d2b146100f95780634e71e0c8146101275780638da5cb5b1461013c578063e30c39781461017a578063f2fde38b1461018f575b600080fd5b34801561009357600080fd5b506100b573ffffffffffffffffffffffffffffffffffffffff600435166101bd565b005b3480156100c357600080fd5b506100e573ffffffffffffffffffffffffffffffffffffffff60043516610258565b604080519115158252519081900360200190f35b34801561010557600080fd5b506100b573ffffffffffffffffffffffffffffffffffffffff6004351661026d565b34801561013357600080fd5b506100b5610305565b34801561014857600080fd5b506101516103bf565b6040805173ffffffffffffffffffffffffffffffffffffffff9092168252519081900360200190f35b34801561018657600080fd5b506101516103db565b34801561019b57600080fd5b506100b573ffffffffffffffffffffffffffffffffffffffff600435166103f7565b60005473ffffffffffffffffffffffffffffffffffffffff1633146101e157600080fd5b73ffffffffffffffffffffffffffffffffffffffff811660008181526002602052604080822080547fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff00166001179055517f3db297c09c19972ba6a701ff373ab97e21ff1e4992e863c7abe44e9b2fed08479190a250565b60026020526000908152604090205460ff1681565b60005473ffffffffffffffffffffffffffffffffffffffff16331461029157600080fd5b73ffffffffffffffffffffffffffffffffffffffff811660008181526002602052604080822080547fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff00169055517f3302a1b37f04242bb55603f5449e7ecd690a35eef08ba1353c48c20e2aae9cda9190a250565b60015473ffffffffffffffffffffffffffffffffffffffff16331461032957600080fd5b6001546000805460405173ffffffffffffffffffffffffffffffffffffffff93841693909116917f8be0079c531659141344cd1fd0a4f28419497f9722a3daafe3b4186f6b6457e091a360018054600080547fffffffffffffffffffffffff000000000000000000000000000000000000000090811673ffffffffffffffffffffffffffffffffffffffff841617909155169055565b60005473ffffffffffffffffffffffffffffffffffffffff1681565b60015473ffffffffffffffffffffffffffffffffffffffff1681565b60005473ffffffffffffffffffffffffffffffffffffffff16331461041b57600080fd5b73ffffffffffffffffffffffffffffffffffffffff8116151561043d57600080fd5b600180547fffffffffffffffffffffffff00000000000000000000000000000000000000001673ffffffffffffffffffffffffffffffffffffffff929092169190911790555600a165627a7a72305820365306345a29f950fc3b0179911fbc6cdd0f384312ccd3809f64e3daaa5b17540029",
+  "sourceMap": "374:891:23:-;;;812:5:6;:18;;-1:-1:-1;;;;;;812:18:6;;;820:10;812:18;;;;;837:25;;;;;;;374:891:23;;;;;;",
+  "deployedSourceMap": "374:891:23:-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;850:142;;8:9:-1;5:2;;;30:1;27;20:12;5:2;-1:-1;850:142:23;;;;;;;;;536:46;;8:9:-1;5:2;;;30:1;27;20:12;5:2;-1:-1;536:46:23;;;;;;;;;;;;;;;;;;;;;;;;;1114:148;;8:9:-1;5:2;;;30:1;27;20:12;5:2;-1:-1;1114:148:23;;;;;;;1588:168:6;;8:9:-1;5:2;;;30:1;27;20:12;5:2;1588:168:6;;;;496:20;;8:9:-1;5:2;;;30:1;27;20:12;5:2;496:20:6;;;;;;;;;;;;;;;;;;;;;;;521:27;;8:9:-1;5:2;;;30:1;27;20:12;5:2;521:27:6;;;;1360:139;;8:9:-1;5:2;;;30:1;27;20:12;5:2;-1:-1;1360:139:6;;;;;;;850:142:23;1003:5:6;;;;989:10;:19;981:28;;;;;;917:21:23;;;;;;;:13;:21;;;;;;:28;;;;941:4;917:28;;;961:23;;;917:21;961:23;850:142;:::o;536:46::-;;;;;;;;;;;;;;;:::o;1114:148::-;1003:5:6;;;;989:10;:19;981:28;;;;;;1184:21:23;;;1208:5;1184:21;;;:13;:21;;;;;;:29;;;;;;1229:25;;;1208:5;1229:25;1114:148;:::o;1588:168:6:-;1165:12;;;;1151:10;:26;1143:35;;;;;;1678:12;;;1671:5;;1650:41;;1678:12;;;;;1671:5;;;;1650:41;;;1706:12;;;;1698:20;;;;;;1706:12;;;1698:20;;;;1725:25;;;1588:168::o;496:20::-;;;;;;:::o;521:27::-;;;;;;:::o;1360:139::-;1003:5;;;;989:10;:19;981:28;;;;;;1438:23;;;;;1430:32;;;;;;1469:12;:24;;;;;;;;;;;;;;;1360:139::o",
+  "source": "pragma solidity ^0.4.24;\r\n\r\n// import \"openzeppelin-solidity/contracts/ownership/Claimable.sol\";\r\nimport '../../../helpers/Ownable.sol';\r\n\r\n/**\r\n* @title StablecoinWhitelist\r\n* @notice Contains a mapping indicating whether or not a token contract\r\n* is approved to participate on the CarbonUSD network. We can also refer\r\n* to tokens on the whitelist as \"stablecoins\".\r\n*/\r\ncontract StablecoinWhitelist is Ownable {\r\n    /** \r\n        Mappings\r\n    */\r\n\r\n    /* is the token address referring to a stablecoin/whitelisted token? */\r\n    mapping (address => bool) public isWhitelisted;\r\n\r\n    /** \r\n        Events\r\n    */\r\n    event StablecoinAdded(address indexed stablecoin);\r\n    event StablecoinRemoved(address indexed stablecoin);\r\n\r\n    /** @notice Add a token to the whitelist.\r\n        @param _token Address of the new stablecoin.\r\n    */\r\n    function addStablecoin(address _token) public onlyOwner {\r\n        isWhitelisted[_token] = true;\r\n        emit StablecoinAdded(_token);\r\n    }\r\n\r\n    /** @notice Removes a token from the whitelist.\r\n        @param _token Address of the ex-stablecoin.\r\n    */\r\n    function removeStablecoin(address _token) public onlyOwner {\r\n        isWhitelisted[_token] = false;\r\n        emit StablecoinRemoved(_token);\r\n    }\r\n}",
   "sourcePath": "C:\\Users\\npain\\Projects\\Carbon\\fiat_gateway\\contracts\\tokens\\carbonToken\\dataStorage\\StablecoinWhitelist.sol",
   "ast": {
     "absolutePath": "/C/Users/npain/Projects/Carbon/fiat_gateway/contracts/tokens/carbonToken/dataStorage/StablecoinWhitelist.sol",
     "exportedSymbols": {
       "StablecoinWhitelist": [
-        3294
+        3655
       ]
     },
-    "id": 3295,
+    "id": 3656,
     "nodeType": "SourceUnit",
     "nodes": [
       {
-        "id": 3242,
+        "id": 3603,
         "literals": [
           "solidity",
           "^",
@@ -164,16 +166,16 @@
           ".24"
         ],
         "nodeType": "PragmaDirective",
-        "src": "0:24:18"
+        "src": "0:24:23"
       },
       {
-        "absolutePath": "openzeppelin-solidity/contracts/ownership/Ownable.sol",
-        "file": "openzeppelin-solidity/contracts/ownership/Ownable.sol",
-        "id": 3243,
+        "absolutePath": "/C/Users/npain/Projects/Carbon/fiat_gateway/contracts/helpers/Ownable.sol",
+        "file": "../../../helpers/Ownable.sol",
+        "id": 3604,
         "nodeType": "ImportDirective",
-        "scope": 3295,
-        "sourceUnit": 5168,
-        "src": "28:63:18",
+        "scope": 3656,
+        "sourceUnit": 709,
+        "src": "98:38:23",
         "symbolAliases": [],
         "unitAlias": ""
       },
@@ -183,42 +185,42 @@
             "arguments": null,
             "baseName": {
               "contractScope": null,
-              "id": 3244,
+              "id": 3605,
               "name": "Ownable",
               "nodeType": "UserDefinedTypeName",
-              "referencedDeclaration": 5167,
-              "src": "361:7:18",
+              "referencedDeclaration": 708,
+              "src": "406:7:23",
               "typeDescriptions": {
-                "typeIdentifier": "t_contract$_Ownable_$5167",
+                "typeIdentifier": "t_contract$_Ownable_$708",
                 "typeString": "contract Ownable"
               }
             },
-            "id": 3245,
+            "id": 3606,
             "nodeType": "InheritanceSpecifier",
-            "src": "361:7:18"
+            "src": "406:7:23"
           }
         ],
         "contractDependencies": [
-          5167
+          708
         ],
         "contractKind": "contract",
         "documentation": "@title StablecoinWhitelist\r\n@notice Contains a mapping indicating whether or not a token contract\r\nis approved to participate on the CarbonUSD network. We can also refer\r\nto tokens on the whitelist as \"stablecoins\".\r",
         "fullyImplemented": true,
-        "id": 3294,
+        "id": 3655,
         "linearizedBaseContracts": [
-          3294,
-          5167
+          3655,
+          708
         ],
         "name": "StablecoinWhitelist",
         "nodeType": "ContractDefinition",
         "nodes": [
           {
             "constant": false,
-            "id": 3249,
+            "id": 3610,
             "name": "isWhitelisted",
             "nodeType": "VariableDeclaration",
-            "scope": 3294,
-            "src": "491:46:18",
+            "scope": 3655,
+            "src": "536:46:23",
             "stateVariable": true,
             "storageLocation": "default",
             "typeDescriptions": {
@@ -226,28 +228,28 @@
               "typeString": "mapping(address => bool)"
             },
             "typeName": {
-              "id": 3248,
+              "id": 3609,
               "keyType": {
-                "id": 3246,
+                "id": 3607,
                 "name": "address",
                 "nodeType": "ElementaryTypeName",
-                "src": "500:7:18",
+                "src": "545:7:23",
                 "typeDescriptions": {
                   "typeIdentifier": "t_address",
                   "typeString": "address"
                 }
               },
               "nodeType": "Mapping",
-              "src": "491:25:18",
+              "src": "536:25:23",
               "typeDescriptions": {
                 "typeIdentifier": "t_mapping$_t_address_$_t_bool_$",
                 "typeString": "mapping(address => bool)"
               },
               "valueType": {
-                "id": 3247,
+                "id": 3608,
                 "name": "bool",
                 "nodeType": "ElementaryTypeName",
-                "src": "511:4:18",
+                "src": "556:4:23",
                 "typeDescriptions": {
                   "typeIdentifier": "t_bool",
                   "typeString": "bool"
@@ -260,21 +262,21 @@
           {
             "anonymous": false,
             "documentation": "Events\r",
-            "id": 3253,
+            "id": 3614,
             "name": "StablecoinAdded",
             "nodeType": "EventDefinition",
             "parameters": {
-              "id": 3252,
+              "id": 3613,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 3251,
+                  "id": 3612,
                   "indexed": true,
                   "name": "stablecoin",
                   "nodeType": "VariableDeclaration",
-                  "scope": 3253,
-                  "src": "602:26:18",
+                  "scope": 3614,
+                  "src": "647:26:23",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -282,10 +284,10 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 3250,
+                    "id": 3611,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
-                    "src": "602:7:18",
+                    "src": "647:7:23",
                     "typeDescriptions": {
                       "typeIdentifier": "t_address",
                       "typeString": "address"
@@ -295,28 +297,28 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "601:28:18"
+              "src": "646:28:23"
             },
-            "src": "580:50:18"
+            "src": "625:50:23"
           },
           {
             "anonymous": false,
             "documentation": null,
-            "id": 3257,
+            "id": 3618,
             "name": "StablecoinRemoved",
             "nodeType": "EventDefinition",
             "parameters": {
-              "id": 3256,
+              "id": 3617,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 3255,
+                  "id": 3616,
                   "indexed": true,
                   "name": "stablecoin",
                   "nodeType": "VariableDeclaration",
-                  "scope": 3257,
-                  "src": "660:26:18",
+                  "scope": 3618,
+                  "src": "705:26:23",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -324,10 +326,10 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 3254,
+                    "id": 3615,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
-                    "src": "660:7:18",
+                    "src": "705:7:23",
                     "typeDescriptions": {
                       "typeIdentifier": "t_address",
                       "typeString": "address"
@@ -337,20 +339,20 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "659:28:18"
+              "src": "704:28:23"
             },
-            "src": "636:52:18"
+            "src": "681:52:23"
           },
           {
             "body": {
-              "id": 3274,
+              "id": 3635,
               "nodeType": "Block",
-              "src": "861:86:18",
+              "src": "906:86:23",
               "statements": [
                 {
                   "expression": {
                     "argumentTypes": null,
-                    "id": 3268,
+                    "id": 3629,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
@@ -359,26 +361,26 @@
                       "argumentTypes": null,
                       "baseExpression": {
                         "argumentTypes": null,
-                        "id": 3264,
+                        "id": 3625,
                         "name": "isWhitelisted",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 3249,
-                        "src": "872:13:18",
+                        "referencedDeclaration": 3610,
+                        "src": "917:13:23",
                         "typeDescriptions": {
                           "typeIdentifier": "t_mapping$_t_address_$_t_bool_$",
                           "typeString": "mapping(address => bool)"
                         }
                       },
-                      "id": 3266,
+                      "id": 3627,
                       "indexExpression": {
                         "argumentTypes": null,
-                        "id": 3265,
+                        "id": 3626,
                         "name": "_token",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 3259,
-                        "src": "886:6:18",
+                        "referencedDeclaration": 3620,
+                        "src": "931:6:23",
                         "typeDescriptions": {
                           "typeIdentifier": "t_address",
                           "typeString": "address"
@@ -389,7 +391,7 @@
                       "isPure": false,
                       "lValueRequested": true,
                       "nodeType": "IndexAccess",
-                      "src": "872:21:18",
+                      "src": "917:21:23",
                       "typeDescriptions": {
                         "typeIdentifier": "t_bool",
                         "typeString": "bool"
@@ -400,14 +402,14 @@
                     "rightHandSide": {
                       "argumentTypes": null,
                       "hexValue": "74727565",
-                      "id": 3267,
+                      "id": 3628,
                       "isConstant": false,
                       "isLValue": false,
                       "isPure": true,
                       "kind": "bool",
                       "lValueRequested": false,
                       "nodeType": "Literal",
-                      "src": "896:4:18",
+                      "src": "941:4:23",
                       "subdenomination": null,
                       "typeDescriptions": {
                         "typeIdentifier": "t_bool",
@@ -415,15 +417,15 @@
                       },
                       "value": "true"
                     },
-                    "src": "872:28:18",
+                    "src": "917:28:23",
                     "typeDescriptions": {
                       "typeIdentifier": "t_bool",
                       "typeString": "bool"
                     }
                   },
-                  "id": 3269,
+                  "id": 3630,
                   "nodeType": "ExpressionStatement",
-                  "src": "872:28:18"
+                  "src": "917:28:23"
                 },
                 {
                   "eventCall": {
@@ -431,12 +433,12 @@
                     "arguments": [
                       {
                         "argumentTypes": null,
-                        "id": 3271,
+                        "id": 3632,
                         "name": "_token",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 3259,
-                        "src": "932:6:18",
+                        "referencedDeclaration": 3620,
+                        "src": "977:6:23",
                         "typeDescriptions": {
                           "typeIdentifier": "t_address",
                           "typeString": "address"
@@ -450,18 +452,18 @@
                           "typeString": "address"
                         }
                       ],
-                      "id": 3270,
+                      "id": 3631,
                       "name": "StablecoinAdded",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 3253,
-                      "src": "916:15:18",
+                      "referencedDeclaration": 3614,
+                      "src": "961:15:23",
                       "typeDescriptions": {
                         "typeIdentifier": "t_function_event_nonpayable$_t_address_$returns$__$",
                         "typeString": "function (address)"
                       }
                     },
-                    "id": 3272,
+                    "id": 3633,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
@@ -469,57 +471,57 @@
                     "lValueRequested": false,
                     "names": [],
                     "nodeType": "FunctionCall",
-                    "src": "916:23:18",
+                    "src": "961:23:23",
                     "typeDescriptions": {
                       "typeIdentifier": "t_tuple$__$",
                       "typeString": "tuple()"
                     }
                   },
-                  "id": 3273,
+                  "id": 3634,
                   "nodeType": "EmitStatement",
-                  "src": "911:28:18"
+                  "src": "956:28:23"
                 }
               ]
             },
             "documentation": "@notice Add a token to the whitelist.\r\n@param _token Address of the new stablecoin.\r",
-            "id": 3275,
+            "id": 3636,
             "implemented": true,
             "isConstructor": false,
             "isDeclaredConst": false,
             "modifiers": [
               {
                 "arguments": null,
-                "id": 3262,
+                "id": 3623,
                 "modifierName": {
                   "argumentTypes": null,
-                  "id": 3261,
+                  "id": 3622,
                   "name": "onlyOwner",
                   "nodeType": "Identifier",
                   "overloadedDeclarations": [],
-                  "referencedDeclaration": 5115,
-                  "src": "851:9:18",
+                  "referencedDeclaration": 655,
+                  "src": "896:9:23",
                   "typeDescriptions": {
                     "typeIdentifier": "t_modifier$__$",
                     "typeString": "modifier ()"
                   }
                 },
                 "nodeType": "ModifierInvocation",
-                "src": "851:9:18"
+                "src": "896:9:23"
               }
             ],
             "name": "addStablecoin",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 3260,
+              "id": 3621,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 3259,
+                  "id": 3620,
                   "name": "_token",
                   "nodeType": "VariableDeclaration",
-                  "scope": 3275,
-                  "src": "828:14:18",
+                  "scope": 3636,
+                  "src": "873:14:23",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -527,10 +529,10 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 3258,
+                    "id": 3619,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
-                    "src": "828:7:18",
+                    "src": "873:7:23",
                     "typeDescriptions": {
                       "typeIdentifier": "t_address",
                       "typeString": "address"
@@ -540,31 +542,31 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "827:16:18"
+              "src": "872:16:23"
             },
             "payable": false,
             "returnParameters": {
-              "id": 3263,
+              "id": 3624,
               "nodeType": "ParameterList",
               "parameters": [],
-              "src": "861:0:18"
+              "src": "906:0:23"
             },
-            "scope": 3294,
-            "src": "805:142:18",
+            "scope": 3655,
+            "src": "850:142:23",
             "stateMutability": "nonpayable",
             "superFunction": null,
             "visibility": "public"
           },
           {
             "body": {
-              "id": 3292,
+              "id": 3653,
               "nodeType": "Block",
-              "src": "1128:89:18",
+              "src": "1173:89:23",
               "statements": [
                 {
                   "expression": {
                     "argumentTypes": null,
-                    "id": 3286,
+                    "id": 3647,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
@@ -573,26 +575,26 @@
                       "argumentTypes": null,
                       "baseExpression": {
                         "argumentTypes": null,
-                        "id": 3282,
+                        "id": 3643,
                         "name": "isWhitelisted",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 3249,
-                        "src": "1139:13:18",
+                        "referencedDeclaration": 3610,
+                        "src": "1184:13:23",
                         "typeDescriptions": {
                           "typeIdentifier": "t_mapping$_t_address_$_t_bool_$",
                           "typeString": "mapping(address => bool)"
                         }
                       },
-                      "id": 3284,
+                      "id": 3645,
                       "indexExpression": {
                         "argumentTypes": null,
-                        "id": 3283,
+                        "id": 3644,
                         "name": "_token",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 3277,
-                        "src": "1153:6:18",
+                        "referencedDeclaration": 3638,
+                        "src": "1198:6:23",
                         "typeDescriptions": {
                           "typeIdentifier": "t_address",
                           "typeString": "address"
@@ -603,7 +605,7 @@
                       "isPure": false,
                       "lValueRequested": true,
                       "nodeType": "IndexAccess",
-                      "src": "1139:21:18",
+                      "src": "1184:21:23",
                       "typeDescriptions": {
                         "typeIdentifier": "t_bool",
                         "typeString": "bool"
@@ -614,14 +616,14 @@
                     "rightHandSide": {
                       "argumentTypes": null,
                       "hexValue": "66616c7365",
-                      "id": 3285,
+                      "id": 3646,
                       "isConstant": false,
                       "isLValue": false,
                       "isPure": true,
                       "kind": "bool",
                       "lValueRequested": false,
                       "nodeType": "Literal",
-                      "src": "1163:5:18",
+                      "src": "1208:5:23",
                       "subdenomination": null,
                       "typeDescriptions": {
                         "typeIdentifier": "t_bool",
@@ -629,15 +631,15 @@
                       },
                       "value": "false"
                     },
-                    "src": "1139:29:18",
+                    "src": "1184:29:23",
                     "typeDescriptions": {
                       "typeIdentifier": "t_bool",
                       "typeString": "bool"
                     }
                   },
-                  "id": 3287,
+                  "id": 3648,
                   "nodeType": "ExpressionStatement",
-                  "src": "1139:29:18"
+                  "src": "1184:29:23"
                 },
                 {
                   "eventCall": {
@@ -645,12 +647,12 @@
                     "arguments": [
                       {
                         "argumentTypes": null,
-                        "id": 3289,
+                        "id": 3650,
                         "name": "_token",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 3277,
-                        "src": "1202:6:18",
+                        "referencedDeclaration": 3638,
+                        "src": "1247:6:23",
                         "typeDescriptions": {
                           "typeIdentifier": "t_address",
                           "typeString": "address"
@@ -664,18 +666,18 @@
                           "typeString": "address"
                         }
                       ],
-                      "id": 3288,
+                      "id": 3649,
                       "name": "StablecoinRemoved",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 3257,
-                      "src": "1184:17:18",
+                      "referencedDeclaration": 3618,
+                      "src": "1229:17:23",
                       "typeDescriptions": {
                         "typeIdentifier": "t_function_event_nonpayable$_t_address_$returns$__$",
                         "typeString": "function (address)"
                       }
                     },
-                    "id": 3290,
+                    "id": 3651,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
@@ -683,57 +685,57 @@
                     "lValueRequested": false,
                     "names": [],
                     "nodeType": "FunctionCall",
-                    "src": "1184:25:18",
+                    "src": "1229:25:23",
                     "typeDescriptions": {
                       "typeIdentifier": "t_tuple$__$",
                       "typeString": "tuple()"
                     }
                   },
-                  "id": 3291,
+                  "id": 3652,
                   "nodeType": "EmitStatement",
-                  "src": "1179:30:18"
+                  "src": "1224:30:23"
                 }
               ]
             },
             "documentation": "@notice Removes a token from the whitelist.\r\n@param _token Address of the ex-stablecoin.\r",
-            "id": 3293,
+            "id": 3654,
             "implemented": true,
             "isConstructor": false,
             "isDeclaredConst": false,
             "modifiers": [
               {
                 "arguments": null,
-                "id": 3280,
+                "id": 3641,
                 "modifierName": {
                   "argumentTypes": null,
-                  "id": 3279,
+                  "id": 3640,
                   "name": "onlyOwner",
                   "nodeType": "Identifier",
                   "overloadedDeclarations": [],
-                  "referencedDeclaration": 5115,
-                  "src": "1118:9:18",
+                  "referencedDeclaration": 655,
+                  "src": "1163:9:23",
                   "typeDescriptions": {
                     "typeIdentifier": "t_modifier$__$",
                     "typeString": "modifier ()"
                   }
                 },
                 "nodeType": "ModifierInvocation",
-                "src": "1118:9:18"
+                "src": "1163:9:23"
               }
             ],
             "name": "removeStablecoin",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 3278,
+              "id": 3639,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 3277,
+                  "id": 3638,
                   "name": "_token",
                   "nodeType": "VariableDeclaration",
-                  "scope": 3293,
-                  "src": "1095:14:18",
+                  "scope": 3654,
+                  "src": "1140:14:23",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -741,10 +743,10 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 3276,
+                    "id": 3637,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
-                    "src": "1095:7:18",
+                    "src": "1140:7:23",
                     "typeDescriptions": {
                       "typeIdentifier": "t_address",
                       "typeString": "address"
@@ -754,40 +756,40 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "1094:16:18"
+              "src": "1139:16:23"
             },
             "payable": false,
             "returnParameters": {
-              "id": 3281,
+              "id": 3642,
               "nodeType": "ParameterList",
               "parameters": [],
-              "src": "1128:0:18"
+              "src": "1173:0:23"
             },
-            "scope": 3294,
-            "src": "1069:148:18",
+            "scope": 3655,
+            "src": "1114:148:23",
             "stateMutability": "nonpayable",
             "superFunction": null,
             "visibility": "public"
           }
         ],
-        "scope": 3295,
-        "src": "329:891:18"
+        "scope": 3656,
+        "src": "374:891:23"
       }
     ],
-    "src": "0:1220:18"
+    "src": "0:1265:23"
   },
   "legacyAST": {
     "absolutePath": "/C/Users/npain/Projects/Carbon/fiat_gateway/contracts/tokens/carbonToken/dataStorage/StablecoinWhitelist.sol",
     "exportedSymbols": {
       "StablecoinWhitelist": [
-        3294
+        3655
       ]
     },
-    "id": 3295,
+    "id": 3656,
     "nodeType": "SourceUnit",
     "nodes": [
       {
-        "id": 3242,
+        "id": 3603,
         "literals": [
           "solidity",
           "^",
@@ -795,16 +797,16 @@
           ".24"
         ],
         "nodeType": "PragmaDirective",
-        "src": "0:24:18"
+        "src": "0:24:23"
       },
       {
-        "absolutePath": "openzeppelin-solidity/contracts/ownership/Ownable.sol",
-        "file": "openzeppelin-solidity/contracts/ownership/Ownable.sol",
-        "id": 3243,
+        "absolutePath": "/C/Users/npain/Projects/Carbon/fiat_gateway/contracts/helpers/Ownable.sol",
+        "file": "../../../helpers/Ownable.sol",
+        "id": 3604,
         "nodeType": "ImportDirective",
-        "scope": 3295,
-        "sourceUnit": 5168,
-        "src": "28:63:18",
+        "scope": 3656,
+        "sourceUnit": 709,
+        "src": "98:38:23",
         "symbolAliases": [],
         "unitAlias": ""
       },
@@ -814,42 +816,42 @@
             "arguments": null,
             "baseName": {
               "contractScope": null,
-              "id": 3244,
+              "id": 3605,
               "name": "Ownable",
               "nodeType": "UserDefinedTypeName",
-              "referencedDeclaration": 5167,
-              "src": "361:7:18",
+              "referencedDeclaration": 708,
+              "src": "406:7:23",
               "typeDescriptions": {
-                "typeIdentifier": "t_contract$_Ownable_$5167",
+                "typeIdentifier": "t_contract$_Ownable_$708",
                 "typeString": "contract Ownable"
               }
             },
-            "id": 3245,
+            "id": 3606,
             "nodeType": "InheritanceSpecifier",
-            "src": "361:7:18"
+            "src": "406:7:23"
           }
         ],
         "contractDependencies": [
-          5167
+          708
         ],
         "contractKind": "contract",
         "documentation": "@title StablecoinWhitelist\r\n@notice Contains a mapping indicating whether or not a token contract\r\nis approved to participate on the CarbonUSD network. We can also refer\r\nto tokens on the whitelist as \"stablecoins\".\r",
         "fullyImplemented": true,
-        "id": 3294,
+        "id": 3655,
         "linearizedBaseContracts": [
-          3294,
-          5167
+          3655,
+          708
         ],
         "name": "StablecoinWhitelist",
         "nodeType": "ContractDefinition",
         "nodes": [
           {
             "constant": false,
-            "id": 3249,
+            "id": 3610,
             "name": "isWhitelisted",
             "nodeType": "VariableDeclaration",
-            "scope": 3294,
-            "src": "491:46:18",
+            "scope": 3655,
+            "src": "536:46:23",
             "stateVariable": true,
             "storageLocation": "default",
             "typeDescriptions": {
@@ -857,28 +859,28 @@
               "typeString": "mapping(address => bool)"
             },
             "typeName": {
-              "id": 3248,
+              "id": 3609,
               "keyType": {
-                "id": 3246,
+                "id": 3607,
                 "name": "address",
                 "nodeType": "ElementaryTypeName",
-                "src": "500:7:18",
+                "src": "545:7:23",
                 "typeDescriptions": {
                   "typeIdentifier": "t_address",
                   "typeString": "address"
                 }
               },
               "nodeType": "Mapping",
-              "src": "491:25:18",
+              "src": "536:25:23",
               "typeDescriptions": {
                 "typeIdentifier": "t_mapping$_t_address_$_t_bool_$",
                 "typeString": "mapping(address => bool)"
               },
               "valueType": {
-                "id": 3247,
+                "id": 3608,
                 "name": "bool",
                 "nodeType": "ElementaryTypeName",
-                "src": "511:4:18",
+                "src": "556:4:23",
                 "typeDescriptions": {
                   "typeIdentifier": "t_bool",
                   "typeString": "bool"
@@ -891,21 +893,21 @@
           {
             "anonymous": false,
             "documentation": "Events\r",
-            "id": 3253,
+            "id": 3614,
             "name": "StablecoinAdded",
             "nodeType": "EventDefinition",
             "parameters": {
-              "id": 3252,
+              "id": 3613,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 3251,
+                  "id": 3612,
                   "indexed": true,
                   "name": "stablecoin",
                   "nodeType": "VariableDeclaration",
-                  "scope": 3253,
-                  "src": "602:26:18",
+                  "scope": 3614,
+                  "src": "647:26:23",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -913,10 +915,10 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 3250,
+                    "id": 3611,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
-                    "src": "602:7:18",
+                    "src": "647:7:23",
                     "typeDescriptions": {
                       "typeIdentifier": "t_address",
                       "typeString": "address"
@@ -926,28 +928,28 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "601:28:18"
+              "src": "646:28:23"
             },
-            "src": "580:50:18"
+            "src": "625:50:23"
           },
           {
             "anonymous": false,
             "documentation": null,
-            "id": 3257,
+            "id": 3618,
             "name": "StablecoinRemoved",
             "nodeType": "EventDefinition",
             "parameters": {
-              "id": 3256,
+              "id": 3617,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 3255,
+                  "id": 3616,
                   "indexed": true,
                   "name": "stablecoin",
                   "nodeType": "VariableDeclaration",
-                  "scope": 3257,
-                  "src": "660:26:18",
+                  "scope": 3618,
+                  "src": "705:26:23",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -955,10 +957,10 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 3254,
+                    "id": 3615,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
-                    "src": "660:7:18",
+                    "src": "705:7:23",
                     "typeDescriptions": {
                       "typeIdentifier": "t_address",
                       "typeString": "address"
@@ -968,20 +970,20 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "659:28:18"
+              "src": "704:28:23"
             },
-            "src": "636:52:18"
+            "src": "681:52:23"
           },
           {
             "body": {
-              "id": 3274,
+              "id": 3635,
               "nodeType": "Block",
-              "src": "861:86:18",
+              "src": "906:86:23",
               "statements": [
                 {
                   "expression": {
                     "argumentTypes": null,
-                    "id": 3268,
+                    "id": 3629,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
@@ -990,26 +992,26 @@
                       "argumentTypes": null,
                       "baseExpression": {
                         "argumentTypes": null,
-                        "id": 3264,
+                        "id": 3625,
                         "name": "isWhitelisted",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 3249,
-                        "src": "872:13:18",
+                        "referencedDeclaration": 3610,
+                        "src": "917:13:23",
                         "typeDescriptions": {
                           "typeIdentifier": "t_mapping$_t_address_$_t_bool_$",
                           "typeString": "mapping(address => bool)"
                         }
                       },
-                      "id": 3266,
+                      "id": 3627,
                       "indexExpression": {
                         "argumentTypes": null,
-                        "id": 3265,
+                        "id": 3626,
                         "name": "_token",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 3259,
-                        "src": "886:6:18",
+                        "referencedDeclaration": 3620,
+                        "src": "931:6:23",
                         "typeDescriptions": {
                           "typeIdentifier": "t_address",
                           "typeString": "address"
@@ -1020,7 +1022,7 @@
                       "isPure": false,
                       "lValueRequested": true,
                       "nodeType": "IndexAccess",
-                      "src": "872:21:18",
+                      "src": "917:21:23",
                       "typeDescriptions": {
                         "typeIdentifier": "t_bool",
                         "typeString": "bool"
@@ -1031,14 +1033,14 @@
                     "rightHandSide": {
                       "argumentTypes": null,
                       "hexValue": "74727565",
-                      "id": 3267,
+                      "id": 3628,
                       "isConstant": false,
                       "isLValue": false,
                       "isPure": true,
                       "kind": "bool",
                       "lValueRequested": false,
                       "nodeType": "Literal",
-                      "src": "896:4:18",
+                      "src": "941:4:23",
                       "subdenomination": null,
                       "typeDescriptions": {
                         "typeIdentifier": "t_bool",
@@ -1046,15 +1048,15 @@
                       },
                       "value": "true"
                     },
-                    "src": "872:28:18",
+                    "src": "917:28:23",
                     "typeDescriptions": {
                       "typeIdentifier": "t_bool",
                       "typeString": "bool"
                     }
                   },
-                  "id": 3269,
+                  "id": 3630,
                   "nodeType": "ExpressionStatement",
-                  "src": "872:28:18"
+                  "src": "917:28:23"
                 },
                 {
                   "eventCall": {
@@ -1062,12 +1064,12 @@
                     "arguments": [
                       {
                         "argumentTypes": null,
-                        "id": 3271,
+                        "id": 3632,
                         "name": "_token",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 3259,
-                        "src": "932:6:18",
+                        "referencedDeclaration": 3620,
+                        "src": "977:6:23",
                         "typeDescriptions": {
                           "typeIdentifier": "t_address",
                           "typeString": "address"
@@ -1081,18 +1083,18 @@
                           "typeString": "address"
                         }
                       ],
-                      "id": 3270,
+                      "id": 3631,
                       "name": "StablecoinAdded",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 3253,
-                      "src": "916:15:18",
+                      "referencedDeclaration": 3614,
+                      "src": "961:15:23",
                       "typeDescriptions": {
                         "typeIdentifier": "t_function_event_nonpayable$_t_address_$returns$__$",
                         "typeString": "function (address)"
                       }
                     },
-                    "id": 3272,
+                    "id": 3633,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
@@ -1100,57 +1102,57 @@
                     "lValueRequested": false,
                     "names": [],
                     "nodeType": "FunctionCall",
-                    "src": "916:23:18",
+                    "src": "961:23:23",
                     "typeDescriptions": {
                       "typeIdentifier": "t_tuple$__$",
                       "typeString": "tuple()"
                     }
                   },
-                  "id": 3273,
+                  "id": 3634,
                   "nodeType": "EmitStatement",
-                  "src": "911:28:18"
+                  "src": "956:28:23"
                 }
               ]
             },
             "documentation": "@notice Add a token to the whitelist.\r\n@param _token Address of the new stablecoin.\r",
-            "id": 3275,
+            "id": 3636,
             "implemented": true,
             "isConstructor": false,
             "isDeclaredConst": false,
             "modifiers": [
               {
                 "arguments": null,
-                "id": 3262,
+                "id": 3623,
                 "modifierName": {
                   "argumentTypes": null,
-                  "id": 3261,
+                  "id": 3622,
                   "name": "onlyOwner",
                   "nodeType": "Identifier",
                   "overloadedDeclarations": [],
-                  "referencedDeclaration": 5115,
-                  "src": "851:9:18",
+                  "referencedDeclaration": 655,
+                  "src": "896:9:23",
                   "typeDescriptions": {
                     "typeIdentifier": "t_modifier$__$",
                     "typeString": "modifier ()"
                   }
                 },
                 "nodeType": "ModifierInvocation",
-                "src": "851:9:18"
+                "src": "896:9:23"
               }
             ],
             "name": "addStablecoin",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 3260,
+              "id": 3621,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 3259,
+                  "id": 3620,
                   "name": "_token",
                   "nodeType": "VariableDeclaration",
-                  "scope": 3275,
-                  "src": "828:14:18",
+                  "scope": 3636,
+                  "src": "873:14:23",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -1158,10 +1160,10 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 3258,
+                    "id": 3619,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
-                    "src": "828:7:18",
+                    "src": "873:7:23",
                     "typeDescriptions": {
                       "typeIdentifier": "t_address",
                       "typeString": "address"
@@ -1171,31 +1173,31 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "827:16:18"
+              "src": "872:16:23"
             },
             "payable": false,
             "returnParameters": {
-              "id": 3263,
+              "id": 3624,
               "nodeType": "ParameterList",
               "parameters": [],
-              "src": "861:0:18"
+              "src": "906:0:23"
             },
-            "scope": 3294,
-            "src": "805:142:18",
+            "scope": 3655,
+            "src": "850:142:23",
             "stateMutability": "nonpayable",
             "superFunction": null,
             "visibility": "public"
           },
           {
             "body": {
-              "id": 3292,
+              "id": 3653,
               "nodeType": "Block",
-              "src": "1128:89:18",
+              "src": "1173:89:23",
               "statements": [
                 {
                   "expression": {
                     "argumentTypes": null,
-                    "id": 3286,
+                    "id": 3647,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
@@ -1204,26 +1206,26 @@
                       "argumentTypes": null,
                       "baseExpression": {
                         "argumentTypes": null,
-                        "id": 3282,
+                        "id": 3643,
                         "name": "isWhitelisted",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 3249,
-                        "src": "1139:13:18",
+                        "referencedDeclaration": 3610,
+                        "src": "1184:13:23",
                         "typeDescriptions": {
                           "typeIdentifier": "t_mapping$_t_address_$_t_bool_$",
                           "typeString": "mapping(address => bool)"
                         }
                       },
-                      "id": 3284,
+                      "id": 3645,
                       "indexExpression": {
                         "argumentTypes": null,
-                        "id": 3283,
+                        "id": 3644,
                         "name": "_token",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 3277,
-                        "src": "1153:6:18",
+                        "referencedDeclaration": 3638,
+                        "src": "1198:6:23",
                         "typeDescriptions": {
                           "typeIdentifier": "t_address",
                           "typeString": "address"
@@ -1234,7 +1236,7 @@
                       "isPure": false,
                       "lValueRequested": true,
                       "nodeType": "IndexAccess",
-                      "src": "1139:21:18",
+                      "src": "1184:21:23",
                       "typeDescriptions": {
                         "typeIdentifier": "t_bool",
                         "typeString": "bool"
@@ -1245,14 +1247,14 @@
                     "rightHandSide": {
                       "argumentTypes": null,
                       "hexValue": "66616c7365",
-                      "id": 3285,
+                      "id": 3646,
                       "isConstant": false,
                       "isLValue": false,
                       "isPure": true,
                       "kind": "bool",
                       "lValueRequested": false,
                       "nodeType": "Literal",
-                      "src": "1163:5:18",
+                      "src": "1208:5:23",
                       "subdenomination": null,
                       "typeDescriptions": {
                         "typeIdentifier": "t_bool",
@@ -1260,15 +1262,15 @@
                       },
                       "value": "false"
                     },
-                    "src": "1139:29:18",
+                    "src": "1184:29:23",
                     "typeDescriptions": {
                       "typeIdentifier": "t_bool",
                       "typeString": "bool"
                     }
                   },
-                  "id": 3287,
+                  "id": 3648,
                   "nodeType": "ExpressionStatement",
-                  "src": "1139:29:18"
+                  "src": "1184:29:23"
                 },
                 {
                   "eventCall": {
@@ -1276,12 +1278,12 @@
                     "arguments": [
                       {
                         "argumentTypes": null,
-                        "id": 3289,
+                        "id": 3650,
                         "name": "_token",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 3277,
-                        "src": "1202:6:18",
+                        "referencedDeclaration": 3638,
+                        "src": "1247:6:23",
                         "typeDescriptions": {
                           "typeIdentifier": "t_address",
                           "typeString": "address"
@@ -1295,18 +1297,18 @@
                           "typeString": "address"
                         }
                       ],
-                      "id": 3288,
+                      "id": 3649,
                       "name": "StablecoinRemoved",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 3257,
-                      "src": "1184:17:18",
+                      "referencedDeclaration": 3618,
+                      "src": "1229:17:23",
                       "typeDescriptions": {
                         "typeIdentifier": "t_function_event_nonpayable$_t_address_$returns$__$",
                         "typeString": "function (address)"
                       }
                     },
-                    "id": 3290,
+                    "id": 3651,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
@@ -1314,57 +1316,57 @@
                     "lValueRequested": false,
                     "names": [],
                     "nodeType": "FunctionCall",
-                    "src": "1184:25:18",
+                    "src": "1229:25:23",
                     "typeDescriptions": {
                       "typeIdentifier": "t_tuple$__$",
                       "typeString": "tuple()"
                     }
                   },
-                  "id": 3291,
+                  "id": 3652,
                   "nodeType": "EmitStatement",
-                  "src": "1179:30:18"
+                  "src": "1224:30:23"
                 }
               ]
             },
             "documentation": "@notice Removes a token from the whitelist.\r\n@param _token Address of the ex-stablecoin.\r",
-            "id": 3293,
+            "id": 3654,
             "implemented": true,
             "isConstructor": false,
             "isDeclaredConst": false,
             "modifiers": [
               {
                 "arguments": null,
-                "id": 3280,
+                "id": 3641,
                 "modifierName": {
                   "argumentTypes": null,
-                  "id": 3279,
+                  "id": 3640,
                   "name": "onlyOwner",
                   "nodeType": "Identifier",
                   "overloadedDeclarations": [],
-                  "referencedDeclaration": 5115,
-                  "src": "1118:9:18",
+                  "referencedDeclaration": 655,
+                  "src": "1163:9:23",
                   "typeDescriptions": {
                     "typeIdentifier": "t_modifier$__$",
                     "typeString": "modifier ()"
                   }
                 },
                 "nodeType": "ModifierInvocation",
-                "src": "1118:9:18"
+                "src": "1163:9:23"
               }
             ],
             "name": "removeStablecoin",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 3278,
+              "id": 3639,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 3277,
+                  "id": 3638,
                   "name": "_token",
                   "nodeType": "VariableDeclaration",
-                  "scope": 3293,
-                  "src": "1095:14:18",
+                  "scope": 3654,
+                  "src": "1140:14:23",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -1372,10 +1374,10 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 3276,
+                    "id": 3637,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
-                    "src": "1095:7:18",
+                    "src": "1140:7:23",
                     "typeDescriptions": {
                       "typeIdentifier": "t_address",
                       "typeString": "address"
@@ -1385,27 +1387,27 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "1094:16:18"
+              "src": "1139:16:23"
             },
             "payable": false,
             "returnParameters": {
-              "id": 3281,
+              "id": 3642,
               "nodeType": "ParameterList",
               "parameters": [],
-              "src": "1128:0:18"
+              "src": "1173:0:23"
             },
-            "scope": 3294,
-            "src": "1069:148:18",
+            "scope": 3655,
+            "src": "1114:148:23",
             "stateMutability": "nonpayable",
             "superFunction": null,
             "visibility": "public"
           }
         ],
-        "scope": 3295,
-        "src": "329:891:18"
+        "scope": 3656,
+        "src": "374:891:23"
       }
     ],
-    "src": "0:1220:18"
+    "src": "0:1265:23"
   },
   "compiler": {
     "name": "solc",
@@ -1413,5 +1415,5 @@
   },
   "networks": {},
   "schemaVersion": "2.0.1",
-  "updatedAt": "2018-08-17T19:47:36.306Z"
+  "updatedAt": "2018-08-18T15:48:20.677Z"
 }

@@ -3,10 +3,12 @@ pragma solidity ^0.4.23;
 import "../tokens/whitelistedToken/WhitelistedTokenProxy.sol";
 import "../tokens/permissionedToken/dataStorage/BalanceSheet.sol";
 import "../tokens/permissionedToken/dataStorage/AllowanceSheet.sol";
+import "../tokens/whitelistedToken/WhitelistedToken.sol";
 
 /**
 *
-* @dev WhitelistedTokenProxyFactory creates new WhitelistedTokenProxyFactory contracts instantiated with data stores. 
+* @dev WhitelistedTokenProxyFactory creates new WhitelistedTokenProxy contracts with new data storage sheets, properly configured
+* with ownership, and the proxy logic implementations are based on a user-specified WhitelistedTokenProxy. 
 *
 **/
 contract WhitelistedTokenProxyFactory {
@@ -49,6 +51,8 @@ contract WhitelistedTokenProxyFactory {
         // calls to the latest implementation *in the context of the proxy contract*
         BalanceSheet(balances).transferOwnership(address(proxy));
         AllowanceSheet(allowances).transferOwnership(address(proxy));
+        WhitelistedToken(proxy).claimBalanceOwnership();
+        WhitelistedToken(proxy).claimAllowanceOwnership();
 
         // The function caller should own the proxy contract
         WhitelistedTokenProxy(proxy).transferOwnership(msg.sender);

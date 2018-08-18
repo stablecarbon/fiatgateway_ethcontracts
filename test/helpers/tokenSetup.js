@@ -24,6 +24,8 @@ async function tokenSetup(validator, minter, user, owner, whitelisted, blacklist
 
     await this.permissionSheet_w.transferOwnership(this.regulator_w.address, { from: owner })
     await this.validatorSheet_w.transferOwnership(this.regulator_w.address, { from: owner })
+    await this.regulator_w.claimPermissionOwnership()
+    await this.regulator_w.claimValidatorOwnership()
 
     // Set user permissions in regulator
     await this.regulator_w.setMinter(minter, { from: validator })
@@ -39,6 +41,8 @@ async function tokenSetup(validator, minter, user, owner, whitelisted, blacklist
 
     await this.permissionSheet_c.transferOwnership(this.regulator_c.address, { from: owner })
     await this.validatorSheet_c.transferOwnership(this.regulator_c.address, { from: owner })
+    await this.regulator_c.claimPermissionOwnership()
+    await this.regulator_c.claimValidatorOwnership()
 
     // Set user permissions in regulator
     await this.regulator_c.setMinter(minter, { from: validator })
@@ -68,6 +72,10 @@ async function tokenSetup(validator, minter, user, owner, whitelisted, blacklist
     await this.allowanceSheet.transferOwnership(this.cdToken.address, { from: owner })
     await this.feeSheet.transferOwnership(this.cdToken.address, { from: owner })
     await this.stablecoins.transferOwnership(this.cdToken.address, { from: owner })
+    await this.cdToken.claimBalanceOwnership()
+    await this.cdToken.claimAllowanceOwnership()
+    await this.cdToken.claimFeeOwnership()
+    await this.cdToken.claimWhitelistOwnership()
 
     // WhitelistedToken
     this.balanceSheetWT = await BalanceSheet.new({ from: owner })
@@ -75,6 +83,8 @@ async function tokenSetup(validator, minter, user, owner, whitelisted, blacklist
     this.wtToken = await WhitelistedToken.new(this.regulator_w.address, this.balanceSheetWT.address, this.allowanceSheetWT.address, this.cdToken.address, { from: owner })
     await this.balanceSheetWT.transferOwnership(this.wtToken.address, { from: owner })
     await this.allowanceSheetWT.transferOwnership(this.wtToken.address, { from: owner })
+    await this.wtToken.claimBalanceOwnership()
+    await this.wtToken.claimAllowanceOwnership()
 
     // must whitelist CUSD address to convert from WT into CUSD (used for minting CUSD)
     await this.regulator_w.setWhitelistedUser(this.cdToken.address, { from: validator });

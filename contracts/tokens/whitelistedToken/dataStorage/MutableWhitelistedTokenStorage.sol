@@ -2,7 +2,7 @@ pragma solidity ^0.4.24;
 
 import "./WhitelistedTokenStorage.sol";
 import "openzeppelin-solidity/contracts/AddressUtils.sol";
-import "openzeppelin-solidity/contracts/ownership/Ownable.sol";
+import '../../../helpers/Ownable.sol';
 
 /**
 * @title MutableWhitelistedTokenStorage

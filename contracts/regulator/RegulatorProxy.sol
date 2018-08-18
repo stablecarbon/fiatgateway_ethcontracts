@@ -2,7 +2,6 @@ pragma solidity ^0.4.24;
 
 import "zos-lib/contracts/upgradeability/UpgradeabilityProxy.sol";
 import "./dataStorage/MutableRegulatorStorage.sol";
-import "openzeppelin-solidity/contracts/ownership/Claimable.sol";
 
 /**
  * @title RegulatorProxy

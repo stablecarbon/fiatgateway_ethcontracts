@@ -89,11 +89,15 @@ contract('PermissionedTokenProxy', _accounts => {
             // set user as minter proxy storage and whitelist
             await this.permissionSheet.transferOwnership(this.tokenProxyRegulator.address, {from:owner})
             await this.validatorSheet.transferOwnership(this.tokenProxyRegulator.address, {from:owner})
+            await this.tokenProxyRegulator.claimPermissionOwnership()
+            await this.tokenProxyRegulator.claimValidatorOwnership()
             await this.tokenProxyRegulator.setMinter(owner, {from:validator})
             await this.tokenProxyRegulator.setWhitelistedUser(user, {from:validator})
 
             await (await BalanceSheet.at(this.proxyBalancesStorage)).transferOwnership(this.tokenProxy.address, {from:owner})
             await (await AllowanceSheet.at(this.proxyAllowancesStorage)).transferOwnership(this.tokenProxy.address, {from:owner})
+            await this.tokenProxy.claimBalanceOwnership()
+            await this.tokenProxy.claimAllowanceOwnership()
         })
         describe('call to proxy to mint', function () {
             it('proxy mints to whitelisted user', async function () {

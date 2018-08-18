@@ -7,7 +7,7 @@ import "./StablecoinWhitelist.sol";
 * @title CarbonDollarStorage
 * @notice Contains necessary storage contracts for CarbonDollar (FeeSheet and StablecoinWhitelist).
 */
-contract CarbonDollarStorage{
+contract CarbonDollarStorage {
     /**
         Storage
     */
@@ -22,5 +22,19 @@ contract CarbonDollarStorage{
     constructor (address _feesheet, address _whitelist) public {
         stablecoinFees = FeeSheet(_feesheet);
         stablecoinWhitelist = StablecoinWhitelist(_whitelist);
+    }
+
+    /**
+    * @dev claim ownership of fee sheet passed into constructor.
+    **/
+    function claimFeeOwnership() public {
+        stablecoinFees.claimOwnership();
+    }
+
+    /**
+    * @dev claim ownership of stablecoin whitelist sheet passed into constructor.
+    **/
+    function claimWhitelistOwnership() public {
+        stablecoinWhitelist.claimOwnership();
     }
 }

@@ -26,6 +26,8 @@ contract('PermissionedToken', _accounts => {
 
         await this.permissionSheet.transferOwnership(this.regulator.address, {from:owner})
         await this.validatorSheet.transferOwnership(this.regulator.address, {from:owner})
+        await this.regulator.claimPermissionOwnership()
+        await this.regulator.claimValidatorOwnership()
 
         // Set user permissions
         await this.regulator.setMinter(minter, {from:validator})
@@ -41,6 +43,8 @@ contract('PermissionedToken', _accounts => {
 
         await this.balanceSheet.transferOwnership(this.token.address, {from:owner})
         await this.allowanceSheet.transferOwnership(this.token.address, {from:owner})
+        await this.token.claimBalanceOwnership()
+        await this.token.claimAllowanceOwnership()
     })
 
 

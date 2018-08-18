@@ -20,7 +20,7 @@ contract('WhitelistedToken', _accounts => {
         this.token = this.wtToken;
     });
 
-    describe("Whitelisted token tests", function () {
+    describe("Whitelisted token behavior tests", function () {
         const hundred = new BigNumber("100000000000000000000") // 100 * 10**18
         const fifty = new BigNumber("50000000000000000000") // 50 * 10**18
         describe('mintCUSD', function () {       
@@ -99,7 +99,7 @@ contract('WhitelistedToken', _accounts => {
         });
     });
 
-    describe("Whitelisted token additional tests", function () {
+    describe("Whitelisted token storage interaction tests", function () {
         whitelistedTokenMutableStorageTests(owner, user)
     });
 })

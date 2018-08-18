@@ -3,7 +3,6 @@ pragma solidity ^0.4.24;
 import "openzeppelin-solidity/contracts/AddressUtils.sol";
 import "./dataStorage/MutableRegulatorStorage.sol";
 
-
 /**
  * @title Regulator
  * @dev Regulator can be configured to meet relevant securities regulations, KYC policies

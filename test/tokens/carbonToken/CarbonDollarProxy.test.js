@@ -117,12 +117,18 @@ contract('CarbonDollarProxy', _accounts => {
             // Transfer regulator storage ownership to regulator
             await this.permissionSheet.transferOwnership(this.tokenProxyRegulator.address, {from:owner})
             await this.validatorSheet.transferOwnership(this.tokenProxyRegulator.address, {from:owner})
+            await this.tokenProxyRegulator.claimPermissionOwnership()
+            await this.tokenProxyRegulator.claimValidatorOwnership()
 
             // Transfer token storage ownership to token
             await (FeeSheet.at(await this.tokenProxy.stablecoinFees())).transferOwnership(this.tokenProxy.address, {from:owner})
             await (StablecoinWhitelist.at(await this.tokenProxy.stablecoinWhitelist())).transferOwnership(this.tokenProxy.address, {from:owner})
             await (BalanceSheet.at(await this.tokenProxy.balances())).transferOwnership(this.tokenProxy.address, {from:owner})
             await (AllowanceSheet.at(await this.tokenProxy.allowances())).transferOwnership(this.tokenProxy.address, {from:owner})
+            await this.tokenProxy.claimFeeOwnership()
+            await this.tokenProxy.claimWhitelistOwnership()
+            await this.tokenProxy.claimBalanceOwnership()
+            await this.tokenProxy.claimAllowanceOwnership()
         })
         describe('call to proxy to set fee', function () {
             it('proxy sets fee on stablecoin', async function () {

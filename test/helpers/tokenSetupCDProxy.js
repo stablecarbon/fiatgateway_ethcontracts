@@ -25,6 +25,8 @@ async function tokenSetupCDProxy(CarbonDollarAddress, validator, minter, user, o
 
     await this.permissionSheet_w.transferOwnership(this.regulator_w.address, { from: owner })
     await this.validatorSheet_w.transferOwnership(this.regulator_w.address, { from: owner })
+    await this.regulator_w.claimPermissionOwnership()
+    await this.regulator_w.claimValidatorOwnership()
 
     // Set user permissions in regulator
     await this.regulator_w.setMinter(minter, { from: validator })
@@ -57,6 +59,8 @@ async function tokenSetupCDProxy(CarbonDollarAddress, validator, minter, user, o
     this.wtToken = await WhitelistedToken.new(this.regulator_w.address, this.balanceSheetWT.address, this.allowanceSheetWT.address, this.cdToken.address, { from: owner })
     await this.balanceSheetWT.transferOwnership(this.wtToken.address, { from: owner })
     await this.allowanceSheetWT.transferOwnership(this.wtToken.address, { from: owner })
+    await this.wtToken.claimBalanceOwnership()
+    await this.wtToken.claimAllowanceOwnership()
 
     // must whitelist CUSD address to convert from WT into CUSD (used for minting CUSD)
     await this.regulator_w.setWhitelistedUser(this.cdToken.address, { from: validator });

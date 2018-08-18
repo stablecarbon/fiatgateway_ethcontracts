@@ -1,4 +1,5 @@
 pragma solidity ^0.4.24;
+
 import "./dataStorage/MutableCarbonDollarStorage.sol";
 import "../permissionedToken/PermissionedToken.sol";
 import "../whitelistedToken/WhitelistedToken.sol";

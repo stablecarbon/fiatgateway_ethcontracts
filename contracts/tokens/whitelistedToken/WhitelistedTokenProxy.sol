@@ -10,7 +10,7 @@ import "../permissionedToken/PermissionedTokenProxy.sol";
 * be routed through this proxy, since this proxy contract is the owner of the
 * storage contracts.
 */
-contract WhitelistedTokenProxy is UpgradeabilityProxy, Ownable, MutableWhitelistedTokenStorage, MutablePermissionedTokenStorage {
+contract WhitelistedTokenProxy is UpgradeabilityProxy, MutableWhitelistedTokenStorage, MutablePermissionedTokenStorage {
     constructor(address i, address r, address b, address a, address cusd) 
     UpgradeabilityProxy(i)
     MutableWhitelistedTokenStorage(cusd)

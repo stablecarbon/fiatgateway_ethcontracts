@@ -3,13 +3,13 @@ const AddressVerification = artifacts.require('./AddressVerification.sol')
 contract('AddressVerification', function ([owner, sender]) {
     let addressVerification
 
-    beforeEach('setup contract for each test', async function ()
-    {
-        addressVerification = await AddressVerification.new(owner)
-    })
-
     describe('Verify Address', function () {
         const verificationCode = 0x12345678;
+
+        beforeEach('setup contract for each test', async function ()
+        {
+            addressVerification = await AddressVerification.new(owner)
+        })
         it("stores verification code", async function() {
             await addressVerification.verifyAddress(verificationCode,
                                                         { from : sender});

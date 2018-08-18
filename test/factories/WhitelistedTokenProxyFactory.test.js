@@ -98,10 +98,16 @@ contract('WhitelistedToken Factory creating WT proxies', _accounts => {
             this.proxy_0 = WhitelistedTokenProxy.at(await this.proxyFactory.getToken((await this.proxyFactory.getCount())-1))
             this.token_0 = WhitelistedToken.at(this.proxy_0.address)
 
+            // Claim ownership of WT token
+            await this.token_0.claimOwnership({ from: proxy_owner })
+
             this.balances_0 = BalanceSheet.at(await this.token_0.balances())
             this.allowances_0 = AllowanceSheet.at(await this.token_0.allowances())
             this.cusd_0 = CarbonDollar.at(await this.token_0.cusdAddress())
             this.regulator_WT = WhitelistedTokenRegulator.at(await this.token_0.regulator())
+
+            await this.cusd_0.claimOwnership({ from:proxy_owner })
+            await this.regulator_WT.claimOwnership({ from:proxy_owner })
         })
         it('token and proxy have same address', async function () {
             assert.equal(this.proxy_0.address, this.token_0.address)
@@ -151,6 +157,7 @@ contract('WhitelistedToken Factory creating WT proxies', _accounts => {
             beforeEach(async function () {
                 // Set up CD permissions
                 this.cdRegulator = CarbonDollarRegulator.at(await this.cusd_0.regulator())
+                await this.cdRegulator.claimOwnership({ from: proxy_owner })
                 await this.cdRegulator.addValidator(validator, {from:proxy_owner})
                 await this.cdRegulator.setWhitelistedUser(whitelisted, {from:validator})
                 await this.cusd_0.listToken(this.token_0.address, {from:proxy_owner})

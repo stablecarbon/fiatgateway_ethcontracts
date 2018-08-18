@@ -89,11 +89,16 @@ contract('CarbonDollar Factory creating CD proxies', _accounts => {
             this.proxy_0 = CarbonDollarProxy.at(await this.proxyFactory.getToken((await this.proxyFactory.getCount())-1))
             this.token_0 = CarbonDollar.at(this.proxy_0.address)
 
+            // Claim ownership of newly created proxy   
+            await this.token_0.claimOwnership({ from:proxy_owner})
+
             this.balances_0 = BalanceSheet.at(await this.token_0.balances())
             this.allowances_0 = AllowanceSheet.at(await this.token_0.allowances())
             this.fees_0 = FeeSheet.at(await this.token_0.stablecoinFees())
             this.whitelist_0 = StablecoinWhitelist.at(await this.token_0.stablecoinWhitelist())
             this.regulator_CD = CarbonDollarRegulator.at(await this.token_0.regulator())
+
+            await this.regulator_CD.claimOwnership({ from: proxy_owner })
         })
         it('token and proxy have same address', async function () {
             assert.equal(this.proxy_0.address, this.token_0.address)
@@ -158,6 +163,10 @@ contract('CarbonDollar Factory creating CD proxies', _accounts => {
                 await this.wtProxyFactory.createToken(this.token_WT_model.address, this.token_0.address, this.regulator_WT_address, {from:proxy_owner})
                 this.token_WT = WhitelistedToken.at(await this.wtProxyFactory.getToken((await this.wtProxyFactory.getCount())-1))
                 this.regulator_WT = WhitelistedTokenRegulator.at(await this.token_WT.regulator())
+
+                await this.token_WT.claimOwnership({ from:proxy_owner })
+                await this.regulator_WT.claimOwnership({ from:proxy_owner })
+
             })
             describe('owner calls listToken', function () {
                 it('adds a token to CD stablecoin whitelist', async function () {
@@ -170,7 +179,7 @@ contract('CarbonDollar Factory creating CD proxies', _accounts => {
                     await expectRevert(this.token_0.listToken(RANDOM_ADDRESS, {from: other_owner}))
                 })
             })  
-            describe('burnCarbonDollar', function () {
+            describe('burnCarbonDollar and convertCarbonDollar', function () {
                 beforeEach(async function () {
                     // Set up CD permissions
                     await this.regulator_CD.addValidator(validator, {from:proxy_owner})

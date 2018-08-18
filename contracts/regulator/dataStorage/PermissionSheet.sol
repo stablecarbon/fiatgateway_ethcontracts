@@ -1,7 +1,6 @@
 pragma solidity ^0.4.24;
 
-import "openzeppelin-solidity/contracts/ownership/Claimable.sol";
-
+import '../../helpers/Ownable.sol';
 /**
  * @title PermissionSheet
  * @dev Stores all of the possible token-level permissions that a user can have access to. For example,
@@ -10,7 +9,7 @@ import "openzeppelin-solidity/contracts/ownership/Claimable.sol";
  *
  */
 
-contract PermissionSheet is Claimable {
+contract PermissionSheet is Ownable {
 	
     /** 
         Mappings 

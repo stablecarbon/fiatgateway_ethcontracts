@@ -4,9 +4,9 @@ import "./dataStorage/MutablePermissionedTokenStorage.sol";
 import "openzeppelin-solidity/contracts/AddressUtils.sol";
 import "openzeppelin-solidity/contracts/math/SafeMath.sol";
 import "openzeppelin-solidity/contracts/AddressUtils.sol";
-import "openzeppelin-solidity/contracts/lifecycle/Pausable.sol";
 import "openzeppelin-solidity/contracts/token/ERC20/ERC20.sol";
-import "./helpers/Lockable.sol";
+import "../../helpers/Lockable.sol";
+import "../../helpers/Pausable.sol";
 
 /**
 * @title PermissionedToken

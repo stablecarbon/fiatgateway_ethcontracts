@@ -18,7 +18,7 @@ contract('WhitelistedTokenProxy', _accounts => {
     const nonlisted = commonVars.user5
 
     beforeEach(async function () {
-        // Empty Proxy Data storage + fully loaded regulator
+        // Empty Proxy Data storage + fully loaded regulator (all permissions + 1 validator)
         this.proxyBalancesStorage = (await BalanceSheet.new({ from:owner })).address
         this.proxyAllowancesStorage = (await AllowanceSheet.new({ from:owner })).address
         this.permissionSheet = await PermissionSheetMock.new( {from:owner })
