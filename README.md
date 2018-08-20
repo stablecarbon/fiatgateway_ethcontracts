@@ -3,23 +3,23 @@ Carbon's Crypto-Fiat gateway: smart contracts
 
 Deployment Addresses in Rinkeby:
 
-	Migrations: 0x0eeb954abc72c6689d5bf111c739acc67dad98c7
+	Migrations: 0x4e3e435face5ba42ba922f5078ac2a16965a79d8
 
-	RegulatorProxyFactory: 0x7b9b8c8dbc6aa1a5450f019dbfc5750e502286af
+	RegulatorProxyFactory: 0x37c018f026f86f52be8cefbc38cdaa7cba6abbfc
 
-	CarbonDollarProxyFactory: 0x79b23bfc69a8419692b51482e19c3d39b95af5c4
+	CarbonDollarProxyFactory: 0xdbbd3f54da1c1dc7b7e797f06da03e5c1c864b26
 
-	WhitelistedTokenProxyFactory: 0xf6d52de0dcbd5d7449665f7a84e1ae21564246cb
+	WhitelistedTokenProxyFactory: 0xb98f31cd7bc7cd431919a8abe2902e76e2e3cec9
 
-	WhitelistedTokenRegulator: 0x59010b4be37b5e8fa20db47a4f4234c0c1745c45
+	WhitelistedTokenRegulator: 0xf8b1eb7a7bca0b5f004148b89e0633d97161dbe6
 
-	CarbonDollarRegulator: 0x26254a2bafac0be509c5f28ce7e2a06f8c87f362
+	CarbonDollarRegulator: 0x070a4f7273a22e82410580d1e8da1f590da2f8d4
 
-	CarbonDollar: 0x590554426afa84d3b83fd8b4afdb09c75667a5b2
+	CarbonDollar: 0x21641c9350517767ab2f6ba534e5638fc068dd3c
 
-	WhitelistedToken: 0xc53350de9c0e87be63742e3ba46897d7329a037b
+	WhitelistedToken: 0x7de8211dcbbb2f9f805033c0841554b3dad63f31
 
-	AddressVerification: 0xc8ca112adf948f8cec5abe987466917694c5fe56
+	AddressVerification: 0x01ff48f43c6a1dd7dc557369efae008b4b795662
 
 To deploy, run:
 truffle migrate --network *testnetwork here*
@@ -31,7 +31,7 @@ Token Roles:
 	MintCUSD: account that has all of the Mint access and can additionally mint directly from a WT into CUSD
 
 	Whitelisted: account capable of redeeming tokens in exchange for withdrawing fiat
-		CarbonDollar Whitelisted: account capable of converting CUSD into an underlying WT or redeeming for USD. This REPLACES the normal Whitelisted access. 
+		CarbonDollar Whitelisted: account capable of converting CUSD into an underlying WT or redeeming for USD. This REPLACES the normal Whitelisted access.
 		WhitelistedToken Whitelisted: account capable of converting WT into CUSD. This ADDS to the normal Whitelisted access, so WT users can not only convert their WT into CUSD but can also burn WT.
 
 	Nonlisted: default account settings, capable of transferring tokens but cannot redeem
