@@ -128,12 +128,93 @@ contract('CarbonDollarProxy', _accounts => {
             await this.tokenProxy.claimWhitelistOwnership()
             await this.tokenProxy.claimBalanceOwnership()
             await this.tokenProxy.claimAllowanceOwnership()
-        })
+        }) 
         describe('call to proxy to set fee', function () {
-            it('proxy sets fee on stablecoin', async function () {
+            beforeEach( async function() {
                 await this.tokenProxy.listToken(RANDOM_ADDRESS, {from:proxyOwner})
+            })
+            it('proxy sets fee on stablecoin', async function () {
                 await this.tokenProxy.setFee(RANDOM_ADDRESS, 100, {from:proxyOwner})
                 assert.equal(await this.tokenProxy.getFee(RANDOM_ADDRESS), 100)
+            })
+            it('proxy reverts when non-owner tries to set fee', async function () {
+                await expectRevert(this.tokenProxy.setFee(RANDOM_ADDRESS, 100, {from:user}));
+            })
+            it('proxy reverts when paused and tries to set fee', async function () {
+                await this.tokenProxy.pause({from:proxyOwner});
+                await expectRevert(this.tokenProxy.setFee(RANDOM_ADDRESS, 100, {from:proxyOwner}));
+            })
+        })
+        describe('call to proxy to set default fee', function () {
+            it('proxy sets fee on stablecoin', async function () {
+                await this.tokenProxy.setDefaultFee(100, {from:proxyOwner})
+                assert.equal(await this.tokenProxy.getDefaultFee(), 100)
+            })
+            it('proxy reverts when non-owner tries to set default fee', async function () {
+                await expectRevert(this.tokenProxy.setDefaultFee(100, {from:user}));
+            })
+            it('proxy reverts when paused and tries to set default fee', async function () {
+                await this.tokenProxy.pause({from:proxyOwner});
+                await expectRevert(this.tokenProxy.setDefaultFee(100, {from:proxyOwner}));
+            })
+        })
+        describe('call to proxy to remove fee', function () {
+            beforeEach(async function() {
+                await this.tokenProxy.listToken(RANDOM_ADDRESS, {from:proxyOwner})
+                await this.tokenProxy.setFee(RANDOM_ADDRESS, 100, {from:proxyOwner})
+            })
+            it('proxy removes fee on stablecoin', async function () {
+                await this.tokenProxy.removeFee(RANDOM_ADDRESS, {from:proxyOwner})
+                assert.equal(await this.tokenProxy.getFee(RANDOM_ADDRESS), 0)
+            })
+            it('proxy reverts when non-owner tries to remove fee', async function () {
+                await expectRevert(this.tokenProxy.removeFee(RANDOM_ADDRESS, {from:user}));
+            })
+            it('proxy reverts when paused and tries to remove fee', async function () {
+                await this.tokenProxy.pause({from:proxyOwner});
+                await expectRevert(this.tokenProxy.removeFee(RANDOM_ADDRESS, {from:proxyOwner}));
+            })
+        })
+        describe('call to proxy to mint', function () {
+            beforeEach(async function () {
+                await tokenSetupCDProxy.call(this, this.tokenProxy.address, validator, minter, user, owner, whitelisted, blacklisted, nonlisted);
+                await this.tokenProxy.listToken(minter, { from: proxyOwner });
+            })
+            it('proxy mints to account', async function () {
+                await this.tokenProxy.mint(whitelisted, 100 * 10 ** 18, { from: minter })
+                assertBalance(this.tokenProxy, whitelisted, 100 * 10 ** 18);
+            })
+            it('proxy reverts when non-whitelisted address tries to mint', async function () {
+                await this.tokenProxy.unlistToken(minter, {from:proxyOwner})
+                await expectRevert(this.tokenProxy.mint(whitelisted, 100 * 10 ** 18, {from:minter}));
+            })
+            it('proxy reverts when paused and tries to set fee', async function () {
+                await this.tokenProxy.pause({from:proxyOwner});
+                await expectRevert(this.tokenProxy.mint(RANDOM_ADDRESS, 100, {from:minter}));
+            })
+        })
+        describe("computeStablecoinFee", function() {
+            beforeEach(async function () {
+                await this.tokenProxy.listToken(minter, { from: proxyOwner });
+                await this.tokenProxy.setFee(minter, 100, { from: proxyOwner });  // 10% fee
+            })
+            it('computes fee on CUSD burn into stablecoin correctly', async function () {
+                assert.equal(await this.tokenProxy.computeStablecoinFee(1000, minter), 100);
+            });
+        })
+
+        describe("computeFeeRate", function() {
+            beforeEach(async function () {
+                await this.tokenProxy.listToken(minter, { from: proxyOwner });
+                await this.tokenProxy.setFee(minter, 100, { from: proxyOwner });  // 10% fee
+            })
+            it("When stablecoin fee is specified, fee is listed correctly", async function () {
+                assert.equal(await this.tokenProxy.computeFeeRate(minter), 100);
+            })
+            it("When no stablecoin fee is specified, the default fee is used", async function () {
+                await this.tokenProxy.removeFee(minter, { from: proxyOwner });
+                await this.tokenProxy.setDefaultFee(50, {from: proxyOwner});
+                assert.equal(await this.tokenProxy.computeFeeRate(minter), 50);
             })
         })
         describe('call to proxy to list coin', function () {
@@ -149,7 +230,7 @@ contract('CarbonDollarProxy', _accounts => {
             // following test fails
             it('reverts when paused and tries to list coin', async function () {
                 await this.tokenProxy.pause({from:proxyOwner});
-                await expectRevert(this.tokenProxy.listToken(this.wtToken.address, {from:proxyOwner}));
+                await expectRevert(this.tokenProxy.listToken(RANDOM_ADDRESS, {from:proxyOwner}));
             })
         })
         describe('call proxy to burnCarbonDollar, relies on PermissionedToken calls working correctly', function () {
@@ -192,6 +273,9 @@ contract('CarbonDollarProxy', _accounts => {
             })
             it('reverts when a user without permission to burn calls burnCarbonDollar', async function () {
                 await expectRevert(this.tokenProxy.burnCarbonDollar(this.wtToken.address, 50 * 10 ** 18, { from: nonlisted }));
+            })
+            it('reverts when CUSD escrow account with stablecoin does not hold enough funds', async function () {
+                await expectRevert(this.tokenProxy.burnCarbonDollar(this.wtToken.address, 110 * 10 ** 18, { from: whitelisted }));
             })
         })
         describe('call proxy to convertCarbonDollar, relies on PermissionedToken calls working correctly', function () {
@@ -237,8 +321,8 @@ contract('CarbonDollarProxy', _accounts => {
                 assert.equal(this.args.amount, 50 * 10 ** 18)
             })
             it("When no stablecoin fee is specified, the default fee is used", async function () {
-                await this.tokenProxy.removeFee(this.wtToken.address, { from: owner });
-                await this.tokenProxy.setDefaultFee(50, { from: owner });  // 5% fee
+                await this.tokenProxy.removeFee(this.wtToken.address, { from: proxyOwner });
+                await this.tokenProxy.setDefaultFee(50, { from: proxyOwner });  // 5% fee
                 await this.tokenProxy.convertCarbonDollar(this.wtToken.address, 50 * 10 ** 18, { from: whitelisted });
                 assertBalance(this.wtToken, whitelisted, 475 * 10 ** 17); // User gets WT0 returned to them
                 assertBalance(this.tokenProxy, whitelisted, 50 * 10 ** 18); // User's remaining CUSD balance
@@ -251,6 +335,9 @@ contract('CarbonDollarProxy', _accounts => {
             })
             it('reverts when a user without permission to burn calls convertCarbonDollar', async function () {
                 await expectRevert(this.tokenProxy.convertCarbonDollar(this.wtToken.address, 50 * 10 ** 18, { from: nonlisted }));
+            })
+            it('reverts when CUSD escrow account with stablecoin does not hold enough funds', async function () {
+                await expectRevert(this.tokenProxy.convertCarbonDollar(this.wtToken.address, 110 * 10 ** 18, { from: whitelisted }));
             })
         })
     })
