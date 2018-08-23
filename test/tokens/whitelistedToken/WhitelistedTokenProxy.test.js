@@ -2,6 +2,8 @@ const { CommonVariables, ZERO_ADDRESS, RANDOM_ADDRESS, expectRevert, assertBalan
 
 const { tokenSetup } = require('../../helpers/tokenSetup')
 
+const { tokenSetupWLProxy } = require('../../helpers/tokenSetupWLProxy')
+
 const { WhitelistedTokenProxy, WhitelistedToken, CarbonDollar, BalanceSheet, AllowanceSheet, WhitelistedTokenRegulator, PermissionSheet, ValidatorSheet } = require('../../helpers/artifacts');
 
 const { PermissionSheetMock, ValidatorSheetMock } = require('../../helpers/mocks');
@@ -35,7 +37,7 @@ contract('WhitelistedTokenProxy', _accounts => {
         this.proxy = await WhitelistedTokenProxy.new(this.impl_v0, this.proxyRegulator, this.proxyBalancesStorage, this.proxyAllowancesStorage, this.proxyCUSD, { from:proxyOwner })
         this.proxyAddress = this.proxy.address
     })
-
+    /*
     describe('set CUSD', function () {
         beforeEach(async function () {
             this.newProxyCUSD = (await CarbonDollar.new(RANDOM_ADDRESS, RANDOM_ADDRESS, RANDOM_ADDRESS, RANDOM_ADDRESS, RANDOM_ADDRESS, {from:owner})).address
@@ -113,7 +115,7 @@ contract('WhitelistedTokenProxy', _accounts => {
             })
         })
     })
-
+    */
 
     describe("Whitelisted token behavior tests", function () {
         beforeEach(async function () {
@@ -135,17 +137,14 @@ contract('WhitelistedTokenProxy', _accounts => {
             await this.tokenProxy.claimAllowanceOwnership()
 
             // set up cdToken
-            await tokenSetup.call(this, validator, minter, user, owner, whitelisted, blacklisted, nonlisted);
+            await tokenSetupWLProxy.call(this, this.tokenProxy.address, validator, minter, user, owner, whitelisted, blacklisted, nonlisted);
         })
-        beforeEach(async function () {
-
-        });
         const hundred = new BigNumber("100000000000000000000") // 100 * 10**18
         const fifty = new BigNumber("50000000000000000000") // 50 * 10**18
         describe('mintCUSD', function () {
             describe('user has mint CUSD permission', function () {
                 beforeEach(async function () {
-                    await this.cdToken.listToken(this.tokenProxy.address, { from: proxyOwner });
+                    await this.cdToken.listToken(this.tokenProxy.address, { from: owner });
                 });
                 it('appropriate number of funds end up in Carbon\'s WT0 escrow account', async function () {
                     await this.tokenProxy.mintCUSD(whitelisted, hundred, { from: minter });
@@ -175,7 +174,7 @@ contract('WhitelistedTokenProxy', _accounts => {
             describe('user has conversion permission', function () {
                 describe('user has sufficient funds', function () {
                     beforeEach(async function () {
-                        await this.cdToken.listToken(this.tokenProxy.address, { from: proxyOwner });
+                        await this.cdToken.listToken(this.tokenProxy.address, { from: owner });
                         await this.tokenProxy.mint(whitelisted, hundred, { from: minter });
                     });
                     it('user loses WT0', async function () {

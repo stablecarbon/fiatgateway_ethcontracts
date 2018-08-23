@@ -13,20 +13,11 @@ const {
 
 const { PermissionSheetMock, ValidatorSheetMock} = require("./mocks");
 
-async function tokenSetupWLProxy(validator, minter, user, owner, whitelisted, blacklisted, nonlisted) {
+async function tokenSetupWLProxy(WhitelistedTokenAddress, validator, minter, user, owner, whitelisted, blacklisted, nonlisted) {
     const from = owner
 
     // REGULATORS
     /* ----------------------------------------------------------------------------*/
-    // Whitelisted Regulator
-    this.permissionSheet_w = await PermissionSheetMock.new({ from: owner })
-    this.validatorSheet_w = await ValidatorSheetMock.new(validator, { from: owner })
-    this.regulator_w = await WhitelistedTokenRegulator.new(this.permissionSheet_w.address, this.validatorSheet_w.address, { from: owner })
-
-    await this.permissionSheet_w.transferOwnership(this.regulator_w.address, { from: owner })
-    await this.validatorSheet_w.transferOwnership(this.regulator_w.address, { from: owner })
-    await this.regulator_w.claimPermissionOwnership()
-    await this.regulator_w.claimValidatorOwnership()
 
     // CarbonDollar Regulator
     this.permissionSheet_c = await PermissionSheetMock.new({ from: owner })
@@ -86,15 +77,6 @@ async function tokenSetupWLProxy(validator, minter, user, owner, whitelisted, bl
     // must whitelist CUSD address to convert from WT into CUSD (used for minting CUSD)
     await this.regulator_w.setWhitelistedUser(this.cdToken.address, { from: validator });
     await this.regulator_c.setWhitelistedUser(this.cdToken.address, { from: validator });
-
-    // Carbon Dollar Proxy
-    this.proxyCUSD = await CarbonDollarProxy.new({from:owner})
-
-    // Whitelisted Token Proxy
-    this.proxyWL = await WhitelistedtokenProxy.new(this.wtToken.address,
-         this.regulator_w.address, this.balanceSheetWT.address,
-          this.allowanceSheetWT.address, this.proxyCUSD, { from:proxyOwner})
-
 
 }
 
