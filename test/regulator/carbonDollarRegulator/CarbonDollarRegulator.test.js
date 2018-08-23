@@ -197,10 +197,17 @@ contract('CarbonDollarRegulator', _accounts => {
                     this.BURN_CARBON_DOLLAR_SIG = await this.permissionSheet.BURN_CARBON_DOLLAR_SIG();
                     // Assert pre-test invariant
                     assert(await this.sheet.isValidator(validator));
-
                 });
 
                 describe('when burn carbon dollar permission is missing:', function() {
+                    /*beforeEach(async function() {
+                        await this.permissionSheet.addPermission(this.BLACKLISTED_SIG, "", "", "", {from:owner});
+                        await this.permissionSheet.addPermission(this.CONVERT_CARBON_DOLLAR_SIG, "", "", "", {from:owner});
+                    });
+                    afterEach(async function() {
+                        await this.permissionSheet.removePermission(this.BLACKLISTED_SIG, {from:owner});
+                        await this.permissionSheet.removePermission(this.CONVERT_CARBON_DOLLAR_SIG, {from:owner});
+                    });*/
                     it('set whitelisted user reverts', async function() {
                         await expectRevert(this.sheet.setWhitelistedUser(user, { from:validator }));
                     })
@@ -211,7 +218,15 @@ contract('CarbonDollarRegulator', _accounts => {
                         await expectRevert(this.sheet.setNonlistedUser(user, { from:validator }));
                     })
                 })
-                describe('when convert carbon dollar permission is missing:', function() {
+                describe('when convert carbon dollar permission is missing:', function()
+                    /*beforeEach(async function() {
+                        await this.permissionSheet.addPermission(this.BLACKLISTED_SIG, "", "", "", {from:owner});
+                        await this.permissionSheet.addPermission(this.BURN_CARBON_DOLLAR_SIG, "", "", "", {from:owner});
+                    });
+                    afterEach(async function() {
+                        await this.permissionSheet.removePermission(this.BLACKLISTED_SIG, {from:owner});
+                        await this.permissionSheet.removePermission(this.BURN_CARBON_DOLLAR_SIG, {from:owner});
+                    });*/
                     it('set whitelisted user reverts', async function() {
                         await expectRevert(this.sheet.setWhitelistedUser(user, {from:validator}));
                     })
@@ -223,6 +238,14 @@ contract('CarbonDollarRegulator', _accounts => {
                     })
                 })
                 describe('when blacklisted permission is missing:', function() {
+                    /*beforeEach(async function() {
+                        await this.permissionSheet.addPermission(this.CONVERT_CARBON_DOLLAR_SIG, "", "", "", {from:owner});
+                        await this.permissionSheet.addPermission(this.BURN_CARBON_DOLLAR_SIG, "", "", "", {from:owner});
+                    });
+                    afterEach(async function() {
+                        await this.permissionSheet.removePermission(this.CONVERT_CARBON_DOLLAR_SIG, {from:owner});
+                        await this.permissionSheet.removePermission(this.BURN_CARBON_DOLLAR_SIG, {from:owner});
+                    });*/
                     it('set whitelisted user reverts', async function() {
                         await expectRevert(this.sheet.setWhitelistedUser(user, { from:validator }));
                     })
