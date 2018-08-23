@@ -2,7 +2,7 @@ const { CommonVariables, expectRevert } = require('../../helpers/common');
 
 const { CarbonDollarRegulator } = require('../../helpers/artifacts');
 
-const { ValidatorSheetMock, PermissionSheetMock } = require('../../helpers/mocks');
+const { ValidatorSheetMock, PermissionSheetMock, PermissionSheetMockNoCDPermissions } = require('../../helpers/mocks');
 
 
 contract('CarbonDollarRegulator', _accounts => {
@@ -172,6 +172,67 @@ contract('CarbonDollarRegulator', _accounts => {
                 })
 
             })
+
+        })
+
+        describe('Testing function behavior for SET with permissions missing', function () {
+
+
+                beforeEach(async function() {
+
+                    // Instantiate RegulatorsMock that comes pre-loaded with some function permissions and one validator
+                    this.permissionSheet = await PermissionSheetMockNoCDPermissions.new( { from:owner })
+                    this.validatorSheet = await ValidatorSheetMock.new(validator, { from:owner } )
+
+                    this.sheet = await CarbonDollarRegulator.new(this.permissionSheet.address, this.validatorSheet.address, {from:owner})
+
+                    await this.permissionSheet.transferOwnership(this.sheet.address, {from:owner})
+                    await this.validatorSheet.transferOwnership(this.sheet.address, {from:owner})
+                    await this.sheet.claimPermissionOwnership()
+                    await this.sheet.claimValidatorOwnership()
+
+                    // storing method signatures for testing convenience
+                    this.BLACKLISTED_SIG = await this.permissionSheet.BLACKLISTED_SIG();
+                    this.CONVERT_CARBON_DOLLAR_SIG = await this.permissionSheet.CONVERT_CARBON_DOLLAR_SIG();
+                    this.BURN_CARBON_DOLLAR_SIG = await this.permissionSheet.BURN_CARBON_DOLLAR_SIG();
+                    // Assert pre-test invariant
+                    assert(await this.sheet.isValidator(validator));
+
+                });
+
+                describe('when burn carbon dollar permission is missing:', function() {
+                    it('set whitelisted user reverts', async function() {
+                        await expectRevert(this.sheet.setWhitelistedUser(user, { from:validator }));
+                    })
+                    it('set blacklisted user reverts', async function() {
+                        await expectRevert(this.sheet.setBlacklistedUser(user, { from:validator }));
+                    })
+                    it('set nonlisted user reverts', async function() {
+                        await expectRevert(this.sheet.setNonlistedUser(user, { from:validator }));
+                    })
+                })
+                describe('when convert carbon dollar permission is missing:', function() {
+                    it('set whitelisted user reverts', async function() {
+                        await expectRevert(this.sheet.setWhitelistedUser(user, {from:validator}));
+                    })
+                    it('set blacklisted user reverts', async function() {
+                        await expectRevert(this.sheet.setBlacklistedUser(user, { from:validator }));
+                    })
+                    it('set nonlisted user reverts', async function() {
+                        await expectRevert(this.sheet.setNonlistedUser(user, { from:validator }));
+                    })
+                })
+                describe('when blacklisted permission is missing:', function() {
+                    it('set whitelisted user reverts', async function() {
+                        await expectRevert(this.sheet.setWhitelistedUser(user, { from:validator }));
+                    })
+                    it('set blacklisted user reverts', async function() {
+                        await expectRevert(this.sheet.setBlacklistedUser(user, { from:validator }));
+                    })
+                    it('set nonlisted user reverts', async function() {
+                        await expectRevert(this.sheet.setNonlistedUser(user, { from:validator }));
+                    })
+                })
 
         })
 
