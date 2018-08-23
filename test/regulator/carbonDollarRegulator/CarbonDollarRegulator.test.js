@@ -218,7 +218,7 @@ contract('CarbonDollarRegulator', _accounts => {
                         await expectRevert(this.sheet.setNonlistedUser(user, { from:validator }));
                     })
                 })
-                describe('when convert carbon dollar permission is missing:', function()
+                describe('when convert carbon dollar permission is missing:', function() {
                     /*beforeEach(async function() {
                         await this.permissionSheet.addPermission(this.BLACKLISTED_SIG, "", "", "", {from:owner});
                         await this.permissionSheet.addPermission(this.BURN_CARBON_DOLLAR_SIG, "", "", "", {from:owner});
