@@ -1,7 +1,5 @@
-const PermissionSheetMock = artifacts.require("PermissionSheetMock");
-const ValidatorSheetMock = artifacts.require("ValidatorSheetMock");
+const RegulatorMock = artifacts.require("RegulatorMock")
 
 module.exports = {
-	PermissionSheetMock,
-	ValidatorSheetMock
+	RegulatorMock
 }

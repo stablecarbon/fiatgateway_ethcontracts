@@ -1,6 +1,6 @@
 const { expectRevert } = require('../../helpers/common');
 
-const { PermissionSheet, ValidatorSheet, Regulator } = require('../../helpers/artifacts');
+const { Regulator } = require('../../helpers/artifacts');
 
 /**
 * 
@@ -9,32 +9,23 @@ const { PermissionSheet, ValidatorSheet, Regulator } = require('../../helpers/ar
 */
 function regulatorStorageBasicInteractionsTests(owner, user, validator, attacker) {
     
-    describe('Regulator sets empty RegulatorStorage', function () {
+    describe('new Regulator has empty RegulatorStorage', function () {
 
-        describe("Testing Regulator basic ability to SET/GET permissions and validators mappings", function () {
-            
-            beforeEach(async function () {
+        beforeEach(async function () {
 
-                this.permissionSheet = await PermissionSheet.new({ from:owner })
-                this.validatorSheet = await ValidatorSheet.new({ from:owner })
+            this.sheet = await Regulator.new({ from:owner })
 
-                this.sheet = await Regulator.new(this.permissionSheet.address, this.validatorSheet.address, { from:owner })
+            // Test Permission
+            this.testPermission = 0x12345678;
+            this.testPermissionName = "Test Permission";
+            this.testPermissionDescription = "A test permission description.";
+            this.testPermissionContract = "A Contract.sol";
 
-                // Must transfer and claim ownership
-                await this.permissionSheet.transferOwnership(this.sheet.address, {from:owner})
-                await this.validatorSheet.transferOwnership(this.sheet.address, {from:owner})
-                await this.sheet.claimPermissionOwnership()
-                await this.sheet.claimValidatorOwnership()
+        })
 
-                // Test Permission
-                this.testPermission = 0x12345678;
-                this.testPermissionName = "Test Permission";
-                this.testPermissionDescription = "A test permission description.";
-                this.testPermissionContract = "A Contract.sol";
+        describe("Testing Regulator basic ability to SET/GET permissions and validators data", function () {
 
-            })
-
-            describe("Regulator Storage Interactions with Permission Storage", function () {
+            describe("Interactions with Permission Storage", function () {
                 describe('when the sender is a validator', function () {
                     const from = validator;
 
@@ -67,6 +58,7 @@ function regulatorStorageBasicInteractionsTests(owner, user, validator, attacker
                             assert.equal(permissions[0], this.testPermissionName);
                             assert.equal(permissions[1], this.testPermissionDescription);
                             assert.equal(permissions[2], this.testPermissionContract);
+                            assert(permissions[3])
                         })
                     })
 
@@ -107,7 +99,7 @@ function regulatorStorageBasicInteractionsTests(owner, user, validator, attacker
 
             });
 
-            describe("Regulator Storage Interactions with Validator Storage", function () {
+            describe("Interactions with Validator Storage", function () {
                 describe('when the sender is the owner', function () {
                     const from = owner
 

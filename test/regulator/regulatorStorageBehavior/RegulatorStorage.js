@@ -14,9 +14,11 @@ function regulatorStorageTests(owner, user, attacker, validator, validator2) {
 
 	    describe('Permissions CRUD tests', function () {
 
-
+	    	beforeEach(async function () {
+	    		await this.storage.addValidator(owner, {from:owner})
+	    	})
 	        describe('addPermission', function () {
-	        	describe('owner calls', function () {
+	        	describe('validator calls', function () {
 	        		const from = owner
 
 	        		it("adds the permission with correct attributes", async function() {
@@ -42,7 +44,7 @@ function regulatorStorageTests(owner, user, attacker, validator, validator2) {
 
 	        	})
 
-	        	describe('non owner calls', function () {
+	        	describe('non validator calls', function () {
 	        		const from = user
 
 	        		it('reverts', async function () {
@@ -61,7 +63,7 @@ function regulatorStorageTests(owner, user, attacker, validator, validator2) {
 	                assert(await this.storage.isPermission(this.testPermission));
 	        	})
 
-	        	describe('owner calls', function () {
+	        	describe('validator calls', function () {
 	        		const from = owner
 					it("removes the permission", async function () {
 		                // second, remove the permission
@@ -78,13 +80,27 @@ function regulatorStorageTests(owner, user, attacker, validator, validator2) {
 
 	        	})
 
-	        	describe('non-owner calls', function () {
+	        	describe('non-validator calls', function () {
 	        		const from = user
 
 	        		it('reverts', async function () {
 	        			await expectRevert(this.storage.removePermission(this.testPermission, { from }))
 	        		})
 	        	})
+	        })
+
+	        describe('getPermission', function () {
+	        	it('retrieves permission fields, permission should be active', async function () {
+	                await this.storage.addPermission(this.testPermission, 
+	                                            	this.testPermissionName, 
+	                                            	this.testPermissionDescription, 
+	                                            	this.testPermissionContract, { from: owner });
+	                const permission = await this.storage.getPermission(this.testPermission);
+	                assert.equal(permission[0], this.testPermissionName)
+	                assert.equal(permission[1], this.testPermissionDescription)
+	                assert.equal(permission[2], this.testPermissionContract)
+	                assert(permission[3])      	
+	            })
 	        })
 
 	        describe('setUserPermission', function () {
@@ -100,7 +116,7 @@ function regulatorStorageTests(owner, user, attacker, validator, validator2) {
 	                        this.testPermissionContract, { from:owner });
 	                })
 
-	                describe('owner calls', function () {
+	                describe('validator calls', function () {
 	                	const from = owner
 
 		                it('sets the user permission', async function() {
@@ -110,19 +126,6 @@ function regulatorStorageTests(owner, user, attacker, validator, validator2) {
 		                    await this.storage.setUserPermission(user, this.testPermission, { from });
 		                    const userHasPermission = await this.storage.hasUserPermission(user, this.testPermission);
 		                    assert(userHasPermission);
-
-		                })
-
-		                it('emits a LogSetUserPermission event', async function () {
-
-		                    assert(await this.storage.isPermission(this.testPermission));
-
-		                    const {logs} =  await this.storage.setUserPermission(user, this.testPermission, { from });
-
-		                    assert.equal(logs.length, 1);
-		                    assert.equal(logs[0].event, 'LogSetUserPermission');
-		                    assert.equal(logs[0].args.who, user);
-		                    assert.equal(logs[0].args.methodsignature, this.testPermission);
 
 		                })
 
@@ -139,7 +142,7 @@ function regulatorStorageTests(owner, user, attacker, validator, validator2) {
 
 	                })
 
-	                describe('non-owner calls', function () {
+	                describe('non-validator calls', function () {
 
 	                	const from = user
 
@@ -166,7 +169,7 @@ function regulatorStorageTests(owner, user, attacker, validator, validator2) {
 		                // set user permission
 		                await this.storage.setUserPermission(user, this.testPermission, { from:owner });
 		            })
-			        describe('owner calls', function () {
+			        describe('validator calls', function () {
 		            	const from = owner
 
 		            	it('removes the user permission', async function () {
@@ -181,19 +184,9 @@ function regulatorStorageTests(owner, user, attacker, validator, validator2) {
 
 			            })
 
-			            it('emits a LogRemovedUserPermission event', async function () {
-
-			                const { logs } = await this.storage.removeUserPermission(user, this.testPermission, { from });
-			                assert.equal(logs.length, 1);
-			                assert.equal(logs[0].event, 'LogRemovedUserPermission');
-			                assert.equal(logs[0].args.who, user);
-			                assert.equal(logs[0].args.methodsignature, this.testPermission);
-
-			            })
-
 		            })
 
-		            describe('non owner calls', function () {
+		            describe('non validator calls', function () {
 
 		            	const from = user
 		            	it('reverts', async function () {

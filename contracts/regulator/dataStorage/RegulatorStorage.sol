@@ -53,10 +53,19 @@ contract RegulatorStorage is Ownable {
     */
     event PermissionAdded(bytes4 methodsignature);
     event PermissionRemoved(bytes4 methodsignature);
-    event LogSetUserPermission(address indexed who, bytes4 methodsignature);
-    event LogRemovedUserPermission(address indexed who, bytes4 methodsignature);
     event ValidatorAdded(address indexed validator);
     event ValidatorRemoved(address indexed validator);
+
+    /** 
+        Modifiers 
+    */
+    /**
+    * @notice Throws if called by any account that does not have access to set attributes
+    */
+    modifier onlyValidator() {
+        require (isValidator(msg.sender), "Sender must be validator");
+        _;
+    }
 
     /**
     * @notice Sets a permission within the list of permissions.
@@ -69,7 +78,7 @@ contract RegulatorStorage is Ownable {
         bytes4 _methodsignature, 
         string _permissionName, 
         string _permissionDescription, 
-        string _contractName) public onlyOwner { 
+        string _contractName) public onlyValidator { 
         Permission memory p = Permission(_permissionName, _permissionDescription, _contractName, true);
         permissions[_methodsignature] = p;
         emit PermissionAdded(_methodsignature);
@@ -79,7 +88,7 @@ contract RegulatorStorage is Ownable {
     * @notice Removes a permission the list of permissions.
     * @param _methodsignature Signature of the method that this permission controls.
     */
-    function removePermission(bytes4 _methodsignature) public onlyOwner {
+    function removePermission(bytes4 _methodsignature) public onlyValidator {
         permissions[_methodsignature].active = false;
         emit PermissionRemoved(_methodsignature);
     }
@@ -88,20 +97,18 @@ contract RegulatorStorage is Ownable {
     * @notice Sets a permission in the list of permissions that a user has.
     * @param _methodsignature Signature of the method that this permission controls.
     */
-    function setUserPermission(address _who, bytes4 _methodsignature) public onlyOwner {
+    function setUserPermission(address _who, bytes4 _methodsignature) public onlyValidator {
         require(permissions[_methodsignature].active, "Permission being set must be for a valid method signature");
         userPermissions[_who][_methodsignature] = true;
-        emit LogSetUserPermission(_who, _methodsignature);
     }
 
     /**
     * @notice Removes a permission from the list of permissions that a user has.
     * @param _methodsignature Signature of the method that this permission controls.
     */
-    function removeUserPermission(address _who, bytes4 _methodsignature) public onlyOwner {
+    function removeUserPermission(address _who, bytes4 _methodsignature) public onlyValidator {
         require(permissions[_methodsignature].active, "Permission being removed must be for a valid method signature");
         userPermissions[_who][_methodsignature] = false;
-        emit LogRemovedUserPermission(_who, _methodsignature);
     }
 
     /**
@@ -134,15 +141,31 @@ contract RegulatorStorage is Ownable {
     * @notice does permission exist?
     * @return true if yes, false if no
     **/
-    function isPermission(bytes4 _permission) public view returns (bool) {
-        return permissions[_permission].active;
+    function isPermission(bytes4 _methodsignature) public view returns (bool) {
+        return permissions[_methodsignature].active;
+    }
+
+    /**
+    * @notice get Permission structure
+    * @param _methodsignature request to retrieve the Permission struct for this methodsignature
+    * @return Permission
+    **/
+    function getPermission(bytes4 _methodsignature) public view returns 
+        (string name, 
+         string description, 
+         string contract_name,
+         bool active) {
+        return (permissions[_methodsignature].name,
+                permissions[_methodsignature].description,
+                permissions[_methodsignature].contract_name,
+                permissions[_methodsignature].active);
     }
 
     /**
     * @notice does permission exist?
     * @return true if yes, false if no
     **/
-    function hasUserPermission(address _who, bytes4 _permission) public view returns (bool) {
-        return userPermissions[_who][_permission];
+    function hasUserPermission(address _who, bytes4 _methodsignature) public view returns (bool) {
+        return userPermissions[_who][_methodsignature];
     }
 }

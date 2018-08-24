@@ -119,48 +119,6 @@ contract Regulator is RegulatorStorage {
     function setNonlistedUser(address _who) public onlyValidator {
         _setNonlistedUser(_who);
     }
-        
-    /**
-    * @notice Sets a permission for an acccount. Only validators can set a permission
-    * @param _who The address of the account that we are setting the value of an attribute for
-    * @param _methodsignature The signature of the method that the user is getting permission to run.
-    */
-    function setUserPermission(address _who, bytes4 _methodsignature) public onlyValidator {
-        super.setUserPermission(_who, _methodsignature);
-    }
- 
-    /**
-    * @notice Removes a permission for an acccount. Only validators can remove a permission
-    * @param _who The address of the account that we are setting the value of an attribute for
-    * @param _methodsignature The signature of the method that the user will no longer be able to execute.
-    */
-    function removeUserPermission(address _who, bytes4 _methodsignature) public onlyValidator {
-        super.removeUserPermission(_who, _methodsignature);
-    }
-
-    /**
-    * @notice Sets a permission within the list of permissions.
-    * @param _methodsignature Signature of the method that this permission controls.
-    * @param _permissionName A "slug" name for this permission (e.g. "canMint").
-    * @param _permissionDescription A lengthier description for this permission (e.g. "Allows user to mint tokens").
-    * @param _contractName Name of the contract that the method belongs to.
-    */
-    function addPermission(
-        bytes4 _methodsignature, 
-        string _permissionName, 
-        string _permissionDescription,
-        string _contractName) 
-    public onlyValidator {
-        super.addPermission(_methodsignature, _permissionName, _permissionDescription, _contractName);
-    }
-
-    /**
-    * @notice Removes a permission the list of permissions.
-    * @param _methodsignature Signature of the method that this permission controls.
-    */
-    function removePermission(bytes4 _methodsignature) public onlyValidator {
-        super.removePermission(_methodsignature);
-    }
 
     /** Returns whether or not a user is whitelisted.
      * @param _who The address of the account in question.

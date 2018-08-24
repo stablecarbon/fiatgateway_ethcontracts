@@ -1,18 +1,18 @@
 pragma solidity ^0.4.24;
 
-import "../dataStorage/RegulatorStorage.sol";
+import "../Regulator.sol";
 
 /**
 *
-* @dev creates a Reglator storage with a single Validator and all Permissions 
+* @dev creates a Reglator with a single Validator and all Permissions 
 *
 **/
-contract RegulatorStorageMock is RegulatorStorage {
+contract RegulatorMock is Regulator {
     /** 
-        @dev Initializes common permissions from validator
+        @dev Initializes common permissions from validator, validator set to msg.sender
      */
-    constructor(address validator) public {
-        addValidator(validator);
+    constructor() public {
+        addValidator(msg.sender);
         setMintPermission();
         setMintCUSDPermission();
         setBurnPermission();
