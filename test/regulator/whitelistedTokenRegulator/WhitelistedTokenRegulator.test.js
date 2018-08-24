@@ -2,7 +2,7 @@ const { CommonVariables, expectRevert } = require('../../helpers/common');
 
 const { WhitelistedTokenRegulator } = require('../../helpers/artifacts');
 
-const { ValidatorSheetMock, PermissionSheetMock } = require('../../helpers/mocks');
+const { ValidatorSheetMock, PermissionSheetMock, PermissionSheetMockNoWLPermissions } = require('../../helpers/mocks');
 
 
 contract('WhitelistedTokenRegulator', _accounts => {
@@ -37,7 +37,7 @@ contract('WhitelistedTokenRegulator', _accounts => {
                     this.MINT_CUSD_SIG = await this.permissionSheet.MINT_CUSD_SIG();
                     this.MINT_SIG = await this.permissionSheet.MINT_SIG();
 
-                    
+
                     // Assert pre-test invariants
                     assert(await this.sheet.isValidator(validator));
                     assert(await this.sheet.isPermission(this.BLACKLISTED_SIG));
@@ -75,7 +75,7 @@ contract('WhitelistedTokenRegulator', _accounts => {
                 describe('removeMinter', function () {
 
                     beforeEach(async function () {
-                        const from = validator; 
+                        const from = validator;
                         await this.sheet.setMinter(user, { from });
                         assert(await this.sheet.isMinter(user));
                     })
@@ -233,6 +233,93 @@ contract('WhitelistedTokenRegulator', _accounts => {
                 })
 
             })
+
+        })
+
+        describe('Testing function behavior for SET with permissions missing', function () {
+
+
+                beforeEach(async function() {
+
+                    this.permissionSheet = await PermissionSheetMockNoWLPermissions.new( {from:owner })
+                    this.validatorSheet = await ValidatorSheetMock.new(validator, {from:owner} )
+
+                    this.sheet = await WhitelistedTokenRegulator.new(this.permissionSheet.address, this.validatorSheet.address, {from:owner})
+
+                    await this.permissionSheet.transferOwnership(this.sheet.address, {from:owner})
+                    await this.validatorSheet.transferOwnership(this.sheet.address, {from:owner})
+                    await this.sheet.claimPermissionOwnership()
+                    await this.sheet.claimValidatorOwnership()
+
+
+                    // storing method signatures for testing convenience
+                    this.BLACKLISTED_SIG = await this.permissionSheet.BLACKLISTED_SIG();
+                    this.CONVERT_WT_SIG = await this.permissionSheet.CONVERT_WT_SIG();
+                    this.MINT_CUSD_SIG = await this.permissionSheet.MINT_CUSD_SIG();
+                    this.MINT_SIG = await this.permissionSheet.MINT_SIG();
+
+
+                    // Assert pre-test invariants
+                    assert(await this.sheet.isValidator(validator));
+                });
+
+                describe('when burn carbon dollar permission is missing:', function() {
+                    /*beforeEach(async function() {
+                        await this.permissionSheet.addPermission(this.BLACKLISTED_SIG, "", "", "", {from:owner});
+                        await this.permissionSheet.addPermission(this.CONVERT_CARBON_DOLLAR_SIG, "", "", "", {from:owner});
+                    });
+                    afterEach(async function() {
+                        await this.permissionSheet.removePermission(this.BLACKLISTED_SIG, {from:owner});
+                        await this.permissionSheet.removePermission(this.CONVERT_CARBON_DOLLAR_SIG, {from:owner});
+                    });*/
+                    it('set whitelisted user reverts', async function() {
+                        await expectRevert(this.sheet.setWhitelistedUser(user, { from:validator }));
+                    })
+                    it('set blacklisted user reverts', async function() {
+                        await expectRevert(this.sheet.setBlacklistedUser(user, { from:validator }));
+                    })
+                    it('set nonlisted user reverts', async function() {
+                        await expectRevert(this.sheet.setNonlistedUser(user, { from:validator }));
+                    })
+                })
+                describe('when convert carbon dollar permission is missing:', function() {
+                    /*beforeEach(async function() {
+                        await this.permissionSheet.addPermission(this.BLACKLISTED_SIG, "", "", "", {from:owner});
+                        await this.permissionSheet.addPermission(this.BURN_CARBON_DOLLAR_SIG, "", "", "", {from:owner});
+                    });
+                    afterEach(async function() {
+                        await this.permissionSheet.removePermission(this.BLACKLISTED_SIG, {from:owner});
+                        await this.permissionSheet.removePermission(this.BURN_CARBON_DOLLAR_SIG, {from:owner});
+                    });*/
+                    it('set whitelisted user reverts', async function() {
+                        await expectRevert(this.sheet.setWhitelistedUser(user, {from:validator}));
+                    })
+                    it('set blacklisted user reverts', async function() {
+                        await expectRevert(this.sheet.setBlacklistedUser(user, { from:validator }));
+                    })
+                    it('set nonlisted user reverts', async function() {
+                        await expectRevert(this.sheet.setNonlistedUser(user, { from:validator }));
+                    })
+                })
+                describe('when blacklisted permission is missing:', function() {
+                    /*beforeEach(async function() {
+                        await this.permissionSheet.addPermission(this.CONVERT_CARBON_DOLLAR_SIG, "", "", "", {from:owner});
+                        await this.permissionSheet.addPermission(this.BURN_CARBON_DOLLAR_SIG, "", "", "", {from:owner});
+                    });
+                    afterEach(async function() {
+                        await this.permissionSheet.removePermission(this.CONVERT_CARBON_DOLLAR_SIG, {from:owner});
+                        await this.permissionSheet.removePermission(this.BURN_CARBON_DOLLAR_SIG, {from:owner});
+                    });*/
+                    it('set whitelisted user reverts', async function() {
+                        await expectRevert(this.sheet.setWhitelistedUser(user, { from:validator }));
+                    })
+                    it('set blacklisted user reverts', async function() {
+                        await expectRevert(this.sheet.setBlacklistedUser(user, { from:validator }));
+                    })
+                    it('set nonlisted user reverts', async function() {
+                        await expectRevert(this.sheet.setNonlistedUser(user, { from:validator }));
+                    })
+                })
 
         })
 
