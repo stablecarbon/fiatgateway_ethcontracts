@@ -1,6 +1,6 @@
 const { CommonVariables, ZERO_ADDRESS, expectRevert } = require('../helpers/common');
 
-const { Regulator, PermissionSheet, ValidatorSheet } = require('../helpers/artifacts');
+const { Regulator } = require('../helpers/artifacts');
 
 const { regulatorStorageBasicInteractionsTests } = require('./regulatorBehavior/RegulatorStorageBasicInteractions.js');
 
@@ -17,9 +17,7 @@ contract('Regulator', _accounts => {
 
     describe('Regulator logic default behavior', function () {
         beforeEach(async function () {
-            this.permissions = await PermissionSheet.new({ from:owner })
-            this.validators = await ValidatorSheet.new({ from:owner })
-            this.regulatorDefault = await Regulator.new(this.permissions.address, this.validators.address, {from:owner})
+            this.regulatorDefault = await Regulator.new({from:owner})
 
             this.testPermission = 0x12345678;
         })

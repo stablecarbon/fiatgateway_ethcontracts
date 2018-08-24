@@ -1,17 +1,18 @@
 pragma solidity ^0.4.24;
 
-import "../dataStorage/PermissionSheet.sol";
+import "../dataStorage/RegulatorStorage.sol";
 
 /**
 *
-* @dev creates a PermissionSheet-loaded with all permissions
+* @dev creates a Reglator storage with a single Validator and all Permissions 
 *
-*/
-contract PermissionSheetMock is PermissionSheet {
+**/
+contract RegulatorStorageMock is RegulatorStorage {
     /** 
-        @dev Initializes common permissions
+        @dev Initializes common permissions from validator
      */
-    constructor() public {
+    constructor(address validator) public {
+        addValidator(validator);
         setMintPermission();
         setMintCUSDPermission();
         setBurnPermission();

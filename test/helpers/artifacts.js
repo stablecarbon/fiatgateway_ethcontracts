@@ -1,7 +1,5 @@
 
 // Regulator 
-const PermissionSheet = artifacts.require("PermissionSheet");
-const ValidatorSheet = artifacts.require("ValidatorSheet");
 const RegulatorStorage = artifacts.require("RegulatorStorage");
 const Regulator = artifacts.require("Regulator");
 const RegulatorProxy = artifacts.require("RegulatorProxy")
@@ -34,9 +32,6 @@ const CarbonDollarProxyFactory = artifacts.require("CarbonDollarProxyFactory");
 const DelayedUpgradeabilityProxy = artifacts.require("DelayedUpgradeabilityProxy");
 
 module.exports = {
-	// Regulator Storage
-	PermissionSheet,
-	ValidatorSheet,
 	// Regulator
 	Regulator,
 	RegulatorProxyFactory,

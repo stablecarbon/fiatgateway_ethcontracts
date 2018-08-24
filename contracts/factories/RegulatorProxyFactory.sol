@@ -1,9 +1,8 @@
 pragma solidity ^0.4.24;
 
 import "../regulator/RegulatorProxy.sol";
-import "../regulator/mocks/PermissionSheetMock.sol";
-import "../regulator/mocks/ValidatorSheetMock.sol";
 import "../regulator/Regulator.sol";
+import '../regulator/dataStorage/RegulatorStorage.sol';
 
 /**
 *
@@ -30,17 +29,38 @@ contract RegulatorProxyFactory {
     function createRegulatorProxy(address regulatorImplementation) public {
 
         // Store new data storage contracts for regulator proxy
-        address permissions = address(new PermissionSheetMock()); // All permissions added
-        address validators = address(new ValidatorSheetMock(msg.sender)); // Adds msg.sender as validator
+        address proxy = address(new RegulatorProxy(regulatorImplementation));
 
-        address proxy = address(new RegulatorProxy(regulatorImplementation, permissions, validators));
+        // The function caller should own the proxy contract, so they will need to claim ownership
+        RegulatorProxy(proxy).transferOwnership(msg.sender);
 
-        // data storages should ultimately point be owned by the proxy, since it will delegate function
-        // calls to the latest implementation *in the context of the proxy contract*
-        PermissionSheet(permissions).transferOwnership(address(proxy));
-        ValidatorSheet(validators).transferOwnership(address(proxy));
-        Regulator(proxy).claimPermissionOwnership();
-        Regulator(proxy).claimValidatorOwnership();
+        regulators.push(proxy);
+        emit CreatedRegulatorProxy(proxy, getCount()-1);
+    }
+
+    /** 
+    *
+    * @dev generate a new proxyaddress pointing to a regulator loaded with all permissions
+    * and an initial validator of the caller's choosing
+    *
+    **/
+    function createRegulatorProxyFullyLoaded(address regulatorImplementation, address validator) public {
+
+        // Store new data storage contracts for regulator proxy
+        address proxy = address(new RegulatorProxy(regulatorImplementation));
+        Regulator regulator = Regulator(proxy);
+
+        // Set up proxy
+        regulator.addValidator(validator);
+        regulator.addPermission(regulator.MINT_SIG(), "","","");
+        regulator.addPermission(regulator.MINT_CUSD_SIG(), "","","");
+        regulator.addPermission(regulator.BURN_SIG(), "","","");
+        regulator.addPermission(regulator.CONVERT_CARBON_DOLLAR_SIG(), "","","");
+        regulator.addPermission(regulator.BURN_CARBON_DOLLAR_SIG(), "","","");
+        regulator.addPermission(regulator.CONVERT_WT_SIG(), "","","");
+        regulator.addPermission(regulator.DESTROY_BLACKLISTED_TOKENS_SIG(), "","","");
+        regulator.addPermission(regulator.APPROVE_BLACKLISTED_ADDRESS_SPENDER_SIG(), "","","");
+        regulator.addPermission(regulator.BLACKLISTED_SIG(), "","","");
 
         // The function caller should own the proxy contract, so they will need to claim ownership
         RegulatorProxy(proxy).transferOwnership(msg.sender);

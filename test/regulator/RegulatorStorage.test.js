@@ -1,6 +1,6 @@
 const { CommonVariables } = require('../helpers/common');
 
-const { PermissionSheet, ValidatorSheet } = require('../helpers/artifacts');
+const { RegulatorStorage } = require('../helpers/artifacts');
 
 const { regulatorStorageTests } = require('./regulatorStorageBehavior/RegulatorStorage.js');
 
@@ -14,8 +14,7 @@ contract('RegulatorStorage', _accounts => {
     const validator2 = commonVars.validator2;
 
     beforeEach(async function () {
-        this.permissionSheet = await PermissionSheet.new({ from:owner })
-        this.validatorSheet = await ValidatorSheet.new({ from:owner })
+        this.storage = await RegulatorStorage.new({ from: owner })
     })
 
     describe("RegulatorStorage tests", function () {
