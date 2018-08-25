@@ -3,9 +3,7 @@ const { CommonVariables, ZERO_ADDRESS, expectRevert } = require('../helpers/comm
 const { RegulatorProxyFactory, 
         WhitelistedTokenRegulator, 
         CarbonDollarRegulator,
-        RegulatorProxy, 
-        PermissionSheet, 
-        ValidatorSheet } = require('../helpers/artifacts');
+        RegulatorProxy } = require('../helpers/artifacts');
 
 contract('Regulator Factory creating Regulators', _accounts => {
     const commonVars = new CommonVariables(_accounts);
@@ -67,7 +65,7 @@ contract('Regulator Factory creating Regulators', _accounts => {
         })
     })
 
-    describe('Casting children to Regulator and RegulatorProxy', function () {
+    describe('Delegating calls to Regulator Proxy', function () {
         beforeEach(async function () {
             await this.proxyFactory.createRegulatorProxy(this.impl_v0_whitelisted.address, {from: proxy_owner })
 
@@ -76,9 +74,6 @@ contract('Regulator Factory creating Regulators', _accounts => {
 
             // Claim ownership of newly created proxy   
             await this.regulator_0.claimOwnership({ from:proxy_owner})
-
-            this.permissions_0 = PermissionSheet.at(await this.regulator_0.permissions())
-            this.validators_0 = ValidatorSheet.at(await this.regulator_0.validators())
         })
         it('regulator and proxy have same address', async function () {
             assert.equal(this.proxy_0.address, this.regulator_0.address)
@@ -90,20 +85,6 @@ contract('Regulator Factory creating Regulators', _accounts => {
             assert.equal(await this.proxy_0.owner(), proxy_owner)
             assert.equal(await this.regulator_0.owner(), proxy_owner)
         }) 
-        it('Proxy data stores are owned by regulator', async function () {
-            assert.equal(await this.permissions_0.owner(), this.regulator_0.address)
-            assert.equal(await this.validators_0.owner(), this.regulator_0.address)
-        })
-        it('Proxy can change storage', async function () {
-            const newPermissions = await PermissionSheet.new()
-            const newValidators = await ValidatorSheet.new()
-
-            await this.regulator_0.setPermissionStorage(newPermissions.address, {from: proxy_owner})
-            await this.regulator_0.setValidatorStorage(newValidators.address, {from: proxy_owner})
-
-            assert.equal(newPermissions.address, await this.regulator_0.permissions())
-            assert.equal(newValidators.address, await this.regulator_0.validators())
-        })
         describe("Proxy upgradeTo and implentation", function () {
             it('upgrades to next implementation', async function () {
     
@@ -143,14 +124,11 @@ contract('Regulator Factory creating Regulators', _accounts => {
             describe('validator sets user permission', function () {
                 beforeEach(async function () {
                     await this.regulator_0.addValidator(validator, {from: proxy_owner})
+                    await this.regulator_0.addPermission(0x12345678, "name","des","contract", {from: validator})
                 })
-                it('sets a minter', async function () {
-                    await this.regulator_0.setMinter(minter, {from: validator})
-                    assert(await this.regulator_0.isMinter(minter))
-                })
-                it('sets a whitelisted user', async function () {
-                    await this.regulator_0.setWhitelistedUser(whitelisted, {from: validator})
-                    assert(await this.regulator_0.isWhitelistedUser(whitelisted))
+                it('user gains permission', async function () {
+                    await this.regulator_0.setUserPermission(minter, 0x12345678, {from: validator})
+                    assert(await this.regulator_0.hasUserPermission(minter, 0x12345678))
                 })
             })
         })

@@ -1,11 +1,6 @@
 const { CommonVariables, ZERO_ADDRESS, RANDOM_ADDRESS, expectRevert, assertBalance } = require('../helpers/common');
 
 const { RegulatorProxyFactory, 
-        PermissionSheet,
-        BalanceSheet, 
-        AllowanceSheet,
-        FeeSheet,
-        StablecoinWhitelist,
         CarbonDollarProxyFactory,
         CarbonDollarProxy,
         CarbonDollar,
@@ -13,6 +8,7 @@ const { RegulatorProxyFactory,
         WhitelistedTokenRegulator,
         WhitelistedToken,
         WhitelistedTokenProxyFactory } = require('../helpers/artifacts');
+const { CarbonDollarMock, WhitelistedRegulatorMock } = require('../helpers/mocks')
 
 contract('CarbonDollar Factory creating CD proxies', _accounts => {
     const commonVars = new CommonVariables(_accounts);
@@ -25,10 +21,8 @@ contract('CarbonDollar Factory creating CD proxies', _accounts => {
     beforeEach(async function () {
 
         this.proxyFactory = await CarbonDollarProxyFactory.new({from: proxy_owner });
-        this.regulatorFactory = await RegulatorProxyFactory.new({from: proxy_owner });
-
-        this.regulator_v0 = await CarbonDollarRegulator.new(ZERO_ADDRESS, ZERO_ADDRESS, {from: other_owner })
-        this.impl_v0 = await CarbonDollar.new(ZERO_ADDRESS, ZERO_ADDRESS, ZERO_ADDRESS, ZERO_ADDRESS, ZERO_ADDRESS, {from: other_owner })
+        this.regulator_CD = await CarbonDollarMock.new({from: validator })
+        this.impl_v0 = await CarbonDollar.new(ZERO_ADDRESS, {from: other_owner })
 
     })
 
@@ -39,12 +33,8 @@ contract('CarbonDollar Factory creating CD proxies', _accounts => {
         })
         it('proxy creates a new CarbonDollar', async function () {
 
-            // Create a CD regulator first
-            await this.regulatorFactory.createRegulatorProxy(this.regulator_v0.address, {from: proxy_owner})
-            this.regulatorAddress = await this.regulatorFactory.getRegulatorProxy((await this.regulatorFactory.getCount())-1)
-
             // Create a CD proxy using factory
-            const { logs } = await this.proxyFactory.createToken(this.impl_v0.address, this.regulatorAddress, {from: proxy_owner})
+            const { logs } = await this.proxyFactory.createToken(this.impl_v0.address, this.regulator_CD.address, {from: proxy_owner})
             assert.equal(logs.length, 1)
             assert.equal(logs[0].event, "CreatedCarbonDollarProxy")
             assert.equal(logs[0].args.newToken, await this.proxyFactory.getToken(0))
@@ -56,12 +46,9 @@ contract('CarbonDollar Factory creating CD proxies', _accounts => {
 
     describe('getToken', function () {
         beforeEach(async function () {
-            // Create a CD regulator first
-            await this.regulatorFactory.createRegulatorProxy(this.regulator_v0.address, {from: proxy_owner})
-            this.regulatorAddress = await this.regulatorFactory.getRegulatorProxy((await this.regulatorFactory.getCount())-1)
 
             // Create a CD proxy using factory
-            await this.proxyFactory.createToken(this.impl_v0.address, this.regulatorAddress, {from: proxy_owner})
+            await this.proxyFactory.createToken(this.impl_v0.address, this.regulator_CD.address, {from: proxy_owner})
 
         })
         it('i is negative, reverts', async function () {
@@ -79,26 +66,15 @@ contract('CarbonDollar Factory creating CD proxies', _accounts => {
 
     describe('Casting children to CarbonDollar and CarbonDollarProxy', function () {
         beforeEach(async function () {
-            // Create a CD regulator first
-            await this.regulatorFactory.createRegulatorProxy(this.regulator_v0.address, {from: proxy_owner})
-            this.regulatorAddress = await this.regulatorFactory.getRegulatorProxy((await this.regulatorFactory.getCount())-1)
 
             // Create a CD proxy using factory
-            await this.proxyFactory.createToken(this.impl_v0.address, this.regulatorAddress, {from: proxy_owner})
+            await this.proxyFactory.createToken(this.impl_v0.address, this.regulator_CD.address, {from: proxy_owner})
 
             this.proxy_0 = CarbonDollarProxy.at(await this.proxyFactory.getToken((await this.proxyFactory.getCount())-1))
             this.token_0 = CarbonDollar.at(this.proxy_0.address)
 
             // Claim ownership of newly created proxy   
             await this.token_0.claimOwnership({ from:proxy_owner})
-
-            this.balances_0 = BalanceSheet.at(await this.token_0.balances())
-            this.allowances_0 = AllowanceSheet.at(await this.token_0.allowances())
-            this.fees_0 = FeeSheet.at(await this.token_0.stablecoinFees())
-            this.whitelist_0 = StablecoinWhitelist.at(await this.token_0.stablecoinWhitelist())
-            this.regulator_CD = CarbonDollarRegulator.at(await this.token_0.regulator())
-
-            await this.regulator_CD.claimOwnership({ from: proxy_owner })
         })
         it('token and proxy have same address', async function () {
             assert.equal(this.proxy_0.address, this.token_0.address)
@@ -110,37 +86,18 @@ contract('CarbonDollar Factory creating CD proxies', _accounts => {
             assert.equal(await this.proxy_0.owner(), proxy_owner)
             assert.equal(await this.token_0.owner(), proxy_owner)
         }) 
-        it('Proxy data stores are owned by token', async function () {
-            assert.equal(await this.balances_0.owner(), this.token_0.address)
-            assert.equal(await this.allowances_0.owner(), this.token_0.address)
-            assert.equal(await this.fees_0.owner(), this.token_0.address)
-            assert.equal(await this.whitelist_0.owner(), this.token_0.address)
-        })
         it('Proxy can change storage', async function () {
-            const newBalances = await BalanceSheet.new()
-            const newAllowances = await AllowanceSheet.new()
-            const newFees = await FeeSheet.new()
-            const newStablecoinWhitelist = await StablecoinWhitelist.new()
 
-            await this.regulatorFactory.createRegulatorProxy(this.regulator_v0.address, {from: proxy_owner})
-            const newRegulator = await this.regulatorFactory.getRegulatorProxy((await this.regulatorFactory.getCount())-1)
+            const newRegulator = (await CarbonDollarMock.new({from: validator})).address
 
-            await this.token_0.setBalanceStorage(newBalances.address, {from: proxy_owner})
-            await this.token_0.setAllowanceStorage(newAllowances.address, {from: proxy_owner})
-            await this.token_0.setFeeSheet(newFees.address, {from: proxy_owner})
-            await this.token_0.setStablecoinWhitelist(newStablecoinWhitelist.address, {from: proxy_owner})
             await this.token_0.setRegulator(newRegulator, {from:proxy_owner})
 
-            assert.equal(newBalances.address, await this.token_0.balances())
-            assert.equal(newAllowances.address, await this.token_0.allowances())
-            assert.equal(newFees.address, await this.token_0.stablecoinFees())
-            assert.equal(newStablecoinWhitelist.address, await this.token_0.stablecoinWhitelist())
             assert.equal(newRegulator, await this.token_0.regulator())
         })
         describe("Proxy upgradeTo and implentation", function () {
             it('upgrades to next implementation', async function () {
     
-                this.impl_v1 = await CarbonDollar.new(ZERO_ADDRESS, ZERO_ADDRESS, ZERO_ADDRESS, ZERO_ADDRESS, ZERO_ADDRESS, {from: other_owner })
+                this.impl_v1 = await CarbonDollar.new(ZERO_ADDRESS, {from: other_owner })
                 const { logs } = await this.proxy_0.upgradeTo(this.impl_v1.address, {from: proxy_owner}) 
                 assert.equal(await this.proxy_0.implementation(), this.impl_v1.address) 
                 assert.equal(logs.length, 1)
@@ -153,19 +110,16 @@ contract('CarbonDollar Factory creating CD proxies', _accounts => {
 
             beforeEach(async function () {
                 // Create a WT regulator
-                this.regulator_WT_model = await WhitelistedTokenRegulator.new(ZERO_ADDRESS, ZERO_ADDRESS, {from: other_owner})
-                await this.regulatorFactory.createRegulatorProxy(this.regulator_WT_model.address, {from: proxy_owner})
-                this.regulator_WT_address = await this.regulatorFactory.getRegulatorProxy((await this.regulatorFactory.getCount())-1)
+                this.regulator_WT = await WhitelistedRegulatorMock.new({from: validator})
 
                 // Create a WT token
-                this.token_WT_model = await WhitelistedToken.new(ZERO_ADDRESS, ZERO_ADDRESS, ZERO_ADDRESS, ZERO_ADDRESS, {from:other_owner})
+                this.token_WT_model = await WhitelistedToken.new(ZERO_ADDRESS, ZERO_ADDRESS, {from:other_owner})
                 this.wtProxyFactory = await WhitelistedTokenProxyFactory.new({ from: proxy_owner })
-                await this.wtProxyFactory.createToken(this.token_WT_model.address, this.token_0.address, this.regulator_WT_address, {from:proxy_owner})
+                await this.wtProxyFactory.createToken(this.token_WT_model.address, this.token_0.address, this.regulator_WT.address, {from:proxy_owner})
                 this.token_WT = WhitelistedToken.at(await this.wtProxyFactory.getToken((await this.wtProxyFactory.getCount())-1))
                 this.regulator_WT = WhitelistedTokenRegulator.at(await this.token_WT.regulator())
 
                 await this.token_WT.claimOwnership({ from:proxy_owner })
-                await this.regulator_WT.claimOwnership({ from:proxy_owner })
 
             })
             describe('owner calls listToken', function () {
@@ -182,13 +136,11 @@ contract('CarbonDollar Factory creating CD proxies', _accounts => {
             describe('burnCarbonDollar and convertCarbonDollar', function () {
                 beforeEach(async function () {
                     // Set up CD permissions
-                    await this.regulator_CD.addValidator(validator, {from:proxy_owner})
                     await this.regulator_CD.setWhitelistedUser(whitelisted, {from:validator})
                     await this.regulator_CD.setWhitelistedUser(this.token_0.address, {from:validator})
                     await this.token_0.listToken(this.token_WT.address, {from:proxy_owner})
 
                     // Set up WT permissions
-                    await this.regulator_WT.addValidator(validator, {from:proxy_owner})
                     await this.regulator_WT.setMinter(minter, {from:validator})
                     await this.regulator_WT.setWhitelistedUser(whitelisted, {from:validator})
                     await this.regulator_WT.setWhitelistedUser(this.token_0.address, {from:validator})

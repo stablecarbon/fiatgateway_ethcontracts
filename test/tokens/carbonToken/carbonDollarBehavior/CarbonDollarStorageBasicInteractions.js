@@ -4,41 +4,6 @@ const { expectRevert, ZERO_ADDRESS } = require('../../../helpers/common');
 
 function carbonDollarStorageInteractionTests(owner, wtMinter) {
     describe('Fee sheet interactions', function () {
-            describe('setFeeSheet', function () {
-                beforeEach(async function () {
-                    this.oldFeeSheet = await this.token.stablecoinFees()
-                    this.newFeeSheet = await FeeSheet.new({from:owner})
-                })
-                describe('when owner calls', function () {
-                    const from = owner
-                    it('sets FeeSheet storage location', async function () {
-                        await this.token.setFeeSheet(this.newFeeSheet.address, {from});
-                        assert.equal(await this.token.stablecoinFees(), this.newFeeSheet.address);
-                    });
-                    it('emits a FeeSheetChanged event', async function () {    
-                        const {logs} = await this.token.setFeeSheet(this.newFeeSheet.address, { from });
-                        assert.equal(logs.length, 1);
-                        assert.equal(logs[0].event, 'FeeSheetChanged');
-                        assert.equal(logs[0].args.oldSheet, this.oldFeeSheet);
-                        assert.equal(logs[0].args.newSheet, this.newFeeSheet.address);
-                    });
-                    describe('sets FeeSheet to non-contract, 0x0, or existing sheet', function () {
-                        it('reverts', async function () {
-                            await expectRevert(this.token.setFeeSheet(ZERO_ADDRESS, {from}));
-                            await expectRevert(this.token.setFeeSheet(owner, {from}));
-                            await expectRevert(this.token.setFeeSheet(this.oldFeeSheet, {from}));
-
-                        })
-                    })
-                })
-                describe('when non owner calls', function () {
-                    const from = wtMinter
-                    it('reverts', async function () {
-                        await expectRevert(this.token.setFeeSheet(this.newFeeSheet.address, { from }));
-                    })
-                })
-
-            });
             describe('setFee, getFee', function () {
                 describe('token is whitelisted', function () {
                     beforeEach(async function () {
@@ -99,41 +64,6 @@ function carbonDollarStorageInteractionTests(owner, wtMinter) {
             });
     });
     describe('Stablecoin whitelist interactions', function () {
-            describe('setStablecoinWhitelist', function () {
-                beforeEach(async function () {
-                    this.oldWhitelist = await this.token.stablecoinWhitelist()
-                    this.newWhitelist = await StablecoinWhitelist.new({ from: owner });
-                })
-                describe('when owner calls', function () {
-                    const from = owner
-                    it('sets StablecoinWhitelist storage location', async function () {
-                        await this.token.setStablecoinWhitelist(this.newWhitelist.address, { from });
-                        assert.equal(await this.token.stablecoinWhitelist(), this.newWhitelist.address);
-                    });
-                    it('emits a StablecoinWhitelistChanged event', async function () {
-                        const { logs } = await this.token.setStablecoinWhitelist(this.newWhitelist.address, { from });
-                        assert.equal(logs.length, 1);
-                        assert.equal(logs[0].event, 'StablecoinWhitelistChanged');
-                        assert.equal(logs[0].args.oldWhitelist,  this.oldWhitelist);
-                        assert.equal(logs[0].args.newWhitelist, this.newWhitelist.address);
-                    });
-                    describe('sets StablecoinWhitelist to non-contract, 0x0, or existing sheet', function () {
-                        it('reverts', async function () {
-                            await expectRevert(this.token.setStablecoinWhitelist(ZERO_ADDRESS, {from}));
-                            await expectRevert(this.token.setStablecoinWhitelist(owner, {from}));
-                            await expectRevert(this.token.setStablecoinWhitelist(this.oldWhitelist, {from}));
-
-                        })
-                    })   
-                })
-                describe('when non owner calls', function () {
-                    const from = wtMinter
-                    it('reverts', async function() {
-                        await expectRevert(this.token.setStablecoinWhitelist(this.newWhitelist.address, { from }))
-                    })
-                })
-
-            });
             describe('listToken', function () {
                 it('adds stablecoin to whitelist', async function () {
                     await this.token.listToken(this.wtToken.address, {from:owner});

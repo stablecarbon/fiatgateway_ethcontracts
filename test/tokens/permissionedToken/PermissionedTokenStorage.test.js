@@ -1,6 +1,8 @@
 const { CommonVariables, ZERO_ADDRESS } = require('../../helpers/common');
 
-const { BalanceSheet, AllowanceSheet } = require('../../helpers/artifacts');
+const { PermissionedTokenStorage,
+        RegulatorProxyFactory,
+        Regulator } = require('../../helpers/artifacts');
 
 const { permissionedTokenStorageTests } = require('./permissionedTokenStorageBehavior/PermissionedTokenStorage.js');
 
@@ -14,8 +16,8 @@ contract('PermissionedTokenStorage', _accounts => {
     const spender = commonVars.user3;
 
     beforeEach(async function () {
-        this.balanceSheet = await BalanceSheet.new({from:owner})
-        this.allowanceSheet = await AllowanceSheet.new({from:owner})
+
+        this.storage = await PermissionedTokenStorage.new({ from:owner })
     })
 
     describe("PermissionedTokenStorage tests", function () {

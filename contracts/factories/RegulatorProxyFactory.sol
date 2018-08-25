@@ -1,8 +1,6 @@
 pragma solidity ^0.4.24;
 
 import "../regulator/RegulatorProxy.sol";
-import "../regulator/mocks/PermissionSheetMock.sol";
-import "../regulator/mocks/ValidatorSheetMock.sol";
 import "../regulator/Regulator.sol";
 
 /**
@@ -30,17 +28,7 @@ contract RegulatorProxyFactory {
     function createRegulatorProxy(address regulatorImplementation) public {
 
         // Store new data storage contracts for regulator proxy
-        address permissions = address(new PermissionSheetMock()); // All permissions added
-        address validators = address(new ValidatorSheetMock(msg.sender)); // Adds msg.sender as validator
-
-        address proxy = address(new RegulatorProxy(regulatorImplementation, permissions, validators));
-
-        // data storages should ultimately point be owned by the proxy, since it will delegate function
-        // calls to the latest implementation *in the context of the proxy contract*
-        PermissionSheet(permissions).transferOwnership(address(proxy));
-        ValidatorSheet(validators).transferOwnership(address(proxy));
-        Regulator(proxy).claimPermissionOwnership();
-        Regulator(proxy).claimValidatorOwnership();
+        address proxy = address(new RegulatorProxy(regulatorImplementation));
 
         // The function caller should own the proxy contract, so they will need to claim ownership
         RegulatorProxy(proxy).transferOwnership(msg.sender);

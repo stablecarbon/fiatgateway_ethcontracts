@@ -1,16 +1,33 @@
 pragma solidity ^0.4.24;
 
-import "./dataStorage/MutablePermissionedTokenStorage.sol";
+import "./dataStorage/PermissionedTokenStorage.sol";
 import "zos-lib/contracts/upgradeability/UpgradeabilityProxy.sol";
+import "../../regulator/Regulator.sol";
+import '../../helpers/Ownable.sol';
+import "openzeppelin-solidity/contracts/AddressUtils.sol";
 
 /**
 * @title PermissionedTokenProxy
 * @notice A proxy contract that serves the latest implementation of PermissionedToken.
 */
-contract PermissionedTokenProxy is UpgradeabilityProxy, MutablePermissionedTokenStorage {
-    constructor(address _implementation, address _regulator, address _balances, address _allowances) 
-    UpgradeabilityProxy(_implementation) 
-    MutablePermissionedTokenStorage(_regulator, _balances, _allowances) public {}
+contract PermissionedTokenProxy is UpgradeabilityProxy, Ownable {
+    
+    PermissionedTokenStorage public tokenStorage;
+    Regulator public regulator;
+
+    // Events
+    event ChangedRegulator(address indexed oldRegulator, address indexed newRegulator );
+
+
+    /**
+    * @dev create a new PermissionedToken as a proxy contract
+    * with a brand new data storage 
+    **/
+    constructor(address _implementation, address _regulator) 
+    UpgradeabilityProxy(_implementation) public {
+        regulator = Regulator(_regulator);
+        tokenStorage = new PermissionedTokenStorage();
+    }
 
     /**
     * @dev Upgrade the backing implementation of the proxy.
@@ -18,9 +35,9 @@ contract PermissionedTokenProxy is UpgradeabilityProxy, MutablePermissionedToken
     * @param newImplementation Address of the new implementation.
     */
     function upgradeTo(address newImplementation) public onlyOwner {
-        // _setPendingUpgrade(newImplementation);
         _upgradeTo(newImplementation);
     }
+
 
     /**
     * @return The address of the implementation.
