@@ -1,7 +1,7 @@
 pragma solidity ^0.4.24;
 
-import "./dataStorage/MutableCarbonDollarStorage.sol";
-import "../permissionedToken/dataStorage/MutablePermissionedTokenStorage.sol";
+import "./dataStorage/CarbonDollarStorage.sol";
+import "../permissionedToken/dataStorage/PermissionedTokenStorage.sol";
 import "../permissionedToken/PermissionedTokenProxy.sol";
 
 /**
@@ -10,21 +10,15 @@ import "../permissionedToken/PermissionedTokenProxy.sol";
 * be routed through this proxy, since this proxy contract is the owner of the
 * storage contracts.
 */
-contract CarbonDollarProxy is UpgradeabilityProxy, MutableCarbonDollarStorage, MutablePermissionedTokenStorage {
+contract CarbonDollarProxy is UpgradeabilityProxy, CarbonDollarStorage, PermissionedTokenStorage {
     
     /** CONSTRUCTOR
     * @dev Passes along arguments to base class.
     * @param _implementation the initial logic implementation
-    * @param _regulator the Regulator, should be a CarbonDollarRegulator 
-    * @param _balances BalanceSheet
-    * @param _allowances AllowanceSheet
-    * @param _fees FeeSheet
-    * @param _stablecoins StablecoinWhitelist
-    */
-    constructor(address _implementation, address _regulator, address _balances, address _allowances, address _fees, address _stablecoins) public
+    * @param _regulator the Regulator, should be a CarbonDollarRegulator     */
+    constructor(address _implementation, address _regulator) public
     UpgradeabilityProxy(_implementation)
-    MutableCarbonDollarStorage(_fees, _stablecoins)
-    MutablePermissionedTokenStorage(_regulator, _balances, _allowances) {}
+    PermissionedTokenStorage(_regulator) {}
 
     /**
     * @dev Upgrade the backing implementation of the proxy.

@@ -6,8 +6,6 @@ const RegulatorProxy = artifacts.require("RegulatorProxy")
 const RegulatorProxyFactory = artifacts.require('RegulatorProxyFactory')
 
 // PermissionedToken
-const AllowanceSheet = artifacts.require("AllowanceSheet");
-const BalanceSheet = artifacts.require("BalanceSheet");
 const PermissionedToken = artifacts.require("PermissionedToken");
 const PermissionedTokenStorage = artifacts.require("PermissionedTokenStorage");
 const PermissionedTokenProxy = artifacts.require("PermissionedTokenProxy");
@@ -22,8 +20,6 @@ const WhitelistedTokenProxyFactory = artifacts.require("WhitelistedTokenProxyFac
 // CarbonDollar
 const CarbonDollar = artifacts.require("CarbonDollar");
 const CarbonDollarStorage = artifacts.require("CarbonDollarStorage");
-const FeeSheet = artifacts.require("FeeSheet");
-const StablecoinWhitelist = artifacts.require("StablecoinWhitelist");
 const CarbonDollarRegulator = artifacts.require("CarbonDollarRegulator");
 const CarbonDollarProxy = artifacts.require("CarbonDollarProxy");
 const CarbonDollarProxyFactory = artifacts.require("CarbonDollarProxyFactory");
@@ -37,11 +33,8 @@ module.exports = {
 	RegulatorProxyFactory,
 	RegulatorProxy,
 	RegulatorStorage,
-	// PToken storage
-	AllowanceSheet,
-	BalanceSheet,
-	PermissionedTokenStorage,
 	// PToken
+	PermissionedTokenStorage,
 	PermissionedToken,
 	PermissionedTokenStorage,
 	PermissionedTokenProxy,
@@ -56,8 +49,6 @@ module.exports = {
 	CarbonDollarProxyFactory,
 	CarbonDollar,
 	CarbonDollarStorage,
-    FeeSheet,
-    StablecoinWhitelist,
 	CarbonDollarRegulator,
 	// Utils
 	DelayedUpgradeabilityProxy

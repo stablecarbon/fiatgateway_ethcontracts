@@ -1,10 +1,6 @@
 pragma solidity ^0.4.24;
 
 import "../tokens/carbonToken/CarbonDollarProxy.sol";
-import "../tokens/carbonToken/dataStorage/FeeSheet.sol";
-import "../tokens/carbonToken/dataStorage/StablecoinWhitelist.sol";
-import "../tokens/permissionedToken/dataStorage/BalanceSheet.sol";
-import "../tokens/permissionedToken/dataStorage/AllowanceSheet.sol";
 import "../tokens/carbonToken/CarbonDollar.sol";
 
 /**
@@ -31,26 +27,7 @@ contract CarbonDollarProxyFactory {
     **/
     function createToken(address tokenImplementation, address regulator) public {
         
-        // Store new data storage contracts for token proxy
-        address balances = address(new BalanceSheet()); 
-        address allowances = address(new AllowanceSheet());
-        address fees = address(new FeeSheet());
-        address whitelist = address(new StablecoinWhitelist());
-
-        address proxy = address(new CarbonDollarProxy(tokenImplementation, regulator, balances, allowances, fees, whitelist));
-
-        // data storages should ultimately point be owned by the proxy, since it will delegate function
-        // calls to the latest implementation *in the context of the proxy contract*
-        BalanceSheet(balances).transferOwnership(address(proxy));
-        AllowanceSheet(allowances).transferOwnership(address(proxy));
-        FeeSheet(fees).transferOwnership(address(proxy));
-        StablecoinWhitelist(whitelist).transferOwnership(address(proxy));
-
-        CarbonDollar(proxy).claimBalanceOwnership();
-        CarbonDollar(proxy).claimAllowanceOwnership();
-        CarbonDollar(proxy).claimFeeOwnership();
-        CarbonDollar(proxy).claimWhitelistOwnership();
-
+        address proxy = address(new CarbonDollarProxy(tokenImplementation, regulator));
 
         // The function caller should own the proxy contract
         CarbonDollarProxy(proxy).transferOwnership(msg.sender);

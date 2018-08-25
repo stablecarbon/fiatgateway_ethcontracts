@@ -2,7 +2,7 @@ pragma solidity ^0.4.24;
 
 import "../permissionedToken/PermissionedToken.sol";
 import "../carbonToken/CarbonDollar.sol";
-import "./dataStorage/MutableWhitelistedTokenStorage.sol";
+import "./dataStorage/WhitelistedTokenStorage.sol";
 
 /**
 * @title WhitelistedToken
@@ -10,7 +10,7 @@ import "./dataStorage/MutableWhitelistedTokenStorage.sol";
 * is the only way for a user to obtain CUSD. This is a permissioned token, so users have to be 
 * whitelisted before they can do any mint/burn/convert operation.
 */
-contract WhitelistedToken is MutableWhitelistedTokenStorage, PermissionedToken {
+contract WhitelistedToken is WhitelistedTokenStorage, PermissionedToken {
 
     /**
         Events
@@ -23,13 +23,11 @@ contract WhitelistedToken is MutableWhitelistedTokenStorage, PermissionedToken {
     * CarbonUSD meta-token contract. The latter is necessary in order to make transactions
     * with the CarbonDollar smart contract.
     * @param _regulator Regulator for WhitelistedToken, should be a WhitelistedTokenRegulator
-    * @param _allowances Address of allowance sheet. Passed to base constructor.
-    * @param _balances Address of balance sheet. Passed to base constructor.
     * @param _cusd Address of `CarbonDollar` contract
     */
-    constructor(address _regulator, address _balances, address _allowances, address _cusd) public
-    PermissionedToken(_regulator, _balances, _allowances)
-    MutableWhitelistedTokenStorage(_cusd) {}
+    constructor(address _regulator, address _cusd) public
+    PermissionedToken(_regulator)
+    WhitelistedTokenStorage(_cusd) {}
 
     /**
     * @notice Mints CarbonUSD for the user. Stores the WT0 that backs the CarbonUSD
