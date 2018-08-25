@@ -104,7 +104,7 @@ function carbonDollarStorageTests(owner, tokenHolder, spender, user) {
                 describe('addStablecoin', function () {
                     it("adds the stablecoin to the whitelist", async function () {
                         await this.storage.addStablecoin(RANDOM_ADDRESS, { from });
-                        assert(await this.storage.isWhitelisted(RANDOM_ADDRESS));
+                        assert(await this.storage.whitelist(RANDOM_ADDRESS));
                     })
                     it("emits a StablecoinAdded event", async function () {
                         const { logs } = await this.storage.addStablecoin(RANDOM_ADDRESS, { from });
@@ -117,11 +117,11 @@ function carbonDollarStorageTests(owner, tokenHolder, spender, user) {
                 describe('removeStablecoin', function () {
                     beforeEach(async function () {
                         await this.storage.addStablecoin(RANDOM_ADDRESS, { from })
-                        assert(await this.storage.isWhitelisted(RANDOM_ADDRESS))
+                        assert(await this.storage.whitelist(RANDOM_ADDRESS))
                     })
                     it("removes the stablecoin from the whitelist", async function () {
                         await this.storage.removeStablecoin(RANDOM_ADDRESS, { from });
-                        assert(!(await this.storage.isWhitelisted(RANDOM_ADDRESS)));
+                        assert(!(await this.storage.whitelist(RANDOM_ADDRESS)));
                     })
                     it("emits a StablecoinRemoved event", async function () {
                         const { logs } = await this.storage.removeStablecoin(RANDOM_ADDRESS, { from });
