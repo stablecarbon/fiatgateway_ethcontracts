@@ -1,7 +1,7 @@
 pragma solidity ^0.4.24;
 
 import "./dataStorage/WhitelistedTokenStorage.sol";
-import "../permissionedToken/dataStorage/PermissionedTokenStorage.sol";
+import "../permissionedToken/PermissionedToken.sol";
 import "../permissionedToken/PermissionedTokenProxy.sol";
 
 /**
@@ -10,11 +10,11 @@ import "../permissionedToken/PermissionedTokenProxy.sol";
 * be routed through this proxy, since this proxy contract is the owner of the
 * storage contracts.
 */
-contract WhitelistedTokenProxy is UpgradeabilityProxy, WhitelistedTokenStorage, PermissionedTokenStorage {
+contract WhitelistedTokenProxy is UpgradeabilityProxy, WhitelistedTokenStorage, PermissionedToken {
     constructor(address _implementation, address _regulator, address _cusd) public
     UpgradeabilityProxy(_implementation)
     WhitelistedTokenStorage(_cusd)
-    PermissionedTokenStorage(_regulator) {}
+    PermissionedToken(_regulator) {}
 
     /**
     * @dev Upgrade the backing implementation of the proxy.

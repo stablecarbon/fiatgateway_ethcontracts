@@ -6,6 +6,7 @@ import "openzeppelin-solidity/contracts/AddressUtils.sol";
 import "openzeppelin-solidity/contracts/token/ERC20/ERC20.sol";
 import "../../helpers/Lockable.sol";
 import "../../helpers/Pausable.sol";
+import "../../regulator/Regulator.sol";
 
 /**
 * @title PermissionedToken
@@ -14,7 +15,7 @@ import "../../helpers/Pausable.sol";
 * ERC-20 smart contract representing ownership of securities and overrides the
 * transfer, burn, and mint methods to check with the Regulator.
 */
-contract PermissionedToken is ERC20, Pausable, Lockable, PermissionedTokenStorage {
+contract PermissionedToken is ERC20, Pausable, Lockable {
     using SafeMath for uint256;
 
     /** Events */
@@ -24,10 +25,17 @@ contract PermissionedToken is ERC20, Pausable, Lockable, PermissionedTokenStorag
     event Burn(address indexed burner, uint256 value);
     event Transfer(address indexed from, address indexed to, uint256 value);
     event Approval(address indexed owner, address indexed spender, uint256 value);
+    event ChangedRegulator(address indexed oldRegulator, address indexed newRegulator );
 
+    PermissionedTokenStorage public tokenStorage;
+    Regulator public regulator;
 
-    constructor (address _regulator) public 
-    PermissionedTokenStorage(_regulator) {}
+    // Create a new PT storage. Necessary for PT to own a PT storage in order to modify
+    // its only owner functions
+    constructor (address _regulator) public {
+        regulator = Regulator(_regulator);
+        tokenStorage = new PermissionedTokenStorage();
+    }
 
     /** Modifiers **/
 
@@ -112,7 +120,7 @@ contract PermissionedToken is ERC20, Pausable, Lockable, PermissionedTokenStorag
     */
     function approve(address _spender, uint256 _value) 
     public userNotBlacklisted(_spender) userNotBlacklisted(msg.sender) whenNotPaused whenUnlocked returns (bool) {
-        setAllowance(msg.sender, _spender, _value);
+        tokenStorage.setAllowance(msg.sender, _spender, _value);
         emit Approval(msg.sender, _spender, _value);
         return true;
     }
@@ -154,8 +162,8 @@ contract PermissionedToken is ERC20, Pausable, Lockable, PermissionedTokenStorag
     * @param _who Account to destroy tokens from. Must be a blacklisted account.
     */
     function destroyBlacklistedTokens(address _who, uint256 _amount) public userBlacklisted(_who) whenNotPaused requiresPermission {
-        subBalance(_who, _amount);
-        subTotalSupply(_amount);
+        tokenStorage.subBalance(_who, _amount);
+        tokenStorage.subTotalSupply(_amount);
         emit DestroyedBlacklistedTokens(_who, _amount);
     }
     /**
@@ -167,7 +175,7 @@ contract PermissionedToken is ERC20, Pausable, Lockable, PermissionedTokenStorag
     */
     function approveBlacklistedAddressSpender(address _blacklistedAccount) 
     public userBlacklisted(_blacklistedAccount) whenNotPaused requiresPermission {
-        setAllowance(_blacklistedAccount, msg.sender, balanceOf(_blacklistedAccount));
+        tokenStorage.setAllowance(_blacklistedAccount, msg.sender, balanceOf(_blacklistedAccount));
         emit ApprovedBlacklistedAddressSpender(_blacklistedAccount, msg.sender, balanceOf(_blacklistedAccount));
     }
 
@@ -183,8 +191,8 @@ contract PermissionedToken is ERC20, Pausable, Lockable, PermissionedTokenStorag
         require(_to != address(0),"to address cannot be 0x0");
         require(_amount <= balanceOf(msg.sender),"not enough balance to transfer");
 
-        subBalance(msg.sender, _amount);
-        addBalance(_to, _amount);
+        tokenStorage.subBalance(msg.sender, _amount);
+        tokenStorage.addBalance(_to, _amount);
         emit Transfer(msg.sender, _to, _amount);
         return true;
     }
@@ -207,11 +215,25 @@ contract PermissionedToken is ERC20, Pausable, Lockable, PermissionedTokenStorag
         require(_to != address(0),"to address cannot be 0x0");
         require(_amount <= balanceOf(_from),"not enough balance to transfer");
         
-        subAllowance(_from, msg.sender, _amount);
-        addBalance(_to, _amount);
-        subBalance(_from, _amount);
+        tokenStorage.subAllowance(_from, msg.sender, _amount);
+        tokenStorage.addBalance(_to, _amount);
+        tokenStorage.subBalance(_from, _amount);
         emit Transfer(_from, _to, _amount);
         return true;
+    }
+
+    /**
+    *
+    * @dev Only the token owner can change its regulator
+    * @param _newRegulator the new Regulator for this token
+    *
+    */
+    function setRegulator(address _newRegulator) public onlyOwner {
+        require(_newRegulator != address(regulator), "Must be a new regulator");
+        require(AddressUtils.isContract(_newRegulator), "Cannot set a regulator storage to a non-contract address");
+        address old = address(regulator);
+        regulator = Regulator(_newRegulator);
+        emit ChangedRegulator(old, _newRegulator);
     }
 
     /**
@@ -227,42 +249,51 @@ contract PermissionedToken is ERC20, Pausable, Lockable, PermissionedTokenStorag
     }
 
     /**
-    * @notice Implements allowance() as specified in the ERC20 standard.
+    * ERC20 standard functions
     */
     function allowance(address owner, address spender) public view returns (uint256) {
-        return allowanceOf(owner, spender);
+        return tokenStorage.allowances(owner, spender);
     }
+
+    function totalSupply() public view returns (uint256) {
+        return tokenStorage.totalSupply();
+    }
+
+    function balanceOf(address _addr) public view returns (uint256) {
+        return tokenStorage.balances(_addr);
+    }
+
 
     /** Internal functions **/
     
     function _decreaseApproval(address _spender, uint256 _subtractedValue, address _tokenHolder) internal {
-        uint256 oldValue = allowanceOf(_tokenHolder, _spender);
+        uint256 oldValue = allowance(_tokenHolder, _spender);
         if (_subtractedValue > oldValue) {
-            setAllowance(_tokenHolder, _spender, 0);
+            tokenStorage.setAllowance(_tokenHolder, _spender, 0);
         } else {
-            subAllowance(_tokenHolder, _spender, _subtractedValue);
+            tokenStorage.subAllowance(_tokenHolder, _spender, _subtractedValue);
         }
-        emit Approval(_tokenHolder, _spender, allowanceOf(_tokenHolder, _spender));
+        emit Approval(_tokenHolder, _spender, allowance(_tokenHolder, _spender));
     }
 
     function _increaseApproval(address _spender, uint256 _addedValue, address _tokenHolder) internal {
-        addAllowance(_tokenHolder, _spender, _addedValue);
-        emit Approval(_tokenHolder, _spender, allowanceOf(_tokenHolder, _spender));
+        tokenStorage.addAllowance(_tokenHolder, _spender, _addedValue);
+        emit Approval(_tokenHolder, _spender, allowance(_tokenHolder, _spender));
     }
 
     function _burn(address _tokensOf, uint256 _amount) internal {
         require(_amount <= balanceOf(_tokensOf),"not enough balance to burn");
         // no need to require value <= totalSupply, since that would imply the
         // sender's balance is greater than the totalSupply, which *should* be an assertion failure
-        subBalance(_tokensOf, _amount);
-        subTotalSupply(_amount);
+        tokenStorage.subBalance(_tokensOf, _amount);
+        tokenStorage.subTotalSupply(_amount);
         emit Burn(_tokensOf, _amount);
         emit Transfer(_tokensOf, address(0), _amount);
     }
 
     function _mint(address _to, uint256 _amount) internal userWhitelisted(_to) {
-        addTotalSupply(_amount);
-        addBalance(_to, _amount);
+        tokenStorage.addTotalSupply(_amount);
+        tokenStorage.addBalance(_to, _amount);
         emit Mint(_to, _amount);
         emit Transfer(address(0), _to, _amount);
     }

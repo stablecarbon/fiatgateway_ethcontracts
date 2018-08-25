@@ -1,7 +1,7 @@
 pragma solidity ^0.4.24;
 
 import "./dataStorage/CarbonDollarStorage.sol";
-import "../permissionedToken/dataStorage/PermissionedTokenStorage.sol";
+import "../permissionedToken/PermissionedToken.sol";
 import "../permissionedToken/PermissionedTokenProxy.sol";
 
 /**
@@ -10,7 +10,7 @@ import "../permissionedToken/PermissionedTokenProxy.sol";
 * be routed through this proxy, since this proxy contract is the owner of the
 * storage contracts.
 */
-contract CarbonDollarProxy is UpgradeabilityProxy, CarbonDollarStorage, PermissionedTokenStorage {
+contract CarbonDollarProxy is UpgradeabilityProxy, CarbonDollarStorage, PermissionedToken {
     
     /** CONSTRUCTOR
     * @dev Passes along arguments to base class.
@@ -18,7 +18,7 @@ contract CarbonDollarProxy is UpgradeabilityProxy, CarbonDollarStorage, Permissi
     * @param _regulator the Regulator, should be a CarbonDollarRegulator     */
     constructor(address _implementation, address _regulator) public
     UpgradeabilityProxy(_implementation)
-    PermissionedTokenStorage(_regulator) {}
+    PermissionedToken(_regulator) {}
 
     /**
     * @dev Upgrade the backing implementation of the proxy.

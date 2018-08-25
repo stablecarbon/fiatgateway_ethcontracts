@@ -16,20 +16,9 @@ contract PermissionedTokenStorage is Ownable {
     /**
         Storage
     */
-    // Regulator storing user privileges to call public methods
-    Regulator public regulator;
     mapping (address => mapping (address => uint256)) public allowances;
     mapping (address => uint256) public balances;
     uint256 public totalSupply;
-
-    /**
-        Events
-    */
-    event ChangedRegulator(address indexed oldRegulator, address indexed newRegulator );
-
-    constructor (address _regulator) public {
-        regulator = Regulator(_regulator);
-    }
 
     function addAllowance(address _tokenHolder, address _spender, uint256 _value) public onlyOwner {
         allowances[_tokenHolder][_spender] = allowances[_tokenHolder][_spender].add(_value);
@@ -41,10 +30,6 @@ contract PermissionedTokenStorage is Ownable {
 
     function setAllowance(address _tokenHolder, address _spender, uint256 _value) public onlyOwner {
         allowances[_tokenHolder][_spender] = _value;
-    }
-
-    function allowanceOf(address _tokenHolder, address _spender) public view returns (uint256) {
-        return allowances[_tokenHolder][_spender];
     }
 
     function addBalance(address _addr, uint256 _value) public onlyOwner {
@@ -59,11 +44,6 @@ contract PermissionedTokenStorage is Ownable {
         balances[_addr] = _value;
     }
 
-    /** ERC20 standard function **/
-    function balanceOf(address _addr) public view returns (uint256) {
-        return balances[_addr];
-    }
-
     function addTotalSupply(uint256 _value) public onlyOwner {
         totalSupply = totalSupply.add(_value);
     }
@@ -74,20 +54,6 @@ contract PermissionedTokenStorage is Ownable {
 
     function setTotalSupply(uint256 _value) public onlyOwner {
         totalSupply = _value;
-    }
-
-    /**
-    *
-    * @dev Only the token owner can change its regulator
-    * @param _newRegulator the new Regulator for this token
-    *
-    */
-    function setRegulator(address _newRegulator) public onlyOwner {
-        require(_newRegulator != address(regulator), "Must be a new regulator");
-        require(AddressUtils.isContract(_newRegulator), "Cannot set a regulator storage to a non-contract address");
-        address old = address(regulator);
-        regulator = Regulator(_newRegulator);
-        emit ChangedRegulator(old, _newRegulator);
     }
 
 }

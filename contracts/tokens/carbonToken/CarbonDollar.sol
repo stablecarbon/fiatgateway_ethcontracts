@@ -30,8 +30,7 @@ contract CarbonDollar is CarbonDollarStorage, PermissionedToken {
     * @dev Passes along arguments to base class.
     * @param _regulator the Regulator, should be a CarbonDollarRegulator 
     */
-    constructor(address _regulator) public
-    PermissionedToken(_regulator) {}
+    constructor(address _regulator) public PermissionedToken(_regulator) {}
 
     /**
      * @notice Add new stablecoin to whitelist.

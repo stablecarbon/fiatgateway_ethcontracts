@@ -16,15 +16,8 @@ contract('PermissionedTokenStorage', _accounts => {
     const spender = commonVars.user3;
 
     beforeEach(async function () {
-        this.regulatorFactory = await RegulatorProxyFactory.new({ from:owner })
-        this.regulator_impl_0 = await Regulator.new({ from:owner })
-        await this.regulatorFactory.createRegulatorProxy(this.regulator_impl_0.address, {from: owner })
-        this.regulator = Regulator.at(await this.regulatorFactory.getRegulatorProxy((await this.regulatorFactory.getCount())-1))
-        
-        // Claim ownership of newly created proxy   
-        await this.regulator.claimOwnership({ from:owner})
 
-        this.storage = await PermissionedTokenStorage.new(this.regulator.address, { from:owner })
+        this.storage = await PermissionedTokenStorage.new({ from:owner })
     })
 
     describe("PermissionedTokenStorage tests", function () {
