@@ -1,17 +1,13 @@
 const { expectRevert, ZERO_ADDRESS } = require("../../../helpers/common");
 
-const { BalanceSheet, AllowanceSheet, Regulator } = require("../../../helpers/artifacts");
-
-const { PermissionSheetMock, ValidatorSheetMock } = require('../../../helpers/mocks');
+const { RegulatorMock } = require('../../../helpers/mocks');
 
 
 function permissionedTokenMutableStorageTests(owner, nonOwner) {
     describe("Permissioned Token Storage setting/getting tests", function () {
 
         beforeEach(async function () {
-            // Initial Token storages
-            this.oldBalances = await this.token.balances()
-            this.oldAllowances = await this.token.allowances()
+            // Initial Token regulator
             this.oldRegulator = await this.token.regulator()
         })
         describe('setRegulator', function () {
@@ -19,9 +15,7 @@ function permissionedTokenMutableStorageTests(owner, nonOwner) {
             const from = owner
             beforeEach(async function () {
                 // create a new regulator loaded with all permissions
-                this.newPermissions = await PermissionSheetMock.new({ from })
-                this.newValidators = await ValidatorSheetMock.new(owner, { from })
-                this.newRegulator = (await Regulator.new(this.newPermissions.address, this.newValidators.address)).address
+                this.newRegulator = (await RegulatorMock.new({from})).address
             })
 
             describe('owner calls', function () {
@@ -33,8 +27,8 @@ function permissionedTokenMutableStorageTests(owner, nonOwner) {
                     const { logs } = await this.token.setRegulator(this.newRegulator, { from })
                     assert.equal(logs.length, 1)
                     assert.equal(logs[0].event, "ChangedRegulator")
-                    assert.equal(logs[0].args._old, this.oldRegulator)
-                    assert.equal(logs[0].args._new, this.newRegulator)
+                    assert.equal(logs[0].args.oldRegulator, this.oldRegulator)
+                    assert.equal(logs[0].args.newRegulator, this.newRegulator)
                 })
 
                 describe('new regulator is a non-contract address', function () {

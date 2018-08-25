@@ -1,6 +1,6 @@
 const { permissionedTokenBasicTests } = require('./permissionedTokenBehavior/PermissionedTokenBasic.js');
-// const { permissionedTokenBehaviorTests } = require('./permissionedTokenBehavior/PermissionedTokenBehavior.js');
-// const { permissionedTokenMutableStorageTests } = require('./permissionedTokenBehavior/PermissionedTokenMutableStorage');
+const { permissionedTokenBehaviorTests } = require('./permissionedTokenBehavior/PermissionedTokenBehavior.js');
+const { permissionedTokenMutableStorageTests } = require('./permissionedTokenBehavior/PermissionedTokenMutableStorage');
 const { PermissionedToken, PermissionedTokenStorage } = require('../../helpers/artifacts');
 const { RegulatorMock } = require('../../helpers/mocks')
 
@@ -36,8 +36,8 @@ contract('PermissionedToken', _accounts => {
 
     describe("Permissioned Token tests", function () {
         permissionedTokenBasicTests(owner, whitelisted, nonlisted, minter);
-        // permissionedTokenMutableStorageTests(owner, user)
-        // permissionedTokenBehaviorTests( minter, whitelisted, blacklisted, nonlisted, user, validator, owner );
+        permissionedTokenMutableStorageTests(owner, user)
+        permissionedTokenBehaviorTests( minter, whitelisted, blacklisted, nonlisted, user, validator, owner );
     });
 
 
