@@ -1,7 +1,7 @@
 pragma solidity ^0.4.24;
 
 import "zos-lib/contracts/upgradeability/UpgradeabilityProxy.sol";
-import "./dataStorage/MutableRegulatorStorage.sol";
+import "./dataStorage/RegulatorStorage.sol";
 
 /**
  * @title RegulatorProxy
@@ -12,18 +12,14 @@ import "./dataStorage/MutableRegulatorStorage.sol";
  * calls that function in the context of the proxy's data storage
  *
  */
-contract RegulatorProxy is UpgradeabilityProxy, MutableRegulatorStorage {
+contract RegulatorProxy is UpgradeabilityProxy, RegulatorStorage {
 
     
     /**
     * @dev CONSTRUCTOR
     * @param _implementation the contract who's logic the proxy will initially delegate functionality to
-    * @param _permissionSheet the permission sheet data storage for this proxy
-    * @param _validatorSheet the validator sheet data storage for this proxy
     **/
-    constructor(address _implementation, address _permissionSheet, address _validatorSheet) public
-    UpgradeabilityProxy(_implementation)
-    MutableRegulatorStorage(_permissionSheet, _validatorSheet) {}
+    constructor(address _implementation) public UpgradeabilityProxy(_implementation) {}
 
     /**
     * @dev Upgrade the backing implementation of the proxy.

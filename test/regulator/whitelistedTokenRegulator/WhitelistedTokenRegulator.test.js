@@ -2,14 +2,14 @@ const { CommonVariables, expectRevert } = require('../../helpers/common');
 
 const { WhitelistedTokenRegulator } = require('../../helpers/artifacts');
 
-const { ValidatorSheetMock, PermissionSheetMock, PermissionSheetMockNoWLPermissions } = require('../../helpers/mocks');
+const { WhitelistedRegulatorMock } = require('../../helpers/mocks');
 
 
 contract('WhitelistedTokenRegulator', _accounts => {
     const commonVars = new CommonVariables(_accounts);
     const owner = commonVars.owner;
     const user = commonVars.user;
-    const validator = commonVars.validator;
+    const validator = owner;
     const attacker = commonVars.attacker;
 
 
@@ -20,22 +20,13 @@ contract('WhitelistedTokenRegulator', _accounts => {
                 beforeEach(async function() {
 
                     // Instantiate RegulatorsMock that comes pre-loaded with all function permissions and one validator
-                    this.permissionSheet = await PermissionSheetMock.new( {from:owner })
-                    this.validatorSheet = await ValidatorSheetMock.new(validator, {from:owner} )
-
-                    this.sheet = await WhitelistedTokenRegulator.new(this.permissionSheet.address, this.validatorSheet.address, {from:owner})
-
-                    await this.permissionSheet.transferOwnership(this.sheet.address, {from:owner})
-                    await this.validatorSheet.transferOwnership(this.sheet.address, {from:owner})
-                    await this.sheet.claimPermissionOwnership()
-                    await this.sheet.claimValidatorOwnership()
-
+                    this.sheet = await WhitelistedRegulatorMock.new({from:owner})
 
                     // storing method signatures for testing convenience
-                    this.BLACKLISTED_SIG = await this.permissionSheet.BLACKLISTED_SIG();
-                    this.CONVERT_WT_SIG = await this.permissionSheet.CONVERT_WT_SIG();
-                    this.MINT_CUSD_SIG = await this.permissionSheet.MINT_CUSD_SIG();
-                    this.MINT_SIG = await this.permissionSheet.MINT_SIG();
+                    this.BLACKLISTED_SIG = await this.sheet.BLACKLISTED_SIG();
+                    this.CONVERT_WT_SIG = await this.sheet.CONVERT_WT_SIG();
+                    this.MINT_CUSD_SIG = await this.sheet.MINT_CUSD_SIG();
+                    this.MINT_SIG = await this.sheet.MINT_SIG();
 
 
                     // Assert pre-test invariants
@@ -63,8 +54,8 @@ contract('WhitelistedTokenRegulator', _accounts => {
                             assert.equal(logs[0].args.who, user);
                         })
                     })
-                    describe("when sender is not validator but is owner", function () {
-                        const from = owner;
+                    describe("when sender is not validator", function () {
+                        const from = user;
                         it('reverts', async function () {
                             await expectRevert(this.sheet.setMinter(user, { from }));
                         })
@@ -97,7 +88,7 @@ contract('WhitelistedTokenRegulator', _accounts => {
                     })
 
                     describe("when sender is not validator", function () {
-                        const from = owner;
+                        const from = user;
                         it('reverts', async function () {
                             await expectRevert(this.sheet.removeMinter(user, { from }));
                         })
@@ -121,7 +112,7 @@ contract('WhitelistedTokenRegulator', _accounts => {
                         })
                     });
                     describe("when sender is not validator", function () {
-                        const from = owner;
+                        const from = user;
                         it('reverts', async function () {
                             await expectRevert(this.sheet.setWhitelistedUser(user, { from }));
                         })
@@ -145,7 +136,7 @@ contract('WhitelistedTokenRegulator', _accounts => {
                         })
                     });
                     describe("when sender is not validator", function () {
-                        const from = owner;
+                        const from = user;
                         it('reverts', async function () {
                             await expectRevert(this.sheet.setBlacklistedUser(user, { from }));
                         })
@@ -169,7 +160,7 @@ contract('WhitelistedTokenRegulator', _accounts => {
                         })
                     });
                     describe("when sender is not validator", function () {
-                        const from = owner;
+                        const from = user;
                         it('reverts', async function () {
                             await expectRevert(this.sheet.setNonlistedUser(user, { from }));
                         })

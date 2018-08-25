@@ -1,8 +1,7 @@
 const { CommonVariables } = require('../../helpers/common');
 const { tokenSetup } = require("../../helpers/tokenSetup");
-const { carbonDollarStorageInteractionTests } = require('./carbonDollarBehavior/CarbonDollarStorageBasicInteractions.js');
 const { carbonDollarBehaviorTests } = require('./carbonDollarBehavior/CarbonDollarBehavior.js')
-
+const { carbonDollarStorageInteractionTests } = require('./carbonDollarBehavior/CarbonDollarStorageBasicInteractions.js')
 contract('CarbonDollar', _accounts => {
     const commonVars = new CommonVariables(_accounts);
     const owner = commonVars.owner
@@ -19,7 +18,7 @@ contract('CarbonDollar', _accounts => {
     });
 
     describe("Carbon Dollar tests", function () {
-        carbonDollarStorageInteractionTests(owner, minter);
         carbonDollarBehaviorTests(owner, user, whitelisted, validator);
+        carbonDollarStorageInteractionTests(owner, minter)
     });
 })

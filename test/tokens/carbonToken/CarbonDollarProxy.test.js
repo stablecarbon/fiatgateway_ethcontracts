@@ -6,7 +6,7 @@ const { tokenSetup } = require('../../helpers/tokenSetup')
 
 const { CarbonDollarProxy, CarbonDollar, BalanceSheet, AllowanceSheet, CarbonDollarRegulator, FeeSheet, StablecoinWhitelist, PermissionSheet, ValidatorSheet } = require('../../helpers/artifacts');
 
-const { PermissionSheetMock, ValidatorSheetMock } = require('../../helpers/mocks');
+const { CarbonDollarMock } = require('../../helpers/mocks');
 
 contract('CarbonDollarProxy', _accounts => {
     const commonVars = new CommonVariables(_accounts);
@@ -19,83 +19,16 @@ contract('CarbonDollarProxy', _accounts => {
     const whitelisted = commonVars.user4
     const nonlisted = commonVars.user5
 
-    // Time travel for delayed upgradeability
-    const ONE_HOUR = 60 * 60; // Number of seconds in one hour
-    const ONE_DAY = 24 * ONE_HOUR; // Number of seconds in one day
-    const ONE_WEEK = 7 * ONE_DAY; // Number of seconds in one week
-    const TWO_WEEKS = 2 * ONE_WEEK; // Number of seconds in two weeks
-    const FOUR_WEEKS = 4 * ONE_WEEK; // Number of seconds in four weeks
-
-
     beforeEach(async function () {
         // Empty Proxy Data storage + fully loaded regulator
-        this.proxyBalancesStorage = (await BalanceSheet.new({ from:owner })).address
-        this.proxyAllowancesStorage = (await AllowanceSheet.new({ from:owner })).address
-        this.permissionSheet = await PermissionSheetMock.new( {from:owner })
-        this.validatorSheet = await ValidatorSheetMock.new(validator, {from:owner} )
-        this.proxyRegulator = (await CarbonDollarRegulator.new(this.permissionSheet.address, this.validatorSheet.address, {from:owner})).address
+        this.proxyRegulator = (await CarbonDollarMock.new({from:validator})).address
 
-        this.proxyFeeSheet = (await FeeSheet.new({from:owner})).address
-        this.proxyWhitelist = (await StablecoinWhitelist.new({from:owner})).address
         // First logic contract
-        this.impl_v0 = (await CarbonDollar.new(this.proxyRegulator, this.proxyBalancesStorage, this.proxyAllowancesStorage, this.proxyFeeSheet, this.proxyWhitelist, { from:owner })).address
+        this.impl_v0 = (await CarbonDollar.new(this.proxyRegulator, { from:owner })).address
 
         // Setting up Proxy initially at version 0 with data storage
-        this.proxy = await CarbonDollarProxy.new(this.impl_v0, this.proxyRegulator, this.proxyBalancesStorage, this.proxyAllowancesStorage, this.proxyFeeSheet, this.proxyWhitelist, { from:proxyOwner })
+        this.proxy = await CarbonDollarProxy.new(this.impl_v0, this.proxyRegulator, { from:proxyOwner })
         this.proxyAddress = this.proxy.address
-    })
-
-    describe('set fee sheet and stablecoin whitelist', function () {
-        beforeEach(async function () {
-            this.newProxyFeeSheet = (await FeeSheet.new({from:owner})).address
-            this.newProxyWhitelist = (await StablecoinWhitelist.new({from:owner})).address
-
-            this.logic_v0 = await CarbonDollar.at(this.impl_v0)
-        })
-
-        describe('owner calls', function () {
-            const from = proxyOwner
-
-            it('fee sheet and whitelist are set initially', async function () {
-                assert.equal(await this.proxy.stablecoinFees(), this.proxyFeeSheet)
-                assert.equal(await this.proxy.stablecoinWhitelist(), this.proxyWhitelist)
-            })
-            it('sets token proxy fee sheet and whitelist', async function () {
-                await this.proxy.setFeeSheet(this.newProxyFeeSheet, {from})
-                await this.proxy.setStablecoinWhitelist(this.newProxyWhitelist, {from})
-                assert.equal(await this.proxy.stablecoinFees(), this.newProxyFeeSheet)
-                assert.equal(await this.proxy.stablecoinWhitelist(), this.newProxyWhitelist)
-            })
-            it('emits a FeeSheetChanged event', async function () {
-                const { logs } = await this.proxy.setFeeSheet(this.newProxyFeeSheet, {from})
-                assert.equal(logs.length, 1)
-                assert.equal(logs[0].event, 'FeeSheetChanged')
-                assert.equal(logs[0].args.oldSheet, this.proxyFeeSheet)
-                assert.equal(logs[0].args.newSheet, this.newProxyFeeSheet)
-            })
-            it('emits a StablecoinWhitelistChanged event', async function () {
-                const { logs } = await this.proxy.setStablecoinWhitelist(this.newProxyWhitelist, {from})
-
-                assert.equal(logs.length, 1)
-                assert.equal(logs[0].event, 'StablecoinWhitelistChanged')
-                assert.equal(logs[0].args.oldWhitelist, this.proxyWhitelist)
-                assert.equal(logs[0].args.newWhitelist, this.newProxyWhitelist)
-            })
-            it('does not change regulator implementation storages', async function () {
-                await this.proxy.setFeeSheet(this.newProxyFeeSheet, {from})
-                await this.proxy.setStablecoinWhitelist(this.newProxyWhitelist, {from})
-                assert.equal(await this.logic_v0.stablecoinFees(), this.proxyFeeSheet)
-                assert.equal(await this.logic_v0.stablecoinWhitelist(), this.proxyWhitelist)
-            })
-        })
-        describe('non-owner calls', function () {
-            const from = owner
-            it('reverts', async function () {
-                await expectRevert(this.proxy.setFeeSheet(this.newProxyFeeSheet, {from}))
-                await expectRevert(this.proxy.setStablecoinWhitelist(this.newProxyWhitelist, {from}))
-            })
-        })
-
     })
 
     describe('implementation', function () {
@@ -112,23 +45,7 @@ contract('CarbonDollarProxy', _accounts => {
             this.tokenProxy = CarbonDollar.at(this.proxyAddress)
 
             this.logic_v0 = CarbonDollar.at(this.impl_v0)
-
-            // Transfer regulator storage ownership to regulator
-            await this.permissionSheet.transferOwnership(this.tokenProxyRegulator.address, {from:owner})
-            await this.validatorSheet.transferOwnership(this.tokenProxyRegulator.address, {from:owner})
-            await this.tokenProxyRegulator.claimPermissionOwnership()
-            await this.tokenProxyRegulator.claimValidatorOwnership()
-
-            // Transfer token storage ownership to token
-            await (FeeSheet.at(await this.tokenProxy.stablecoinFees())).transferOwnership(this.tokenProxy.address, {from:owner})
-            await (StablecoinWhitelist.at(await this.tokenProxy.stablecoinWhitelist())).transferOwnership(this.tokenProxy.address, {from:owner})
-            await (BalanceSheet.at(await this.tokenProxy.balances())).transferOwnership(this.tokenProxy.address, {from:owner})
-            await (AllowanceSheet.at(await this.tokenProxy.allowances())).transferOwnership(this.tokenProxy.address, {from:owner})
-            await this.tokenProxy.claimFeeOwnership()
-            await this.tokenProxy.claimWhitelistOwnership()
-            await this.tokenProxy.claimBalanceOwnership()
-            await this.tokenProxy.claimAllowanceOwnership()
-        }) 
+        })
         describe('call to proxy to set fee', function () {
             beforeEach( async function() {
                 await this.tokenProxy.listToken(RANDOM_ADDRESS, {from:proxyOwner})

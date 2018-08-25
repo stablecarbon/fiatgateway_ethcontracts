@@ -2,7 +2,8 @@ pragma solidity ^0.4.24;
 
 import "../permissionedToken/PermissionedToken.sol";
 import "../carbonToken/CarbonDollar.sol";
-import "./dataStorage/MutableWhitelistedTokenStorage.sol";
+import "openzeppelin-solidity/contracts/AddressUtils.sol";
+import "../../regulator/whitelistedRegulator/WhitelistedTokenRegulator.sol";
 
 /**
 * @title WhitelistedToken
@@ -10,11 +11,15 @@ import "./dataStorage/MutableWhitelistedTokenStorage.sol";
 * is the only way for a user to obtain CUSD. This is a permissioned token, so users have to be 
 * whitelisted before they can do any mint/burn/convert operation.
 */
-contract WhitelistedToken is MutableWhitelistedTokenStorage, PermissionedToken {
+contract WhitelistedToken is PermissionedToken {
+
+
+    address public cusdAddress;
 
     /**
         Events
      */
+    event CUSDAddressChanged(address indexed oldCUSD, address indexed newCUSD);
     event MintedToCUSD(address indexed user, uint256 amount);
     event ConvertedToCUSD(address indexed user, uint256 amount);
 
@@ -22,14 +27,15 @@ contract WhitelistedToken is MutableWhitelistedTokenStorage, PermissionedToken {
     * @notice Constructor sets the regulator contract and the address of the
     * CarbonUSD meta-token contract. The latter is necessary in order to make transactions
     * with the CarbonDollar smart contract.
-    * @param _regulator Regulator for WhitelistedToken, should be a WhitelistedTokenRegulator
-    * @param _allowances Address of allowance sheet. Passed to base constructor.
-    * @param _balances Address of balance sheet. Passed to base constructor.
-    * @param _cusd Address of `CarbonDollar` contract
     */
-    constructor(address _regulator, address _balances, address _allowances, address _cusd) public
-    PermissionedToken(_regulator, _balances, _allowances)
-    MutableWhitelistedTokenStorage(_cusd) {}
+    constructor(address _regulator, address _cusd) public PermissionedToken(_regulator) {
+
+        // base class fields
+        regulator = WhitelistedTokenRegulator(_regulator);
+
+        cusdAddress = _cusd;
+
+    }
 
     /**
     * @notice Mints CarbonUSD for the user. Stores the WT0 that backs the CarbonUSD
@@ -51,6 +57,18 @@ contract WhitelistedToken is MutableWhitelistedTokenStorage, PermissionedToken {
         _burn(msg.sender, _amount);
         _mintCUSD(msg.sender, _amount);
         emit ConvertedToCUSD(msg.sender, _amount);
+    }
+
+    /**
+     * @notice Change the cusd address.
+     * @param _cusd the cusd address.
+     */
+    function setCUSDAddress(address _cusd) public onlyOwner {
+        require(_cusd != address(cusdAddress), "Must be a new cusd address");
+        require(AddressUtils.isContract(_cusd), "Must be an actual contract");
+        address oldCUSD = address(cusdAddress);
+        cusdAddress = _cusd;
+        emit CUSDAddressChanged(oldCUSD, _cusd);
     }
 
     function _mintCUSD(address _to, uint256 _amount) internal {

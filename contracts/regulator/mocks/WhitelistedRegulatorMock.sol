@@ -1,22 +1,21 @@
 pragma solidity ^0.4.24;
 
-import "../dataStorage/PermissionSheet.sol";
+import "../whitelistedRegulator/WhitelistedTokenRegulator.sol";
 
 /**
 *
-* @dev creates a PermissionSheet-loaded with all permissions
+* @dev creates a WT Regulator with a single Validator and all Permissions 
 *
-*/
-contract PermissionSheetMock is PermissionSheet {
+**/
+contract WhitelistedRegulatorMock is WhitelistedTokenRegulator {
     /** 
-        @dev Initializes common permissions
+        @dev Initializes common permissions from validator, validator set to msg.sender
      */
     constructor() public {
+        addValidator(msg.sender);
         setMintPermission();
         setMintCUSDPermission();
         setBurnPermission();
-        setConvertCarbonDollarPermission();
-        setBurnCarbonDollarPermission();
         setConvertWTPermission();
         setDestroyBlacklistedTokensPermission();
         setApproveBlacklistedAddressSpenderPermission();
@@ -33,14 +32,6 @@ contract PermissionSheetMock is PermissionSheet {
 
     function setBurnPermission() internal {
         addPermission(BURN_SIG, "","","");
-    }
-
-    function setConvertCarbonDollarPermission() internal {
-        addPermission(CONVERT_CARBON_DOLLAR_SIG, "","","");
-    }
-
-    function setBurnCarbonDollarPermission() internal {
-        addPermission(BURN_CARBON_DOLLAR_SIG, "","","");
     }
 
     function setConvertWTPermission() internal {

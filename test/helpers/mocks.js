@@ -1,11 +1,9 @@
-const PermissionSheetMock = artifacts.require("PermissionSheetMock");
-const ValidatorSheetMock = artifacts.require("ValidatorSheetMock");
-const PermissionSheetMockNoCDPermissions = artifacts.require("PermissionSheetMockNoCDPermissions");
-const PermissionSheetMockNoWLPermissions = artifacts.require("PermissionSheetMockNoWLPermissions");
+const RegulatorMock = artifacts.require("RegulatorMock")
+const WhitelistedRegulatorMock = artifacts.require("WhitelistedRegulatorMock")
+const CarbonDollarMock = artifacts.require("CarbonDollarMock")
 
 module.exports = {
-	PermissionSheetMock,
-	ValidatorSheetMock,
-	PermissionSheetMockNoCDPermissions,
-	PermissionSheetMockNoWLPermissions
+	RegulatorMock,
+	WhitelistedRegulatorMock,
+	CarbonDollarMock
 }

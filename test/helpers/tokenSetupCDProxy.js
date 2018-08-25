@@ -2,16 +2,14 @@
 // Identical to toknSetup except that CD references a proxy address
 
 const { 
-    CarbonDollarRegulator, 
-    WhitelistedTokenRegulator,
     WhitelistedToken,
     CarbonDollar,
-    AllowanceSheet,
-    BalanceSheet,
-    FeeSheet,
-    StablecoinWhitelist } = require('./artifacts');
+    CarbonDollarRegulator,
+    PermissionedTokenStorage,
+    CarbonDollarStorage,
+ } = require('./artifacts');
 
-const { PermissionSheetMock, ValidatorSheetMock} = require("./mocks");
+ const { WhitelistedRegulatorMock } = require('./mocks')
 
 async function tokenSetupCDProxy(CarbonDollarAddress, validator, minter, user, owner, whitelisted, blacklisted, nonlisted) {
     const from = owner
@@ -19,14 +17,7 @@ async function tokenSetupCDProxy(CarbonDollarAddress, validator, minter, user, o
     // REGULATORS
     /* ----------------------------------------------------------------------------*/
     // Whitelisted Regulator
-    this.permissionSheet_w = await PermissionSheetMock.new({ from: owner })
-    this.validatorSheet_w = await ValidatorSheetMock.new(validator, { from: owner })
-    this.regulator_w = await WhitelistedTokenRegulator.new(this.permissionSheet_w.address, this.validatorSheet_w.address, { from: owner })
-
-    await this.permissionSheet_w.transferOwnership(this.regulator_w.address, { from: owner })
-    await this.validatorSheet_w.transferOwnership(this.regulator_w.address, { from: owner })
-    await this.regulator_w.claimPermissionOwnership()
-    await this.regulator_w.claimValidatorOwnership()
+    this.regulator_w = await WhitelistedRegulatorMock.new({ from: validator })
 
     // Set user permissions in regulator
     await this.regulator_w.setMinter(minter, { from: validator })
@@ -41,7 +32,7 @@ async function tokenSetupCDProxy(CarbonDollarAddress, validator, minter, user, o
 
     /* ----------------------------------------------------------------------------*/
     
-    // CarbonDollar
+    // CarbonDollar taken from proxy
     this.cdToken = await CarbonDollar.at(CarbonDollarAddress)
     this.regulator_c = await CarbonDollarRegulator.at(await this.cdToken.regulator())
     
@@ -54,13 +45,7 @@ async function tokenSetupCDProxy(CarbonDollarAddress, validator, minter, user, o
     await this.regulator_c.setBlacklistedUser(blacklisted, { from: validator })
 
     // WhitelistedToken
-    this.balanceSheetWT = await BalanceSheet.new({ from: owner })
-    this.allowanceSheetWT = await AllowanceSheet.new({ from: owner })
-    this.wtToken = await WhitelistedToken.new(this.regulator_w.address, this.balanceSheetWT.address, this.allowanceSheetWT.address, this.cdToken.address, { from: owner })
-    await this.balanceSheetWT.transferOwnership(this.wtToken.address, { from: owner })
-    await this.allowanceSheetWT.transferOwnership(this.wtToken.address, { from: owner })
-    await this.wtToken.claimBalanceOwnership()
-    await this.wtToken.claimAllowanceOwnership()
+    this.wtToken = await WhitelistedToken.new(this.regulator_w.address, this.cdToken.address, { from: owner })
 
     // must whitelist CUSD address to convert from WT into CUSD (used for minting CUSD)
     await this.regulator_w.setWhitelistedUser(this.cdToken.address, { from: validator });
