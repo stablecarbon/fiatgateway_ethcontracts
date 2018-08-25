@@ -42,12 +42,12 @@ module.exports = {
       gas: 6612388
     }
   },
-  // mocha: {
-  //   reporter: 'eth-gas-reporter',
-  //   reporterOptions: {
-  //     gasPrice: 21
-  //   }
-  // },
+  mocha: {
+    reporter: 'eth-gas-reporter',
+    reporterOptions: {
+      gasPrice: 21
+    }
+  },
   solc: {
     optimizer: {
       enabled: true,
