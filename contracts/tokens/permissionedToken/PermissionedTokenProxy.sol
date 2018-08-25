@@ -4,6 +4,7 @@ import "./dataStorage/PermissionedTokenStorage.sol";
 import "zos-lib/contracts/upgradeability/UpgradeabilityProxy.sol";
 import "../../regulator/Regulator.sol";
 import '../../helpers/Ownable.sol';
+import "openzeppelin-solidity/contracts/AddressUtils.sol";
 
 /**
 * @title PermissionedTokenProxy
@@ -14,6 +15,14 @@ contract PermissionedTokenProxy is UpgradeabilityProxy, Ownable {
     PermissionedTokenStorage public tokenStorage;
     Regulator public regulator;
 
+    // Events
+    event ChangedRegulator(address indexed oldRegulator, address indexed newRegulator );
+
+
+    /**
+    * @dev create a new PermissionedToken as a proxy contract
+    * with a brand new data storage 
+    **/
     constructor(address _implementation, address _regulator) 
     UpgradeabilityProxy(_implementation) public {
         regulator = Regulator(_regulator);
@@ -28,6 +37,7 @@ contract PermissionedTokenProxy is UpgradeabilityProxy, Ownable {
     function upgradeTo(address newImplementation) public onlyOwner {
         _upgradeTo(newImplementation);
     }
+
 
     /**
     * @return The address of the implementation.

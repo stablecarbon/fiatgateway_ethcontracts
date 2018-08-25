@@ -2,7 +2,7 @@ const { expectRevert, ZERO_ADDRESS, RANDOM_ADDRESS } = require("../../../helpers
 const { CarbonDollar } = require("../../../helpers/artifacts")
 
 function whitelistedTokenMutableStorageTests(owner, nonOwner) {
-    describe("Whitelisted Token Storage setting/getting tests", function () {
+    describe("Whitelisted Token contract references setting/getting tests", function () {
 
         beforeEach(async function () {
             // Initial Token storages
@@ -13,7 +13,7 @@ function whitelistedTokenMutableStorageTests(owner, nonOwner) {
 
             const from = owner
             beforeEach(async function () {
-                this.newCUSDAddress = (await CarbonDollar.new(ZERO_ADDRESS, ZERO_ADDRESS, ZERO_ADDRESS, ZERO_ADDRESS, ZERO_ADDRESS, {from})).address
+                this.newCUSDAddress = (await CarbonDollar.new(ZERO_ADDRESS, {from})).address
             })
 
             describe('owner calls', function () {

@@ -13,7 +13,6 @@ const PermissionedTokenProxy = artifacts.require("PermissionedTokenProxy");
 // WhitelistedToken
 const WhitelistedToken = artifacts.require("WhitelistedToken");
 const WhitelistedTokenRegulator = artifacts.require("WhitelistedTokenRegulator");
-const WhitelistedTokenStorage = artifacts.require("WhitelistedTokenStorage");
 const WhitelistedTokenProxy = artifacts.require("WhitelistedTokenProxy");
 const WhitelistedTokenProxyFactory = artifacts.require("WhitelistedTokenProxyFactory")
 
@@ -41,7 +40,6 @@ module.exports = {
 	// WToken + Regulator
 	WhitelistedToken,
 	WhitelistedTokenRegulator,
-	WhitelistedTokenStorage,
 	WhitelistedTokenProxy,
 	WhitelistedTokenProxyFactory,
 	//CDollar 

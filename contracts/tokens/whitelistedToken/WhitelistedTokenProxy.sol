@@ -1,8 +1,7 @@
 pragma solidity ^0.4.24;
 
-import "./dataStorage/WhitelistedTokenStorage.sol";
-import "../permissionedToken/PermissionedToken.sol";
 import "../permissionedToken/PermissionedTokenProxy.sol";
+import "../../regulator/whitelistedRegulator/WhitelistedTokenRegulator.sol";
 
 /**
 * @title WhitelistedTokenProxy
@@ -10,26 +9,17 @@ import "../permissionedToken/PermissionedTokenProxy.sol";
 * be routed through this proxy, since this proxy contract is the owner of the
 * storage contracts.
 */
-contract WhitelistedTokenProxy is UpgradeabilityProxy, WhitelistedTokenStorage, PermissionedToken {
-    constructor(address _implementation, address _regulator, address _cusd) public
-    UpgradeabilityProxy(_implementation)
-    WhitelistedTokenStorage(_cusd)
-    PermissionedToken(_regulator) {}
+contract WhitelistedTokenProxy is PermissionedTokenProxy {
+    address public cusdAddress;
 
-    /**
-    * @dev Upgrade the backing implementation of the proxy.
-    * Only the admin can call this function.
-    * @param newImplementation Address of the new implementation.
-    */
-    function upgradeTo(address newImplementation) public onlyOwner {
-        _upgradeTo(newImplementation);
 
-    }
+    constructor(address _implementation, 
+                address _regulator, 
+                address _cusd) public PermissionedTokenProxy(_implementation, _regulator) {
+        // base class override
+        regulator = WhitelistedTokenRegulator(_regulator);
 
-    /**
-    * @return The address of the implementation.
-    */
-    function implementation() public view returns (address) {
-        return _implementation();
+        cusdAddress = _cusd;
+
     }
 }

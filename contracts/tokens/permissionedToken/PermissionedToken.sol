@@ -30,8 +30,9 @@ contract PermissionedToken is ERC20, Pausable, Lockable {
     PermissionedTokenStorage public tokenStorage;
     Regulator public regulator;
 
-    // Create a new PT storage. Necessary for PT to own a PT storage in order to modify
-    // its only owner functions
+    /**
+    * @dev create a new PermissionedToken with a brand new data storage
+    **/
     constructor (address _regulator) public {
         regulator = Regulator(_regulator);
         tokenStorage = new PermissionedTokenStorage();
