@@ -1,20 +1,22 @@
 pragma solidity ^0.4.24;
 
-import "../Regulator.sol";
+import "../whitelistedRegulator/WhitelistedTokenRegulator.sol";
 
 /**
 *
-* @dev creates a Reglator with a single Validator and all Permissions 
+* @dev creates a WT Regulator with a single Validator and all Permissions 
 *
 **/
-contract RegulatorMock is Regulator {
+contract WhitelistedRegulatorMock is WhitelistedTokenRegulator {
     /** 
         @dev Initializes common permissions from validator, validator set to msg.sender
      */
     constructor() public {
         addValidator(msg.sender);
         setMintPermission();
+        setMintCUSDPermission();
         setBurnPermission();
+        setConvertWTPermission();
         setDestroyBlacklistedTokensPermission();
         setApproveBlacklistedAddressSpenderPermission();
         setDestroySelfPermission();
@@ -30,6 +32,10 @@ contract RegulatorMock is Regulator {
 
     function setBurnPermission() internal {
         addPermission(BURN_SIG, "","","");
+    }
+
+    function setConvertWTPermission() internal {
+        addPermission(CONVERT_WT_SIG, "","","");
     }
 
     function setDestroyBlacklistedTokensPermission() internal {

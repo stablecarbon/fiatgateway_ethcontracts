@@ -2,14 +2,14 @@ const { CommonVariables, expectRevert } = require('../../helpers/common');
 
 const { CarbonDollarRegulator } = require('../../helpers/artifacts');
 
-const { ValidatorSheetMock, PermissionSheetMock } = require('../../helpers/mocks');
+const { CarbonDollarMock } = require('../../helpers/mocks');
 
 
 contract('CarbonDollarRegulator', _accounts => {
     const commonVars = new CommonVariables(_accounts);
     const owner = commonVars.owner;
     const user = commonVars.user;
-    const validator = commonVars.validator;
+    const validator = owner;
     const attacker = commonVars.attacker;
 
 
@@ -19,21 +19,13 @@ contract('CarbonDollarRegulator', _accounts => {
             describe("Testing CarbonDollarRegulator ability to SET/GET user permissions", async function () {
                 beforeEach(async function() {
 
-                    // Instantiate RegulatorsMock that comes pre-loaded with all function permissions and one validator
-                    this.permissionSheet = await PermissionSheetMock.new( {from:owner })
-                    this.validatorSheet = await ValidatorSheetMock.new(validator, {from:owner} )
-
-                    this.sheet = await CarbonDollarRegulator.new(this.permissionSheet.address, this.validatorSheet.address, {from:owner})
-
-                    await this.permissionSheet.transferOwnership(this.sheet.address, {from:owner})
-                    await this.validatorSheet.transferOwnership(this.sheet.address, {from:owner})
-                    await this.sheet.claimPermissionOwnership()
-                    await this.sheet.claimValidatorOwnership()
+                    this.sheet = await CarbonDollarMock.new({from:owner})
 
                     // storing method signatures for testing convenience
-                    this.BLACKLISTED_SIG = await this.permissionSheet.BLACKLISTED_SIG();
-                    this.CONVERT_CARBON_DOLLAR_SIG = await this.permissionSheet.CONVERT_CARBON_DOLLAR_SIG();
-                    this.BURN_CARBON_DOLLAR_SIG = await this.permissionSheet.BURN_CARBON_DOLLAR_SIG();
+                    this.BLACKLISTED_SIG = await this.sheet.BLACKLISTED_SIG();
+                    this.CONVERT_CARBON_DOLLAR_SIG = await this.sheet.CONVERT_CARBON_DOLLAR_SIG();
+                    this.BURN_CARBON_DOLLAR_SIG = await this.sheet.BURN_CARBON_DOLLAR_SIG();
+
                     // Assert pre-test invariants
                     assert(await this.sheet.isValidator(validator));
                     assert(await this.sheet.isPermission(this.BLACKLISTED_SIG));
@@ -59,7 +51,7 @@ contract('CarbonDollarRegulator', _accounts => {
                         })
                     });
                     describe("when sender is not validator", function () {
-                        const from = owner;
+                        const from = user;
                         it('reverts', async function () {
                             await expectRevert(this.sheet.setWhitelistedUser(user, { from }));
                         })
@@ -83,7 +75,7 @@ contract('CarbonDollarRegulator', _accounts => {
                         })
                     });
                     describe("when sender is not validator", function () {
-                        const from = owner;
+                        const from = user;
                         it('reverts', async function () {
                             await expectRevert(this.sheet.setBlacklistedUser(user, { from }));
                         })
@@ -108,7 +100,7 @@ contract('CarbonDollarRegulator', _accounts => {
                         })
                     });
                     describe("when sender is not validator", function () {
-                        const from = owner;
+                        const from = user;
                         it('reverts', async function () {
                             await expectRevert(this.sheet.setNonlistedUser(user, { from }));
                         })

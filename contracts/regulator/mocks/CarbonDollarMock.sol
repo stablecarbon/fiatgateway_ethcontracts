@@ -1,13 +1,13 @@
 pragma solidity ^0.4.24;
 
-import "../Regulator.sol";
+import "../carbonDollarRegulator/CarbonDollarRegulator.sol";
 
 /**
 *
-* @dev creates a Reglator with a single Validator and all Permissions 
+* @dev creates a CD Regulator with a single Validator and all Permissions 
 *
 **/
-contract RegulatorMock is Regulator {
+contract CarbonDollarMock is CarbonDollarRegulator {
     /** 
         @dev Initializes common permissions from validator, validator set to msg.sender
      */
@@ -15,6 +15,8 @@ contract RegulatorMock is Regulator {
         addValidator(msg.sender);
         setMintPermission();
         setBurnPermission();
+        setConvertCarbonDollarPermission();
+        setBurnCarbonDollarPermission();
         setDestroyBlacklistedTokensPermission();
         setApproveBlacklistedAddressSpenderPermission();
         setDestroySelfPermission();
@@ -24,12 +26,16 @@ contract RegulatorMock is Regulator {
         addPermission(MINT_SIG, "","","");
     }
     
-    function setMintCUSDPermission() internal {
-        addPermission(MINT_CUSD_SIG, "","","");
-    }
-
     function setBurnPermission() internal {
         addPermission(BURN_SIG, "","","");
+    }
+
+    function setConvertCarbonDollarPermission() internal {
+        addPermission(CONVERT_CARBON_DOLLAR_SIG, "","","");
+    }
+
+    function setBurnCarbonDollarPermission() internal {
+        addPermission(BURN_CARBON_DOLLAR_SIG, "","","");
     }
 
     function setDestroyBlacklistedTokensPermission() internal {

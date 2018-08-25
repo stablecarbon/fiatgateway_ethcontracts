@@ -2,7 +2,6 @@ pragma solidity ^0.4.24;
 
 import "../regulator/RegulatorProxy.sol";
 import "../regulator/Regulator.sol";
-import '../regulator/dataStorage/RegulatorStorage.sol';
 
 /**
 *
@@ -30,37 +29,6 @@ contract RegulatorProxyFactory {
 
         // Store new data storage contracts for regulator proxy
         address proxy = address(new RegulatorProxy(regulatorImplementation));
-
-        // The function caller should own the proxy contract, so they will need to claim ownership
-        RegulatorProxy(proxy).transferOwnership(msg.sender);
-
-        regulators.push(proxy);
-        emit CreatedRegulatorProxy(proxy, getCount()-1);
-    }
-
-    /** 
-    *
-    * @dev generate a new proxyaddress pointing to a regulator loaded with all permissions
-    * and an initial validator of the caller's choosing
-    *
-    **/
-    function createRegulatorProxyFullyLoaded(address regulatorImplementation, address validator) public {
-
-        // Store new data storage contracts for regulator proxy
-        address proxy = address(new RegulatorProxy(regulatorImplementation));
-        Regulator regulator = Regulator(proxy);
-
-        // Set up proxy
-        regulator.addValidator(validator);
-        regulator.addPermission(regulator.MINT_SIG(), "","","");
-        regulator.addPermission(regulator.MINT_CUSD_SIG(), "","","");
-        regulator.addPermission(regulator.BURN_SIG(), "","","");
-        regulator.addPermission(regulator.CONVERT_CARBON_DOLLAR_SIG(), "","","");
-        regulator.addPermission(regulator.BURN_CARBON_DOLLAR_SIG(), "","","");
-        regulator.addPermission(regulator.CONVERT_WT_SIG(), "","","");
-        regulator.addPermission(regulator.DESTROY_BLACKLISTED_TOKENS_SIG(), "","","");
-        regulator.addPermission(regulator.APPROVE_BLACKLISTED_ADDRESS_SPENDER_SIG(), "","","");
-        regulator.addPermission(regulator.BLACKLISTED_SIG(), "","","");
 
         // The function caller should own the proxy contract, so they will need to claim ownership
         RegulatorProxy(proxy).transferOwnership(msg.sender);
