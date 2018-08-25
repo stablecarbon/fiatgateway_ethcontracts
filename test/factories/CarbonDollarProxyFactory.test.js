@@ -1,11 +1,6 @@
 const { CommonVariables, ZERO_ADDRESS, RANDOM_ADDRESS, expectRevert, assertBalance } = require('../helpers/common');
 
 const { RegulatorProxyFactory, 
-        PermissionSheet,
-        BalanceSheet, 
-        AllowanceSheet,
-        FeeSheet,
-        StablecoinWhitelist,
         CarbonDollarProxyFactory,
         CarbonDollarProxy,
         CarbonDollar,
@@ -27,8 +22,8 @@ contract('CarbonDollar Factory creating CD proxies', _accounts => {
         this.proxyFactory = await CarbonDollarProxyFactory.new({from: proxy_owner });
         this.regulatorFactory = await RegulatorProxyFactory.new({from: proxy_owner });
 
-        this.regulator_v0 = await CarbonDollarRegulator.new(ZERO_ADDRESS, ZERO_ADDRESS, {from: other_owner })
-        this.impl_v0 = await CarbonDollar.new(ZERO_ADDRESS, ZERO_ADDRESS, ZERO_ADDRESS, ZERO_ADDRESS, ZERO_ADDRESS, {from: other_owner })
+        this.regulator_v0 = await CarbonDollarRegulator.new({from: other_owner })
+        this.impl_v0 = await CarbonDollar.new(ZERO_ADDRESS, {from: other_owner })
 
     })
 

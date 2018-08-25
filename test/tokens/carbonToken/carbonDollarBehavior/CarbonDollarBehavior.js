@@ -182,16 +182,6 @@ function carbonDollarBehaviorTests(owner, wtMinter, whitelisted, validator) {
     });
 
     describe("Computational functions", function() {
-        describe("computeStablecoinFee", function() {
-            beforeEach(async function () {
-                await this.token.listToken(this.wtToken.address, { from: owner });
-                await this.token.setFee(this.wtToken.address, 100, { from: owner });  // 10% fee
-            })
-            it('computes fee on CUSD burn into stablecoin correctly', async function () {
-                assert.equal(await this.token.computeStablecoinFee(1000, this.wtToken.address), 100);
-            });
-        })
-
         describe("computeFeeRate", function() {
             beforeEach(async function () {
                 await this.token.listToken(this.wtToken.address, { from: owner });

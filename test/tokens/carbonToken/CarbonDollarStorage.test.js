@@ -1,5 +1,5 @@
 const { CommonVariables, ZERO_ADDRESS } = require('../../helpers/common');
-const { FeeSheet, StablecoinWhitelist } = require('../../helpers/artifacts');
+const { CarbonDollarStorage } = require('../../helpers/artifacts');
 const { carbonDollarStorageTests } = require('./carbonDollarStorageBehavior/CarbonDollarStorage.js');
 
 contract('CarbonDollarStorage', _accounts => {
@@ -10,9 +10,7 @@ contract('CarbonDollarStorage', _accounts => {
     const tokenHolder = commonVars.user2;
     const spender = commonVars.user3;
     beforeEach(async function () {
-        this.feeSheet = await FeeSheet.new({from:owner})
-        this.stablecoinWhitelist = await StablecoinWhitelist.new({ from: owner })
-
+        this.storage = await CarbonDollarStorage.new({ from: owner })
     })
     describe("CarbonDollarStorage tests", function () {
        carbonDollarStorageTests(owner, tokenHolder, spender, user);

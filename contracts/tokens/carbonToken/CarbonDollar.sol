@@ -23,7 +23,7 @@ contract CarbonDollar is PermissionedToken {
         Modifiers
     */
     modifier requiresWhitelistedToken() {
-        require(tokenStorage_CD.isWhitelisted(msg.sender), "Sender must be a whitelisted token contract");
+        require(isWhitelisted(msg.sender), "Sender must be a whitelisted token contract");
         _;
     }
 
@@ -62,7 +62,7 @@ contract CarbonDollar is PermissionedToken {
      * @param _newFee The new fee rate to set, in tenths of a percent. 
      */
     function setFee(address stablecoin, uint256 _newFee) public onlyOwner whenNotPaused {
-        require(tokenStorage_CD.isWhitelisted(stablecoin), "Stablecoin must be whitelisted prior to setting conversion fee");
+        require(isWhitelisted(stablecoin), "Stablecoin must be whitelisted prior to setting conversion fee");
         tokenStorage_CD.setFee(stablecoin, _newFee);
     }
 
@@ -72,8 +72,8 @@ contract CarbonDollar is PermissionedToken {
      * @param stablecoin Address of the stablecoin contract.
      */
     function removeFee(address stablecoin) public onlyOwner whenNotPaused {
-        require(tokenStorage_CD.isWhitelisted(stablecoin), "Stablecoin must be whitelisted prior to setting conversion fee");
-       tokenStorage_CD. removeFee(stablecoin);
+        require(isWhitelisted(stablecoin), "Stablecoin must be whitelisted prior to setting conversion fee");
+       tokenStorage_CD.removeFee(stablecoin);
     }
 
     /**
@@ -104,7 +104,7 @@ contract CarbonDollar is PermissionedToken {
      * we credit the user's account at the sender address with the _amount minus the percentage fee we want to charge.
      */
     function convertCarbonDollar(address stablecoin, uint256 _amount) public requiresPermission whenNotPaused  {
-        require(tokenStorage_CD.isWhitelisted(stablecoin), "Stablecoin must be whitelisted prior to setting conversion fee");
+        require(isWhitelisted(stablecoin), "Stablecoin must be whitelisted prior to setting conversion fee");
         WhitelistedToken whitelisted = WhitelistedToken(stablecoin);
         require(whitelisted.balanceOf(address(this)) >= _amount, "Carbon escrow account in WT0 doesn't have enough tokens for burning");
  
@@ -125,7 +125,7 @@ contract CarbonDollar is PermissionedToken {
      * @param _amount Amount of CarbonUSD to burn.
      */
     function burnCarbonDollar(address stablecoin, uint256 _amount) public requiresPermission whenNotPaused {
-        require(tokenStorage_CD.isWhitelisted(stablecoin), "Stablecoin must be whitelisted prior to setting conversion fee");
+        require(isWhitelisted(stablecoin), "Stablecoin must be whitelisted prior to setting conversion fee");
         WhitelistedToken whitelisted = WhitelistedToken(stablecoin);
         require(whitelisted.balanceOf(address(this)) >= _amount, "Carbon escrow account in WT0 doesn't have enough tokens for burning");
  
@@ -145,10 +145,35 @@ contract CarbonDollar is PermissionedToken {
      * fee is returned.
      */
     function computeFeeRate(address stablecoin) public view returns (uint256 feeRate) {
-        if (tokenStorage_CD.getFee(stablecoin) > 0) 
-            feeRate = tokenStorage_CD.getFee(stablecoin);
+        if (getFee(stablecoin) > 0) 
+            feeRate = getFee(stablecoin);
         else
-            feeRate = tokenStorage_CD.getDefaultFee();
+            feeRate = getDefaultFee();
+    }
+
+    /**
+    * @notice Check if whitelisted token is whitelisted
+    * @return bool true if whitelisted, false if not
+    **/
+    function isWhitelisted(address _stablecoin) public view returns (bool) {
+        return tokenStorage_CD.whitelist(_stablecoin);
+    }
+
+    /**
+     * @notice Get the fee associated with going from CarbonUSD to a specific WhitelistedToken.
+     * @param stablecoin The stablecoin whose fee is being checked.
+     * @return The fee associated with the stablecoin.
+     */
+    function getFee(address stablecoin) public view returns (uint256) {
+        return tokenStorage_CD.fees(stablecoin);
+    }
+
+    /**
+     * @notice Get the default fee associated with going from CarbonUSD to a specific WhitelistedToken.
+     * @return The default fee for stablecoin trades.
+     */
+    function getDefaultFee() public view returns (uint256) {
+        return tokenStorage_CD.defaultFee();
     }
 
     function _mint(address _to, uint256 _amount) internal {

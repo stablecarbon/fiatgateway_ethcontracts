@@ -79,23 +79,6 @@ contract CarbonDollarStorage is Ownable {
 
 
     /**
-     * @notice Get the fee associated with going from CarbonUSD to a specific WhitelistedToken.
-     * @param stablecoin The stablecoin whose fee is being checked.
-     * @return The fee associated with the stablecoin.
-     */
-    function getFee(address stablecoin) public view returns (uint256) {
-        return fees[stablecoin];
-    }
-
-    /**
-     * @notice Get the default fee associated with going from CarbonUSD to a specific WhitelistedToken.
-     * @return The default fee for stablecoin trades.
-     */
-    function getDefaultFee() public view returns (uint256) {
-        return defaultFee;
-    }
-
-    /**
      * @notice Compute the fee that will be charged on a "burn" operation.
      * @param _amount The amount that will be traded.
      * @param _stablecoin The stablecoin whose fee will be used.
@@ -103,14 +86,6 @@ contract CarbonDollarStorage is Ownable {
     function computeStablecoinFee(uint256 _amount, address _stablecoin) public view returns (uint256) {
         uint256 fee = fees[_stablecoin];
         return computeFee(_amount, fee);
-    }
-
-    /**
-    * @notice Check if whitelisted token is whitelisted
-    * @return bool true if whitelisted, false if not
-    **/
-    function isWhitelisted(address _stablecoin) public view returns (bool) {
-        return whitelist[_stablecoin];
     }
 
     /**
