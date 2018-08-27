@@ -2,7 +2,7 @@ const { CommonVariables, expectRevert } = require('../../helpers/common');
 
 const { CarbonDollarRegulator } = require('../../helpers/artifacts');
 
-const { CarbonDollarMock } = require('../../helpers/mocks');
+const { CarbonDollarMock, CarbonDollarMockMissingPermissions } = require('../../helpers/mocks');
 
 
 contract('CarbonDollarRegulator', _accounts => {
@@ -172,21 +172,12 @@ contract('CarbonDollarRegulator', _accounts => {
 
                 beforeEach(async function() {
 
-                    // Instantiate RegulatorsMock that comes pre-loaded with some function permissions and one validator
-                    this.permissionSheet = await PermissionSheetMockNoCDPermissions.new( { from:owner })
-                    this.validatorSheet = await ValidatorSheetMock.new(validator, { from:owner } )
-
-                    this.sheet = await CarbonDollarRegulator.new(this.permissionSheet.address, this.validatorSheet.address, {from:owner})
-
-                    await this.permissionSheet.transferOwnership(this.sheet.address, {from:owner})
-                    await this.validatorSheet.transferOwnership(this.sheet.address, {from:owner})
-                    await this.sheet.claimPermissionOwnership()
-                    await this.sheet.claimValidatorOwnership()
+                    this.sheet = await CarbonDollarMockMissingPermissions.new({from:owner})
 
                     // storing method signatures for testing convenience
-                    this.BLACKLISTED_SIG = await this.permissionSheet.BLACKLISTED_SIG();
-                    this.CONVERT_CARBON_DOLLAR_SIG = await this.permissionSheet.CONVERT_CARBON_DOLLAR_SIG();
-                    this.BURN_CARBON_DOLLAR_SIG = await this.permissionSheet.BURN_CARBON_DOLLAR_SIG();
+                    this.BLACKLISTED_SIG = await this.sheet.BLACKLISTED_SIG();
+                    this.CONVERT_CARBON_DOLLAR_SIG = await this.sheet.CONVERT_CARBON_DOLLAR_SIG();
+                    this.BURN_CARBON_DOLLAR_SIG = await this.sheet.BURN_CARBON_DOLLAR_SIG();
                     // Assert pre-test invariant
                     assert(await this.sheet.isValidator(validator));
                 });
