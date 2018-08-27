@@ -2,7 +2,7 @@ const { CommonVariables, expectRevert } = require('../../helpers/common');
 
 const { WhitelistedTokenRegulator } = require('../../helpers/artifacts');
 
-const { WhitelistedRegulatorMock } = require('../../helpers/mocks');
+const { WhitelistedRegulatorMock, WhitelistedRegulatorMockMissingPermissions } = require('../../helpers/mocks');
 
 
 contract('WhitelistedTokenRegulator', _accounts => {
@@ -231,24 +231,13 @@ contract('WhitelistedTokenRegulator', _accounts => {
 
 
                 beforeEach(async function() {
-
-                    this.permissionSheet = await PermissionSheetMockNoWLPermissions.new( {from:owner })
-                    this.validatorSheet = await ValidatorSheetMock.new(validator, {from:owner} )
-
-                    this.sheet = await WhitelistedTokenRegulator.new(this.permissionSheet.address, this.validatorSheet.address, {from:owner})
-
-                    await this.permissionSheet.transferOwnership(this.sheet.address, {from:owner})
-                    await this.validatorSheet.transferOwnership(this.sheet.address, {from:owner})
-                    await this.sheet.claimPermissionOwnership()
-                    await this.sheet.claimValidatorOwnership()
-
+                    this.sheet = await WhitelistedRegulatorMockMissingPermissions.new({from:owner})
 
                     // storing method signatures for testing convenience
-                    this.BLACKLISTED_SIG = await this.permissionSheet.BLACKLISTED_SIG();
-                    this.CONVERT_WT_SIG = await this.permissionSheet.CONVERT_WT_SIG();
-                    this.MINT_CUSD_SIG = await this.permissionSheet.MINT_CUSD_SIG();
-                    this.MINT_SIG = await this.permissionSheet.MINT_SIG();
-
+                    this.BLACKLISTED_SIG = await this.sheet.BLACKLISTED_SIG();
+                    this.CONVERT_WT_SIG = await this.sheet.CONVERT_WT_SIG();
+                    this.MINT_CUSD_SIG = await this.sheet.MINT_CUSD_SIG();
+                    this.MINT_SIG = await this.sheet.MINT_SIG();
 
                     // Assert pre-test invariants
                     assert(await this.sheet.isValidator(validator));
@@ -256,13 +245,13 @@ contract('WhitelistedTokenRegulator', _accounts => {
 
                 describe('when burn carbon dollar permission is missing:', function() {
                     /*beforeEach(async function() {
-                        await this.permissionSheet.addPermission(this.BLACKLISTED_SIG, "", "", "", {from:owner});
-                        await this.permissionSheet.addPermission(this.CONVERT_CARBON_DOLLAR_SIG, "", "", "", {from:owner});
+                        await this.sheet.addPermission(this.BLACKLISTED_SIG, "", "", "", {from:owner});
+                        await this.sheet.addPermission(this.CONVERT_CARBON_DOLLAR_SIG, "", "", "", {from:owner});
                     });
                     afterEach(async function() {
-                        await this.permissionSheet.removePermission(this.BLACKLISTED_SIG, {from:owner});
-                        await this.permissionSheet.removePermission(this.CONVERT_CARBON_DOLLAR_SIG, {from:owner});
-                    });*/
+                        await this.sheet.removePermission(this.BLACKLISTED_SIG, {from:owner});
+                        await this.sheet.removePermission(this.CONVERT_CARBON_DOLLAR_SIG, {from:owner});
+                    }); */
                     it('set whitelisted user reverts', async function() {
                         await expectRevert(this.sheet.setWhitelistedUser(user, { from:validator }));
                     })
