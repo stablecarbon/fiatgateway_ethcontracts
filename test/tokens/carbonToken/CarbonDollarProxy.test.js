@@ -4,7 +4,7 @@ const { tokenSetupCDProxy } = require('../../helpers/tokenSetupCDProxy')
 
 const { tokenSetup } = require('../../helpers/tokenSetup')
 
-const { CarbonDollarProxy, CarbonDollar, BalanceSheet, AllowanceSheet, CarbonDollarRegulator, FeeSheet, StablecoinWhitelist, PermissionSheet, ValidatorSheet } = require('../../helpers/artifacts');
+const { CarbonDollarProxy, CarbonDollar, CarbonDollarRegulator} = require('../../helpers/artifacts');
 
 const { CarbonDollarMock } = require('../../helpers/mocks');
 
@@ -109,15 +109,6 @@ contract('CarbonDollarProxy', _accounts => {
                 await this.tokenProxy.pause({from:proxyOwner});
                 await expectRevert(this.tokenProxy.mint(RANDOM_ADDRESS, 100, {from:minter}));
             })
-        })
-        describe("computeStablecoinFee", function() {
-            beforeEach(async function () {
-                await this.tokenProxy.listToken(minter, { from: proxyOwner });
-                await this.tokenProxy.setFee(minter, 100, { from: proxyOwner });  // 10% fee
-            })
-            it('computes fee on CUSD burn into stablecoin correctly', async function () {
-                assert.equal(await this.tokenProxy.computeStablecoinFee(1000, minter), 100);
-            });
         })
 
         describe("computeFeeRate", function() {
@@ -300,22 +291,6 @@ contract('CarbonDollarProxy', _accounts => {
             this.tokenProxy = CarbonDollar.at(this.proxyAddress)
 
             this.logic_v0 = CarbonDollar.at(this.impl_v0)
-
-            // Transfer regulator storage ownership to regulator
-            await this.permissionSheet.transferOwnership(this.tokenProxyRegulator.address, {from:owner})
-            await this.validatorSheet.transferOwnership(this.tokenProxyRegulator.address, {from:owner})
-            await this.tokenProxyRegulator.claimPermissionOwnership()
-            await this.tokenProxyRegulator.claimValidatorOwnership()
-
-            // Transfer token storage ownership to token
-            await (FeeSheet.at(await this.tokenProxy.stablecoinFees())).transferOwnership(this.tokenProxy.address, {from:owner})
-            await (StablecoinWhitelist.at(await this.tokenProxy.stablecoinWhitelist())).transferOwnership(this.tokenProxy.address, {from:owner})
-            await (BalanceSheet.at(await this.tokenProxy.balances())).transferOwnership(this.tokenProxy.address, {from:owner})
-            await (AllowanceSheet.at(await this.tokenProxy.allowances())).transferOwnership(this.tokenProxy.address, {from:owner})
-            await this.tokenProxy.claimFeeOwnership()
-            await this.tokenProxy.claimWhitelistOwnership()
-            await this.tokenProxy.claimBalanceOwnership()
-            await this.tokenProxy.claimAllowanceOwnership()
         })
         /* note that the stress tests require considerably longer time compared to
            other tests due to the high volume of function calls */

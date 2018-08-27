@@ -4,11 +4,11 @@ import "../carbonDollarRegulator/CarbonDollarRegulator.sol";
 
 /**
 *
-* @dev creates a CD Regulator with a single Validator and all Permissions 
+* @dev creates a CD Regulator with a single Validator and all Permissions
 *
 **/
 contract CarbonDollarMock is CarbonDollarRegulator {
-    /** 
+    /**
         @dev Initializes common permissions from validator, validator set to msg.sender
      */
     constructor() public {
@@ -25,7 +25,7 @@ contract CarbonDollarMock is CarbonDollarRegulator {
     function setMintPermission() internal {
         addPermission(MINT_SIG, "","","");
     }
-    
+
     function setBurnPermission() internal {
         addPermission(BURN_SIG, "","","");
     }
