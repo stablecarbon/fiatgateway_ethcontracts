@@ -19,7 +19,7 @@ Deployment Addresses in Rinkeby:
 
 	WhitelistedToken: 0x5a320eada5c4ab63007311743cda4ffe40e5ee2d
 
-	AddressVerification: 0x225c6b666ba3efe3984c8983f529048163a614ac
+	AddressVerification: 0x4798b79437c6c665703114a047cdec5714b0d149
 
 To deploy, run:
 truffle migrate --network *testnetwork here*
