@@ -24,21 +24,27 @@ contract('WhitelistedTokenProxy', _accounts => {
     const nonlisted = commonVars.user5
 
     beforeEach(async function () {
-        // Empty Proxy Data storage + fully loaded regulator (all permissions + 1 validator)
-        this.proxyRegulator = (await WhitelistedRegulatorMock.new({from:validator})).address
 
-        // Empty Proxy Data storage + fully loaded regulator
-        this.proxyRegulatorCUSD = (await CarbonDollarMock.new({from:validator})).address
+        // initialize needed regulators and tokens
+        await tokenSetup.call(this, validator, minter, user, owner, whitelisted, blacklisted, nonlisted);
 
-        this.proxyCUSD = (await CarbonDollar.new(this.proxyRegulatorCUSD, {from:owner})).address
-        // First logic contract
-        this.impl_v0 = (await WhitelistedToken.new(this.proxyRegulator, this.proxyCUSD)).address
+        // set whitelisted regulator proxy
+        this.proxyRegulator = this.regulator_w.address
+
+        // set Carbon Dollar regulator proxy
+        this.proxyRegulatorCUSD = this.regulator_c.address
+
+        // set Carbon Dollar proxy
+        this.proxyCUSD = this.cdToken.address
+
+        // First logic contract for whitelisted token
+        this.impl_v0 = this.wtToken.address
 
         // Setting up Proxy initially at version 0 with data storage
         this.proxy = await WhitelistedTokenProxy.new(this.impl_v0, this.proxyRegulator, this.proxyCUSD, { from:proxyOwner })
         this.proxyAddress = this.proxy.address
     })
-
+    
     describe('set CUSD', function () {
         beforeEach(async function () {
             this.newProxyCUSD = (await CarbonDollar.new(RANDOM_ADDRESS, {from:owner})).address
@@ -119,21 +125,32 @@ contract('WhitelistedTokenProxy', _accounts => {
     })
 
     // Behavior tests currently failing due to transaction revert
-    /*describe("Whitelisted token behavior tests", function () {
+    describe("Whitelisted token behavior tests", function () {
         beforeEach(async function () {
-            this.tokenProxyRegulator = WhitelistedTokenRegulator.at(this.proxyRegulator)
+            // set whitelisted regulator
+            //this.tokenProxyRegulator = WhitelistedTokenRegulator.at(this.proxyRegulator)
+            this.tokenProxyRegulator = await WhitelistedRegulatorMock.new({from:validator})
+
             this.tokenProxy = WhitelistedToken.at(this.proxyAddress)
 
-            this.logic_v0 = WhitelistedToken.at(this.impl_v0)
+            // assert test invariants
+            assert(this.tokenProxyRegulator.isWhitelistedUser(whitelisted))
+            assert(this.tokenProxyRegulator.isWhitelistedUser(this.cdToken.address))
+            assert(this.tokenProxyRegulator.isMinter(minter))
+            assert(this.regulator_c.isWhitelistedUser(whitelisted))
+            assert(this.regulator_c.isWhitelistedUser(this.cdToken.address))
+            assert(this.regulator_c.isMinter(minter))
 
-            // set up cdToken
-            //assert(await this.tokenProxyRegulator.isPermission(this.MINT_CUSD_SIG));
-            await tokenSetup.call(this, validator, minter, user, owner, whitelisted, blacklisted, nonlisted)
-            //await tokenSetupCDProxy.call(this, this.proxyCUSD, validator, minter, user, owner, whitelisted, blacklisted, nonlisted);
         })
         const hundred = new BigNumber("100000000000000000000") // 100 * 10**18
         const fifty = new BigNumber("50000000000000000000") // 50 * 10**18
         describe('mintCUSD', function () {
+            describe('if whitelisted token is not listed', function (){
+                it('reverts', async function () {
+                    await this.cdToken.unlistToken(this.tokenProxy.address, {from:owner});
+                    await expectRevert(this.tokenProxy.mintCUSD(whitelisted, hundred, {from:minter}))
+                })
+            })
             describe('user has mint CUSD permission', function () {
                 beforeEach(async function () {
                     await this.cdToken.listToken(this.tokenProxy.address, { from: owner });
@@ -145,6 +162,29 @@ contract('WhitelistedTokenProxy', _accounts => {
                 it('user has appropriate amount of CUSD', async function () {
                     await this.tokenProxy.mintCUSD(whitelisted, hundred, { from: minter });
                     assertBalance(this.cdToken, whitelisted, hundred);
+                });
+                it('emits a MintedToCUSD event', async function () {
+                    const { logs } = await this.tokenProxy.mintCUSD(whitelisted, 50 * 10 ** 18, {from:minter})
+                    /* 5 events are emitted since both tokens emit a
+                       mint and transfer event, and finally a MintedToCUSD
+                       event is emitted */
+                    assert.equal(logs.length, 5)
+                    assert.equal(logs[0].event, 'Mint')
+                    assert.equal(logs[1].event, 'Transfer')
+                    assert.equal(logs[2].event, 'Mint')
+                    assert.equal(logs[3].event, 'Transfer')
+                    assert.equal(logs[4].event, 'MintedToCUSD')
+                    assert.equal(logs[4].args.user, whitelisted)
+                    assert.equal(logs[4].args.amount, 50 * 10 ** 18)
+                });
+                it('reverts when called by user without minting permissions', async function () {
+                    await expectRevert(this.tokenProxy.mintCUSD(whitelisted, hundred, { from: nonlisted }))
+                });
+                it('reverts when trying to mint to CarbonUSD contract', async function () {
+                    await expectRevert(this.tokenProxy.mintCUSD(this.cdToken.address, hundred, { from: nonlisted }))
+                });
+                it('reverts when tries to mint CUSD to user without whitelisted user permissions', async function () {
+                    await expectRevert(this.tokenProxy.mintCUSD(user, hundred, { from: minter }))
                 });
                 it('reverts when paused', async function () {
                     await this.tokenProxy.pause({ from: proxyOwner })
@@ -207,5 +247,5 @@ contract('WhitelistedTokenProxy', _accounts => {
                 });
             });
         });
-    }); */
+    });
 })
