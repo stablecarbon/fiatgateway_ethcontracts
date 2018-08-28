@@ -10,7 +10,9 @@ import "../regulator/Regulator.sol";
 *
 **/
 contract RegulatorProxyFactory {
-    // Parameters
+
+    // TODO: Instead of a single array of addresses, this should be a mapping or an array
+    // of objects of type { address: ...new_regulator, type: whitelisted_or_cusd }
     address[] public regulators;
 
     // Events
@@ -29,12 +31,36 @@ contract RegulatorProxyFactory {
 
         // Store new data storage contracts for regulator proxy
         address proxy = address(new RegulatorProxy(regulatorImplementation));
+        Regulator newRegulator = Regulator(proxy);
+
+        // Testing: Add msg.sender as a validator, add all permissions
+        newRegulator.addValidator(msg.sender);
+        addAllPermissions(newRegulator);
 
         // The function caller should own the proxy contract, so they will need to claim ownership
         RegulatorProxy(proxy).transferOwnership(msg.sender);
 
         regulators.push(proxy);
         emit CreatedRegulatorProxy(proxy, getCount()-1);
+    }
+
+    /**
+    *
+    * @dev Add all permission signatures to regullator
+    *
+    **/
+    function addAllPermissions(Regulator regulator) public {
+        regulator.addValidator(this);
+        regulator.addPermission(regulator.MINT_SIG(), "", "", "" );
+        regulator.addPermission(regulator.BURN_SIG(), "", "", "" );
+        regulator.addPermission(regulator.DESTROY_BLACKLISTED_TOKENS_SIG(), "", "", "" );
+        regulator.addPermission(regulator.APPROVE_BLACKLISTED_ADDRESS_SPENDER_SIG(), "", "", "" );
+        regulator.addPermission(regulator.BLACKLISTED_SIG(), "", "", "" );
+        regulator.addPermission(regulator.CONVERT_CARBON_DOLLAR_SIG(), "", "", "" );
+        regulator.addPermission(regulator.BURN_CARBON_DOLLAR_SIG(), "", "", "" );
+        regulator.addPermission(regulator.MINT_CUSD_SIG(), "", "", "" );
+        regulator.addPermission(regulator.CONVERT_WT_SIG(), "", "", "" );
+        regulator.removeValidator(this);
     }
 
     // Return number of proxies created 

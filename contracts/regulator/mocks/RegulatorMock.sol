@@ -23,10 +23,6 @@ contract RegulatorMock is Regulator {
     function setMintPermission() internal {
         addPermission(MINT_SIG, "","","");
     }
-    
-    function setMintCUSDPermission() internal {
-        addPermission(MINT_CUSD_SIG, "","","");
-    }
 
     function setBurnPermission() internal {
         addPermission(BURN_SIG, "","","");
