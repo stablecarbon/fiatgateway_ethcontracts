@@ -50,6 +50,8 @@ contract RegulatorProxyFactory {
     *
     **/
     function addAllPermissions(Regulator regulator) public {
+
+        // Make this contract a temporary validator to add all permissions
         regulator.addValidator(this);
         regulator.addPermission(regulator.MINT_SIG(), "", "", "" );
         regulator.addPermission(regulator.BURN_SIG(), "", "", "" );

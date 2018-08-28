@@ -17,6 +17,7 @@ contract('CarbonDollar Factory creating CD proxies', _accounts => {
     const validator = commonVars.validator;
     const minter = commonVars.user2;
     const whitelisted = commonVars.user3;
+    const minterCD = commonVars.user4;
 
     beforeEach(async function () {
 

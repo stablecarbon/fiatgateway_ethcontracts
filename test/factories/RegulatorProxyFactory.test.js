@@ -12,6 +12,8 @@ contract('Regulator Factory creating Regulators', _accounts => {
     const validator = commonVars.validator;
     const minter = commonVars.user2;
     const whitelisted = commonVars.user3;
+    const minterCD = commonVars.user4;
+    const whitelistedCD = commonVars.user5;
 
     beforeEach(async function () {
 
@@ -20,6 +22,8 @@ contract('Regulator Factory creating Regulators', _accounts => {
         this.impl_v0_whitelisted = await WhitelistedTokenRegulator.new(ZERO_ADDRESS, ZERO_ADDRESS, {from: other_owner })
         this.impl_v0_carbondollar = await CarbonDollarRegulator.new(ZERO_ADDRESS, ZERO_ADDRESS, {from: other_owner })
 
+        this.MINT_SIG = await this.impl_v0_whitelisted.MINT_SIG()
+        this.MINT_CUSD_SIG = await this.impl_v0_carbondollar.MINT_CUSD_SIG()
     })
 
     describe('Creating brand new Regulator proxies from the factory', function () {
@@ -68,22 +72,29 @@ contract('Regulator Factory creating Regulators', _accounts => {
     describe('Delegating calls to Regulator Proxy', function () {
         beforeEach(async function () {
             await this.proxyFactory.createRegulatorProxy(this.impl_v0_whitelisted.address, {from: proxy_owner })
+            await this.proxyFactory.createRegulatorProxy(this.impl_v0_carbondollar.address, {from: proxy_owner })
 
-            this.proxy_0 = RegulatorProxy.at(await this.proxyFactory.getRegulatorProxy((await this.proxyFactory.getCount())-1))
+            this.proxy_0 = RegulatorProxy.at(await this.proxyFactory.getRegulatorProxy((await this.proxyFactory.getCount())-2))
             this.regulator_0 = WhitelistedTokenRegulator.at(this.proxy_0.address)
+            this.proxy_1 = RegulatorProxy.at(await this.proxyFactory.getRegulatorProxy((await this.proxyFactory.getCount())-1))
+            this.regulator_1 = CarbonDollarRegulator.at(this.proxy_1.address)
 
             // Claim ownership of newly created proxy   
+            await this.regulator_1.claimOwnership({ from:proxy_owner})
             await this.regulator_0.claimOwnership({ from:proxy_owner})
         })
         it('regulator and proxy have same address', async function () {
             assert.equal(this.proxy_0.address, this.regulator_0.address)
+            assert.equal(this.proxy_1.address, this.regulator_1.address)
         })
         it('initial implementation set by the proxy', async function () {
             assert.equal(await this.proxy_0.implementation(), this.impl_v0_whitelisted.address)
+            assert.equal(await this.proxy_1.implementation(), this.impl_v0_carbondollar.address)
         })  
         it('proxy is owned by caller of factory createRegulator()', async function () {
             assert.equal(await this.proxy_0.owner(), proxy_owner)
             assert.equal(await this.regulator_0.owner(), proxy_owner)
+            assert.equal(await this.regulator_1.owner(), proxy_owner)
         }) 
         describe("Proxy upgradeTo and implentation", function () {
             it('upgrades to next implementation', async function () {
@@ -130,6 +141,38 @@ contract('Regulator Factory creating Regulators', _accounts => {
                     await this.regulator_0.setUserPermission(minter, 0x12345678, {from: validator})
                     assert(await this.regulator_0.hasUserPermission(minter, 0x12345678))
                 })
+            })
+        })
+
+        describe('Proxy factory creates different types of regulators', function () {
+            beforeEach(async function () {
+                await this.regulator_0.addValidator(validator, {from: proxy_owner})
+                await this.regulator_1.addValidator(validator, {from: proxy_owner})
+
+                await this.regulator_0.setMinter(minter, {from: validator})   // WT
+                await this.regulator_1.setMinter(minterCD, {from: validator}) // CD
+
+                await this.regulator_0.setWhitelistedUser(whitelisted, {from: validator })   // WT
+                await this.regulator_1.setWhitelistedUser(whitelistedCD, {from: validator }) // CD
+            })
+            it('regulators have different addresses', async function () {
+                assert.notEqual(this.regulator_0.address, this.regulator_1.address)
+            })
+            it('CD minter is not a WT minter (lacks the mintCUSD sig)', async function () {
+                assert(!(await this.regulator_0.isMinter(minterCD)))
+                assert(await this.regulator_1.isMinter(minterCD))
+            })
+            it('WT minter is not a CD minter', async function () {
+                assert(await this.regulator_0.isMinter(minter))
+                assert(!(await this.regulator_1.isMinter(minter)))
+            })
+            it('CD whitelisted is not whitelisted on WT', async function () {
+                assert(await this.regulator_0.isWhitelistedUser(whitelisted))
+                assert(!(await this.regulator_1.isWhitelistedUser(whitelisted)))
+            })
+            it('WT whitelisted is not whitelisted on CD', async function () {
+                assert(!(await this.regulator_0.isWhitelistedUser(whitelistedCD)))
+                assert(await this.regulator_1.isWhitelistedUser(whitelistedCD))
             })
         })
     })
