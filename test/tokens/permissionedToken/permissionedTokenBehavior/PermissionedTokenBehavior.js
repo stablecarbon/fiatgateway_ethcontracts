@@ -236,25 +236,21 @@ function permissionedTokenBehaviorTests(minter, whitelisted, blacklisted, nonlis
                                 await expectRevert(this.token.approve(spender, amountToTransferFrom, {from:holder}))
                             })
                         })
-                    })
-
-                describe('spender is blacklisted', function () {
-                    const spender = blacklisted
-                    it('reverts', async function () {
-                        await expectRevert(this.token.approve(spender, amountToTransferFrom, {from:holder}))
-                        assert((await this.token.allowance(holder, spender)).eq(0));
-                    })
-                })
-                })
-
-            describe('token holder is blacklisted', function () {
-                const holder = blacklisted
-                describe('spender is not blacklisted', function () {
-                    it('reverts', async function () {
-                        await expectRevert(this.token.approve(whitelisted, amountToTransferFrom, {from:holder}));
+                        describe('spender is blacklisted', function () {
+                            it('reverts', async function () {
+                                await expectRevert(this.token.approve(blacklisted, amountToTransferFrom, {from:holder}))
+                                assert((await this.token.allowance(holder, spender)).eq(0));
+                            })
+                        })
+                        describe('token holder is blacklisted', function () {
+                            describe('spender is not blacklisted', function () {
+                                it('reverts', async function () {
+                                    await expectRevert(this.token.approve(whitelisted, amountToTransferFrom, {from:blacklisted}));
+                                })
+                            })
+                        })
                     })
                 })
-            })
             })
         })
 
