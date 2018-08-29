@@ -100,7 +100,7 @@ contract PermissionedToken is ERC20, Pausable, Lockable {
     * @param _amount The number of tokens to mint
     */
     function mint(address _to, uint256 _amount) public requiresPermission whenNotPaused {
-        return _mint(_to, _amount);
+        _mint(_to, _amount);
     }
 
     /**
