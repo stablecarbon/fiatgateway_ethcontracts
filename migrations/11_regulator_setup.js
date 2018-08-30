@@ -19,8 +19,12 @@ module.exports = function (deployer, network, accounts) {
                     proxyRegulatorInstance.getCount().then(function (count) {
                         proxyRegulatorInstance.getRegulatorProxy(count - 1).then(function (wtRegulatorInstance) {
                             proxyRegulatorInstance.getRegulatorProxy(count - 2).then(function (cdRegulatorInstance) {
-                                CarbonDollarRegulator.at(cdRegulatorInstance).setWhitelistedUser(cdInstance, {from:tokenOwner}).then(function (result) {
-                                    WhitelistedTokenRegulator.at(wtRegulatorInstance).setWhitelistedUser(cdInstance, {from:tokenOwner})
+                                CarbonDollarRegulator.at(cdRegulatorInstance).setWhitelistedUser(cdInstance, {from:tokenOwner}).then(function () {
+                                    WhitelistedTokenRegulator.at(wtRegulatorInstance).setWhitelistedUser(cdInstance, {from:tokenOwner}).then(function () {
+                                        CarbonDollarRegulator.at(cdRegulatorInstance).setMinter(tokenOwner, {from:tokenOwner}).then(function () {
+                                            WhitelistedTokenRegulator.at(wtRegulatorInstance).setMinter(tokenOwner, {from:tokenOwner})
+                                        })
+                                    })
                                 })
                             })
                         })

@@ -57,4 +57,8 @@ contract('Deployment scripts', _accounts => {
     it('CUSD contract whitelisted WT token address', async function () {
         assert(await this.cdToken.isWhitelisted(this.wtToken.address))
     })
+    it('initial validator is a minter on both regulators', async function () {
+        assert(await this.wtRegulator.isMinter(owner))
+        assert(await this.cdRegulator.isMinter(owner))
+    })
 })
