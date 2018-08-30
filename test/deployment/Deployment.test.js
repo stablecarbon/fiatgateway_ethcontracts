@@ -29,11 +29,10 @@ contract('Deployment scripts', _accounts => {
         this.cdCount = await this.cdFactory.getCount()
         this.wtCount = await this.wtFactory.getCount()
 
-        this.cdRegulator = CarbonDollarRegulator.at(await this.regFactory.getRegulatorProxy(this.regCount-2))
-        this.wtRegulator = WhitelistedTokenRegulator.at(await this.regFactory.getRegulatorProxy(this.regCount-1))
         this.cdToken = CarbonDollar.at(await this.cdFactory.getToken(this.cdCount-1))
         this.wtToken = WhitelistedToken.at(await this.wtFactory.getToken(this.wtCount-1))
-
+        this.cdRegulator = CarbonDollarRegulator.at(await this.cdToken.regulator())
+        this.wtRegulator = WhitelistedTokenRegulator.at(await this.wtToken.regulator())
     })
     it('factories created the minimum set of contracts', async function () {
         assert.equal(this.regCount, 2); // Should have deployed one WT and one CD regulator
@@ -60,5 +59,10 @@ contract('Deployment scripts', _accounts => {
     it('initial validator is a minter on both regulators', async function () {
         assert(await this.wtRegulator.isMinter(owner))
         assert(await this.cdRegulator.isMinter(owner))
+    })
+    it('WT can mintCUSD to random user', async function () {
+        await this.cdRegulator.setWhitelistedUser(RANDOM_ADDRESS, {from:owner})
+        await this.wtRegulator.setWhitelistedUser(RANDOM_ADDRESS, {from:owner})
+        await this.wtToken.mintCUSD(RANDOM_ADDRESS, 10 * 10 ** 18, {from:owner})
     })
 })
