@@ -1,5 +1,5 @@
 var RegulatorProxyFactory = artifacts.require("./RegulatorProxyFactory");
-var WhitelistedToken = artifacts.require("./CarbonDollar");
+var WhitelistedToken = artifacts.require("./WhitelistedToken");
 var WhitelistedTokenProxyFactory = artifacts.require("./WhitelistedTokenProxyFactory");
 var CarbonDollarProxyFactory = artifacts.require("./CarbonDollarProxyFactory");
 

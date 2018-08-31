@@ -91,7 +91,7 @@ contract CarbonDollar is PermissionedToken {
      * only whitelisted token contracts can call this function. The intended functionality is that the only
      * way to mint CUSD is for the user to actually burn a whitelisted token to convert into CUSD
      * @param _to User to send CUSD to
-     * @param _amount Amount of CarbonUSD to burn.
+     * @param _amount Amount of CarbonUSD to mint.
      */
     function mint(address _to, uint256 _amount) public requiresWhitelistedToken whenNotPaused {
         _mint(_to, _amount);

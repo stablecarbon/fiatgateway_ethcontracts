@@ -16,6 +16,7 @@ const { RegulatorProxyFactory,
 
 contract('Deployment scripts', _accounts => {
     const owner = _accounts[0]; 
+    const user = _accounts[1]
     // accounts[0] should be owner of all contracts AND the initial validator, but must first claim the contracts!!!
 
     beforeEach(async function () {
@@ -56,13 +57,11 @@ contract('Deployment scripts', _accounts => {
     it('CUSD contract whitelisted WT token address', async function () {
         assert(await this.cdToken.isWhitelisted(this.wtToken.address))
     })
+    it('WT contract references the correct CUSD address', async function () {
+        assert.equal(await this.wtToken.cusdAddress(), this.cdToken.address)
+    })
     it('initial validator is a minter on both regulators', async function () {
         assert(await this.wtRegulator.isMinter(owner))
         assert(await this.cdRegulator.isMinter(owner))
-    })
-    it('WT can mintCUSD to random user', async function () {
-        await this.cdRegulator.setWhitelistedUser(RANDOM_ADDRESS, {from:owner})
-        await this.wtRegulator.setWhitelistedUser(RANDOM_ADDRESS, {from:owner})
-        await this.wtToken.mintCUSD(RANDOM_ADDRESS, 10 * 10 ** 18, {from:owner})
     })
 })
