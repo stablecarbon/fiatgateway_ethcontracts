@@ -40,11 +40,9 @@ module.exports = function(callback) {
             WhitelistedToken.at(createdWTToken).then(wtToken => {
                 WT0 = wtToken
                 console.log("WT: " + WT0.address)
-                WT0.burn(10 * 10 ** 18, {from:mintRecipient}).then(tx => {
+                WT0.mint(mintRecipient, 10 * 10 ** 18, {from:minterCUSD}).then(tx => {
                     WT0.balanceOf(mintRecipient).then(newB => {
                         console.log("New user balance: " + newB.toNumber())
-
-
                     })
                 })
                 CarbonDollarProxyFactory.at(CUSDFactory).then(cdInstance => {
