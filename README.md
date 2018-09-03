@@ -1,6 +1,8 @@
 # fiat_gateway
 Carbon's Crypto-Fiat gateway: smart contracts
 
+[![node](https://img.shields.io/badge/Node-v8.11.4-brightgreen.svg)](https://github.com/stablecarbon/fiat_gateway)
+
 Deployment Addresses in Rinkeby:
 
 	Migrations: 0x12c30c603ce1be272167d23be431f5abdf5abb0d
