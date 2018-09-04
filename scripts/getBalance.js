@@ -31,23 +31,25 @@ module.exports = function(callback) {
 
     console.log('user: ' + mintRecipient)
 
-    // 3) WT mints to user
-    WhitelistedTokenProxyFactory.at(WTFactory).then(wtInstance => {
-        wtInstance.getToken(0).then(createdWTToken => {
-            WhitelistedToken.at(createdWTToken).then(wtToken => {
-                WT0 = wtToken
-                console.log("WT: " + WT0.address)
-                WT0.mintCUSD(mintRecipient, 10 * 10 ** 18, {from:minterCUSD}).then(tx => {
-                }).catch(error => {
-                    console.log(error)
+    // CUSD balance
+    CarbonDollarProxyFactory.at(CUSDFactory).then(cusdFactory => {
+        cusdFactory.getToken(0).then(cusdAddress => {
+            CarbonDollar.at(cusdAddress).then(cusd => {
+                CUSD = cusd
+                CUSD.balanceOf(mintRecipient).then(cusdBalance => {
+                    console.log("CUSD Balance: " + cusdBalance)
                 })
-                CarbonDollarProxyFactory.at(CUSDFactory).then(cdInstance => {
-                    cdInstance.getToken(0).then(createdCDToken => {
-                        CarbonDollar.at(createdCDToken).then(cdToken => {
-                            CUSD = cdToken
-                            console.log("CUSD: " + CUSD.address)
-                        })
-                    })
+            })
+        })
+    })
+
+    // WT0 balance
+    WhitelistedTokenProxyFactory.at(WTFactory).then(wtFactory => {
+        wtFactory.getToken(0).then(wtAddress => {
+            WhitelistedToken.at(wtAddress).then(wt => {
+                WT0 = wt
+                WT0.balanceOf(mintRecipient).then(wtBalance => {
+                    console.log("WT0 Balance: " + wtBalance)
                 })
             })
         })
