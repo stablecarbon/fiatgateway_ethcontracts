@@ -1,6 +1,5 @@
 var WhitelistedTokenRegulator = artifacts.require("./WhitelistedTokenRegulator");
 var RegulatorProxyFactory = artifacts.require("./RegulatorProxyFactory");
-var WhitelistedTokenRegulator = artifacts.require("./WhitelistedTokenRegulator")
 
 // Create and claim ownership of new WhitelistedToken contract
 module.exports = function(deployer, network, accounts) {

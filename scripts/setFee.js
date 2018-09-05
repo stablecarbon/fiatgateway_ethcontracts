@@ -8,8 +8,8 @@ const WhitelistedToken_abi = require('../build/contracts/WhitelistedToken.json')
 
 // Addresses of contracts
 const { 
-        mintRecipient,
-        minterCUSD } = require('./addresses')
+        validator
+        } = require('./addresses')
 
 let CarbonDollarProxyFactory = contract(CarbonDollarProxyFactory_abi);
 let WhitelistedTokenProxyFactory = contract(WhitelistedTokenProxyFactory_abi);
@@ -25,31 +25,27 @@ WhitelistedToken.setProvider(web3.currentProvider)
 // Specific token addresses
 let WT0
 let CUSD
-let who = minterCUSD
+
+// Constants
+let tokenOwner = validator
+let gas = 1000000
+let fee = 10 // 10ths of a percent, so fee=10 = 1%
 
 module.exports = function(callback) {
 
-    console.log('user: ' + who)
-
-    // CUSD balance
-    CarbonDollarProxyFactory.deployed().then(cusdFactory => {
-        cusdFactory.getToken(0).then(cusdAddress => {
-            CarbonDollar.at(cusdAddress).then(cusd => {
-                CUSD = cusd
-                CUSD.balanceOf(who).then(cusdBalance => {
-                    console.log("CUSD Balance: " + cusdBalance)
-                })
-            })
-        })
-    })
-
-    // WT0 balance
-    WhitelistedTokenProxyFactory.deployed().then(wtFactory => {
-        wtFactory.getToken(0).then(wtAddress => {
-            WhitelistedToken.at(wtAddress).then(wt => {
-                WT0 = wt
-                WT0.balanceOf(who).then(wtBalance => {
-                    console.log("WT0 Balance: " + wtBalance)
+    WhitelistedTokenProxyFactory.deployed().then(wtInstance => {
+        wtInstance.getToken(0).then(createdWTToken => {
+            WhitelistedToken.at(createdWTToken).then(wtToken => {
+                WT0 = wtToken
+                console.log("WT: " + WT0.address)
+                WT0.cusdAddress().then(cusd => {
+                    CarbonDollar.at(cusd).then(cdToken => {
+                        CUSD = cdToken
+                        console.log("CUSD: " + CUSD.address)
+                        CUSD.setFee(WT0.address, fee, {from:tokenOwner, gas}).then(tx => {
+                            console.log(tx)
+                        })
+                    })
                 })
             })
         })

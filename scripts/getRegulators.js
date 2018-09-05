@@ -4,7 +4,7 @@ const contract = require("truffle-contract");
 const RegulatorProxyFactory_abi = require('../build/contracts/RegulatorProxyFactory.json')
 
 // Addresses of contracts
-const { RegulatorFactory,
+const { 
         mintRecipient,
         minterCUSD,
         validator } = require('./addresses')
@@ -19,7 +19,7 @@ RegulatorProxyFactory.setProvider(web3.currentProvider)
 
 module.exports = function(callback) {
 
-    RegulatorProxyFactory.at(RegulatorFactory).then(instance => {
+    RegulatorProxyFactory.deployed().then(instance => {
 
         // 1) CUSD Regulator 
         instance.getRegulatorProxy(0).then(createdReg => {

@@ -6,11 +6,6 @@ const WhitelistedTokenProxyFactory_abi = require('../build/contracts/Whitelisted
 const CarbonDollar_abi = require('../build/contracts/CarbonDollar.json')
 const WhitelistedToken_abi = require('../build/contracts/WhitelistedToken.json')
 
-// Addresses of contracts
-const { WTFactory,
-        CUSDFactory,
-        } = require('./addresses')
-
 let CarbonDollarProxyFactory = contract(CarbonDollarProxyFactory_abi);
 let WhitelistedTokenProxyFactory = contract(WhitelistedTokenProxyFactory_abi);
 let CarbonDollar = contract(CarbonDollar_abi)
@@ -29,7 +24,7 @@ let CUSD
 module.exports = function(callback) {
 
     // CUSD tokens
-    CarbonDollarProxyFactory.at(CUSDFactory).then(cusdFactory => {
+    CarbonDollarProxyFactory.deployed().then(cusdFactory => {
         console.log('CUSD Factory: ' + cusdFactory.address)
         cusdFactory.getCount().then(count => {
             for (i = 0; i < count; i++) {
@@ -41,7 +36,7 @@ module.exports = function(callback) {
     })
 
     // WT tokens
-    WhitelistedTokenProxyFactory.at(WTFactory).then(wtFactory => {
+    WhitelistedTokenProxyFactory.deployed().then(wtFactory => {
         console.log('WT Factory: ' + wtFactory.address)
         wtFactory.getCount().then(count => {
             for (i = 0; i < count; i++) {

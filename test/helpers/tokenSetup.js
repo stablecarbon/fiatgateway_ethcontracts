@@ -18,7 +18,6 @@ async function tokenSetup(validator, minter, user, owner, whitelisted, blacklist
 
     // Set user permissions in regulator
     await this.regulator_w.setMinter(minter, { from: validator })
-    await this.regulator_w.setMinter(user, { from: validator })
     await this.regulator_w.setWhitelistedUser(whitelisted, { from: validator })
     await this.regulator_w.setNonlistedUser(nonlisted, { from: validator })
     await this.regulator_w.setBlacklistedUser(blacklisted, { from: validator })

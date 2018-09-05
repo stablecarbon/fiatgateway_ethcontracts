@@ -9,8 +9,7 @@ const CarbonDollar_abi = require('../build/contracts/CarbonDollar.json')
 const WhitelistedToken_abi = require('../build/contracts/WhitelistedToken.json')
 
 // Addresses of contracts
-const { WTFactory,
-        CUSDFactory,
+const { 
         mintRecipient,
         minterCUSD,
         validator } = require('./addresses')
@@ -35,13 +34,13 @@ let WTRegulator
 let CUSDRegulator 
 let WT0
 let CUSD
-let who = mintRecipient
+let who = minterCUSD
 
 module.exports = function(callback) {
 
     console.log('user: ' + who)
 
-    WhitelistedTokenProxyFactory.at(WTFactory).then(wtFactory => {
+    WhitelistedTokenProxyFactory.deployed().then(wtFactory => {
         wtFactory.getToken(0).then(wtAddress => {
             WhitelistedToken.at(wtAddress).then(wt => {
                 WT0 = wt
@@ -65,7 +64,7 @@ module.exports = function(callback) {
         })
     })
 
-    CarbonDollarProxyFactory.at(CUSDFactory).then(cusdFactory => {
+    CarbonDollarProxyFactory.deployed().then(cusdFactory => {
         cusdFactory.getToken(0).then(cusdAddress => {
             CarbonDollar.at(cusdAddress).then(cusd => {
                 CUSD = cusd

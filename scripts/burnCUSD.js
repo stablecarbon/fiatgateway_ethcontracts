@@ -25,31 +25,30 @@ WhitelistedToken.setProvider(web3.currentProvider)
 // Specific token addresses
 let WT0
 let CUSD
+
+// Constants
 let who = minterCUSD
+let gas = 1000000
+let amountToBurn = 500
 
 module.exports = function(callback) {
 
-    console.log('user: ' + who)
+    console.log('Who to mint coins to: ' + who)
 
-    // CUSD balance
-    CarbonDollarProxyFactory.deployed().then(cusdFactory => {
-        cusdFactory.getToken(0).then(cusdAddress => {
-            CarbonDollar.at(cusdAddress).then(cusd => {
-                CUSD = cusd
-                CUSD.balanceOf(who).then(cusdBalance => {
-                    console.log("CUSD Balance: " + cusdBalance)
-                })
-            })
-        })
-    })
-
-    // WT0 balance
-    WhitelistedTokenProxyFactory.deployed().then(wtFactory => {
-        wtFactory.getToken(0).then(wtAddress => {
-            WhitelistedToken.at(wtAddress).then(wt => {
-                WT0 = wt
-                WT0.balanceOf(who).then(wtBalance => {
-                    console.log("WT0 Balance: " + wtBalance)
+    WhitelistedTokenProxyFactory.deployed().then(wtInstance => {
+        wtInstance.getToken(0).then(createdWTToken => {
+            WhitelistedToken.at(createdWTToken).then(wtToken => {
+                WT0 = wtToken
+                console.log("WT: " + WT0.address)
+                WT0.cusdAddress().then(cusd => {
+                    CarbonDollar.at(cusd).then(cdToken => {
+                        CUSD = cdToken
+                        console.log("CUSD: " + CUSD.address)
+                        CUSD.burnCarbonDollar(WT0.address, amountToBurn, {from:who, gas}).then(tx => {
+                            let burnCUSDEvent = tx.logs[tx.logs.length-1]
+                            console.log(burnCUSDEvent.event + ": amount = " + burnCUSDEvent.args.feedAmount + ", charged a fee of " + burnCUSDEvent.args.chargedFee)
+                        })
+                    })
                 })
             })
         })

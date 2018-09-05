@@ -7,8 +7,7 @@ const CarbonDollar_abi = require('../build/contracts/CarbonDollar.json')
 const WhitelistedToken_abi = require('../build/contracts/WhitelistedToken.json')
 
 // Addresses of contracts
-const { WTFactory,
-        CUSDFactory,
+const { 
         mintRecipient,
         minterCUSD } = require('./addresses')
 
@@ -26,14 +25,17 @@ WhitelistedToken.setProvider(web3.currentProvider)
 // Specific token addresses
 let WT0
 let CUSD
+
+// Constants
 let who = minterCUSD
+let gas = 1000000
+let amountToMint = 1000
 
 module.exports = function(callback) {
 
-    console.log('Who to mint coins to: ' + who)
+    console.log('Who to burn coins from: ' + who)
 
-    // 3) WT mints to user
-    WhitelistedTokenProxyFactory.at(WTFactory).then(wtInstance => {
+    WhitelistedTokenProxyFactory.deployed().then(wtInstance => {
         wtInstance.getToken(0).then(createdWTToken => {
             WhitelistedToken.at(createdWTToken).then(wtToken => {
                 WT0 = wtToken
@@ -42,13 +44,12 @@ module.exports = function(callback) {
                     CarbonDollar.at(cusd).then(cdToken => {
                         CUSD = cdToken
                         console.log("CUSD: " + CUSD.address)
-                        // CUSD.mintCUSD(mintRecipient, 0, {from:minterCUSD})
+                        WT0.mintCUSD(who, amountToMint, {from:minterCUSD, gas}).then(tx => {
+                            let mintCUSDEvent = tx.logs[tx.logs.length-1]
+                            console.log(mintCUSDEvent.event + ": amount = " + mintCUSDEvent.args.amount)
+                        })
                     })
                 })
-                // WT0.mintCUSD(who, 5 * 10 ** 18, {from:minterCUSD}).then(tx => {
-                // }).catch(error => {
-                //     console.log(error)
-                // })
             })
         })
     })
