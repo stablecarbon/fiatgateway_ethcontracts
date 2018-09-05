@@ -39,18 +39,17 @@ contract CarbonDollarRegulator is Regulator {
     function _setWhitelistedUser(address _who) internal {
         require(isPermission(CONVERT_CARBON_DOLLAR_SIG), "Converting CUSD not supported");
         require(isPermission(BURN_CARBON_DOLLAR_SIG), "Burning CUSD not supported");
-        require(isPermission(BLACKLISTED_SIG), "Blacklisting not supported by token");
+        require(isPermission(BLACKLISTED_SIG), "Blacklisting not supported");
         setUserPermission(_who, CONVERT_CARBON_DOLLAR_SIG);
         setUserPermission(_who, BURN_CARBON_DOLLAR_SIG);
         removeUserPermission(_who, BLACKLISTED_SIG);
         emit LogWhitelistedUser(_who);
-
     }
 
     function _setBlacklistedUser(address _who) internal {
         require(isPermission(CONVERT_CARBON_DOLLAR_SIG), "Converting CUSD not supported");
         require(isPermission(BURN_CARBON_DOLLAR_SIG), "Burning CUSD not supported");
-        require(isPermission(BLACKLISTED_SIG), "Blacklisting not supported by token");
+        require(isPermission(BLACKLISTED_SIG), "Blacklisting not supported");
         removeUserPermission(_who, CONVERT_CARBON_DOLLAR_SIG);
         removeUserPermission(_who, BURN_CARBON_DOLLAR_SIG);
         setUserPermission(_who, BLACKLISTED_SIG);
@@ -60,7 +59,7 @@ contract CarbonDollarRegulator is Regulator {
     function _setNonlistedUser(address _who) internal {
         require(isPermission(CONVERT_CARBON_DOLLAR_SIG), "Converting CUSD not supported");
         require(isPermission(BURN_CARBON_DOLLAR_SIG), "Burning CUSD not supported");
-        require(isPermission(BLACKLISTED_SIG), "Blacklisting not supported by token");
+        require(isPermission(BLACKLISTED_SIG), "Blacklisting not supported");
         removeUserPermission(_who, CONVERT_CARBON_DOLLAR_SIG);
         removeUserPermission(_who, BURN_CARBON_DOLLAR_SIG);
         removeUserPermission(_who, BLACKLISTED_SIG);

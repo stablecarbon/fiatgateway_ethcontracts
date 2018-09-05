@@ -144,7 +144,7 @@ contract('Regulator Factory creating Regulators', _accounts => {
             })
         })
 
-        describe('Proxy factory creates different types of regulators', function () {
+        describe('Proxy factory creates different types of regulators with different storages', function () {
             beforeEach(async function () {
                 await this.regulator_0.addValidator(validator, {from: proxy_owner})
                 await this.regulator_1.addValidator(validator, {from: proxy_owner})

@@ -9,8 +9,7 @@ const WhitelistedToken_abi = require('../build/contracts/WhitelistedToken.json')
 // Addresses of contracts
 const { WTFactory,
         CUSDFactory,
-        mintRecipient,
-        minterCUSD } = require('./addresses')
+        } = require('./addresses')
 
 let CarbonDollarProxyFactory = contract(CarbonDollarProxyFactory_abi);
 let WhitelistedTokenProxyFactory = contract(WhitelistedTokenProxyFactory_abi);
@@ -26,33 +25,30 @@ WhitelistedToken.setProvider(web3.currentProvider)
 // Specific token addresses
 let WT0
 let CUSD
-let who = mintRecipient
 
 module.exports = function(callback) {
 
-    console.log('user: ' + who)
-
-    // CUSD balance
+    // CUSD tokens
     CarbonDollarProxyFactory.at(CUSDFactory).then(cusdFactory => {
-        cusdFactory.getToken(0).then(cusdAddress => {
-            CarbonDollar.at(cusdAddress).then(cusd => {
-                CUSD = cusd
-                CUSD.balanceOf(who).then(cusdBalance => {
-                    console.log("CUSD Balance: " + cusdBalance)
+        console.log('CUSD Factory: ' + cusdFactory.address)
+        cusdFactory.getCount().then(count => {
+            for (i = 0; i < count; i++) {
+                cusdFactory.getToken(i).then(token => {
+                    console.log('CUSD token #' + i + ': ' + token)
                 })
-            })
+            }
         })
     })
 
-    // WT0 balance
+    // WT tokens
     WhitelistedTokenProxyFactory.at(WTFactory).then(wtFactory => {
-        wtFactory.getToken(0).then(wtAddress => {
-            WhitelistedToken.at(wtAddress).then(wt => {
-                WT0 = wt
-                WT0.balanceOf(who).then(wtBalance => {
-                    console.log("WT0 Balance: " + wtBalance)
+        console.log('WT Factory: ' + wtFactory.address)
+        wtFactory.getCount().then(count => {
+            for (i = 0; i < count; i++) {
+                wtFactory.getToken(i).then(token => {
+                    console.log('WT token #' + i + ': ' + token)
                 })
-            })
+            }
         })
     })
 }

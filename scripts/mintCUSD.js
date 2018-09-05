@@ -26,10 +26,11 @@ WhitelistedToken.setProvider(web3.currentProvider)
 // Specific token addresses
 let WT0
 let CUSD
+let who = minterCUSD
 
 module.exports = function(callback) {
 
-    console.log('user: ' + mintRecipient)
+    console.log('Who to mint coins to: ' + who)
 
     // 3) WT mints to user
     WhitelistedTokenProxyFactory.at(WTFactory).then(wtInstance => {
@@ -37,18 +38,17 @@ module.exports = function(callback) {
             WhitelistedToken.at(createdWTToken).then(wtToken => {
                 WT0 = wtToken
                 console.log("WT: " + WT0.address)
-                WT0.mintCUSD(mintRecipient, 10 * 10 ** 18, {from:minterCUSD}).then(tx => {
-                }).catch(error => {
-                    console.log(error)
-                })
-                CarbonDollarProxyFactory.at(CUSDFactory).then(cdInstance => {
-                    cdInstance.getToken(0).then(createdCDToken => {
-                        CarbonDollar.at(createdCDToken).then(cdToken => {
-                            CUSD = cdToken
-                            console.log("CUSD: " + CUSD.address)
-                        })
+                WT0.cusdAddress().then(cusd => {
+                    CarbonDollar.at(cusd).then(cdToken => {
+                        CUSD = cdToken
+                        console.log("CUSD: " + CUSD.address)
+                        // CUSD.mintCUSD(mintRecipient, 0, {from:minterCUSD})
                     })
                 })
+                // WT0.mintCUSD(who, 5 * 10 ** 18, {from:minterCUSD}).then(tx => {
+                // }).catch(error => {
+                //     console.log(error)
+                // })
             })
         })
     })

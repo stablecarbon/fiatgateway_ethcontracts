@@ -4,8 +4,10 @@ const { RegulatorProxyFactory,
         PermissionSheet,
         BalanceSheet, 
         AllowanceSheet,
+        PermissionedTokenStorage,
         FeeSheet,
         StablecoinWhitelist,
+        CarbonDollarStorage,
         CarbonDollar,
         CarbonDollarProxyFactory,
         CarbonDollarRegulator,
@@ -63,5 +65,15 @@ contract('Deployment scripts', _accounts => {
     it('initial validator is a minter on both regulators', async function () {
         assert(await this.wtRegulator.isMinter(owner))
         assert(await this.cdRegulator.isMinter(owner))
+    })
+    it('CUSD owns its storage contracts', async function () {
+        const storage = await this.cdToken.tokenStorage()
+        assert.equal(await PermissionedTokenStorage.at(storage).owner(), this.cdToken.address)
+        const storage_CD = await this.cdToken.tokenStorage_CD()
+        assert.equal(await CarbonDollarStorage.at(storage_CD).owner(), this.cdToken.address)
+    })    
+    it('WT0 owns its storage contracts', async function () {
+        const storage = await this.wtToken.tokenStorage()
+        assert.equal(await PermissionedTokenStorage.at(storage).owner(), this.wtToken.address)
     })
 })

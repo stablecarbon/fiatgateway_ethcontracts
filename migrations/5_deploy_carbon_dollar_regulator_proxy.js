@@ -1,6 +1,5 @@
 var CarbonDollarRegulator = artifacts.require("./CarbonDollarRegulator");
 var RegulatorProxyFactory = artifacts.require("./RegulatorProxyFactory");
-var CarbonDollarRegulator = artifacts.require('./CarbonDollarRegulator');
 
 // Create and claim ownership of new CUSD contract
 module.exports = function(deployer, network, accounts) {

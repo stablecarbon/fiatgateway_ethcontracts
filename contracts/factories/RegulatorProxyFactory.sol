@@ -46,7 +46,7 @@ contract RegulatorProxyFactory {
 
     /**
     *
-    * @dev Add all permission signatures to regullator
+    * @dev Add all permission signatures to regulator
     *
     **/
     function addAllPermissions(Regulator regulator) public {
