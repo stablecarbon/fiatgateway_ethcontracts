@@ -25,7 +25,7 @@ WhitelistedToken.setProvider(web3.currentProvider)
 // Specific token addresses
 let WT0
 let CUSD
-let who = minterCUSD
+let who = mintRecipient
 
 module.exports = function(callback) {
 

@@ -5,30 +5,28 @@ Carbon's Crypto-Fiat gateway: smart contracts
 
 Requires Node Version 8+
 
-Deployment Addresses in Rinkeby:
+Deployment Addresses in Ropsten:
 
-	Migrations: 0x12c30c603ce1be272167d23be431f5abdf5abb0d
+	RegulatorProxyFactory: 0x0eeb954abc72c6689d5bf111c739acc67dad98c7
 
-	RegulatorProxyFactory: 0x37ad0f117780fdf7dfb63e86097cf9d6082e41cb
+	CarbonDollarProxyFactory: 0x0e9a127da064a1c5e31ccd08b2d83cebe626ef2b
 
-	CarbonDollarProxyFactory: 0x29c0e4b4e800dc329f52d0bc24f1c4f59b2431ca
+	WhitelistedTokenProxyFactory: 0x7b9b8c8dbc6aa1a5450f019dbfc5750e502286af
 
-	WhitelistedTokenProxyFactory: 0x26a73cda632d642b90e1b78d848ef57f11fa2752
+	WhitelistedTokenRegulator: 0xf6d52de0dcbd5d7449665f7a84e1ae21564246cb
 
-	WhitelistedTokenRegulator: 0xff34b9f96403f07bbedb343ce8ffe1fc847941de
+	CarbonDollarRegulator: 0x59010b4be37b5e8fa20db47a4f4234c0c1745c45
 
-	CarbonDollarRegulator: 0x9e1a226ce7a83090a489207d0b3acf312d4b8dac
+	CarbonDollar: 0x2345f809f39a52fc156b6edd400c0b14a0c11bc4
 
-	CarbonDollar: 0x45fc9ce32c8d3404ee146718124b9ced4b04baac
+	WhitelistedToken: 0xc53350de9c0e87be63742e3ba46897d7329a037b
 
-	WhitelistedToken: 0xb40ce0833fac645815710e14c872179539917ab0
-
-	AddressVerification: 0x05d9e09c82bd184326be74d3dff11241ceb967ff
+	AddressVerification: 0x4e3e435face5ba42ba922f5078ac2a16965a79d8
 
 To deploy, run:
 truffle migrate --network *testnetwork here*
 The gas limit may have to be adjusted in truffle-config.js.
-The current contracts deployed using 7000000 gas. 
+The current contracts deployed using 7000000 gas limit and cost ~2.5 ETH to deploy.
 
 Token Roles:
 

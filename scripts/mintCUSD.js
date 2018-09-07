@@ -27,7 +27,7 @@ let WT0
 let CUSD
 
 // Constants
-let who = minterCUSD
+let who = mintRecipient
 let gas = 1000000
 let amountToMint = 1000
 

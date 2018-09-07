@@ -34,7 +34,7 @@ let WTRegulator
 let CUSDRegulator 
 let WT0
 let CUSD
-let who = minterCUSD
+let who = mintRecipient
 
 module.exports = function(callback) {
 

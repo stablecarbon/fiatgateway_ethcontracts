@@ -39,7 +39,14 @@ module.exports = {
           return new HDWalletProvider(process.env.MNEMONIC, "https://rinkeby.infura.io/v3/" + process.env.INFURA_API_KEY)
       },
       network_id: 4,
-      gas: 6612388
+      gas: 7000000
+    },
+    ropsten: {
+      provider: function () {
+          return new HDWalletProvider(process.env.MNEMONIC, "https://ropsten.infura.io/v3/" + process.env.INFURA_API_KEY)
+      },
+      network_id: 3,
+      gas: 7000000
     }
   },
   // mocha: {
