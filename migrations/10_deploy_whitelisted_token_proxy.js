@@ -3,6 +3,8 @@ var WhitelistedToken = artifacts.require("./WhitelistedToken");
 var WhitelistedTokenProxyFactory = artifacts.require("./WhitelistedTokenProxyFactory");
 var CarbonDollarProxyFactory = artifacts.require("./CarbonDollarProxyFactory");
 
+
+// This cost around 1mm gas on 9/12/18
 module.exports = function (deployer, network, accounts) {
     let wtTokenOwner = accounts[0];
 
