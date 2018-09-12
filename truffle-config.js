@@ -47,14 +47,21 @@ module.exports = {
       },
       network_id: 3,
       gas: 7000000
+    },
+    mainnet: {
+      provider: function () {
+        return new HDWalletProvider(process.env.MNEMONIC, "https://mainnet.infura.io/v3/" + process.env.INFURA_API_KEY_MAIN)
+      },
+      network_id: 1,
+      gas: 7000000
     }
   },
-  // mocha: {
-  //   reporter: 'eth-gas-reporter',
-  //   reporterOptions: {
-  //     gasPrice: 21
-  //   }
-  // },
+  mocha: {
+    reporter: 'eth-gas-reporter',
+    reporterOptions: {
+      gasPrice: 21
+    }
+  },
   solc: {
     optimizer: {
       enabled: true,
