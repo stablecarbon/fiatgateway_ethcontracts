@@ -39,7 +39,6 @@ module.exports = {
           return new HDWalletProvider(process.env.MNEMONIC, "https://rinkeby.infura.io/v3/" + process.env.INFURA_API_KEY)
       },
       network_id: 4,
-      gas: 7000000
     },
     ropsten: {
       provider: function () {
@@ -53,7 +52,8 @@ module.exports = {
         return new HDWalletProvider(process.env.MNEMONIC, "https://mainnet.infura.io/v3/" + process.env.INFURA_API_KEY_MAIN)
       },
       network_id: 1,
-      gas: 7000000
+      gas: 7000000, // Largest contracts can take almost 7mm gas
+      gasPrice: 20000000000, // 20 GWei, should be pretty fast: https://ethgasstation.info/
     }
   },
   mocha: {

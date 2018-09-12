@@ -2,6 +2,7 @@ var RegulatorProxyFactory = artifacts.require("./RegulatorProxyFactory");
 var CarbonDollar = artifacts.require("./CarbonDollar");
 var CarbonDollarProxyFactory = artifacts.require("./CarbonDollarProxyFactory");
 
+// This cost around 1.5mm gas on 9/12/18
 module.exports = function (deployer, network, accounts) {
     let cdTokenOwner = accounts[0];
 
