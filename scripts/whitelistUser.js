@@ -58,6 +58,9 @@ module.exports = function(callback) {
                                 console.log("User already WT Whitelisted!")
                             }
                         })
+                        .catch(error => {
+                            console.log('Check that all user permissions are enabled')
+                        })
                     })
                 })
             })

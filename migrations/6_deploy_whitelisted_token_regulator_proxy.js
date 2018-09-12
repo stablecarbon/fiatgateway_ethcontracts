@@ -2,6 +2,7 @@ var WhitelistedTokenRegulator = artifacts.require("./WhitelistedTokenRegulator")
 var RegulatorProxyFactory = artifacts.require("./RegulatorProxyFactory");
 
 // Create and claim ownership of new WhitelistedToken contract
+// This cost around 2mm gas on 9/12/18
 module.exports = function(deployer, network, accounts) {
   let wtRegulatorOwner = accounts[0];
   WhitelistedTokenRegulator.deployed().then(function (whitelistedTokenRegulatorInstance) {

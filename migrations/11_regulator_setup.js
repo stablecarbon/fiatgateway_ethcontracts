@@ -5,6 +5,7 @@ var WhitelistedTokenRegulator = artifacts.require("./WhitelistedTokenRegulator")
 var CarbonDollarRegulator = artifacts.require("./CarbonDollarRegulator");
 var CarbonDollar = artifacts.require("./CarbonDollar");
 
+// OPTIONAL: This is a script to set up regulators + tokens to work properly out of the box
 // Claim ownership of all contracts, set up regulators initially so that WT and CUSD are interchangeable
 module.exports = function (deployer, network, accounts) {
     let tokenOwner = accounts[0]; 
