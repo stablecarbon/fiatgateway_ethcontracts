@@ -22,6 +22,9 @@ module.exports = function(callback) {
     RegulatorProxyFactory.deployed().then(instance => {
 
         console.log('Regulator Factory: ' + instance.address)
+        instance.getCount().then(numCreated => {
+            console.log('Created ' + numCreated + ' regulators')
+        })
         
         // 1) CUSD Regulator 
         instance.getRegulatorProxy(0).then(createdReg => {

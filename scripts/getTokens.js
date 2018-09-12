@@ -32,6 +32,7 @@ module.exports = function(callback) {
                     console.log('CUSD token #' + i + ': ' + token)
                 })
             }
+            console.log('Total Count: ' + count)
         })
     })
 
@@ -44,6 +45,7 @@ module.exports = function(callback) {
                     console.log('WT token #' + i + ': ' + token)
                 })
             }
+            console.log('Total Count: ' + count)
         })
     })
 }

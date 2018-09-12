@@ -5,24 +5,6 @@ Carbon's Crypto-Fiat gateway: smart contracts
 
 Requires Node Version 8+
 
-Deployment Addresses in Ropsten:
-
-	RegulatorProxyFactory: 0x0eeb954abc72c6689d5bf111c739acc67dad98c7
-
-	CarbonDollarProxyFactory: 0x0e9a127da064a1c5e31ccd08b2d83cebe626ef2b
-
-	WhitelistedTokenProxyFactory: 0x7b9b8c8dbc6aa1a5450f019dbfc5750e502286af
-
-	WhitelistedTokenRegulator: 0xf6d52de0dcbd5d7449665f7a84e1ae21564246cb
-
-	CarbonDollarRegulator: 0x59010b4be37b5e8fa20db47a4f4234c0c1745c45
-
-	CarbonDollar: 0x2345f809f39a52fc156b6edd400c0b14a0c11bc4
-
-	WhitelistedToken: 0xc53350de9c0e87be63742e3ba46897d7329a037b
-
-	AddressVerification: 0x4e3e435face5ba42ba922f5078ac2a16965a79d8
-
 To deploy, run:
 truffle migrate --network *testnetwork here*
 The gas limit may have to be adjusted in truffle-config.js.
@@ -81,3 +63,36 @@ Architecture
 		CarbonDollarProxy <-- use this to interact with CD
 		PermissionedTokenProxy <--use this to interact with PT
 		RegulatorProxy <--use this to interact with Regulator
+
+Deployment Addresses:
+
+Ropsten:
+	RegulatorProxyFactory: 0x0eeb954abc72c6689d5bf111c739acc67dad98c7
+
+	CarbonDollarProxyFactory: 0x0e9a127da064a1c5e31ccd08b2d83cebe626ef2b
+
+	WhitelistedTokenProxyFactory: 0x7b9b8c8dbc6aa1a5450f019dbfc5750e502286af
+
+	WhitelistedTokenRegulator: 0xf6d52de0dcbd5d7449665f7a84e1ae21564246cb
+
+	CarbonDollarRegulator: 0x59010b4be37b5e8fa20db47a4f4234c0c1745c45
+
+	CarbonDollar: 0x2345f809f39a52fc156b6edd400c0b14a0c11bc4
+
+	WhitelistedToken: 0xc53350de9c0e87be63742e3ba46897d7329a037b
+
+Mainnet (deployed with best results using 20 Gwei gas price):
+	RegulatorProxyFactory (4mm gas): 0xd7f00820bd44a6c30888edff4495282028d58d36
+
+	CarbonDollarProxyFactory (2mm gas):  0x64137b260a9ac9bb7609488dd8a9cf42723291cb
+
+	WhitelistedTokenProxyFactory (1.5mm gas): 0xeaa47c38d2c7c946ae93fa9c09769a14e4ada74f
+
+	WhitelistedTokenRegulator (4mm gas): 0x3d0c2ca9b014d7ef52d168c33e1d98d6b9eb1fe5
+
+	CarbonDollarRegulator (4mm gas): 0xb5f440d0f5002e589755c07f26ad964eb3723175
+
+	CarbonDollar (6mm gas): 0xd41851bcc58c0ea436f57957b1f0a3b27a1e7809
+
+	WhitelistedToken (5mm gas): 0x7b811ae95fff15a3100cd39220af69faf523c2d9
+
