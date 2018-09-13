@@ -29,7 +29,7 @@ let CUSD
 // Constants
 let who = minterCUSD
 let gas = 1000000
-let amountToBurn = 500
+let amountToBurn = 5
 
 module.exports = function(callback) {
 

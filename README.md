@@ -67,6 +67,7 @@ Architecture
 Deployment Addresses:
 
 Ropsten:
+
 	RegulatorProxyFactory: 0x0eeb954abc72c6689d5bf111c739acc67dad98c7
 
 	CarbonDollarProxyFactory: 0x0e9a127da064a1c5e31ccd08b2d83cebe626ef2b
@@ -82,6 +83,7 @@ Ropsten:
 	WhitelistedToken: 0xc53350de9c0e87be63742e3ba46897d7329a037b
 
 Mainnet (deployed with best results using 20 Gwei gas price):
+
 	RegulatorProxyFactory (4mm gas): 0xd7f00820bd44a6c30888edff4495282028d58d36
 
 	CarbonDollarProxyFactory (2mm gas):  0x64137b260a9ac9bb7609488dd8a9cf42723291cb
