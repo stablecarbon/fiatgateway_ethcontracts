@@ -28,8 +28,8 @@ let CUSD
 
 // Constants
 let tokenOwner = validator
-let gas = 1000000
-let fee = 10 // 10ths of a percent, so fee=10 = 1%
+let fee = 1 // 10ths of a percent, so fee=1 = 0.1%
+let gasPrice = web3.toWei('25', 'gwei')
 
 module.exports = function(callback) {
 
@@ -42,7 +42,7 @@ module.exports = function(callback) {
                     CarbonDollar.at(cusd).then(cdToken => {
                         CUSD = cdToken
                         console.log("CUSD: " + CUSD.address)
-                        CUSD.setFee(WT0.address, fee, {from:tokenOwner, gas}).then(tx => {
+                        CUSD.setFee(WT0.address, fee, {from:tokenOwner, gasPrice}).then(tx => {
                             console.log(tx)
                         })
                     })

@@ -27,13 +27,14 @@ let WT0
 let CUSD
 
 // Constants
-let who = minterCUSD
-let gas = 1000000
-let amountToBurn = 5
+let who = mintRecipient
+let gasPrice = web3.toWei('25', 'gwei')
+let amountToBurn = 20
+let conversion = 10**18
 
 module.exports = function(callback) {
 
-    console.log('Who to mint coins to: ' + who)
+    console.log('Who to burn coins from: ' + who)
 
     WhitelistedTokenProxyFactory.deployed().then(wtInstance => {
         wtInstance.getToken(0).then(createdWTToken => {
@@ -44,7 +45,7 @@ module.exports = function(callback) {
                     CarbonDollar.at(cusd).then(cdToken => {
                         CUSD = cdToken
                         console.log("CUSD: " + CUSD.address)
-                        CUSD.burnCarbonDollar(WT0.address, amountToBurn, {from:who, gas}).then(tx => {
+                        CUSD.burnCarbonDollar(WT0.address, amountToBurn*conversion, {from:who, gasPrice}).then(tx => {
                             let burnCUSDEvent = tx.logs[tx.logs.length-1]
                             console.log(burnCUSDEvent.event + ": amount = " + burnCUSDEvent.args.feedAmount + ", charged a fee of " + burnCUSDEvent.args.chargedFee)
                         })
