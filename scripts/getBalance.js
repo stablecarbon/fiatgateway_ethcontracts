@@ -26,7 +26,7 @@ WhitelistedToken.setProvider(web3.currentProvider)
 // Specific token addresses
 let WT0
 let CUSD
-let who = CUSDContract
+let who = mintRecipient
 let conversion = 10**18
 
 module.exports = function(callback) {
@@ -39,7 +39,7 @@ module.exports = function(callback) {
             CarbonDollar.at(cusdAddress).then(cusd => {
                 CUSD = cusd
                 CUSD.balanceOf(who).then(cusdBalance => {
-                    console.log("CUSD Balance: " + cusdBalance/conversion)
+                    console.log("CUSD Balance: " + cusdBalance)
                 })
             })
         })
