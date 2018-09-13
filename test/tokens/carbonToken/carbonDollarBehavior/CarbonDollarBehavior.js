@@ -41,7 +41,7 @@ function carbonDollarBehaviorTests(owner, wtMinter, whitelisted, validator) {
                         // (since WhitelistedToken will end up testing it.)
                         await this.wtToken.mintCUSD(whitelisted, 100 * 10 ** 18, { from: wtMinter });
                     })
-                    it('Burns user CUSD, minus a fee', async function () {
+                    it('Burns user CUSD', async function () {
                         // User now could call CarbonDollar.convertCarbonDollar to convert CUSD back into WT
                         await this.token.burnCarbonDollar(this.wtToken.address, 50 * 10 ** 18, { from: whitelisted });
                         assertBalance(this.token, whitelisted, 50 * 10**18); // User's remaining CUSD balance
