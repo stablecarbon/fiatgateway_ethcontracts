@@ -28,8 +28,9 @@ let CUSD
 
 // Constants
 let who = mintRecipient
-let gas = 1000000
-let amountToMint = 1
+let gasPrice = web3.toWei('25', 'gwei')
+let amountToMint = 10
+let conversion = 10**18
 
 module.exports = function(callback) {
 
@@ -44,7 +45,7 @@ module.exports = function(callback) {
                     CarbonDollar.at(cusd).then(cdToken => {
                         CUSD = cdToken
                         console.log("CUSD: " + CUSD.address)
-                        WT0.mintCUSD(who, amountToMint, {from:minterCUSD, gas}).then(tx => {
+                        WT0.mintCUSD(who, amountToMint*conversion, {from:minterCUSD, gasPrice}).then(tx => {
                             let mintCUSDEvent = tx.logs[tx.logs.length-1]
                             console.log(mintCUSDEvent.event + ": amount = " + mintCUSDEvent.args.amount)
                         })
