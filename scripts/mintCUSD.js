@@ -29,7 +29,7 @@ let CUSD
 // Constants
 let who = mintRecipient
 let gasPrice = web3.toWei('25', 'gwei')
-let amountToMint = 10
+let amountToMint = 100
 let conversion = 10**18
 
 module.exports = function(callback) {

@@ -51,7 +51,7 @@ module.exports = function(callback) {
             WhitelistedToken.at(wtAddress).then(wt => {
                 WT0 = wt
                 WT0.balanceOf(who).then(wtBalance => {
-                    console.log("WT0 Balance: " + wtBalance/conversion)
+                    console.log("WT0 Balance: " + wtBalance)
                 })
             })
         })
