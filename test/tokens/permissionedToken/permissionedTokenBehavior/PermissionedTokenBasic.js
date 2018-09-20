@@ -92,6 +92,12 @@ function permissionedTokenBasicTests(owner, oneHundred, anotherAccount, minter) 
                     assert(logs[1].args.value.eq(amount))
                 })
             })
+            describe('when the given amount is greater than balance of the sender', function () {
+                const amount = 11 * 10 ** 18
+                it('reverts', async function () {
+                    await expectRevert(this.token.burn(amount, { from }))
+                })
+            }) 
             
         })
         
