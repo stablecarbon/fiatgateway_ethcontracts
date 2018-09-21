@@ -1,5 +1,5 @@
 # fiat_gateway
-Carbon's Crypto-Fiat gateway: smart contracts
+Carbon's CUSD-Fiat gateway: smart contracts
 
 [![node](https://img.shields.io/badge/Node-v8.11.4-brightgreen.svg)](https://github.com/stablecarbon/fiat_gateway)
 
@@ -46,7 +46,7 @@ Architecture
 
 	WhitelistedToken is a PermissionedToken
 
-	Two-way convertability between: CUSD < -- > WT. Account must be whitelisted by relevant CD or WT regulator.
+	Two-way convertability between: CUSD < -- > WT. Account must be whitelisted by relevant CD AND WT regulator to convert (via burnCUSD/convertCUSD (CUSD --> WT [--> fiat]) or mintCUSD/convertWT ([fiat -->] WT --> CUSD).
 
 	PermissionedToken is a burnable, mintable, and pausable ERC-20 token that is connected at all times to a Regulator
 		Data Storage:
@@ -59,7 +59,7 @@ Architecture
 			ValidatorStorage
 			PermissionStorage
 
-	Proxies: Proxies are upgradeable by owner of the contract. The Proxy allows owner to modify its (1) data storage and (2) implementation logic. The latest implementation function call is fetched by the proxy and called in the context of the Proxy. THEREFORE, the Proxy must have identical data storage to its implementation.
+	Proxies: Proxies are upgradeable by owner of the contract. The Proxy allows owner to modify its implementation logic only. Data storage is set once upon construction. The latest implementation function call is fetched by the proxy and called in the context of the Proxy. Importantly, the Proxy must have identical data storage to its implementation.
 		CarbonDollarProxy <-- use this to interact with CD
 		PermissionedTokenProxy <--use this to interact with PT
 		RegulatorProxy <--use this to interact with Regulator
