@@ -61,11 +61,6 @@ contract('DelayedUpgradeabilityProxy', _accounts => {
                     timeTravel(TWO_WEEKS);
                     assert.equal(await DummyContractV0.at(this.proxy.address).hello(), "Konichiwa!");
                 })
-                it('four weeks', async function () {
-                    timeTravel(FOUR_WEEKS);
-                    assert.equal(await DummyContractV0.at(this.proxy.address).hello(), "Konichiwa!");
-
-                })
             });
             it('switches to pending implementation after the application date', async function () {
                 timeTravel(FOUR_WEEKS + ONE_HOUR);
