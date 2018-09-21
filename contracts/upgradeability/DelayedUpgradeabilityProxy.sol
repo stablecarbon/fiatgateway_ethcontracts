@@ -44,6 +44,10 @@ contract DelayedUpgradeabilityProxy is UpgradeabilityProxy {
         if (pendingImplementationIsSet && block.timestamp > pendingImplementationApplicationDate) {
             _upgradeTo(pendingImplementation);
             pendingImplementationIsSet = false;
+            super._willFallback();
+        }
+        else {
+            super._willFallback();
         }
     }
 }
