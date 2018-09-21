@@ -249,8 +249,6 @@ function permissionedTokenBasicTests(owner, oneHundred, anotherAccount, minter) 
                     
 
                 })
-                
-
             })
             
             describe('transfer from', function () {
@@ -338,7 +336,6 @@ function permissionedTokenBasicTests(owner, oneHundred, anotherAccount, minter) 
                         await expectRevert(this.token.transferFrom(oneHundred, to, amount, { from: spender }))
                     })
                 })
-
             })
             
             describe('decrease approval', function () {
