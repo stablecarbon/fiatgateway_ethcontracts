@@ -53,7 +53,7 @@ module.exports = {
       },
       network_id: 1,
       gas: 7000000, // Largest contracts can take almost 7mm gas
-      gasPrice: 20000000000, // 20 GWei, should be pretty fast: https://ethgasstation.info/
+      gasPrice: 35000000000, // 20 GWei, should be pretty fast: https://ethgasstation.info/
     }
   },
   mocha: {
