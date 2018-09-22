@@ -12,7 +12,8 @@ const WhitelistedToken_abi = require('../build/contracts/WhitelistedToken.json')
 const { 
         mintRecipient,
         minterCUSD,
-        validator } = require('./addresses')
+        validator,
+        owner } = require('./addresses')
 
 let CarbonDollarProxyFactory = contract(CarbonDollarProxyFactory_abi);
 let WhitelistedTokenProxyFactory = contract(WhitelistedTokenProxyFactory_abi);
@@ -34,7 +35,8 @@ let WTRegulator
 let CUSDRegulator 
 let WT0
 let CUSD
-let who = mintRecipient
+let who = validator
+let gasPrice = web3.toWei('25', 'gwei')
 
 module.exports = function(callback) {
 
@@ -50,7 +52,7 @@ module.exports = function(callback) {
                         console.log("WT Regulator: " + WTRegulator.address)
                         WTRegulator.isWhitelistedUser(who).then(whitelisted => {
                             if(!whitelisted) {
-                                WTRegulator.setWhitelistedUser(who, {from:validator}).then(() => {
+                                WTRegulator.setWhitelistedUser(who, {from:owner, gasPrice}).then(() => {
                                     console.log("Whitelisted user on WT")
                                 })
                             }
@@ -77,13 +79,16 @@ module.exports = function(callback) {
                         console.log("CUSD Regulator: " + CUSDRegulator.address)
                         CUSDRegulator.isWhitelistedUser(who).then(whitelisted => {
                             if(!whitelisted) {
-                                CUSDRegulator.setWhitelistedUser(who, {from:validator}).then(() => {
+                                CUSDRegulator.setWhitelistedUser(who, {from:owner, gasPrice}).then(() => {
                                     console.log("Whitelisted user on CUSD")
                                 })
                             }
                             else {
                                 console.log("User already CUSD whitelisted!")
                             }
+                        })
+                        .catch(error => {
+                            console.log('Check that all user permissions are enabled')
                         })
                     })
                 })
