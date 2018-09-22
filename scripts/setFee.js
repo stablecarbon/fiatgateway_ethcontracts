@@ -8,7 +8,8 @@ const WhitelistedToken_abi = require('../build/contracts/WhitelistedToken.json')
 
 // Addresses of contracts
 const { 
-        validator
+        validator,
+        owner
         } = require('./addresses')
 
 let CarbonDollarProxyFactory = contract(CarbonDollarProxyFactory_abi);
@@ -27,7 +28,7 @@ let WT0
 let CUSD
 
 // Constants
-let tokenOwner = validator
+let tokenOwner = owner
 let fee = 1 // 10ths of a percent, so fee=1 = 0.1%
 let gasPrice = web3.toWei('25', 'gwei')
 
