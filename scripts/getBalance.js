@@ -10,7 +10,7 @@ const WhitelistedToken_abi = require('../build/contracts/WhitelistedToken.json')
 const { 
         mintRecipient,
         minterCUSD,
-        CUSDContract, } = require('./addresses')
+        cusd, } = require('./addresses')
 
 let CarbonDollarProxyFactory = contract(CarbonDollarProxyFactory_abi);
 let WhitelistedTokenProxyFactory = contract(WhitelistedTokenProxyFactory_abi);
@@ -26,7 +26,7 @@ WhitelistedToken.setProvider(web3.currentProvider)
 // Specific token addresses
 let WT0
 let CUSD
-let who = mintRecipient
+let who = cusd
 let conversion = 10**18
 
 module.exports = function(callback) {
