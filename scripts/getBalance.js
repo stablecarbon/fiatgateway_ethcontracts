@@ -9,8 +9,9 @@ const WhitelistedToken_abi = require('../build/contracts/WhitelistedToken.json')
 // Addresses of contracts
 const { 
         mintRecipient,
-        minterCUSD,
-        cusd, } = require('./addresses')
+        validator,
+        cusd,
+        owner } = require('./addresses')
 
 let CarbonDollarProxyFactory = contract(CarbonDollarProxyFactory_abi);
 let WhitelistedTokenProxyFactory = contract(WhitelistedTokenProxyFactory_abi);
@@ -26,7 +27,7 @@ WhitelistedToken.setProvider(web3.currentProvider)
 // Specific token addresses
 let WT0
 let CUSD
-let who = cusd
+let who = '0x687e640906f2abe2ceabf3a2cc40abebb5af1813'
 let conversion = 10**18
 
 module.exports = function(callback) {
@@ -39,7 +40,7 @@ module.exports = function(callback) {
             CarbonDollar.at(cusdAddress).then(cusd => {
                 CUSD = cusd
                 CUSD.balanceOf(who).then(cusdBalance => {
-                    console.log("CUSD Balance: " + cusdBalance)
+                    console.log("CUSD Balance: " + cusdBalance/conversion)
                 })
             })
         })
@@ -51,7 +52,7 @@ module.exports = function(callback) {
             WhitelistedToken.at(wtAddress).then(wt => {
                 WT0 = wt
                 WT0.balanceOf(who).then(wtBalance => {
-                    console.log("WT0 Balance: " + wtBalance)
+                    console.log("WT0 Balance: " + wtBalance/conversion)
                 })
             })
         })

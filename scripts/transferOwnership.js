@@ -14,7 +14,7 @@ const {
         mintRecipient,
         minterCUSD,
         validator,
-        newOwner, } = require('./addresses')
+        newOwner, oldOwner, owner } = require('./addresses')
 
 let CarbonDollarProxyFactory = contract(CarbonDollarProxyFactory_abi);
 let WhitelistedTokenProxyFactory = contract(WhitelistedTokenProxyFactory_abi);
@@ -38,7 +38,9 @@ let WTRegulator
 let CUSDRegulator 
 let WT0
 let CUSD
-let who = validator
+let who = oldOwner
+let gasPrice = web3.toWei('30', 'gwei')
+let ZERO_ADDRESS = '0x0000000000000000000000000000000000000000';
 
 module.exports = function(callback) {
 
@@ -50,9 +52,10 @@ module.exports = function(callback) {
             WhitelistedToken.at(wtAddress).then(wt => {
                 console.log('WT: ' + wtAddress)
                 wt.owner().then(owner => { console.log('WT current owner: ' + owner)})
+                wt.pendingOwner().then(pending => { console.log('WT pending owner: ' + pending)})
+                wt.regulator().then(regulator => { console.log('WT regulator: ' + regulator)})
+                // wt.claimOwnership({ from: newOwner , gasPrice })
             })
-            
-
         })
     })
 
@@ -63,6 +66,9 @@ module.exports = function(callback) {
             CarbonDollar.at(cusdAddress).then(cusd => {
                 console.log('CUSD: ' + cusdAddress)
                 cusd.owner().then(owner => { console.log('CUSD current owner: ' + owner)})
+                cusd.pendingOwner().then(pending => { console.log('CUSD pending owner: ' + pending)})
+                cusd.regulator().then(regulator => { console.log('CUSD regulator: ' + regulator)})
+                // cusd.claimOwnership({ from: newOwner, gasPrice})
             })
         })
     })
@@ -73,12 +79,16 @@ module.exports = function(callback) {
             CarbonDollarRegulator.at(createdReg).then(cusdReg => {
                 console.log('CUSD Regulator: ' + cusdReg.address)
                 cusdReg.owner().then(owner => { console.log('CUSD regulator current owner: ' + owner)})
+                cusdReg.pendingOwner().then(pending => { console.log('CUSD regulator pending owner: ' + pending)})
+                // cusdReg.transferOwnership(newOwner, { from: who, gasPrice})
+                // cusdReg.claimOwnership({ from: who, gasPrice})
             })
         })
         instance.getRegulatorProxy(1).then(createdReg => {
             WhitelistedTokenRegulator.at(createdReg).then(wtReg => {
                 console.log('WT Regulator: ' + wtReg.address)
                 wtReg.owner().then(owner => { console.log('WT regulator current owner: ' + owner)})
+                wtReg.pendingOwner().then(pending => { console.log('WT regulator pending owner: ' + pending)})
             })
         })
     })
