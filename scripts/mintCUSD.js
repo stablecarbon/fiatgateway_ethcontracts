@@ -9,7 +9,8 @@ const WhitelistedToken_abi = require('../build/contracts/WhitelistedToken.json')
 // Addresses of contracts
 const { 
         mintRecipient,
-        minterCUSD } = require('./addresses')
+        minterCUSD,
+        owner } = require('./addresses')
 
 let CarbonDollarProxyFactory = contract(CarbonDollarProxyFactory_abi);
 let WhitelistedTokenProxyFactory = contract(WhitelistedTokenProxyFactory_abi);
@@ -27,7 +28,7 @@ let WT0
 let CUSD
 
 // Constants
-let who = mintRecipient
+let who = owner
 let gasPrice = web3.toWei('25', 'gwei')
 let amountToMint = 100
 let conversion = 10**18
