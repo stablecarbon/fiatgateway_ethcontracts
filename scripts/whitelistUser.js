@@ -35,7 +35,7 @@ let WTRegulator
 let CUSDRegulator 
 let WT0
 let CUSD
-let who = validator
+let who = '0xB3801a04F1fc50B71d5c0776b0739add3AaDdc42'
 let gasPrice = web3.toWei('25', 'gwei')
 
 module.exports = function(callback) {
@@ -52,9 +52,9 @@ module.exports = function(callback) {
                         console.log("WT Regulator: " + WTRegulator.address)
                         WTRegulator.isWhitelistedUser(who).then(whitelisted => {
                             if(!whitelisted) {
-                                WTRegulator.setWhitelistedUser(who, {from:owner, gasPrice}).then(() => {
+                                // WTRegulator.setWhitelistedUser(who, {from:owner, gasPrice}).then(() => {
                                     console.log("Whitelisted user on WT")
-                                })
+                                // })
                             }
                             else {
                                 console.log("User already WT Whitelisted!")
@@ -79,9 +79,9 @@ module.exports = function(callback) {
                         console.log("CUSD Regulator: " + CUSDRegulator.address)
                         CUSDRegulator.isWhitelistedUser(who).then(whitelisted => {
                             if(!whitelisted) {
-                                CUSDRegulator.setWhitelistedUser(who, {from:owner, gasPrice}).then(() => {
+                                // CUSDRegulator.setWhitelistedUser(who, {from:owner, gasPrice}).then(() => {
                                     console.log("Whitelisted user on CUSD")
-                                })
+                                // })
                             }
                             else {
                                 console.log("User already CUSD whitelisted!")

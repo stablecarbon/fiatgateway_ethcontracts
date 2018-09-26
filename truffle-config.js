@@ -42,7 +42,7 @@ module.exports = {
     },
     ropsten: {
       provider: function () {
-          return new HDWalletProvider(process.env.MNEMONIC, "https://ropsten.infura.io/v3/" + process.env.INFURA_API_KEY)
+          return new HDWalletProvider(process.env.MNEMONIC, "https://ropsten.infura.io/v3/" + process.env.INFURA_API_KEY_MAIN)
       },
       network_id: 3,
       gas: 7000000
@@ -65,7 +65,7 @@ module.exports = {
   solc: {
     optimizer: {
       enabled: true,
-      runs: 20000
+      runs: 200
     }
   }
 };

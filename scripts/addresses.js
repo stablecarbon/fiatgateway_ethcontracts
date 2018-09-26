@@ -6,7 +6,7 @@ const minterCUSD = "0xfe6eb9835041e16a67eeeecdb7945af27bc5a28d" // Minter capabl
 const cusd = "0xa12df85972d7b567553ce81d78cfc9c5b1d3455a"
 
 // In case of transferring ownership:
-const oldOwner = ''
+const oldOwner = '0x4488cfa4a7a30d709bec5a34e8341e68426ebdb1'
 const newOwner = ""
 
 module.exports = {

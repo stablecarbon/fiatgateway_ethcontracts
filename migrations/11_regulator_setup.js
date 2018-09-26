@@ -13,41 +13,41 @@ module.exports = function (deployer, network, accounts) {
 
     // Both WT and CD regulators need to whitelist CD for conversion
     // First, claim ownership of contracts
-    CarbonDollarProxyFactory.deployed().then(function (proxyCDInstance) {
-        proxyCDInstance.getCount().then(function (countToken) {
-            proxyCDInstance.getToken(countToken-1).then(function (cdInstance) {
-                RegulatorProxyFactory.deployed().then(function (proxyRegulatorInstance) {
-                    proxyRegulatorInstance.getCount().then(function (count) {
-                        proxyRegulatorInstance.getRegulatorProxy(count - 1).then(function (wtRegulatorInstance) {
-                            proxyRegulatorInstance.getRegulatorProxy(count - 2).then(function (cdRegulatorInstance) {
-                                CarbonDollarRegulator.at(cdRegulatorInstance).setWhitelistedUser(cdInstance, {from:tokenOwner}).then(function () {
-                                    WhitelistedTokenRegulator.at(wtRegulatorInstance).setWhitelistedUser(cdInstance, {from:tokenOwner}).then(function () {
-                                        CarbonDollarRegulator.at(cdRegulatorInstance).setMinter(tokenOwner, {from:tokenOwner}).then(function () {
-                                            WhitelistedTokenRegulator.at(wtRegulatorInstance).setMinter(tokenOwner, {from:tokenOwner})
-                                        })
-                                    })
-                                })
-                            })
-                        })
-                    })
-                })   
-            })
-        })
-    })
+    // CarbonDollarProxyFactory.deployed().then(function (proxyCDInstance) {
+    //     proxyCDInstance.getCount().then(function (countToken) {
+    //         proxyCDInstance.getToken(countToken-1).then(function (cdInstance) {
+    //             RegulatorProxyFactory.deployed().then(function (proxyRegulatorInstance) {
+    //                 proxyRegulatorInstance.getCount().then(function (count) {
+    //                     proxyRegulatorInstance.getRegulatorProxy(count - 1).then(function (wtRegulatorInstance) {
+    //                         proxyRegulatorInstance.getRegulatorProxy(count - 2).then(function (cdRegulatorInstance) {
+    //                             CarbonDollarRegulator.at(cdRegulatorInstance).setWhitelistedUser(cdInstance, {from:tokenOwner}).then(function () {
+    //                                 WhitelistedTokenRegulator.at(wtRegulatorInstance).setWhitelistedUser(cdInstance, {from:tokenOwner}).then(function () {
+    //                                     CarbonDollarRegulator.at(cdRegulatorInstance).setMinter(tokenOwner, {from:tokenOwner}).then(function () {
+    //                                         WhitelistedTokenRegulator.at(wtRegulatorInstance).setMinter(tokenOwner, {from:tokenOwner})
+    //                                     })
+    //                                 })
+    //                             })
+    //                         })
+    //                     })
+    //                 })
+    //             })   
+    //         })
+    //     })
+    // })
 
     // Separately, CD token should whitelist WT as a stablecoin
-    CarbonDollarProxyFactory.deployed().then(function (cdFactory) {
-        cdFactory.getCount().then(function (count) {
-            cdFactory.getToken(count-1).then(function (cdInstance) {
-                WhitelistedTokenProxyFactory.deployed().then(function (wtFactory) {
-                    wtFactory.getCount().then(function (countWT) {
-                        wtFactory.getToken(countWT-1).then(function(wtInstance) {
-                            CarbonDollar.at(cdInstance).listToken(wtInstance, { from: tokenOwner })
-                        })
-                    })
-                })
-            })
-        })
-    })
+    // CarbonDollarProxyFactory.deployed().then(function (cdFactory) {
+    //     cdFactory.getCount().then(function (count) {
+    //         cdFactory.getToken(count-1).then(function (cdInstance) {
+    //             WhitelistedTokenProxyFactory.deployed().then(function (wtFactory) {
+    //                 wtFactory.getCount().then(function (countWT) {
+    //                     wtFactory.getToken(countWT-1).then(function(wtInstance) {
+    //                         CarbonDollar.at(cdInstance).listToken(wtInstance, { from: tokenOwner })
+    //                     })
+    //                 })
+    //             })
+    //         })
+    //     })
+    // })
 
 };
