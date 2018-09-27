@@ -5,12 +5,21 @@ Carbon's CUSD-Fiat gateway: smart contracts
 
 Requires Node Version 8+
 
+## Deployment
 To deploy, run:
 truffle migrate --network *testnetwork here*
 The gas limit may have to be adjusted in truffle-config.js.
 The current contracts deployed using 7000000 gas limit and cost ~2.5 ETH to deploy.
 
-Token Roles:
+## ETH node
+truffle-config currently connects to Ethereum via Infura using the account stored in a .env mnemonic at the i'th index: 
+
+`provider: function () {
+        return new HDWalletProvider(process.env.MNEMONIC, "https://mainnet.infura.io/v3/" + process.env.INFURA_API_KEY_MAIN, i)
+      },`
+
+## Architecture
+###Token Roles:
 
 	Mint: account capable of minting or issuing new tokens to any account
 
@@ -28,16 +37,16 @@ Token Roles:
 		CD Blacklisted: Cannot convert CUSD into WT or USD or trade CUSD. This REPLACES the normal Blacklisted access.
 		WT Blacklisted: Cannot convert WT or trade WT. This ADDS to the normal Blacklisted access.
 
-Regulator Roles:
+###Regulator Roles:
 
 	Validator: account capable of setting user permissions/roles including all the ones listed in this README. Regulator owner is able to set validators.
 
-Special Roles:
+###Special Roles:
 
 	BlacklistedAddressSpender: can transfer tokens on behalf of a blacklisted token
 	BlacklistedAddressDestroyer: can destroy tokens in a blacklisted account
 
-Architecture
+###Architecture Description
 
 	CUSD is a MutableStorage PermissionedToken and is the publicly exchange-traded token, and therefore it is the most liquid token
 		Data Storage:
@@ -64,25 +73,9 @@ Architecture
 		PermissionedTokenProxy <--use this to interact with PT
 		RegulatorProxy <--use this to interact with Regulator
 
-Deployment Addresses:
+##Deployment Addresses:
 
-Ropsten:
-
-	RegulatorProxyFactory: 0x0eeb954abc72c6689d5bf111c739acc67dad98c7
-
-	CarbonDollarProxyFactory: 0x0e9a127da064a1c5e31ccd08b2d83cebe626ef2b
-
-	WhitelistedTokenProxyFactory: 0x7b9b8c8dbc6aa1a5450f019dbfc5750e502286af
-
-	WhitelistedTokenRegulator: 0xf6d52de0dcbd5d7449665f7a84e1ae21564246cb
-
-	CarbonDollarRegulator: 0x59010b4be37b5e8fa20db47a4f4234c0c1745c45
-
-	CarbonDollar: 0x2345f809f39a52fc156b6edd400c0b14a0c11bc4
-
-	WhitelistedToken: 0xc53350de9c0e87be63742e3ba46897d7329a037b
-
-Mainnet (deployed with best results using 20 Gwei gas price):
+###Mainnet:
 
 	RegulatorProxyFactory (4mm gas): 0xe7c888d9f5eed1be9eeb4a2ddebe437b0ac5e63e
 

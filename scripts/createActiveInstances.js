@@ -92,7 +92,7 @@ module.exports = function(callback) {
                         wt.owner().then(owner => { console.log('WT token current owner: ' + owner)})
                         wt.pendingOwner().then(pending => { console.log('WT token pending owner: ' + pending)})
                         wt.regulator().then(regulator => { console.log('WT token regulator: ' + regulator)})
-                        wt.claimOwnership({ from: who , gasPrice })
+                        // wt.claimOwnership({ from: who , gasPrice })
                     })
                 })
                 wtFactory.getCount().then(count => {

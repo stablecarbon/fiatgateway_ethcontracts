@@ -56,12 +56,12 @@ module.exports = {
       gasPrice: 35000000000, // 20 GWei, should be pretty fast: https://ethgasstation.info/
     }
   },
-  mocha: {
-    reporter: 'eth-gas-reporter',
-    reporterOptions: {
-      gasPrice: 21
-    }
-  },
+  // mocha: {
+  //   reporter: 'eth-gas-reporter',
+  //   reporterOptions: {
+  //     gasPrice: 21
+  //   }
+  // },
   solc: {
     optimizer: {
       enabled: true,

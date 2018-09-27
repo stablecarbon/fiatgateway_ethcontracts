@@ -1,7 +1,6 @@
 pragma solidity ^0.4.24;
 
 import "../tokens/carbonToken/CarbonDollarProxy.sol";
-import "../tokens/carbonToken/CarbonDollar.sol";
 
 /**
 *

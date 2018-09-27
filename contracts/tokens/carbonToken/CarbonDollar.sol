@@ -138,6 +138,20 @@ contract CarbonDollar is PermissionedToken {
         emit BurnedCUSD(msg.sender, feedAmount, chargedFee); // Whitelisted trust account should send user feedAmount USD
     }
 
+    /** 
+    * @notice release collected CUSD fees to owner 
+    * @param _amount Amount of CUSD to release
+    * @return `true` if successful 
+    */
+    function releaseCarbonDollar(uint256 _amount) public onlyOwner returns (bool) {
+        require(_amount <= balanceOf(address(this)),"not enough balance to transfer");
+
+        tokenStorage.subBalance(address(this), _amount);
+        tokenStorage.addBalance(msg.sender, _amount);
+        emit Transfer(address(this), msg.sender, _amount);
+        return true;
+    }
+
     /** Computes fee percentage associated with burning into a particular stablecoin.
      * @param stablecoin The stablecoin whose fee will be charged. Precondition: is a whitelisted
      * stablecoin.

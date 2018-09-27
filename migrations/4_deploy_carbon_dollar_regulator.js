@@ -4,5 +4,5 @@ var CarbonDollarRegulator = artifacts.require("./CarbonDollarRegulator");
 module.exports = function(deployer, network, accounts) {
   let cdRegulatorOwner = accounts[0];
 
-  deployer.deploy(CarbonDollarRegulator, {from:cdRegulatorOwner})
+  // deployer.deploy(CarbonDollarRegulator, {from:cdRegulatorOwner})
 };
