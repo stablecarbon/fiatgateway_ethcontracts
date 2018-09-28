@@ -49,77 +49,77 @@ module.exports = function(callback) {
     RegulatorProxyFactory.deployed().then(instance => {
         console.log('Regulator factory: ' + instance.address)
 
-        instance.getRegulatorProxy(0).then(createdReg => {
-            CarbonDollarRegulator.at(createdReg).then(cusdReg => {
-                console.log('CUSD regulator active: ' + cusdReg.address)
-                cusdReg.owner().then(owner => { console.log('CUSD regulator current owner: ' + owner)})
-                cusdReg.pendingOwner().then(pending => { console.log('CUSD regulator pending owner: ' + pending)})
-                // cusdReg.transferOwnership(newOwner, { from: who, gasPrice})
-                // cusdReg.claimOwnership({ from: who, gasPrice})
-            })
+        // instance.getRegulatorProxy(0).then(createdReg => {
+        //     CarbonDollarRegulator.at(createdReg).then(cusdReg => {
+        //         console.log('CUSD regulator active: ' + cusdReg.address)
+        //         cusdReg.owner().then(owner => { console.log('CUSD regulator current owner: ' + owner)})
+        //         cusdReg.pendingOwner().then(pending => { console.log('CUSD regulator pending owner: ' + pending)})
+        //         // cusdReg.transferOwnership(newOwner, { from: who, gasPrice})
+        //         // cusdReg.claimOwnership({ from: who, gasPrice})
+        //     })
             CarbonDollarProxyFactory.deployed().then(cusdFactory => {
                 console.log('CUSD factory: ' + cusdFactory.address)
                 cusdFactory.getCount().then(count => {
                     console.log('CUSD factory count: ' + count)
                 })
-                CarbonDollar.deployed().then(cusdLogic => {
-                    console.log('CUSD token logic: ' + cusdLogic.address)
-                    // cusdFactory.createToken(cusdLogic.address, createdReg, {from:who})
-                })
-                cusdFactory.getToken(0).then(cusdAddress => {
-                    CarbonDollar.at(cusdAddress).then(cusd => {
-                        console.log('CUSD token active: ' + cusdAddress)
-                        cusd.owner().then(owner => { console.log('CUSD token current owner: ' + owner)})
-                        cusd.pendingOwner().then(pending => { console.log('CUSD token pending owner: ' + pending)})
-                        cusd.regulator().then(regulator => { console.log('CUSD token regulator: ' + regulator)})
-                        // cusd.claimOwnership({ from: newOwner, gasPrice})
-                    })
-                })
+                // CarbonDollar.deployed().then(cusdLogic => {
+                //     console.log('CUSD token logic: ' + cusdLogic.address)
+                //     // cusdFactory.createToken(cusdLogic.address, createdReg, {from:who})
+                // })
+                // cusdFactory.getToken(0).then(cusdAddress => {
+                //     CarbonDollar.at(cusdAddress).then(cusd => {
+                //         console.log('CUSD token active: ' + cusdAddress)
+                //         cusd.owner().then(owner => { console.log('CUSD token current owner: ' + owner)})
+                //         cusd.pendingOwner().then(pending => { console.log('CUSD token pending owner: ' + pending)})
+                //         cusd.regulator().then(regulator => { console.log('CUSD token regulator: ' + regulator)})
+                //         // cusd.claimOwnership({ from: newOwner, gasPrice})
+                //     })
+                // })
             })
-        })
+        // })
 
-        instance.getRegulatorProxy(1).then(createdReg => {
-            WhitelistedTokenRegulator.at(createdReg).then(wtReg => {
-                console.log('WT0 Regulator active: ' + wtReg.address)
-                wtReg.owner().then(owner => { console.log('WT regulator current owner: ' + owner)})
-                wtReg.pendingOwner().then(pending => { console.log('WT regulator pending owner: ' + pending)})
-            })
+        // instance.getRegulatorProxy(1).then(createdReg => {
+        //     WhitelistedTokenRegulator.at(createdReg).then(wtReg => {
+        //         console.log('WT0 Regulator active: ' + wtReg.address)
+        //         wtReg.owner().then(owner => { console.log('WT regulator current owner: ' + owner)})
+        //         wtReg.pendingOwner().then(pending => { console.log('WT regulator pending owner: ' + pending)})
+        //     })
             WhitelistedTokenProxyFactory.deployed().then(wtFactory => {
                 console.log('WT0 factory: ' + wtFactory.address)
-                wtFactory.getToken(0).then(wtAddress => {
-                    WhitelistedToken.at(wtAddress).then(wt => {
-                        console.log('WT0 token active: ' + wtAddress)
-                        wt.owner().then(owner => { console.log('WT token current owner: ' + owner)})
-                        wt.pendingOwner().then(pending => { console.log('WT token pending owner: ' + pending)})
-                        wt.regulator().then(regulator => { console.log('WT token regulator: ' + regulator)})
-                        // wt.claimOwnership({ from: who , gasPrice })
-                    })
-                })
+                // wtFactory.getToken(0).then(wtAddress => {
+                //     WhitelistedToken.at(wtAddress).then(wt => {
+                //         console.log('WT0 token active: ' + wtAddress)
+                //         wt.owner().then(owner => { console.log('WT token current owner: ' + owner)})
+                //         wt.pendingOwner().then(pending => { console.log('WT token pending owner: ' + pending)})
+                //         wt.regulator().then(regulator => { console.log('WT token regulator: ' + regulator)})
+                //         // wt.claimOwnership({ from: who , gasPrice })
+                //     })
+                // })
                 wtFactory.getCount().then(count => {
                     console.log('WT0 factory count: ' + count)
                 })
-                WhitelistedToken.deployed().then(wt0logic => {
-                    console.log('WT0 token logic: ' + wt0logic.address)
-                    CarbonDollarProxyFactory.deployed().then(cusdFactory => {
-                        cusdFactory.getToken(0).then(cusdInstance => {
-                            // wtFactory.createToken(wt0logic.address, cusdInstance, createdReg, { from: who })
-                        })
-                    })
+                // WhitelistedToken.deployed().then(wt0logic => {
+                //     console.log('WT0 token logic: ' + wt0logic.address)
+                //     CarbonDollarProxyFactory.deployed().then(cusdFactory => {
+                //         cusdFactory.getToken(0).then(cusdInstance => {
+                //             // wtFactory.createToken(wt0logic.address, cusdInstance, createdReg, { from: who })
+                //         })
+                //     })
                     
-                })
+                // })
             })
-        })
+        // })
         instance.getCount().then(count => {
             console.log('Regulator factory count: ' + count)
         })
-        CarbonDollarRegulator.deployed().then(function (carbonDollarRegulatorInstance) {
-              console.log('CUSD regulator logic: ' + carbonDollarRegulatorInstance.address)
-              // instance.createRegulatorProxy(carbonDollarRegulatorInstance.address, { from: who})
-          })
-        WhitelistedTokenRegulator.deployed().then(function (whitelistedTokenRegulatorInstance) {
-            console.log('WT0 regulator logic: ' + whitelistedTokenRegulatorInstance.address)
-            // instance.createRegulatorProxy(whitelistedTokenRegulatorInstance.address, { from: who })
-        })
+        // CarbonDollarRegulator.deployed().then(function (carbonDollarRegulatorInstance) {
+        //       console.log('CUSD regulator logic: ' + carbonDollarRegulatorInstance.address)
+        //       // instance.createRegulatorProxy(carbonDollarRegulatorInstance.address, { from: who})
+        //   })
+        // WhitelistedTokenRegulator.deployed().then(function (whitelistedTokenRegulatorInstance) {
+        //     console.log('WT0 regulator logic: ' + whitelistedTokenRegulatorInstance.address)
+        //     // instance.createRegulatorProxy(whitelistedTokenRegulatorInstance.address, { from: who })
+        // })
 
     })
 }
