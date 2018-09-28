@@ -75,7 +75,7 @@ truffle-config currently connects to Ethereum via Infura using the account store
 
 ##Deployment Addresses:
 
-###Mainnet:
+###Mainnet (Logic contracts are proxy "implementations", *Active contracts are used*):
 
 	RegulatorProxyFactory: https://etherscan.io/address/0xf363c6de4a27c202fd8e3216351c242fb4a39d8c
 
@@ -83,11 +83,14 @@ truffle-config currently connects to Ethereum via Infura using the account store
 
 	WhitelistedTokenProxyFactory: https://etherscan.io/address/0x3aa4a0482e6f475856d98c12e71b658d0c1d0b68
 
-	WhitelistedTokenRegulator: https://etherscan.io/address/0x0eb1b93c35dc7513c1e6cd683850734686fc9106
+	WhitelistedTokenRegulator (logic): https://etherscan.io/address/0x0eb1b93c35dc7513c1e6cd683850734686fc9106
+	WhitelistedTokenRegulator (active): https://etherscan.io/address/0x8644b70d1e40e954d8397e79a210624cbc22e1fe
 
-	CarbonDollarRegulator (4mm gas): https://etherscan.io/address/0x78a87623e381c395f6b02c649893642dcb3d245e
+	CarbonDollarRegulator (logic): https://etherscan.io/address/0x78a87623e381c395f6b02c649893642dcb3d245e
+	CarbonDollarRegulator (active): https://etherscan.io/address/0xbe729d06dd2d7b2e953b40e234c62bd5f0204a12
 
-	CarbonDollar (6mm gas): 0x5369808868556d476d0ebbea81ead08cf1c73243
+	CarbonDollar (logic): https://etherscan.io/address/0xe05b1e8463773a2368760bfff14c2bb20821d990
+	CarbonDollar (active): https://etherscan.io/address/0x1410d4ec3d276c0ebbf16ccbe88a4383ae734ed0
 
-	WhitelistedToken (5mm gas): 0xe481e0f7a66691e47e8b7c40953cd5dcc6fc2be3
-
+	WhitelistedToken (logic): https://etherscan.io/address/0xe5b58d53caabc455a4ea1ad6a9ea48bca0e42c7a
+	WhitelistedToken (active): https://etherscan.io/address/0x21683397aa53aaf7baca416c27f2c1e0e84bb493
