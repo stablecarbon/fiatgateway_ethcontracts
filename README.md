@@ -83,9 +83,9 @@ truffle-config currently connects to Ethereum via Infura using the account store
 
 	WhitelistedTokenProxyFactory: https://etherscan.io/address/0x3aa4a0482e6f475856d98c12e71b658d0c1d0b68
 
-	WhitelistedTokenRegulator (4mm gas): 0xdd1fff57debf3131e021091be08aac62ccf0b61e
+	WhitelistedTokenRegulator: https://etherscan.io/address/0x0eb1b93c35dc7513c1e6cd683850734686fc9106
 
-	CarbonDollarRegulator (4mm gas): 0x3b4c4deabe37606de5be72d040c19a2f6ae34d96
+	CarbonDollarRegulator (4mm gas): https://etherscan.io/address/0x78a87623e381c395f6b02c649893642dcb3d245e
 
 	CarbonDollar (6mm gas): 0x5369808868556d476d0ebbea81ead08cf1c73243
 

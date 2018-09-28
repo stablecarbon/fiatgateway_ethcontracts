@@ -4,5 +4,5 @@ var WhitelistedTokenRegulator = artifacts.require("./WhitelistedTokenRegulator")
 module.exports = function(deployer, network, accounts) {
   let wtRegulatorOwner = accounts[0];
 
-  deployer.deploy(WhitelistedTokenRegulator, { from: wtRegulatorOwner })
+  // deployer.deploy(WhitelistedTokenRegulator, { from: wtRegulatorOwner })
 };

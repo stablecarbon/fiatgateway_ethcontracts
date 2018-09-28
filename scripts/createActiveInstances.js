@@ -112,14 +112,18 @@ module.exports = function(callback) {
         instance.getCount().then(count => {
             console.log('Regulator factory count: ' + count)
         })
-        // CarbonDollarRegulator.deployed().then(function (carbonDollarRegulatorInstance) {
-        //       console.log('CUSD regulator logic: ' + carbonDollarRegulatorInstance.address)
-        //       // instance.createRegulatorProxy(carbonDollarRegulatorInstance.address, { from: who})
-        //   })
-        // WhitelistedTokenRegulator.deployed().then(function (whitelistedTokenRegulatorInstance) {
-        //     console.log('WT0 regulator logic: ' + whitelistedTokenRegulatorInstance.address)
-        //     // instance.createRegulatorProxy(whitelistedTokenRegulatorInstance.address, { from: who })
-        // })
+        CarbonDollarRegulator.deployed().then(function (carbonDollarRegulatorInstance) {
+              console.log('CUSD regulator logic: ' + carbonDollarRegulatorInstance.address)
+              instance.createRegulatorProxy(carbonDollarRegulatorInstance.address, { from: who})
+              // carbonDollarRegulatorInstance.transferOwnership(newOwner, { from: oldOwner, gasPrice})
+              // carbonDollarRegulatorInstance.claimOwnership({ from: newOwner })
+          })
+        WhitelistedTokenRegulator.deployed().then(function (whitelistedTokenRegulatorInstance) {
+            console.log('WT0 regulator logic: ' + whitelistedTokenRegulatorInstance.address)
+            // instance.createRegulatorProxy(whitelistedTokenRegulatorInstance.address, { from: who })
+            // whitelistedTokenRegulatorInstance.transferOwnership(newOwner, { from: oldOwner, gasPrice })
+            // whitelistedTokenRegulatorInstance.claimOwnership({ from: newOwner })
+        })
 
     })
 }
