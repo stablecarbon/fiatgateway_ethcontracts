@@ -10,7 +10,8 @@ const WhitelistedToken_abi = require('../build/contracts/WhitelistedToken.json')
 const { 
         mintRecipient,
         validator,
-        minterCUSD } = require('./addresses')
+        minterCUSD,
+        owner } = require('./addresses')
 
 let CarbonDollarProxyFactory = contract(CarbonDollarProxyFactory_abi);
 let WhitelistedTokenProxyFactory = contract(WhitelistedTokenProxyFactory_abi);
@@ -42,7 +43,7 @@ module.exports = function(callback) {
                     CarbonDollar.at(cusd).then(cdToken => {
                         CUSD = cdToken
                         console.log("CUSD: " + CUSD.address)
-                        CUSD.listToken(WT0.address, {from:validator, gas, gasPrice}).then(tx => {
+                        CUSD.listToken(WT0.address, {from:owner, gas, gasPrice}).then(tx => {
                             console.log("Whitelisted WT Stablecoin!")
                             console.log(tx)
                         })

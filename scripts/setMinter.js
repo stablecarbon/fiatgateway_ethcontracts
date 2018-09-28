@@ -73,33 +73,33 @@ module.exports = function(callback) {
         })
     })
 
-    CarbonDollarProxyFactory.deployed().then(cusdFactory => {
-        // cusdFactory.getCount().then(count => {
-        //     console.log('cusd count: ' + count)
-        // })
-        cusdFactory.getToken(0).then(cusdAddress => {
-            CarbonDollar.at(cusdAddress).then(cusd => {
-                CUSD = cusd
-                CUSD.regulator().then(cusdRegulatorAddress => {
-                    CarbonDollarRegulator.at(cusdRegulatorAddress).then(cusdRegulator => {
-                        CUSDRegulator = cusdRegulator
-                        console.log("CUSD Regulator: " + CUSDRegulator.address)
-                        CUSDRegulator.isMinter(who).then(minter => {
-                            if(!minter) {
-                                CUSDRegulator.setMinter(who, {from:validator, gasPrice}).then(() => {
-                                    console.log("Set minter on CUSD")
-                                })
-                            }
-                            else {
-                                console.log("User already CUSD minter!")
-                            }
-                        })
-                        .catch(error => {
-                            console.log('Check that all user permissions are enabled')
-                        })
-                    })
-                })
-            })
-        })
-    })
+    // CarbonDollarProxyFactory.deployed().then(cusdFactory => {
+    //     // cusdFactory.getCount().then(count => {
+    //     //     console.log('cusd count: ' + count)
+    //     // })
+    //     cusdFactory.getToken(0).then(cusdAddress => {
+    //         CarbonDollar.at(cusdAddress).then(cusd => {
+    //             CUSD = cusd
+    //             CUSD.regulator().then(cusdRegulatorAddress => {
+    //                 CarbonDollarRegulator.at(cusdRegulatorAddress).then(cusdRegulator => {
+    //                     CUSDRegulator = cusdRegulator
+    //                     console.log("CUSD Regulator: " + CUSDRegulator.address)
+    //                     CUSDRegulator.isMinter(who).then(minter => {
+    //                         if(!minter) {
+    //                             CUSDRegulator.setMinter(who, {from:validator, gasPrice}).then(() => {
+    //                                 console.log("Set minter on CUSD")
+    //                             })
+    //                         }
+    //                         else {
+    //                             console.log("User already CUSD minter!")
+    //                         }
+    //                     })
+    //                     .catch(error => {
+    //                         console.log('Check that all user permissions are enabled')
+    //                     })
+    //                 })
+    //             })
+    //         })
+    //     })
+    // })
 }

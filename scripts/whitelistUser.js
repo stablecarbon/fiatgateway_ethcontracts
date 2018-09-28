@@ -13,7 +13,8 @@ const {
         mintRecipient,
         minterCUSD,
         validator,
-        owner } = require('./addresses')
+        owner,
+        cusdAddress } = require('./addresses')
 
 let CarbonDollarProxyFactory = contract(CarbonDollarProxyFactory_abi);
 let WhitelistedTokenProxyFactory = contract(WhitelistedTokenProxyFactory_abi);
@@ -35,39 +36,39 @@ let WTRegulator
 let CUSDRegulator 
 let WT0
 let CUSD
-let who = '0xB3801a04F1fc50B71d5c0776b0739add3AaDdc42'
+let who = owner
 let gasPrice = web3.toWei('25', 'gwei')
 
 module.exports = function(callback) {
 
     console.log('user: ' + who)
 
-    WhitelistedTokenProxyFactory.deployed().then(wtFactory => {
-        wtFactory.getToken(0).then(wtAddress => {
-            WhitelistedToken.at(wtAddress).then(wt => {
-                WT0 = wt
-                WT0.regulator().then(wtRegulatorAddress => {
-                    WhitelistedTokenRegulator.at(wtRegulatorAddress).then(wtRegulator => {
-                        WTRegulator = wtRegulator
-                        console.log("WT Regulator: " + WTRegulator.address)
-                        WTRegulator.isWhitelistedUser(who).then(whitelisted => {
-                            if(!whitelisted) {
-                                // WTRegulator.setWhitelistedUser(who, {from:owner, gasPrice}).then(() => {
-                                    console.log("Whitelisted user on WT")
-                                // })
-                            }
-                            else {
-                                console.log("User already WT Whitelisted!")
-                            }
-                        })
-                        .catch(error => {
-                            console.log('Check that all user permissions are enabled')
-                        })
-                    })
-                })
-            })
-        })
-    })
+    // WhitelistedTokenProxyFactory.deployed().then(wtFactory => {
+    //     wtFactory.getToken(0).then(wtAddress => {
+    //         WhitelistedToken.at(wtAddress).then(wt => {
+    //             WT0 = wt
+    //             WT0.regulator().then(wtRegulatorAddress => {
+    //                 WhitelistedTokenRegulator.at(wtRegulatorAddress).then(wtRegulator => {
+    //                     WTRegulator = wtRegulator
+    //                     console.log("WT Regulator: " + WTRegulator.address)
+    //                     WTRegulator.isWhitelistedUser(cusdAddress).then(whitelisted => {
+    //                         if(!whitelisted) {
+    //                             WTRegulator.setWhitelistedUser(cusdAddress, {from:who, gasPrice}).then(() => {
+    //                                 console.log("Whitelisted user on WT")
+    //                             })
+    //                         }
+    //                         else {
+    //                             console.log("User already WT Whitelisted!")
+    //                         }
+    //                     })
+    //                     .catch(error => {
+    //                         console.log(error.message)
+    //                     })
+    //                 })
+    //             })
+    //         })
+    //     })
+    // })
 
     CarbonDollarProxyFactory.deployed().then(cusdFactory => {
         cusdFactory.getToken(0).then(cusdAddress => {
@@ -77,18 +78,18 @@ module.exports = function(callback) {
                     CarbonDollarRegulator.at(cusdRegulatorAddress).then(cusdRegulator => {
                         CUSDRegulator = cusdRegulator
                         console.log("CUSD Regulator: " + CUSDRegulator.address)
-                        CUSDRegulator.isWhitelistedUser(who).then(whitelisted => {
+                        CUSDRegulator.isWhitelistedUser(cusdAddress).then(whitelisted => {
                             if(!whitelisted) {
-                                // CUSDRegulator.setWhitelistedUser(who, {from:owner, gasPrice}).then(() => {
+                                CUSDRegulator.setWhitelistedUser(cusdAddress, {from:who, gasPrice}).then(() => {
                                     console.log("Whitelisted user on CUSD")
-                                // })
+                                })
                             }
                             else {
                                 console.log("User already CUSD whitelisted!")
                             }
                         })
                         .catch(error => {
-                            console.log('Check that all user permissions are enabled')
+                            console.log(error.message)
                         })
                     })
                 })
