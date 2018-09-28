@@ -7,8 +7,8 @@ Requires Node Version 8+
 
 ## Deployment
 To deploy, run:
-truffle migrate --network *testnetwork here*
-The gas limit may have to be adjusted in truffle-config.js.
+`truffle migrate --network [network]`
+The gas limit may have to be adjusted in `truffle-config.js`.
 The current contracts deployed using 7000000 gas limit and cost ~2.5 ETH to deploy.
 
 ## ETH node
@@ -77,7 +77,7 @@ truffle-config currently connects to Ethereum via Infura using the account store
 
 ###Mainnet:
 
-	RegulatorProxyFactory (4mm gas): 0xe7c888d9f5eed1be9eeb4a2ddebe437b0ac5e63e
+	RegulatorProxyFactory: [0xe7c888d9f5eed1be9eeb4a2ddebe437b0ac5e63e](https://etherscan.io/myaccount)
 
 	CarbonDollarProxyFactory (2mm gas):  0x47386efa5d4887aef97a73d5d14905d005200072
 
