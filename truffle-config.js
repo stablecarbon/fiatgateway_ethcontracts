@@ -42,7 +42,7 @@ module.exports = {
     },
     ropsten: {
       provider: function () {
-          return new HDWalletProvider(process.env.MNEMONIC, "https://ropsten.infura.io/v3/" + process.env.INFURA_API_KEY)
+          return new HDWalletProvider(process.env.MNEMONIC, "https://ropsten.infura.io/v3/" + process.env.INFURA_API_KEY_MAIN)
       },
       network_id: 3,
       gas: 7000000
@@ -56,16 +56,16 @@ module.exports = {
       gasPrice: 35000000000, // 20 GWei, should be pretty fast: https://ethgasstation.info/
     }
   },
-  mocha: {
-    reporter: 'eth-gas-reporter',
-    reporterOptions: {
-      gasPrice: 21
-    }
-  },
+  // mocha: {
+  //   reporter: 'eth-gas-reporter',
+  //   reporterOptions: {
+  //     gasPrice: 21
+  //   }
+  // },
   solc: {
     optimizer: {
       enabled: true,
-      runs: 20000
+      runs: 200
     }
   }
 };

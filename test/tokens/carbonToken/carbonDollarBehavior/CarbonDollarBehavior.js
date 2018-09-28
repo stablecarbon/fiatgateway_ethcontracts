@@ -179,6 +179,55 @@ function carbonDollarBehaviorTests(owner, wtMinter, whitelisted, validator) {
                 });
             });
         });
+
+        describe('releaseCarbonDollar', function () {
+            beforeEach(async function () {
+                // Whitelist the WT0 contract and add a fee
+                await this.token.listToken(this.wtToken.address, { from: owner });
+                await this.token.setFee(this.wtToken.address, 100, { from: owner });  // 10% fee
+                // Mint WT for user directly into CUSD. We assume this function call works as intended
+                // (since WhitelistedToken will end up testing it.)
+                await this.wtToken.mintCUSD(whitelisted, 100 * 10 ** 18, { from: wtMinter });
+                await this.token.burnCarbonDollar(this.wtToken.address, 50 * 10 ** 18, { from: whitelisted });
+                // CUSD should own 5 CUSD now 
+            })
+            describe('owner calls', function () {
+                const from = owner
+                describe('CUSD has enough funds', function () {
+                    const amount = 4 * 10 ** 18
+                    it('releases amount to owner', async function () {
+                        assert(await this.token.releaseCarbonDollar(amount, { from }))
+                        assertBalance(this.token, owner, amount)
+                    })
+                    it('CUSD balance decreases', async function () {
+                        await this.token.releaseCarbonDollar(amount, { from })
+                        assertBalance(this.token, this.token.address, 1 * 10 ** 18)
+                    })
+                    it('emits Transfer event', async function () {
+                        const { logs } = await this.token.releaseCarbonDollar(amount, { from })
+                        assert.equal(logs.length, 1)
+                        assert.equal(logs[0].event, 'Transfer')
+                        assert.equal(logs[0].args.from, this.token.address)
+                        assert.equal(logs[0].args.to, owner)
+                        assert(logs[0].args.value.eq(amount))
+                    })
+                })
+                describe('CUSD does not have enough funds', function () {
+                    const amount = 6 * 10 ** 18
+                    it('reverts', async function () {
+                        await expectRevert(this.token.releaseCarbonDollar(amount, { from }))
+                    })
+                })
+            })
+            describe('non owner calls', function () {
+                const from = wtMinter
+                const amount = 5 * 10 ** 18
+                it('reverts', async function () {
+                    await expectRevert(this.token.releaseCarbonDollar(amount, { from }))
+                })
+            })
+            
+        })
     });
 
     describe("Computational functions", function() {

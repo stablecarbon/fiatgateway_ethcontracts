@@ -27,7 +27,7 @@ WhitelistedToken.setProvider(web3.currentProvider)
 // Specific token addresses
 let WT0
 let CUSD
-let who = '0x687e640906f2abe2ceabf3a2cc40abebb5af1813'
+let who = cusd
 let conversion = 10**18
 
 module.exports = function(callback) {
