@@ -18,8 +18,8 @@ truffle-config currently connects to Ethereum via Infura using the account store
         return new HDWalletProvider(process.env.MNEMONIC, "https://mainnet.infura.io/v3/" + process.env.INFURA_API_KEY_MAIN, i)
       },`
 
-## Architecture
-###Token Roles:
+# Architecture
+## Token Roles:
 
 	Mint: account capable of minting or issuing new tokens to any account
 
@@ -37,16 +37,16 @@ truffle-config currently connects to Ethereum via Infura using the account store
 		CD Blacklisted: Cannot convert CUSD into WT or USD or trade CUSD. This REPLACES the normal Blacklisted access.
 		WT Blacklisted: Cannot convert WT or trade WT. This ADDS to the normal Blacklisted access.
 
-###Regulator Roles:
+## Regulator Roles:
 
 	Validator: account capable of setting user permissions/roles including all the ones listed in this README. Regulator owner is able to set validators.
 
-###Special Roles:
+## Special Roles:
 
 	BlacklistedAddressSpender: can transfer tokens on behalf of a blacklisted token
 	BlacklistedAddressDestroyer: can destroy tokens in a blacklisted account
 
-###Architecture Description
+## Architecture Description
 
 	CUSD is a MutableStorage PermissionedToken and is the publicly exchange-traded token, and therefore it is the most liquid token
 		Data Storage:
@@ -73,24 +73,24 @@ truffle-config currently connects to Ethereum via Infura using the account store
 		PermissionedTokenProxy <--use this to interact with PT
 		RegulatorProxy <--use this to interact with Regulator
 
-##Deployment Addresses:
+# Deployment Addresses:
 
-###Mainnet (Logic contracts are proxy "implementations", *Active contracts are used*):
+## Mainnet (Logic contracts are proxy "implementations", *Active contracts are used*):
 
-	RegulatorProxyFactory: https://etherscan.io/address/0xf363c6de4a27c202fd8e3216351c242fb4a39d8c
+[RegulatorProxyFactory](https://etherscan.io/address/0xf363c6de4a27c202fd8e3216351c242fb4a39d8c)
 
-	CarbonDollarProxyFactory:  https://etherscan.io/address/0x4a5693fa90442aff3067b59a4256834fe612b541
+[CarbonDollarProxyFactory](https://etherscan.io/address/0x4a5693fa90442aff3067b59a4256834fe612b541)
 
-	WhitelistedTokenProxyFactory: https://etherscan.io/address/0x3aa4a0482e6f475856d98c12e71b658d0c1d0b68
+[WhitelistedTokenProxyFactory](https://etherscan.io/address/0x3aa4a0482e6f475856d98c12e71b658d0c1d0b68)
 
-	WhitelistedTokenRegulator (logic): https://etherscan.io/address/0x0eb1b93c35dc7513c1e6cd683850734686fc9106
-	WhitelistedTokenRegulator (active): https://etherscan.io/address/0x8644b70d1e40e954d8397e79a210624cbc22e1fe
+[WhitelistedTokenRegulator (logic)](https://etherscan.io/address/0x0eb1b93c35dc7513c1e6cd683850734686fc9106)
+[WhitelistedTokenRegulator (active)](https://etherscan.io/address/0x8644b70d1e40e954d8397e79a210624cbc22e1fe)
 
-	CarbonDollarRegulator (logic): https://etherscan.io/address/0x78a87623e381c395f6b02c649893642dcb3d245e
-	CarbonDollarRegulator (active): https://etherscan.io/address/0xbe729d06dd2d7b2e953b40e234c62bd5f0204a12
+[CarbonDollarRegulator (logic)](https://etherscan.io/address/0x78a87623e381c395f6b02c649893642dcb3d245e)
+[CarbonDollarRegulator (active)](https://etherscan.io/address/0xbe729d06dd2d7b2e953b40e234c62bd5f0204a12)
 
-	CarbonDollar (logic): https://etherscan.io/address/0xe05b1e8463773a2368760bfff14c2bb20821d990
-	CarbonDollar (active): https://etherscan.io/address/0x1410d4ec3d276c0ebbf16ccbe88a4383ae734ed0
+[CarbonDollar (logic)](https://etherscan.io/address/0xe05b1e8463773a2368760bfff14c2bb20821d990)
+[CarbonDollar (active)](https://etherscan.io/address/0x1410d4ec3d276c0ebbf16ccbe88a4383ae734ed0)
 
-	WhitelistedToken (logic): https://etherscan.io/address/0xe5b58d53caabc455a4ea1ad6a9ea48bca0e42c7a
-	WhitelistedToken (active): https://etherscan.io/address/0x21683397aa53aaf7baca416c27f2c1e0e84bb493
+[WhitelistedToken (logic)](https://etherscan.io/address/0xe5b58d53caabc455a4ea1ad6a9ea48bca0e42c7a)
+[WhitelistedToken (active)](https://etherscan.io/address/0x21683397aa53aaf7baca416c27f2c1e0e84bb493)
