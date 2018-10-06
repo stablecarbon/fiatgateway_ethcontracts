@@ -1,55 +1,78 @@
 const contract = require("truffle-contract");
 
 // ABI's of contracts
+const CarbonDollarProxyFactory_abi = require('../build/contracts/CarbonDollarProxyFactory.json')
+const WhitelistedTokenProxyFactory_abi = require('../build/contracts/WhitelistedTokenProxyFactory.json')
+const CarbonDollar_abi = require('../build/contracts/CarbonDollar.json')
+const WhitelistedToken_abi = require('../build/contracts/WhitelistedToken.json')
 const WhitelistedTokenRegulator_abi = require('../build/contracts/WhitelistedTokenRegulator.json')
 const CarbonDollarRegulator_abi = require('../build/contracts/CarbonDollarRegulator.json')
-const RegulatorProxyFactory_abi = require('../build/contracts/RegulatorProxyFactory.json')
 
 // Addresses of contracts
 const { owner } = require('./addresses')
 
+let CarbonDollarProxyFactory = contract(CarbonDollarProxyFactory_abi);
+let WhitelistedTokenProxyFactory = contract(WhitelistedTokenProxyFactory_abi);
+let CarbonDollar = contract(CarbonDollar_abi)
+let WhitelistedToken = contract(WhitelistedToken_abi)
 let WhitelistedTokenRegulator = contract(WhitelistedTokenRegulator_abi);
 let CarbonDollarRegulator = contract(CarbonDollarRegulator_abi);
-let RegulatorProxyFactory = contract(RegulatorProxyFactory_abi);
 
 // Set providers
+CarbonDollarProxyFactory.setProvider(web3.currentProvider)
+WhitelistedTokenProxyFactory.setProvider(web3.currentProvider)
+CarbonDollar.setProvider(web3.currentProvider)
+WhitelistedToken.setProvider(web3.currentProvider)
 WhitelistedTokenRegulator.setProvider(web3.currentProvider)
 CarbonDollarRegulator.setProvider(web3.currentProvider)
-RegulatorProxyFactory.setProvider(web3.currentProvider)
 
-// Specific regulator addresses
-let WTRegulator 
-let CUSDRegulator 
-let gasPrice = web3.toWei('30', 'gwei')
-let ZERO_ADDRESS = '0x0000000000000000000000000000000000000000'
- 
-// ** Change REGULATOR_TYPE to change the type of new Regulator created ** //
-let REGULATOR_TYPE = ""
+
+// Constants
+let gasPrice = web3.toWei('25', 'gwei')
+let amountToMint = 1000
+let conversion = 10**18 // precision is like ETH and goes out to 18 decimals
+
 module.exports = function(callback) {
 
-    console.log('owner: ' + owner)
+    console.log('Who to mint coins to: ' + owner)
 
-    RegulatorProxyFactory.deployed().then(instance => {
-        console.log('Regulator factory: ' + instance.address)
-
-        // Scripts for user to claimOwnership of regulator instances
-        // When ownership is claimed, there should no longer be a Regulator.pendingOwner
-        instance.getRegulatorProxy(0).then(createdReg => {
-            CarbonDollarRegulator.at(createdReg).then(cusdReg => {
-                console.log('CUSD regulator active: ' + cusdReg.address)
-                cusdReg.isValidator(owner).then(result => {
-                    result ? console.log('Owner is a CUSD validator') : console.log('Owner is NOT CUSD a validator')
-                 })
-            })
-        })
-        instance.getRegulatorProxy(1).then(createdReg => {
-            WhitelistedTokenRegulator.at(createdReg).then(wtReg => {
-                console.log('WT0 Regulator active: ' + wtReg.address)
-                wtReg.isValidator(owner).then(result => {
-                    result ? console.log('Owner is a WT0 validator') : console.log('Owner is NOT a WT0 validator')
+    WhitelistedTokenProxyFactory.deployed().then(wtInstance => {
+        wtInstance.getToken(0).then(createdWTToken => {
+            WhitelistedToken.at(createdWTToken).then(wtToken => {
+                console.log("WT: " + wtToken.address)
+                wtToken.regulator().then(wtRegulatorAddress => {
+                    WhitelistedTokenRegulator.at(wtRegulatorAddress).then(wtRegulator => {
+                        wtRegulator.isMinter(owner).then(minterWT0 => {
+                            if(!minterWT0) {
+                                console.log('Owner is not a Minter on WT0')
+                                return;
+                            } else {
+                                wtToken.cusdAddress().then(cusd => {
+                                    CarbonDollar.at(cusd).then(cdToken => {
+                                        console.log("CUSD: " + cdToken.address)
+                                        cdToken.regulator().then(cdRegulatorAddress => {
+                                            CarbonDollarRegulator.at(cdRegulatorAddress).then(cdRegulator => {
+                                                cdRegulator.isMinter(owner).then(minterCUSD => {
+                                                    if(!minterCUSD) {
+                                                        console.log('Owner is not a Minter on CUSD')
+                                                        return;
+                                                    } else {
+                                                        console.log('Minter verified, minting ' + amountToMint + ' CUSD...')
+                                                        wtToken.mintCUSD(owner, amountToMint*conversion, {from:owner,  gasPrice}).then(tx => {
+                                                            let mintCUSDEvent = tx.logs[tx.logs.length-1]
+                                                            console.log("Minted to " + owner + " : amount = " + mintCUSDEvent.args.amount/conversion)
+                                                        })
+                                                    }
+                                                })
+                                            })
+                                        })
+                                    })
+                                })
+                            }
+                        })
+                    })
                 })
             })
         })
-
     })
 }

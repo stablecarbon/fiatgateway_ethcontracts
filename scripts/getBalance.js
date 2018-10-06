@@ -7,11 +7,7 @@ const CarbonDollar_abi = require('../build/contracts/CarbonDollar.json')
 const WhitelistedToken_abi = require('../build/contracts/WhitelistedToken.json')
 
 // Addresses of contracts
-const { 
-        mintRecipient,
-        validator,
-        cusd,
-        owner } = require('./addresses')
+const { owner, cusd } = require('./addresses')
 
 let CarbonDollarProxyFactory = contract(CarbonDollarProxyFactory_abi);
 let WhitelistedTokenProxyFactory = contract(WhitelistedTokenProxyFactory_abi);
@@ -27,32 +23,44 @@ WhitelistedToken.setProvider(web3.currentProvider)
 // Specific token addresses
 let WT0
 let CUSD
-let who = cusd
 let conversion = 10**18
-
 module.exports = function(callback) {
 
-    console.log('user: ' + who)
-
-    // CUSD balance
+    // CUSD contract balance: stores fees and escrowed WT tokens for each CUSD outstanding
     CarbonDollarProxyFactory.deployed().then(cusdFactory => {
         cusdFactory.getToken(0).then(cusdAddress => {
-            CarbonDollar.at(cusdAddress).then(cusd => {
-                CUSD = cusd
-                CUSD.balanceOf(who).then(cusdBalance => {
-                    console.log("CUSD Balance: " + cusdBalance/conversion)
+            CarbonDollar.at(cusdAddress).then(cusdInstance => {
+                cusdInstance.balanceOf(cusd).then(cusdBalance => {
+                    console.log("==TOKEN==\nCUSD Balance of " + cusd + " : " + cusdBalance/conversion)
+                })
+            })
+        })
+    })
+    WhitelistedTokenProxyFactory.deployed().then(wtFactory => {
+        wtFactory.getToken(0).then(wtAddress => {
+            WhitelistedToken.at(wtAddress).then(wt => {
+                wt.balanceOf(cusd).then(wtBalance => {
+                    console.log("==TOKEN==\nWT0 Balance of " + cusd + " : " + wtBalance/conversion)
                 })
             })
         })
     })
 
-    // WT0 balance
+    // Owner balance
+    CarbonDollarProxyFactory.deployed().then(cusdFactory => {
+        cusdFactory.getToken(0).then(cusdAddress => {
+            CarbonDollar.at(cusdAddress).then(cusd => {
+                cusd.balanceOf(owner).then(cusdBalance => {
+                    console.log("==USER==\nCUSD Balance of " + owner + " : " + cusdBalance/conversion)
+                })
+            })
+        })
+    })
     WhitelistedTokenProxyFactory.deployed().then(wtFactory => {
         wtFactory.getToken(0).then(wtAddress => {
             WhitelistedToken.at(wtAddress).then(wt => {
-                WT0 = wt
-                WT0.balanceOf(who).then(wtBalance => {
-                    console.log("WT0 Balance: " + wtBalance/conversion)
+                wt.balanceOf(owner).then(wtBalance => {
+                    console.log("==USER==\nWT0 Balance of " + owner + " : " + wtBalance/conversion)
                 })
             })
         })

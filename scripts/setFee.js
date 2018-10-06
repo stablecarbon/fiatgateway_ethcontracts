@@ -7,10 +7,7 @@ const CarbonDollar_abi = require('../build/contracts/CarbonDollar.json')
 const WhitelistedToken_abi = require('../build/contracts/WhitelistedToken.json')
 
 // Addresses of contracts
-const { 
-        validator,
-        owner
-        } = require('./addresses')
+const { owner } = require('./addresses')
 
 let CarbonDollarProxyFactory = contract(CarbonDollarProxyFactory_abi);
 let WhitelistedTokenProxyFactory = contract(WhitelistedTokenProxyFactory_abi);
@@ -23,13 +20,9 @@ WhitelistedTokenProxyFactory.setProvider(web3.currentProvider)
 CarbonDollar.setProvider(web3.currentProvider)
 WhitelistedToken.setProvider(web3.currentProvider)
 
-// Specific token addresses
-let WT0
-let CUSD
 
 // Constants
-let tokenOwner = owner
-let fee = 1 // 10ths of a percent, so fee=1 = 0.1%
+let FEE = 1 // 10ths of a percent, so fee=1 = 0.1%
 let gasPrice = web3.toWei('25', 'gwei')
 
 module.exports = function(callback) {
@@ -37,14 +30,17 @@ module.exports = function(callback) {
     WhitelistedTokenProxyFactory.deployed().then(wtInstance => {
         wtInstance.getToken(0).then(createdWTToken => {
             WhitelistedToken.at(createdWTToken).then(wtToken => {
-                WT0 = wtToken
-                console.log("WT: " + WT0.address)
-                WT0.cusdAddress().then(cusd => {
+                console.log("WT: " + wtToken.address)
+                wtToken.cusdAddress().then(cusd => {
                     CarbonDollar.at(cusd).then(cdToken => {
-                        CUSD = cdToken
-                        console.log("CUSD: " + CUSD.address)
-                        CUSD.setFee(WT0.address, fee, {from:tokenOwner, gasPrice}).then(tx => {
-                            console.log(tx)
+                        console.log("CUSD: " + cdToken.address)
+                        cdToken.getFee(wtToken.address).then(fee => {
+                            console.log('CUSD Fee for redeeming ' + wtToken.address + ': ' + '%' + fee/10)
+
+                            // To set a stablecoin fee, the WT must first be whitelisted by this CUSD instance
+                            cdToken.setFee(wtToken.address, FEE, {from:owner, gasPrice}).then(tx => {
+                                console.log('Changed CUSD fee for ' + wtToken.address + ' to ' + '%' + FEE/10)
+                            })
                         })
                     })
                 })

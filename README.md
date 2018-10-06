@@ -13,7 +13,7 @@ The gas limit may have to be adjusted in `truffle-config.js`.
 ## Contract Verification 
 Code dependencies need to be flattened into a single `*.sol` contract in order for popular block explorers like etherscan.io to verify their byteccode. 
 
-Run `sol-merger ./contract/[CONTRACT].sol "./flatten/*.sol"` to flatten any contract into the flatten/ directory named [CONTRACT]\_merged.sol
+Run `sol-merger ./contracts/[CONTRACT].sol "./flatten/*.sol"` to flatten any contract into the flatten/ directory named [CONTRACT]\_merged.sol
 
 ## Connecting to an Ethereum node
 truffle-config currently connects to Ethereum via an [Infura account](https://infura.io/) using the account [mnemonic](https://en.bitcoin.it/wiki/Seed_phrase) stored in a .env 
@@ -91,15 +91,23 @@ For convenience, the caller of createRegulatorProxy() is designated a Validator 
 2) Newly created contracts are initialized with empty data storages. A newly created token contract must be assigned a chosen regulated upon creation. `CarbonDollarProxyFactory` and `WhitelistedTokenProxyFactory` work similarly to the Regulator factory. They create new tokens via `CarbonDollarProxyFactory.createToken(CUSD.address, CUSDRegulator.address)` and `WhitelistedTOkenProxyFactory.createToken(WT.address, CUSD.address, WTRegulator.address)` where CUSD, WT and CUSD/WTRegulators are abstract logic contracts. CUSD is the CarbonDollar that a given WT is fungible with. Again, ownerships of token contracts must be claimed.
 
 3) Now, we have to do some additional setup steps to ensure that CUSD and WT work properly.
+	
 i) CarbonDollarRegulator and WhitelistedTokenRegulator instances must whitelist the CUSD active address to enforce fungibility between CUSD and WT
 
-	`Regulator.whitelist(CUSD.address, {from: validator})`
+	`WTRegulator.whitelist(CUSD.address, {from: validator})`
+	`CUSDRegulator.whitelist(CUSD.address, {from: validator})`
 
-ii) To mint new tokens, both the CarbonDollarRegulator and WhitelistedTokenRegulator must designate a minter capable of calling `mint()`
+ii) CUSD must whitelist WT as an official stablecoin that CUSD is redeemable for
+
+	`CUSD.listToken(WT.address, {from:cusdOwner})`
+
+iii) To mint new tokens, both the CarbonDollarRegulator and WhitelistedTokenRegulator must designate a minter capable of calling `mint()`
 
 	`Regulator.setMinter(minter, {from: validator})`
 
-III) To set a fee charged upon redeeming CUSD into WT, the CUSD contract owner may call `CUSD.setFee(fee)` on the active CUSD contract. Fees can optionally be collected be escrowed by the CUSD contract to pay for transaction fees.
+iv) To set a fee charged upon redeeming CUSD into WT, the CUSD contract owner may call `CUSD.setFee(fee)` on the active CUSD contract. Fees can optionally be collected be escrowed by the CUSD contract to pay for transaction fees.
+
+v) An address must be whitelisted by both CUSD and WT0 regulators to receive newly minted CUSD and whitelisted by WT0 to receive WT0
 
 Model scripts are provided in `./scripts/` for convenient contract interactions that can be run with `truffle exc ./scripts/[script] --network [network]`
 
