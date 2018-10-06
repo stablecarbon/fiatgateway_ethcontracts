@@ -94,3 +94,5 @@ truffle-config currently connects to Ethereum via Infura using the account store
 
 [WhitelistedToken (logic)](https://etherscan.io/address/0xe5b58d53caabc455a4ea1ad6a9ea48bca0e42c7a)
 [WhitelistedToken (active)](https://etherscan.io/address/0x21683397aa53aaf7baca416c27f2c1e0e84bb493)
+
+
