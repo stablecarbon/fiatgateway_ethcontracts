@@ -7,6 +7,7 @@ Carbon's CUSD-Fiat gateway: smart contracts
 To deploy, run:
 `truffle migrate --network [network]`
 The gas limit may have to be adjusted in `truffle-config.js`.
+
 [Sep 18] The latest deployment cost ~2.5 ETH to deploy.
 
 ## Contract Verification 
@@ -31,22 +32,22 @@ What you need to keep secret:
 	B) seedwords --> can restore metamask account including ETH keypairs on any computer.
 
 ## Architecture
-###Core Token:
+### Core Token:
 	CUSD: "CUSD" is a regulated ERC20 token redeemable into any whitelisted token, the initial of which is "WT0" (Whitelisted Token v.0)
 
 ### Our Regulators can assign accounts Permissions
-###Token Permissions:
+### Token Permissions:
 
 	MintPermissions: account capable of minting or issuing new CUSD or WT0 tokens to any account
 
 	Whitelisted: whitelisted accounts can(1) receive newly minted tokens and (2) redeem tokens with our partner banks
 
 
-###Regulator Permissions:
+### Regulator Permissions:
 
 	Validator: account capable of setting user permissions/roles including MintPermissions and Whitelisted
 
-###Architecture Description
+### Architecture Description
 
 	CUSD is a Permissioned ERC20 Token whose methods are protected by a Regulator
 
@@ -54,7 +55,7 @@ What you need to keep secret:
 
 ## Deployment Addresses:
 
-###Mainnet (Logic contracts are proxy "implementations", *Only the Active contracts can be used*):
+### Mainnet (Logic contracts are proxy "implementations", *Only the Active contracts can be used*):
 
 [RegulatorProxyFactory](https://etherscan.io/address/0xf363c6de4a27c202fd8e3216351c242fb4a39d8c)
 
@@ -78,7 +79,7 @@ What you need to keep secret:
 
 [WhitelistedToken (active)](https://etherscan.io/address/0x21683397aa53aaf7baca416c27f2c1e0e84bb493)
 
-###Setting up CUSD token for local
+### Setting up CUSD token for local
 1) The Regulator/CarbonDollar/Whitelisted Proxy Factories can create new CUSD, WT0, and Regulator contracts. 
 
 `RegulatorProxyFactory.createRegulatorProxy(Regulator.address)` creates a new Regulator instance that uses the same logic as the abstract Regulator Logic contract. For example, `RegulatorProxyFactory.createRegulatorProxy(CarbonDollarRegulatorInstance.address)` would act as a Regulator that can regulate the CUSD token. Importantly, since Regulators are ownable contracts, the Factory will transfer ownership to the specified owner account in `./scripts/addresses.js` and must be claimed via `newRegulator.claimOwnership({ from: newOwner })`.
@@ -102,7 +103,7 @@ III) To set a fee charged upon redeeming CUSD into WT, the CUSD contract owner m
 
 Model scripts are provided in `./scripts/` for convenient contract interactions that can be run with `truffle exc ./scripts/[script] --network [network]`
 
-###Ropsten
+### Ropsten
 
 [RegulatorProxyFactory](https://etherscan.io/address/0x2d35b31f1b760e22b6f926abaca365f97b261b2e)
 
