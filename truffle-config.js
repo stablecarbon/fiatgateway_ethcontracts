@@ -25,7 +25,7 @@ module.exports = {
       host: "localhost",
       port: 8545,
       network_id: "*", //Listen to all networks,
-      gasLimit: 10000000000000
+      gasLimit: 6000000
     },
     coverage: {
       host: "localhost",
@@ -53,17 +53,17 @@ module.exports = {
       },
       network_id: 1,
       gas: 7000000, // Largest contracts can take almost 7mm gas
-      gasPrice: 35000000000, // 20 GWei, should be pretty fast: https://ethgasstation.info/
+      gasPrice: 35000000000, // 35 GWei, should be very fast: https://ethgasstation.info/
     }
   },
-  // mocha: {
+  // mocha: { // Uncomment to turn on gas reporter, slows down transactions
   //   reporter: 'eth-gas-reporter',
   //   reporterOptions: {
   //     gasPrice: 21
   //   }
   // },
-  solc: {
-    optimizer: {
+  solc: { 
+    optimizer: { // deployed Sep18 { enabled: true, runs: 200 }
       enabled: true,
       runs: 200
     }

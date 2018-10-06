@@ -17,11 +17,8 @@ WhitelistedTokenRegulator.setProvider(web3.currentProvider)
 CarbonDollarRegulator.setProvider(web3.currentProvider)
 RegulatorProxyFactory.setProvider(web3.currentProvider)
 
-// Specific regulator addresses
-let WTRegulator 
-let CUSDRegulator 
+// Useful constants
 let gasPrice = web3.toWei('30', 'gwei')
-let ZERO_ADDRESS = '0x0000000000000000000000000000000000000000'
  
 // ** Change REGULATOR_TYPE to change the type of new Regulator created ** //
 let REGULATOR_TYPE = ""
@@ -32,8 +29,7 @@ module.exports = function(callback) {
     RegulatorProxyFactory.deployed().then(instance => {
         console.log('Regulator factory: ' + instance.address)
 
-        // Scripts for user to claimOwnership of regulator instances
-        // When ownership is claimed, there should no longer be a Regulator.pendingOwner
+        // Scripts for user to check Validator status of owner for regulator instances
         instance.getRegulatorProxy(0).then(createdReg => {
             CarbonDollarRegulator.at(createdReg).then(cusdReg => {
                 console.log('CUSD regulator active: ' + cusdReg.address)

@@ -17,11 +17,8 @@ WhitelistedTokenRegulator.setProvider(web3.currentProvider)
 CarbonDollarRegulator.setProvider(web3.currentProvider)
 RegulatorProxyFactory.setProvider(web3.currentProvider)
 
-// Specific regulator addresses
-let WTRegulator 
-let CUSDRegulator 
+// Useful constants
 let gasPrice = web3.toWei('30', 'gwei')
-let ZERO_ADDRESS = '0x0000000000000000000000000000000000000000'
  
 // ** Change REGULATOR_TYPE to change the type of new Regulator created ** //
 let REGULATOR_TYPE = ""
@@ -37,19 +34,38 @@ module.exports = function(callback) {
         instance.getRegulatorProxy(0).then(createdReg => {
             CarbonDollarRegulator.at(createdReg).then(cusdReg => {
                 console.log('CUSD regulator active: ' + cusdReg.address)
-                cusdReg.isValidator(owner).then(result => {
-                    result ? console.log('Owner is a CUSD validator') : console.log('Owner is NOT CUSD a validator')
-                 })
+                cusdReg.owner().then(owner => { console.log('CUSD regulator current owner: ' + owner)})
+                cusdReg.pendingOwner().then(pending => { console.log('CUSD regulator pending owner: ' + pending)})
+                // cusdReg.claimOwnership({ from: owner, gasPrice})
             })
         })
         instance.getRegulatorProxy(1).then(createdReg => {
             WhitelistedTokenRegulator.at(createdReg).then(wtReg => {
                 console.log('WT0 Regulator active: ' + wtReg.address)
-                wtReg.isValidator(owner).then(result => {
-                    result ? console.log('Owner is a WT0 validator') : console.log('Owner is NOT a WT0 validator')
-                })
+                wtReg.owner().then(owner => { console.log('WT regulator current owner: ' + owner)})
+                wtReg.pendingOwner().then(pending => { console.log('WT regulator pending owner: ' + pending)})
+                // wtReg.claimOwnership({ from: owner, gasPrice })
             })
         })
+
+        instance.getCount().then(count => {
+            console.log('Regulator factory count: ' + count)
+        })
+
+        if (REGULATOR_TYPE == "CUSD") {
+         CarbonDollarRegulator.deployed().then(function (carbonDollarRegulatorInstance) {
+              console.log('CUSD regulator logic: ' + carbonDollarRegulatorInstance.address)
+              instance.createRegulatorProxy(carbonDollarRegulatorInstance.address, { from: owner})
+          })
+        } else if (REGULATOR_TYPE == "WT0") {
+            WhitelistedTokenRegulator.deployed().then(function (whitelistedTokenRegulatorInstance) {
+                console.log('WT0 regulator logic: ' + whitelistedTokenRegulatorInstance.address)
+                instance.createRegulatorProxy(whitelistedTokenRegulatorInstance.address, { from: owner })
+            })
+        } else {
+            console.log('!! No Regulator created !!\nUsage: Please specify a REGULATOR_TYPE to create a new Regulator')
+        }
+
 
     })
 }
