@@ -3,6 +3,8 @@ Carbon's CUSD-Fiat gateway: smart contracts
 
 [![node](https://img.shields.io/badge/Node-v8.11.4-brightgreen.svg)](https://github.com/stablecarbon/fiat_gateway)
 
+Smart contract code audited by [New Alchemy](https://medium.com/@newalchemy/carbon-money-smart-contract-audit-c5ae62cbe5d4)
+
 ## Deployment
 To deploy, run:
 `truffle migrate --network [network]`
