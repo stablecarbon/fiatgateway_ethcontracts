@@ -13,7 +13,7 @@ The gas limit may have to be adjusted in `truffle-config.js`.
 ## Contract Verification 
 Code dependencies need to be flattened into a single `*.sol` contract in order for popular block explorers like etherscan.io to verify their byteccode. 
 
-Run `sol-merger ./contracts/[CONTRACT].sol "./flatten/*.sol"` to flatten any contract into the flatten/ directory named [CONTRACT]\_merged.sol
+Run `sol-merger ./contracts/[CONTRACT].sol "./flatten/"` to flatten any contract into the flatten/ directory named [CONTRACT]\_merged.sol
 
 To verify contracts created by the Factories, you will need to retrieve the ABI-ecoded constructor arguments that were passed during creation. This is a useful online [ABI encoding service](https://abi.hashex.org/)
 
