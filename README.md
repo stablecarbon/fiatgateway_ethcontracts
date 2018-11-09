@@ -136,3 +136,11 @@ Model scripts are provided in `./scripts/` for convenient contract interactions 
 [WhitelistedToken (logic)](https://ropsten.etherscan.io/address/0x99f72bd9aebbd1e51ba977157d5f0eca73dadd8f)
 
 [WhitelistedToken (active)](https://ropsten.etherscan.io/address/0xcd36463470c4b92700b4d5fbe270e680d9d48968)
+
+## Scripts to interact with deployed contracts
+
+### Get owners of active token contracts 
+
+`truffle exec ./scripts/getOwners.js --network [mainnet/testnet]`
+
+This command will print current ownership of CUSD and WT0 contracts as well as their regulators
