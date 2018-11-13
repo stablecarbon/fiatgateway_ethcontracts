@@ -1,0 +1,1150 @@
+{
+  "contractName": "Lockable",
+  "abi": [
+    {
+      "constant": false,
+      "inputs": [],
+      "name": "claimOwnership",
+      "outputs": [],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "isMethodEnabled",
+      "outputs": [
+        {
+          "name": "",
+          "type": "bool"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "owner",
+      "outputs": [
+        {
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "pendingOwner",
+      "outputs": [
+        {
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "_newOwner",
+          "type": "address"
+        }
+      ],
+      "name": "transferOwnership",
+      "outputs": [],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "anonymous": false,
+      "inputs": [],
+      "name": "Unlocked",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [],
+      "name": "Locked",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "name": "previousOwner",
+          "type": "address"
+        },
+        {
+          "indexed": true,
+          "name": "newOwner",
+          "type": "address"
+        }
+      ],
+      "name": "OwnershipTransferred",
+      "type": "event"
+    },
+    {
+      "constant": false,
+      "inputs": [],
+      "name": "unlock",
+      "outputs": [],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [],
+      "name": "lock",
+      "outputs": [],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function"
+    }
+  ],
+  "bytecode": "0x60806040526001805460008054600160a060020a03191633179055600160a860020a031916905561037d806100356000396000f3006080604052600436106100825763ffffffff7c01000000000000000000000000000000000000000000000000000000006000350416634e71e0c8811461008757806388fa26171461009e5780638da5cb5b146100c7578063a69df4b5146100f8578063e30c39781461010d578063f2fde38b14610122578063f83d08ba14610143575b600080fd5b34801561009357600080fd5b5061009c610158565b005b3480156100aa57600080fd5b506100b36101e0565b604080519115158252519081900360200190f35b3480156100d357600080fd5b506100dc610201565b60408051600160a060020a039092168252519081900360200190f35b34801561010457600080fd5b5061009c610210565b34801561011957600080fd5b506100dc610287565b34801561012e57600080fd5b5061009c600160a060020a0360043516610296565b34801561014f57600080fd5b5061009c6102f1565b600154600160a060020a0316331461016f57600080fd5b60015460008054604051600160a060020a0393841693909116917f8be0079c531659141344cd1fd0a4f28419497f9722a3daafe3b4186f6b6457e091a3600180546000805473ffffffffffffffffffffffffffffffffffffffff19908116600160a060020a03841617909155169055565b60015474010000000000000000000000000000000000000000900460ff1681565b600054600160a060020a031681565b600054600160a060020a0316331461022757600080fd5b6001805474ff00000000000000000000000000000000000000001916740100000000000000000000000000000000000000001790556040517f19aad37188a1d3921e29eb3c66acf43d81975e107cb650d58cca878627955fd690600090a1565b600154600160a060020a031681565b600054600160a060020a031633146102ad57600080fd5b600160a060020a03811615156102c257600080fd5b6001805473ffffffffffffffffffffffffffffffffffffffff1916600160a060020a0392909216919091179055565b600054600160a060020a0316331461030857600080fd5b6001805474ff0000000000000000000000000000000000000000191690556040517f0f2e5b6c72c6a4491efd919a9f9a409f324ef0708c11ee57d410c2cb06c0992b90600090a15600a165627a7a72305820798dc3aa7c3cb542a98555137682462b53912f4be5cc2349d0104de817c593730029",
+  "deployedBytecode": "0x6080604052600436106100825763ffffffff7c01000000000000000000000000000000000000000000000000000000006000350416634e71e0c8811461008757806388fa26171461009e5780638da5cb5b146100c7578063a69df4b5146100f8578063e30c39781461010d578063f2fde38b14610122578063f83d08ba14610143575b600080fd5b34801561009357600080fd5b5061009c610158565b005b3480156100aa57600080fd5b506100b36101e0565b604080519115158252519081900360200190f35b3480156100d357600080fd5b506100dc610201565b60408051600160a060020a039092168252519081900360200190f35b34801561010457600080fd5b5061009c610210565b34801561011957600080fd5b506100dc610287565b34801561012e57600080fd5b5061009c600160a060020a0360043516610296565b34801561014f57600080fd5b5061009c6102f1565b600154600160a060020a0316331461016f57600080fd5b60015460008054604051600160a060020a0393841693909116917f8be0079c531659141344cd1fd0a4f28419497f9722a3daafe3b4186f6b6457e091a3600180546000805473ffffffffffffffffffffffffffffffffffffffff19908116600160a060020a03841617909155169055565b60015474010000000000000000000000000000000000000000900460ff1681565b600054600160a060020a031681565b600054600160a060020a0316331461022757600080fd5b6001805474ff00000000000000000000000000000000000000001916740100000000000000000000000000000000000000001790556040517f19aad37188a1d3921e29eb3c66acf43d81975e107cb650d58cca878627955fd690600090a1565b600154600160a060020a031681565b600054600160a060020a031633146102ad57600080fd5b600160a060020a03811615156102c257600080fd5b6001805473ffffffffffffffffffffffffffffffffffffffff1916600160a060020a0392909216919091179055565b600054600160a060020a0316331461030857600080fd5b6001805474ff0000000000000000000000000000000000000000191690556040517f0f2e5b6c72c6a4491efd919a9f9a409f324ef0708c11ee57d410c2cb06c0992b90600090a15600a165627a7a72305820798dc3aa7c3cb542a98555137682462b53912f4be5cc2349d0104de817c593730029",
+  "sourceMap": "336:654:2:-;;;435:35;;;465:5;812:18:3;;-1:-1:-1;;;;;;812:18:3;820:10;812:18;;;-1:-1:-1;;;;;;837:25:3;;;336:654:2;;;;;;",
+  "deployedSourceMap": "336:654:2:-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;1588:168:3;;8:9:-1;5:2;;;30:1;27;20:12;5:2;1588:168:3;;;;;;435:35:2;;8:9:-1;5:2;;;30:1;27;20:12;5:2;435:35:2;;;;;;;;;;;;;;;;;;;;;;496:20:3;;8:9:-1;5:2;;;30:1;27;20:12;5:2;496:20:3;;;;;;;;-1:-1:-1;;;;;496:20:3;;;;;;;;;;;;;;729:87:2;;8:9:-1;5:2;;;30:1;27;20:12;5:2;729:87:2;;;;521:27:3;;8:9:-1;5:2;;;30:1;27;20:12;5:2;521:27:3;;;;1360:139;;8:9:-1;5:2;;;30:1;27;20:12;5:2;-1:-1;1360:139:3;-1:-1:-1;;;;;1360:139:3;;;;;901:84:2;;8:9:-1;5:2;;;30:1;27;20:12;5:2;901:84:2;;;;1588:168:3;1165:12;;-1:-1:-1;;;;;1165:12:3;1151:10;:26;1143:35;;;;;;1678:12;;;1671:5;;1650:41;;-1:-1:-1;;;;;1678:12:3;;;;1671:5;;;;1650:41;;;1706:12;;;;1698:20;;-1:-1:-1;;1698:20:3;;;-1:-1:-1;;;;;1706:12:3;;1698:20;;;;1725:25;;;1588:168::o;435:35:2:-;;;;;;;;;:::o;496:20:3:-;;;-1:-1:-1;;;;;496:20:3;;:::o;729:87:2:-;1003:5:3;;-1:-1:-1;;;;;1003:5:3;989:10;:19;981:28;;;;;;787:4:2;769:22;;-1:-1:-1;;769:22:2;;;;;801:10;;;;769:22;;801:10;729:87::o;521:27:3:-;;;-1:-1:-1;;;;;521:27:3;;:::o;1360:139::-;1003:5;;-1:-1:-1;;;;;1003:5:3;989:10;:19;981:28;;;;;;-1:-1:-1;;;;;1438:23:3;;;;1430:32;;;;;;1469:12;:24;;-1:-1:-1;;1469:24:3;-1:-1:-1;;;;;1469:24:3;;;;;;;;;;1360:139::o;901:84:2:-;1003:5:3;;-1:-1:-1;;;;;1003:5:3;989:10;:19;981:28;;;;;;939:15:2;:23;;-1:-1:-1;;939:23:2;;;972:8;;;;957:5;;972:8;901:84::o",
+  "source": "pragma solidity ^0.4.24;\r\n\r\nimport './Ownable.sol';\r\n\r\n/**\r\n* @title Lockable\r\n* @dev Base contract which allows children to lock certain methods from being called by clients.\r\n* Locked methods are deemed unsafe by default, but must be implemented in children functionality to adhere by\r\n* some inherited standard, for example. \r\n*/\r\n\r\ncontract Lockable is Ownable {\r\n\r\n\t// Events\r\n\tevent Unlocked();\r\n\tevent Locked();\r\n\r\n\t// Fields\r\n\tbool public isMethodEnabled = false;\r\n\r\n\t// Modifiers\r\n\t/**\r\n\t* @dev Modifier that disables functions by default unless they are explicitly enabled\r\n\t*/\r\n\tmodifier whenUnlocked() {\r\n\t\trequire(isMethodEnabled);\r\n\t\t_;\r\n\t}\r\n\r\n\t// Methods\r\n\t/**\r\n\t* @dev called by the owner to enable method\r\n\t*/\r\n\tfunction unlock() onlyOwner public {\r\n\t\tisMethodEnabled = true;\r\n\t\temit Unlocked();\r\n\t}\r\n\r\n\t/**\r\n\t* @dev called by the owner to disable method, back to normal state\r\n\t*/\r\n\tfunction lock() onlyOwner public {\r\n\t\tisMethodEnabled = false;\r\n\t\temit Locked();\r\n\t}\r\n\r\n}",
+  "sourcePath": "C:\\Users\\npain\\Projects\\Carbon\\fiat_gateway\\contracts\\helpers\\Lockable.sol",
+  "ast": {
+    "absolutePath": "/C/Users/npain/Projects/Carbon/fiat_gateway/contracts/helpers/Lockable.sol",
+    "exportedSymbols": {
+      "Lockable": [
+        225
+      ]
+    },
+    "id": 226,
+    "nodeType": "SourceUnit",
+    "nodes": [
+      {
+        "id": 180,
+        "literals": [
+          "solidity",
+          "^",
+          "0.4",
+          ".24"
+        ],
+        "nodeType": "PragmaDirective",
+        "src": "0:24:2"
+      },
+      {
+        "absolutePath": "/C/Users/npain/Projects/Carbon/fiat_gateway/contracts/helpers/Ownable.sol",
+        "file": "./Ownable.sol",
+        "id": 181,
+        "nodeType": "ImportDirective",
+        "scope": 226,
+        "sourceUnit": 317,
+        "src": "28:23:2",
+        "symbolAliases": [],
+        "unitAlias": ""
+      },
+      {
+        "baseContracts": [
+          {
+            "arguments": null,
+            "baseName": {
+              "contractScope": null,
+              "id": 182,
+              "name": "Ownable",
+              "nodeType": "UserDefinedTypeName",
+              "referencedDeclaration": 316,
+              "src": "357:7:2",
+              "typeDescriptions": {
+                "typeIdentifier": "t_contract$_Ownable_$316",
+                "typeString": "contract Ownable"
+              }
+            },
+            "id": 183,
+            "nodeType": "InheritanceSpecifier",
+            "src": "357:7:2"
+          }
+        ],
+        "contractDependencies": [
+          316
+        ],
+        "contractKind": "contract",
+        "documentation": "@title Lockable\r\n@dev Base contract which allows children to lock certain methods from being called by clients.\r\nLocked methods are deemed unsafe by default, but must be implemented in children functionality to adhere by\r\nsome inherited standard, for example. \r",
+        "fullyImplemented": true,
+        "id": 225,
+        "linearizedBaseContracts": [
+          225,
+          316
+        ],
+        "name": "Lockable",
+        "nodeType": "ContractDefinition",
+        "nodes": [
+          {
+            "anonymous": false,
+            "documentation": null,
+            "id": 185,
+            "name": "Unlocked",
+            "nodeType": "EventDefinition",
+            "parameters": {
+              "id": 184,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "397:2:2"
+            },
+            "src": "383:17:2"
+          },
+          {
+            "anonymous": false,
+            "documentation": null,
+            "id": 187,
+            "name": "Locked",
+            "nodeType": "EventDefinition",
+            "parameters": {
+              "id": 186,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "415:2:2"
+            },
+            "src": "403:15:2"
+          },
+          {
+            "constant": false,
+            "id": 190,
+            "name": "isMethodEnabled",
+            "nodeType": "VariableDeclaration",
+            "scope": 225,
+            "src": "435:35:2",
+            "stateVariable": true,
+            "storageLocation": "default",
+            "typeDescriptions": {
+              "typeIdentifier": "t_bool",
+              "typeString": "bool"
+            },
+            "typeName": {
+              "id": 188,
+              "name": "bool",
+              "nodeType": "ElementaryTypeName",
+              "src": "435:4:2",
+              "typeDescriptions": {
+                "typeIdentifier": "t_bool",
+                "typeString": "bool"
+              }
+            },
+            "value": {
+              "argumentTypes": null,
+              "hexValue": "66616c7365",
+              "id": 189,
+              "isConstant": false,
+              "isLValue": false,
+              "isPure": true,
+              "kind": "bool",
+              "lValueRequested": false,
+              "nodeType": "Literal",
+              "src": "465:5:2",
+              "subdenomination": null,
+              "typeDescriptions": {
+                "typeIdentifier": "t_bool",
+                "typeString": "bool"
+              },
+              "value": "false"
+            },
+            "visibility": "public"
+          },
+          {
+            "body": {
+              "id": 197,
+              "nodeType": "Block",
+              "src": "614:40:2",
+              "statements": [
+                {
+                  "expression": {
+                    "argumentTypes": null,
+                    "arguments": [
+                      {
+                        "argumentTypes": null,
+                        "id": 193,
+                        "name": "isMethodEnabled",
+                        "nodeType": "Identifier",
+                        "overloadedDeclarations": [],
+                        "referencedDeclaration": 190,
+                        "src": "627:15:2",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_bool",
+                          "typeString": "bool"
+                        }
+                      }
+                    ],
+                    "expression": {
+                      "argumentTypes": [
+                        {
+                          "typeIdentifier": "t_bool",
+                          "typeString": "bool"
+                        }
+                      ],
+                      "id": 192,
+                      "name": "require",
+                      "nodeType": "Identifier",
+                      "overloadedDeclarations": [
+                        3864,
+                        3865
+                      ],
+                      "referencedDeclaration": 3864,
+                      "src": "619:7:2",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_function_require_pure$_t_bool_$returns$__$",
+                        "typeString": "function (bool) pure"
+                      }
+                    },
+                    "id": 194,
+                    "isConstant": false,
+                    "isLValue": false,
+                    "isPure": false,
+                    "kind": "functionCall",
+                    "lValueRequested": false,
+                    "names": [],
+                    "nodeType": "FunctionCall",
+                    "src": "619:24:2",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_tuple$__$",
+                      "typeString": "tuple()"
+                    }
+                  },
+                  "id": 195,
+                  "nodeType": "ExpressionStatement",
+                  "src": "619:24:2"
+                },
+                {
+                  "id": 196,
+                  "nodeType": "PlaceholderStatement",
+                  "src": "648:1:2"
+                }
+              ]
+            },
+            "documentation": "@dev Modifier that disables functions by default unless they are explicitly enabled\r",
+            "id": 198,
+            "name": "whenUnlocked",
+            "nodeType": "ModifierDefinition",
+            "parameters": {
+              "id": 191,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "611:2:2"
+            },
+            "src": "590:64:2",
+            "visibility": "internal"
+          },
+          {
+            "body": {
+              "id": 210,
+              "nodeType": "Block",
+              "src": "764:52:2",
+              "statements": [
+                {
+                  "expression": {
+                    "argumentTypes": null,
+                    "id": 205,
+                    "isConstant": false,
+                    "isLValue": false,
+                    "isPure": false,
+                    "lValueRequested": false,
+                    "leftHandSide": {
+                      "argumentTypes": null,
+                      "id": 203,
+                      "name": "isMethodEnabled",
+                      "nodeType": "Identifier",
+                      "overloadedDeclarations": [],
+                      "referencedDeclaration": 190,
+                      "src": "769:15:2",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_bool",
+                        "typeString": "bool"
+                      }
+                    },
+                    "nodeType": "Assignment",
+                    "operator": "=",
+                    "rightHandSide": {
+                      "argumentTypes": null,
+                      "hexValue": "74727565",
+                      "id": 204,
+                      "isConstant": false,
+                      "isLValue": false,
+                      "isPure": true,
+                      "kind": "bool",
+                      "lValueRequested": false,
+                      "nodeType": "Literal",
+                      "src": "787:4:2",
+                      "subdenomination": null,
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_bool",
+                        "typeString": "bool"
+                      },
+                      "value": "true"
+                    },
+                    "src": "769:22:2",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_bool",
+                      "typeString": "bool"
+                    }
+                  },
+                  "id": 206,
+                  "nodeType": "ExpressionStatement",
+                  "src": "769:22:2"
+                },
+                {
+                  "eventCall": {
+                    "argumentTypes": null,
+                    "arguments": [],
+                    "expression": {
+                      "argumentTypes": [],
+                      "id": 207,
+                      "name": "Unlocked",
+                      "nodeType": "Identifier",
+                      "overloadedDeclarations": [],
+                      "referencedDeclaration": 185,
+                      "src": "801:8:2",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_function_event_nonpayable$__$returns$__$",
+                        "typeString": "function ()"
+                      }
+                    },
+                    "id": 208,
+                    "isConstant": false,
+                    "isLValue": false,
+                    "isPure": false,
+                    "kind": "functionCall",
+                    "lValueRequested": false,
+                    "names": [],
+                    "nodeType": "FunctionCall",
+                    "src": "801:10:2",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_tuple$__$",
+                      "typeString": "tuple()"
+                    }
+                  },
+                  "id": 209,
+                  "nodeType": "EmitStatement",
+                  "src": "796:15:2"
+                }
+              ]
+            },
+            "documentation": "@dev called by the owner to enable method\r",
+            "id": 211,
+            "implemented": true,
+            "isConstructor": false,
+            "isDeclaredConst": false,
+            "modifiers": [
+              {
+                "arguments": null,
+                "id": 201,
+                "modifierName": {
+                  "argumentTypes": null,
+                  "id": 200,
+                  "name": "onlyOwner",
+                  "nodeType": "Identifier",
+                  "overloadedDeclarations": [],
+                  "referencedDeclaration": 263,
+                  "src": "747:9:2",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_modifier$__$",
+                    "typeString": "modifier ()"
+                  }
+                },
+                "nodeType": "ModifierInvocation",
+                "src": "747:9:2"
+              }
+            ],
+            "name": "unlock",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 199,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "744:2:2"
+            },
+            "payable": false,
+            "returnParameters": {
+              "id": 202,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "764:0:2"
+            },
+            "scope": 225,
+            "src": "729:87:2",
+            "stateMutability": "nonpayable",
+            "superFunction": null,
+            "visibility": "public"
+          },
+          {
+            "body": {
+              "id": 223,
+              "nodeType": "Block",
+              "src": "934:51:2",
+              "statements": [
+                {
+                  "expression": {
+                    "argumentTypes": null,
+                    "id": 218,
+                    "isConstant": false,
+                    "isLValue": false,
+                    "isPure": false,
+                    "lValueRequested": false,
+                    "leftHandSide": {
+                      "argumentTypes": null,
+                      "id": 216,
+                      "name": "isMethodEnabled",
+                      "nodeType": "Identifier",
+                      "overloadedDeclarations": [],
+                      "referencedDeclaration": 190,
+                      "src": "939:15:2",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_bool",
+                        "typeString": "bool"
+                      }
+                    },
+                    "nodeType": "Assignment",
+                    "operator": "=",
+                    "rightHandSide": {
+                      "argumentTypes": null,
+                      "hexValue": "66616c7365",
+                      "id": 217,
+                      "isConstant": false,
+                      "isLValue": false,
+                      "isPure": true,
+                      "kind": "bool",
+                      "lValueRequested": false,
+                      "nodeType": "Literal",
+                      "src": "957:5:2",
+                      "subdenomination": null,
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_bool",
+                        "typeString": "bool"
+                      },
+                      "value": "false"
+                    },
+                    "src": "939:23:2",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_bool",
+                      "typeString": "bool"
+                    }
+                  },
+                  "id": 219,
+                  "nodeType": "ExpressionStatement",
+                  "src": "939:23:2"
+                },
+                {
+                  "eventCall": {
+                    "argumentTypes": null,
+                    "arguments": [],
+                    "expression": {
+                      "argumentTypes": [],
+                      "id": 220,
+                      "name": "Locked",
+                      "nodeType": "Identifier",
+                      "overloadedDeclarations": [],
+                      "referencedDeclaration": 187,
+                      "src": "972:6:2",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_function_event_nonpayable$__$returns$__$",
+                        "typeString": "function ()"
+                      }
+                    },
+                    "id": 221,
+                    "isConstant": false,
+                    "isLValue": false,
+                    "isPure": false,
+                    "kind": "functionCall",
+                    "lValueRequested": false,
+                    "names": [],
+                    "nodeType": "FunctionCall",
+                    "src": "972:8:2",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_tuple$__$",
+                      "typeString": "tuple()"
+                    }
+                  },
+                  "id": 222,
+                  "nodeType": "EmitStatement",
+                  "src": "967:13:2"
+                }
+              ]
+            },
+            "documentation": "@dev called by the owner to disable method, back to normal state\r",
+            "id": 224,
+            "implemented": true,
+            "isConstructor": false,
+            "isDeclaredConst": false,
+            "modifiers": [
+              {
+                "arguments": null,
+                "id": 214,
+                "modifierName": {
+                  "argumentTypes": null,
+                  "id": 213,
+                  "name": "onlyOwner",
+                  "nodeType": "Identifier",
+                  "overloadedDeclarations": [],
+                  "referencedDeclaration": 263,
+                  "src": "917:9:2",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_modifier$__$",
+                    "typeString": "modifier ()"
+                  }
+                },
+                "nodeType": "ModifierInvocation",
+                "src": "917:9:2"
+              }
+            ],
+            "name": "lock",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 212,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "914:2:2"
+            },
+            "payable": false,
+            "returnParameters": {
+              "id": 215,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "934:0:2"
+            },
+            "scope": 225,
+            "src": "901:84:2",
+            "stateMutability": "nonpayable",
+            "superFunction": null,
+            "visibility": "public"
+          }
+        ],
+        "scope": 226,
+        "src": "336:654:2"
+      }
+    ],
+    "src": "0:990:2"
+  },
+  "legacyAST": {
+    "absolutePath": "/C/Users/npain/Projects/Carbon/fiat_gateway/contracts/helpers/Lockable.sol",
+    "exportedSymbols": {
+      "Lockable": [
+        225
+      ]
+    },
+    "id": 226,
+    "nodeType": "SourceUnit",
+    "nodes": [
+      {
+        "id": 180,
+        "literals": [
+          "solidity",
+          "^",
+          "0.4",
+          ".24"
+        ],
+        "nodeType": "PragmaDirective",
+        "src": "0:24:2"
+      },
+      {
+        "absolutePath": "/C/Users/npain/Projects/Carbon/fiat_gateway/contracts/helpers/Ownable.sol",
+        "file": "./Ownable.sol",
+        "id": 181,
+        "nodeType": "ImportDirective",
+        "scope": 226,
+        "sourceUnit": 317,
+        "src": "28:23:2",
+        "symbolAliases": [],
+        "unitAlias": ""
+      },
+      {
+        "baseContracts": [
+          {
+            "arguments": null,
+            "baseName": {
+              "contractScope": null,
+              "id": 182,
+              "name": "Ownable",
+              "nodeType": "UserDefinedTypeName",
+              "referencedDeclaration": 316,
+              "src": "357:7:2",
+              "typeDescriptions": {
+                "typeIdentifier": "t_contract$_Ownable_$316",
+                "typeString": "contract Ownable"
+              }
+            },
+            "id": 183,
+            "nodeType": "InheritanceSpecifier",
+            "src": "357:7:2"
+          }
+        ],
+        "contractDependencies": [
+          316
+        ],
+        "contractKind": "contract",
+        "documentation": "@title Lockable\r\n@dev Base contract which allows children to lock certain methods from being called by clients.\r\nLocked methods are deemed unsafe by default, but must be implemented in children functionality to adhere by\r\nsome inherited standard, for example. \r",
+        "fullyImplemented": true,
+        "id": 225,
+        "linearizedBaseContracts": [
+          225,
+          316
+        ],
+        "name": "Lockable",
+        "nodeType": "ContractDefinition",
+        "nodes": [
+          {
+            "anonymous": false,
+            "documentation": null,
+            "id": 185,
+            "name": "Unlocked",
+            "nodeType": "EventDefinition",
+            "parameters": {
+              "id": 184,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "397:2:2"
+            },
+            "src": "383:17:2"
+          },
+          {
+            "anonymous": false,
+            "documentation": null,
+            "id": 187,
+            "name": "Locked",
+            "nodeType": "EventDefinition",
+            "parameters": {
+              "id": 186,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "415:2:2"
+            },
+            "src": "403:15:2"
+          },
+          {
+            "constant": false,
+            "id": 190,
+            "name": "isMethodEnabled",
+            "nodeType": "VariableDeclaration",
+            "scope": 225,
+            "src": "435:35:2",
+            "stateVariable": true,
+            "storageLocation": "default",
+            "typeDescriptions": {
+              "typeIdentifier": "t_bool",
+              "typeString": "bool"
+            },
+            "typeName": {
+              "id": 188,
+              "name": "bool",
+              "nodeType": "ElementaryTypeName",
+              "src": "435:4:2",
+              "typeDescriptions": {
+                "typeIdentifier": "t_bool",
+                "typeString": "bool"
+              }
+            },
+            "value": {
+              "argumentTypes": null,
+              "hexValue": "66616c7365",
+              "id": 189,
+              "isConstant": false,
+              "isLValue": false,
+              "isPure": true,
+              "kind": "bool",
+              "lValueRequested": false,
+              "nodeType": "Literal",
+              "src": "465:5:2",
+              "subdenomination": null,
+              "typeDescriptions": {
+                "typeIdentifier": "t_bool",
+                "typeString": "bool"
+              },
+              "value": "false"
+            },
+            "visibility": "public"
+          },
+          {
+            "body": {
+              "id": 197,
+              "nodeType": "Block",
+              "src": "614:40:2",
+              "statements": [
+                {
+                  "expression": {
+                    "argumentTypes": null,
+                    "arguments": [
+                      {
+                        "argumentTypes": null,
+                        "id": 193,
+                        "name": "isMethodEnabled",
+                        "nodeType": "Identifier",
+                        "overloadedDeclarations": [],
+                        "referencedDeclaration": 190,
+                        "src": "627:15:2",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_bool",
+                          "typeString": "bool"
+                        }
+                      }
+                    ],
+                    "expression": {
+                      "argumentTypes": [
+                        {
+                          "typeIdentifier": "t_bool",
+                          "typeString": "bool"
+                        }
+                      ],
+                      "id": 192,
+                      "name": "require",
+                      "nodeType": "Identifier",
+                      "overloadedDeclarations": [
+                        3864,
+                        3865
+                      ],
+                      "referencedDeclaration": 3864,
+                      "src": "619:7:2",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_function_require_pure$_t_bool_$returns$__$",
+                        "typeString": "function (bool) pure"
+                      }
+                    },
+                    "id": 194,
+                    "isConstant": false,
+                    "isLValue": false,
+                    "isPure": false,
+                    "kind": "functionCall",
+                    "lValueRequested": false,
+                    "names": [],
+                    "nodeType": "FunctionCall",
+                    "src": "619:24:2",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_tuple$__$",
+                      "typeString": "tuple()"
+                    }
+                  },
+                  "id": 195,
+                  "nodeType": "ExpressionStatement",
+                  "src": "619:24:2"
+                },
+                {
+                  "id": 196,
+                  "nodeType": "PlaceholderStatement",
+                  "src": "648:1:2"
+                }
+              ]
+            },
+            "documentation": "@dev Modifier that disables functions by default unless they are explicitly enabled\r",
+            "id": 198,
+            "name": "whenUnlocked",
+            "nodeType": "ModifierDefinition",
+            "parameters": {
+              "id": 191,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "611:2:2"
+            },
+            "src": "590:64:2",
+            "visibility": "internal"
+          },
+          {
+            "body": {
+              "id": 210,
+              "nodeType": "Block",
+              "src": "764:52:2",
+              "statements": [
+                {
+                  "expression": {
+                    "argumentTypes": null,
+                    "id": 205,
+                    "isConstant": false,
+                    "isLValue": false,
+                    "isPure": false,
+                    "lValueRequested": false,
+                    "leftHandSide": {
+                      "argumentTypes": null,
+                      "id": 203,
+                      "name": "isMethodEnabled",
+                      "nodeType": "Identifier",
+                      "overloadedDeclarations": [],
+                      "referencedDeclaration": 190,
+                      "src": "769:15:2",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_bool",
+                        "typeString": "bool"
+                      }
+                    },
+                    "nodeType": "Assignment",
+                    "operator": "=",
+                    "rightHandSide": {
+                      "argumentTypes": null,
+                      "hexValue": "74727565",
+                      "id": 204,
+                      "isConstant": false,
+                      "isLValue": false,
+                      "isPure": true,
+                      "kind": "bool",
+                      "lValueRequested": false,
+                      "nodeType": "Literal",
+                      "src": "787:4:2",
+                      "subdenomination": null,
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_bool",
+                        "typeString": "bool"
+                      },
+                      "value": "true"
+                    },
+                    "src": "769:22:2",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_bool",
+                      "typeString": "bool"
+                    }
+                  },
+                  "id": 206,
+                  "nodeType": "ExpressionStatement",
+                  "src": "769:22:2"
+                },
+                {
+                  "eventCall": {
+                    "argumentTypes": null,
+                    "arguments": [],
+                    "expression": {
+                      "argumentTypes": [],
+                      "id": 207,
+                      "name": "Unlocked",
+                      "nodeType": "Identifier",
+                      "overloadedDeclarations": [],
+                      "referencedDeclaration": 185,
+                      "src": "801:8:2",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_function_event_nonpayable$__$returns$__$",
+                        "typeString": "function ()"
+                      }
+                    },
+                    "id": 208,
+                    "isConstant": false,
+                    "isLValue": false,
+                    "isPure": false,
+                    "kind": "functionCall",
+                    "lValueRequested": false,
+                    "names": [],
+                    "nodeType": "FunctionCall",
+                    "src": "801:10:2",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_tuple$__$",
+                      "typeString": "tuple()"
+                    }
+                  },
+                  "id": 209,
+                  "nodeType": "EmitStatement",
+                  "src": "796:15:2"
+                }
+              ]
+            },
+            "documentation": "@dev called by the owner to enable method\r",
+            "id": 211,
+            "implemented": true,
+            "isConstructor": false,
+            "isDeclaredConst": false,
+            "modifiers": [
+              {
+                "arguments": null,
+                "id": 201,
+                "modifierName": {
+                  "argumentTypes": null,
+                  "id": 200,
+                  "name": "onlyOwner",
+                  "nodeType": "Identifier",
+                  "overloadedDeclarations": [],
+                  "referencedDeclaration": 263,
+                  "src": "747:9:2",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_modifier$__$",
+                    "typeString": "modifier ()"
+                  }
+                },
+                "nodeType": "ModifierInvocation",
+                "src": "747:9:2"
+              }
+            ],
+            "name": "unlock",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 199,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "744:2:2"
+            },
+            "payable": false,
+            "returnParameters": {
+              "id": 202,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "764:0:2"
+            },
+            "scope": 225,
+            "src": "729:87:2",
+            "stateMutability": "nonpayable",
+            "superFunction": null,
+            "visibility": "public"
+          },
+          {
+            "body": {
+              "id": 223,
+              "nodeType": "Block",
+              "src": "934:51:2",
+              "statements": [
+                {
+                  "expression": {
+                    "argumentTypes": null,
+                    "id": 218,
+                    "isConstant": false,
+                    "isLValue": false,
+                    "isPure": false,
+                    "lValueRequested": false,
+                    "leftHandSide": {
+                      "argumentTypes": null,
+                      "id": 216,
+                      "name": "isMethodEnabled",
+                      "nodeType": "Identifier",
+                      "overloadedDeclarations": [],
+                      "referencedDeclaration": 190,
+                      "src": "939:15:2",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_bool",
+                        "typeString": "bool"
+                      }
+                    },
+                    "nodeType": "Assignment",
+                    "operator": "=",
+                    "rightHandSide": {
+                      "argumentTypes": null,
+                      "hexValue": "66616c7365",
+                      "id": 217,
+                      "isConstant": false,
+                      "isLValue": false,
+                      "isPure": true,
+                      "kind": "bool",
+                      "lValueRequested": false,
+                      "nodeType": "Literal",
+                      "src": "957:5:2",
+                      "subdenomination": null,
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_bool",
+                        "typeString": "bool"
+                      },
+                      "value": "false"
+                    },
+                    "src": "939:23:2",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_bool",
+                      "typeString": "bool"
+                    }
+                  },
+                  "id": 219,
+                  "nodeType": "ExpressionStatement",
+                  "src": "939:23:2"
+                },
+                {
+                  "eventCall": {
+                    "argumentTypes": null,
+                    "arguments": [],
+                    "expression": {
+                      "argumentTypes": [],
+                      "id": 220,
+                      "name": "Locked",
+                      "nodeType": "Identifier",
+                      "overloadedDeclarations": [],
+                      "referencedDeclaration": 187,
+                      "src": "972:6:2",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_function_event_nonpayable$__$returns$__$",
+                        "typeString": "function ()"
+                      }
+                    },
+                    "id": 221,
+                    "isConstant": false,
+                    "isLValue": false,
+                    "isPure": false,
+                    "kind": "functionCall",
+                    "lValueRequested": false,
+                    "names": [],
+                    "nodeType": "FunctionCall",
+                    "src": "972:8:2",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_tuple$__$",
+                      "typeString": "tuple()"
+                    }
+                  },
+                  "id": 222,
+                  "nodeType": "EmitStatement",
+                  "src": "967:13:2"
+                }
+              ]
+            },
+            "documentation": "@dev called by the owner to disable method, back to normal state\r",
+            "id": 224,
+            "implemented": true,
+            "isConstructor": false,
+            "isDeclaredConst": false,
+            "modifiers": [
+              {
+                "arguments": null,
+                "id": 214,
+                "modifierName": {
+                  "argumentTypes": null,
+                  "id": 213,
+                  "name": "onlyOwner",
+                  "nodeType": "Identifier",
+                  "overloadedDeclarations": [],
+                  "referencedDeclaration": 263,
+                  "src": "917:9:2",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_modifier$__$",
+                    "typeString": "modifier ()"
+                  }
+                },
+                "nodeType": "ModifierInvocation",
+                "src": "917:9:2"
+              }
+            ],
+            "name": "lock",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 212,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "914:2:2"
+            },
+            "payable": false,
+            "returnParameters": {
+              "id": 215,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "934:0:2"
+            },
+            "scope": 225,
+            "src": "901:84:2",
+            "stateMutability": "nonpayable",
+            "superFunction": null,
+            "visibility": "public"
+          }
+        ],
+        "scope": 226,
+        "src": "336:654:2"
+      }
+    ],
+    "src": "0:990:2"
+  },
+  "compiler": {
+    "name": "solc",
+    "version": "0.4.24+commit.e67f0147.Emscripten.clang"
+  },
+  "networks": {},
+  "schemaVersion": "2.0.1",
+  "updatedAt": "2018-10-06T05:55:34.429Z"
+}

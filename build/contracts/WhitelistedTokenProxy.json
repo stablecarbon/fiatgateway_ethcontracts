@@ -1,0 +1,1021 @@
+{
+  "contractName": "WhitelistedTokenProxy",
+  "abi": [
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "newImplementation",
+          "type": "address"
+        }
+      ],
+      "name": "upgradeTo",
+      "outputs": [],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [],
+      "name": "claimOwnership",
+      "outputs": [],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "implementation",
+      "outputs": [
+        {
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "cusdAddress",
+      "outputs": [
+        {
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "owner",
+      "outputs": [
+        {
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "tokenStorage",
+      "outputs": [
+        {
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "regulator",
+      "outputs": [
+        {
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "pendingOwner",
+      "outputs": [
+        {
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "_newOwner",
+          "type": "address"
+        }
+      ],
+      "name": "transferOwnership",
+      "outputs": [],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "name": "_implementation",
+          "type": "address"
+        },
+        {
+          "name": "_regulator",
+          "type": "address"
+        },
+        {
+          "name": "_cusd",
+          "type": "address"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "constructor"
+    },
+    {
+      "payable": true,
+      "stateMutability": "payable",
+      "type": "fallback"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "name": "oldRegulator",
+          "type": "address"
+        },
+        {
+          "indexed": true,
+          "name": "newRegulator",
+          "type": "address"
+        }
+      ],
+      "name": "ChangedRegulator",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "name": "previousOwner",
+          "type": "address"
+        },
+        {
+          "indexed": true,
+          "name": "newOwner",
+          "type": "address"
+        }
+      ],
+      "name": "OwnershipTransferred",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": false,
+          "name": "implementation",
+          "type": "address"
+        }
+      ],
+      "name": "Upgraded",
+      "type": "event"
+    }
+  ],
+  "bytecode": "0x608060405234801561001057600080fd5b50604051606080610e088339810160408181528251602080850151948301517f6f72672e7a657070656c696e6f732e70726f78792e696d706c656d656e74617485527f696f6e000000000000000000000000000000000000000000000000000000000091850191909152915192839003602301909220919291839083908290600080516020610de8833981519152146100a557fe5b6100b781640100000000610156810204565b506000805433600160a060020a031991821617909155600180548216905560038054909116600160a060020a0383161790556100f161021c565b604051809103906000f08015801561010d573d6000803e3d6000fd5b5060028054600160a060020a0319908116600160a060020a039384161790915560038054821696831696909617909555600480549095169316929092179092555061022c915050565b600061016e8264010000000061046161021482021704565b151561020157604080517f08c379a000000000000000000000000000000000000000000000000000000000815260206004820152603b60248201527f43616e6e6f742073657420612070726f787920696d706c656d656e746174696f60448201527f6e20746f2061206e6f6e2d636f6e747261637420616464726573730000000000606482015290519081900360840190fd5b50600080516020610de883398151915255565b6000903b1190565b604051610718806106d083390190565b6104958061023b6000396000f3006080604052600436106100985763ffffffff7c01000000000000000000000000000000000000000000000000000000006000350416633659cfe681146100a25780634e71e0c8146100c35780635c60da1b146100d8578063636f0cf8146101095780638da5cb5b1461011e578063b199efb514610133578063dd8fee1414610148578063e30c39781461015d578063f2fde38b14610172575b6100a0610193565b005b3480156100ae57600080fd5b506100a0600160a060020a03600435166101ad565b3480156100cf57600080fd5b506100a06101d0565b3480156100e457600080fd5b506100ed610258565b60408051600160a060020a039092168252519081900360200190f35b34801561011557600080fd5b506100ed610267565b34801561012a57600080fd5b506100ed610276565b34801561013f57600080fd5b506100ed610285565b34801561015457600080fd5b506100ed610294565b34801561016957600080fd5b506100ed6102a3565b34801561017e57600080fd5b506100a0600160a060020a03600435166102b2565b61019b6101ab565b6101ab6101a661030d565b610332565b565b600054600160a060020a031633146101c457600080fd5b6101cd81610356565b50565b600154600160a060020a031633146101e757600080fd5b60015460008054604051600160a060020a0393841693909116917f8be0079c531659141344cd1fd0a4f28419497f9722a3daafe3b4186f6b6457e091a3600180546000805473ffffffffffffffffffffffffffffffffffffffff19908116600160a060020a03841617909155169055565b600061026261030d565b905090565b600454600160a060020a031681565b600054600160a060020a031681565b600254600160a060020a031681565b600354600160a060020a031681565b600154600160a060020a031681565b600054600160a060020a031633146102c957600080fd5b600160a060020a03811615156102de57600080fd5b6001805473ffffffffffffffffffffffffffffffffffffffff1916600160a060020a0392909216919091179055565b7f7050c9e0f4ca769c69bd3a8ef740bc37934f8e2c036e5a723fd8ee048ed3f8c35490565b3660008037600080366000845af43d6000803e808015610351573d6000f35b3d6000fd5b61035f8161039e565b60408051600160a060020a038316815290517fbc7cd75a20ee27fd9adebab32041f755214dbc6bffa90cc0225b39da2e5c2d3b9181900360200190a150565b60006103a982610461565b151561043c57604080517f08c379a000000000000000000000000000000000000000000000000000000000815260206004820152603b60248201527f43616e6e6f742073657420612070726f787920696d706c656d656e746174696f60448201527f6e20746f2061206e6f6e2d636f6e747261637420616464726573730000000000606482015290519081900360840190fd5b507f7050c9e0f4ca769c69bd3a8ef740bc37934f8e2c036e5a723fd8ee048ed3f8c355565b6000903b11905600a165627a7a72305820538ffd21bd292e650c4841d0c36d0c7b224c26518db11a330dc5f4dbb6367ddd0029608060405260008054600160a060020a031990811633179091556001805490911690556106e7806100316000396000f3006080604052600436106100e55763ffffffff7c010000000000000000000000000000000000000000000000000000000060003504166318160ddd81146100ea57806321e5383a1461011157806327e235e3146101375780634e71e0c81461015857806355b6ed5c1461016d5780635fd72d161461019457806382838c76146101be5780638da5cb5b146101d657806397d88cd214610207578063cf8eeb7e14610231578063da46098c14610255578063e30443bc1461027f578063e30c3978146102a3578063e468688e146102b8578063f2fde38b146102d0578063f7ea7a3d146102f1575b600080fd5b3480156100f657600080fd5b506100ff610309565b60408051918252519081900360200190f35b34801561011d57600080fd5b50610135600160a060020a036004351660243561030f565b005b34801561014357600080fd5b506100ff600160a060020a036004351661036f565b34801561016457600080fd5b50610135610381565b34801561017957600080fd5b506100ff600160a060020a0360043581169060243516610409565b3480156101a057600080fd5b50610135600160a060020a0360043581169060243516604435610426565b3480156101ca57600080fd5b506101356004356104a4565b3480156101e257600080fd5b506101eb6104d4565b60408051600160a060020a039092168252519081900360200190f35b34801561021357600080fd5b50610135600160a060020a03600435811690602435166044356104e3565b34801561023d57600080fd5b50610135600160a060020a0360043516602435610530565b34801561026157600080fd5b50610135600160a060020a0360043581169060243516604435610570565b34801561028b57600080fd5b50610135600160a060020a03600435166024356105b3565b3480156102af57600080fd5b506101eb6105e6565b3480156102c457600080fd5b506101356004356105f5565b3480156102dc57600080fd5b50610135600160a060020a036004351661061f565b3480156102fd57600080fd5b5061013560043561067a565b60045481565b600054600160a060020a0316331461032657600080fd5b600160a060020a03821660009081526003602052604090205461034f908263ffffffff61069616565b600160a060020a0390921660009081526003602052604090209190915550565b60036020526000908152604090205481565b600154600160a060020a0316331461039857600080fd5b60015460008054604051600160a060020a0393841693909116917f8be0079c531659141344cd1fd0a4f28419497f9722a3daafe3b4186f6b6457e091a3600180546000805473ffffffffffffffffffffffffffffffffffffffff19908116600160a060020a03841617909155169055565b600260209081526000928352604080842090915290825290205481565b600054600160a060020a0316331461043d57600080fd5b600160a060020a03808416600090815260026020908152604080832093861683529290522054610473908263ffffffff61069616565b600160a060020a03938416600090815260026020908152604080832095909616825293909352929091209190915550565b600054600160a060020a031633146104bb57600080fd5b6004546104ce908263ffffffff6106a916565b60045550565b600054600160a060020a031681565b600054600160a060020a031633146104fa57600080fd5b600160a060020a03808416600090815260026020908152604080832093861683529290522054610473908263ffffffff6106a916565b600054600160a060020a0316331461054757600080fd5b600160a060020a03821660009081526003602052604090205461034f908263ffffffff6106a916565b600054600160a060020a0316331461058757600080fd5b600160a060020a0392831660009081526002602090815260408083209490951682529290925291902055565b600054600160a060020a031633146105ca57600080fd5b600160a060020a03909116600090815260036020526040902055565b600154600160a060020a031681565b600054600160a060020a0316331461060c57600080fd5b6004546104ce908263ffffffff61069616565b600054600160a060020a0316331461063657600080fd5b600160a060020a038116151561064b57600080fd5b6001805473ffffffffffffffffffffffffffffffffffffffff1916600160a060020a0392909216919091179055565b600054600160a060020a0316331461069157600080fd5b600455565b818101828110156106a357fe5b92915050565b6000828211156106b557fe5b509003905600a165627a7a72305820aedc8f8f5d2ec047db8a77ac7af64d87a9e84df392b69e942ea0ab5f4866c42500297050c9e0f4ca769c69bd3a8ef740bc37934f8e2c036e5a723fd8ee048ed3f8c3",
+  "deployedBytecode": "0x6080604052600436106100985763ffffffff7c01000000000000000000000000000000000000000000000000000000006000350416633659cfe681146100a25780634e71e0c8146100c35780635c60da1b146100d8578063636f0cf8146101095780638da5cb5b1461011e578063b199efb514610133578063dd8fee1414610148578063e30c39781461015d578063f2fde38b14610172575b6100a0610193565b005b3480156100ae57600080fd5b506100a0600160a060020a03600435166101ad565b3480156100cf57600080fd5b506100a06101d0565b3480156100e457600080fd5b506100ed610258565b60408051600160a060020a039092168252519081900360200190f35b34801561011557600080fd5b506100ed610267565b34801561012a57600080fd5b506100ed610276565b34801561013f57600080fd5b506100ed610285565b34801561015457600080fd5b506100ed610294565b34801561016957600080fd5b506100ed6102a3565b34801561017e57600080fd5b506100a0600160a060020a03600435166102b2565b61019b6101ab565b6101ab6101a661030d565b610332565b565b600054600160a060020a031633146101c457600080fd5b6101cd81610356565b50565b600154600160a060020a031633146101e757600080fd5b60015460008054604051600160a060020a0393841693909116917f8be0079c531659141344cd1fd0a4f28419497f9722a3daafe3b4186f6b6457e091a3600180546000805473ffffffffffffffffffffffffffffffffffffffff19908116600160a060020a03841617909155169055565b600061026261030d565b905090565b600454600160a060020a031681565b600054600160a060020a031681565b600254600160a060020a031681565b600354600160a060020a031681565b600154600160a060020a031681565b600054600160a060020a031633146102c957600080fd5b600160a060020a03811615156102de57600080fd5b6001805473ffffffffffffffffffffffffffffffffffffffff1916600160a060020a0392909216919091179055565b7f7050c9e0f4ca769c69bd3a8ef740bc37934f8e2c036e5a723fd8ee048ed3f8c35490565b3660008037600080366000845af43d6000803e808015610351573d6000f35b3d6000fd5b61035f8161039e565b60408051600160a060020a038316815290517fbc7cd75a20ee27fd9adebab32041f755214dbc6bffa90cc0225b39da2e5c2d3b9181900360200190a150565b60006103a982610461565b151561043c57604080517f08c379a000000000000000000000000000000000000000000000000000000000815260206004820152603b60248201527f43616e6e6f742073657420612070726f787920696d706c656d656e746174696f60448201527f6e20746f2061206e6f6e2d636f6e747261637420616464726573730000000000606482015290519081900360840190fd5b507f7050c9e0f4ca769c69bd3a8ef740bc37934f8e2c036e5a723fd8ee048ed3f8c355565b6000903b11905600a165627a7a72305820538ffd21bd292e650c4841d0c36d0c7b224c26518db11a330dc5f4dbb6367ddd0029",
+  "sourceMap": "405:405:16:-;;;506:301;8:9:-1;5:2;;;30:1;27;20:12;5:2;506:301:16;;;;;;;;;;;;;;;;;;;;;;;;;1043:48:22;;;;;;;;;;;;;;;;;;;;;;506:301:16;;;;;;;;;-1:-1:-1;;;;;;;;;;;1020:71:22;1013:79;;;;1099:35;1118:15;1099:18;;;;:35;:::i;:::-;-1:-1:-1;812:5:3;:18;;820:10;-1:-1:-1;;;;;;812:18:3;;;;;;;-1:-1:-1;837:25:3;;;;;;929:9:13;:33;;;;;-1:-1:-1;;;;;929:33:13;;;;;988:30;;:::i;:::-;;;;;;;;;;;8:9:-1;5:2;;;45:16;42:1;39;24:38;77:16;74:1;67:27;5:2;-1:-1;973:12:13;:45;;-1:-1:-1;;;;;;973:45:13;;;-1:-1:-1;;;;;973:45:13;;;;;;;716:9:16;:49;;;;;;;;;;;;;;778:11;:19;;;;;;;;;;;;;;-1:-1:-1;405:405:16;;-1:-1:-1;;405:405:16;1822:289:22;2012:12;1899:42;1923:17;1899:23;;;;;;:42;:::i;:::-;1891:114;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;-1:-1:-1;;;;;;;;;;;;2070:31:22;2062:45::o;437:576:17:-;494:4;969:17;;1000:8;;437:576::o;405:405:16:-;;;;;;;;;;:::o;:::-;;;;;;;",
+  "deployedSourceMap": "405:405:16:-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;454:11:21;:9;:11::i;:::-;405:405:16;1225:111:13;;8:9:-1;5:2;;;30:1;27;20:12;5:2;-1:-1;1225:111:13;;;-1:-1:-1;;;;;1225:111:13;;;1588:168:3;;8:9:-1;5:2;;;30:1;27;20:12;5:2;1588:168:3;;;;1413:99:13;;8:9:-1;5:2;;;30:1;27;20:12;5:2;1413:99:13;;;;;;;;-1:-1:-1;;;;;1413:99:13;;;;;;;;;;;;;;469:26:16;;8:9:-1;5:2;;;30:1;27;20:12;5:2;469:26:16;;;;496:20:3;;8:9:-1;5:2;;;30:1;27;20:12;5:2;496:20:3;;;;497:44:13;;8:9:-1;5:2;;;30:1;27;20:12;5:2;497:44:13;;;;548:26;;8:9:-1;5:2;;;30:1;27;20:12;5:2;548:26:13;;;;521:27:3;;8:9:-1;5:2;;;30:1;27;20:12;5:2;521:27:3;;;;1360:139;;8:9:-1;5:2;;;30:1;27;20:12;5:2;-1:-1;1360:139:3;;;-1:-1:-1;;;;;1360:139:3;;;1953:90:21;1989:15;:13;:15::i;:::-;2010:28;2020:17;:15;:17::i;:::-;2010:9;:28::i;:::-;1953:90::o;1225:111:13:-;1003:5:3;;-1:-1:-1;;;;;1003:5:3;989:10;:19;981:28;;;;;;1299:29:13;1310:17;1299:10;:29::i;:::-;1225:111;:::o;1588:168:3:-;1165:12;;-1:-1:-1;;;;;1165:12:3;1151:10;:26;1143:35;;;;;;1678:12;;;1671:5;;1650:41;;-1:-1:-1;;;;;1678:12:3;;;;1671:5;;;;1650:41;;;1706:12;;;;1698:20;;-1:-1:-1;;;;;1706:12:3;;-1:-1:-1;;1698:20:3;;;;;;;1725:25;;;1588:168::o;1413:99:13:-;1460:7;1487:17;:15;:17::i;:::-;1480:24;;1413:99;:::o;469:26:16:-;;;-1:-1:-1;;;;;469:26:16;;:::o;496:20:3:-;;;-1:-1:-1;;;;;496:20:3;;:::o;497:44:13:-;;;-1:-1:-1;;;;;497:44:13;;:::o;548:26::-;;;-1:-1:-1;;;;;548:26:13;;:::o;521:27:3:-;;;-1:-1:-1;;;;;521:27:3;;:::o;1360:139::-;1003:5;;-1:-1:-1;;;;;1003:5:3;989:10;:19;981:28;;;;;;-1:-1:-1;;;;;1438:23:3;;;;1430:32;;;;;;1469:12;:24;;-1:-1:-1;;1469:24:3;-1:-1:-1;;;;;1469:24:3;;;;;;;;;;1360:139::o;1252:156:22:-;781:66;1387:11;;1371:33::o;879:731:21:-;1181:12;1178:1;1175;1162:32;1371:1;1368;1354:12;1351:1;1335:14;1330:3;1317:56;1435:14;1432:1;1429;1414:36;1465:6;1520:36;;;;1583:14;1580:1;1573:25;1520:36;1539:14;1536:1;1529:25;1543:142:22;1605:37;1624:17;1605:18;:37::i;:::-;1653:27;;;-1:-1:-1;;;;;1653:27:22;;;;;;;;;;;;;;;1543:142;:::o;1822:289::-;2012:12;1899:42;1923:17;1899:23;:42::i;:::-;1891:114;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;-1:-1:-1;781:66:22;2070:31;2062:45::o;437:576:17:-;494:4;969:17;;1000:8;;437:576::o",
+  "source": "pragma solidity ^0.4.24;\r\n\r\nimport \"../permissionedToken/PermissionedTokenProxy.sol\";\r\nimport \"../../regulator/whitelistedRegulator/WhitelistedTokenRegulator.sol\";\r\n\r\n/**\r\n* @title WhitelistedTokenProxy\r\n* @notice This contract IS a WhitelistedToken. All calls to the WhitelistedToken contract will\r\n* be routed through this proxy, since this proxy contract is the owner of the\r\n* storage contracts.\r\n*/\r\ncontract WhitelistedTokenProxy is PermissionedTokenProxy {\r\n    address public cusdAddress;\r\n\r\n\r\n    constructor(address _implementation, \r\n                address _regulator, \r\n                address _cusd) public PermissionedTokenProxy(_implementation, _regulator) {\r\n        // base class override\r\n        regulator = WhitelistedTokenRegulator(_regulator);\r\n\r\n        cusdAddress = _cusd;\r\n\r\n    }\r\n}",
+  "sourcePath": "C:\\Users\\npain\\Projects\\Carbon\\fiat_gateway\\contracts\\tokens\\whitelistedToken\\WhitelistedTokenProxy.sol",
+  "ast": {
+    "absolutePath": "/C/Users/npain/Projects/Carbon/fiat_gateway/contracts/tokens/whitelistedToken/WhitelistedTokenProxy.sol",
+    "exportedSymbols": {
+      "WhitelistedTokenProxy": [
+        3544
+      ]
+    },
+    "id": 3545,
+    "nodeType": "SourceUnit",
+    "nodes": [
+      {
+        "id": 3513,
+        "literals": [
+          "solidity",
+          "^",
+          "0.4",
+          ".24"
+        ],
+        "nodeType": "PragmaDirective",
+        "src": "0:24:16"
+      },
+      {
+        "absolutePath": "/C/Users/npain/Projects/Carbon/fiat_gateway/contracts/tokens/permissionedToken/PermissionedTokenProxy.sol",
+        "file": "../permissionedToken/PermissionedTokenProxy.sol",
+        "id": 3514,
+        "nodeType": "ImportDirective",
+        "scope": 3545,
+        "sourceUnit": 3134,
+        "src": "28:57:16",
+        "symbolAliases": [],
+        "unitAlias": ""
+      },
+      {
+        "absolutePath": "/C/Users/npain/Projects/Carbon/fiat_gateway/contracts/regulator/whitelistedRegulator/WhitelistedTokenRegulator.sol",
+        "file": "../../regulator/whitelistedRegulator/WhitelistedTokenRegulator.sol",
+        "id": 3515,
+        "nodeType": "ImportDirective",
+        "scope": 3545,
+        "sourceUnit": 1592,
+        "src": "87:76:16",
+        "symbolAliases": [],
+        "unitAlias": ""
+      },
+      {
+        "baseContracts": [
+          {
+            "arguments": null,
+            "baseName": {
+              "contractScope": null,
+              "id": 3516,
+              "name": "PermissionedTokenProxy",
+              "nodeType": "UserDefinedTypeName",
+              "referencedDeclaration": 3133,
+              "src": "439:22:16",
+              "typeDescriptions": {
+                "typeIdentifier": "t_contract$_PermissionedTokenProxy_$3133",
+                "typeString": "contract PermissionedTokenProxy"
+              }
+            },
+            "id": 3517,
+            "nodeType": "InheritanceSpecifier",
+            "src": "439:22:16"
+          }
+        ],
+        "contractDependencies": [
+          316,
+          3133,
+          3770,
+          3846
+        ],
+        "contractKind": "contract",
+        "documentation": "@title WhitelistedTokenProxy\r\n@notice This contract IS a WhitelistedToken. All calls to the WhitelistedToken contract will\r\nbe routed through this proxy, since this proxy contract is the owner of the\r\nstorage contracts.\r",
+        "fullyImplemented": true,
+        "id": 3544,
+        "linearizedBaseContracts": [
+          3544,
+          3133,
+          316,
+          3846,
+          3770
+        ],
+        "name": "WhitelistedTokenProxy",
+        "nodeType": "ContractDefinition",
+        "nodes": [
+          {
+            "constant": false,
+            "id": 3519,
+            "name": "cusdAddress",
+            "nodeType": "VariableDeclaration",
+            "scope": 3544,
+            "src": "469:26:16",
+            "stateVariable": true,
+            "storageLocation": "default",
+            "typeDescriptions": {
+              "typeIdentifier": "t_address",
+              "typeString": "address"
+            },
+            "typeName": {
+              "id": 3518,
+              "name": "address",
+              "nodeType": "ElementaryTypeName",
+              "src": "469:7:16",
+              "typeDescriptions": {
+                "typeIdentifier": "t_address",
+                "typeString": "address"
+              }
+            },
+            "value": null,
+            "visibility": "public"
+          },
+          {
+            "body": {
+              "id": 3542,
+              "nodeType": "Block",
+              "src": "673:134:16",
+              "statements": [
+                {
+                  "expression": {
+                    "argumentTypes": null,
+                    "id": 3536,
+                    "isConstant": false,
+                    "isLValue": false,
+                    "isPure": false,
+                    "lValueRequested": false,
+                    "leftHandSide": {
+                      "argumentTypes": null,
+                      "id": 3532,
+                      "name": "regulator",
+                      "nodeType": "Identifier",
+                      "overloadedDeclarations": [],
+                      "referencedDeclaration": 3082,
+                      "src": "716:9:16",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_contract$_Regulator_$832",
+                        "typeString": "contract Regulator"
+                      }
+                    },
+                    "nodeType": "Assignment",
+                    "operator": "=",
+                    "rightHandSide": {
+                      "argumentTypes": null,
+                      "arguments": [
+                        {
+                          "argumentTypes": null,
+                          "id": 3534,
+                          "name": "_regulator",
+                          "nodeType": "Identifier",
+                          "overloadedDeclarations": [],
+                          "referencedDeclaration": 3523,
+                          "src": "754:10:16",
+                          "typeDescriptions": {
+                            "typeIdentifier": "t_address",
+                            "typeString": "address"
+                          }
+                        }
+                      ],
+                      "expression": {
+                        "argumentTypes": [
+                          {
+                            "typeIdentifier": "t_address",
+                            "typeString": "address"
+                          }
+                        ],
+                        "id": 3533,
+                        "name": "WhitelistedTokenRegulator",
+                        "nodeType": "Identifier",
+                        "overloadedDeclarations": [],
+                        "referencedDeclaration": 1591,
+                        "src": "728:25:16",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_type$_t_contract$_WhitelistedTokenRegulator_$1591_$",
+                          "typeString": "type(contract WhitelistedTokenRegulator)"
+                        }
+                      },
+                      "id": 3535,
+                      "isConstant": false,
+                      "isLValue": false,
+                      "isPure": false,
+                      "kind": "typeConversion",
+                      "lValueRequested": false,
+                      "names": [],
+                      "nodeType": "FunctionCall",
+                      "src": "728:37:16",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_contract$_WhitelistedTokenRegulator_$1591",
+                        "typeString": "contract WhitelistedTokenRegulator"
+                      }
+                    },
+                    "src": "716:49:16",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_contract$_Regulator_$832",
+                      "typeString": "contract Regulator"
+                    }
+                  },
+                  "id": 3537,
+                  "nodeType": "ExpressionStatement",
+                  "src": "716:49:16"
+                },
+                {
+                  "expression": {
+                    "argumentTypes": null,
+                    "id": 3540,
+                    "isConstant": false,
+                    "isLValue": false,
+                    "isPure": false,
+                    "lValueRequested": false,
+                    "leftHandSide": {
+                      "argumentTypes": null,
+                      "id": 3538,
+                      "name": "cusdAddress",
+                      "nodeType": "Identifier",
+                      "overloadedDeclarations": [],
+                      "referencedDeclaration": 3519,
+                      "src": "778:11:16",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_address",
+                        "typeString": "address"
+                      }
+                    },
+                    "nodeType": "Assignment",
+                    "operator": "=",
+                    "rightHandSide": {
+                      "argumentTypes": null,
+                      "id": 3539,
+                      "name": "_cusd",
+                      "nodeType": "Identifier",
+                      "overloadedDeclarations": [],
+                      "referencedDeclaration": 3525,
+                      "src": "792:5:16",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_address",
+                        "typeString": "address"
+                      }
+                    },
+                    "src": "778:19:16",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "id": 3541,
+                  "nodeType": "ExpressionStatement",
+                  "src": "778:19:16"
+                }
+              ]
+            },
+            "documentation": null,
+            "id": 3543,
+            "implemented": true,
+            "isConstructor": true,
+            "isDeclaredConst": false,
+            "modifiers": [
+              {
+                "arguments": [
+                  {
+                    "argumentTypes": null,
+                    "id": 3528,
+                    "name": "_implementation",
+                    "nodeType": "Identifier",
+                    "overloadedDeclarations": [],
+                    "referencedDeclaration": 3521,
+                    "src": "644:15:16",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  {
+                    "argumentTypes": null,
+                    "id": 3529,
+                    "name": "_regulator",
+                    "nodeType": "Identifier",
+                    "overloadedDeclarations": [],
+                    "referencedDeclaration": 3523,
+                    "src": "661:10:16",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  }
+                ],
+                "id": 3530,
+                "modifierName": {
+                  "argumentTypes": null,
+                  "id": 3527,
+                  "name": "PermissionedTokenProxy",
+                  "nodeType": "Identifier",
+                  "overloadedDeclarations": [],
+                  "referencedDeclaration": 3133,
+                  "src": "621:22:16",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_type$_t_contract$_PermissionedTokenProxy_$3133_$",
+                    "typeString": "type(contract PermissionedTokenProxy)"
+                  }
+                },
+                "nodeType": "ModifierInvocation",
+                "src": "621:51:16"
+              }
+            ],
+            "name": "",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 3526,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 3521,
+                  "name": "_implementation",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 3543,
+                  "src": "518:23:16",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 3520,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "518:7:16",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 3523,
+                  "name": "_regulator",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 3543,
+                  "src": "561:18:16",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 3522,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "561:7:16",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 3525,
+                  "name": "_cusd",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 3543,
+                  "src": "599:13:16",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 3524,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "599:7:16",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "517:96:16"
+            },
+            "payable": false,
+            "returnParameters": {
+              "id": 3531,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "673:0:16"
+            },
+            "scope": 3544,
+            "src": "506:301:16",
+            "stateMutability": "nonpayable",
+            "superFunction": null,
+            "visibility": "public"
+          }
+        ],
+        "scope": 3545,
+        "src": "405:405:16"
+      }
+    ],
+    "src": "0:810:16"
+  },
+  "legacyAST": {
+    "absolutePath": "/C/Users/npain/Projects/Carbon/fiat_gateway/contracts/tokens/whitelistedToken/WhitelistedTokenProxy.sol",
+    "exportedSymbols": {
+      "WhitelistedTokenProxy": [
+        3544
+      ]
+    },
+    "id": 3545,
+    "nodeType": "SourceUnit",
+    "nodes": [
+      {
+        "id": 3513,
+        "literals": [
+          "solidity",
+          "^",
+          "0.4",
+          ".24"
+        ],
+        "nodeType": "PragmaDirective",
+        "src": "0:24:16"
+      },
+      {
+        "absolutePath": "/C/Users/npain/Projects/Carbon/fiat_gateway/contracts/tokens/permissionedToken/PermissionedTokenProxy.sol",
+        "file": "../permissionedToken/PermissionedTokenProxy.sol",
+        "id": 3514,
+        "nodeType": "ImportDirective",
+        "scope": 3545,
+        "sourceUnit": 3134,
+        "src": "28:57:16",
+        "symbolAliases": [],
+        "unitAlias": ""
+      },
+      {
+        "absolutePath": "/C/Users/npain/Projects/Carbon/fiat_gateway/contracts/regulator/whitelistedRegulator/WhitelistedTokenRegulator.sol",
+        "file": "../../regulator/whitelistedRegulator/WhitelistedTokenRegulator.sol",
+        "id": 3515,
+        "nodeType": "ImportDirective",
+        "scope": 3545,
+        "sourceUnit": 1592,
+        "src": "87:76:16",
+        "symbolAliases": [],
+        "unitAlias": ""
+      },
+      {
+        "baseContracts": [
+          {
+            "arguments": null,
+            "baseName": {
+              "contractScope": null,
+              "id": 3516,
+              "name": "PermissionedTokenProxy",
+              "nodeType": "UserDefinedTypeName",
+              "referencedDeclaration": 3133,
+              "src": "439:22:16",
+              "typeDescriptions": {
+                "typeIdentifier": "t_contract$_PermissionedTokenProxy_$3133",
+                "typeString": "contract PermissionedTokenProxy"
+              }
+            },
+            "id": 3517,
+            "nodeType": "InheritanceSpecifier",
+            "src": "439:22:16"
+          }
+        ],
+        "contractDependencies": [
+          316,
+          3133,
+          3770,
+          3846
+        ],
+        "contractKind": "contract",
+        "documentation": "@title WhitelistedTokenProxy\r\n@notice This contract IS a WhitelistedToken. All calls to the WhitelistedToken contract will\r\nbe routed through this proxy, since this proxy contract is the owner of the\r\nstorage contracts.\r",
+        "fullyImplemented": true,
+        "id": 3544,
+        "linearizedBaseContracts": [
+          3544,
+          3133,
+          316,
+          3846,
+          3770
+        ],
+        "name": "WhitelistedTokenProxy",
+        "nodeType": "ContractDefinition",
+        "nodes": [
+          {
+            "constant": false,
+            "id": 3519,
+            "name": "cusdAddress",
+            "nodeType": "VariableDeclaration",
+            "scope": 3544,
+            "src": "469:26:16",
+            "stateVariable": true,
+            "storageLocation": "default",
+            "typeDescriptions": {
+              "typeIdentifier": "t_address",
+              "typeString": "address"
+            },
+            "typeName": {
+              "id": 3518,
+              "name": "address",
+              "nodeType": "ElementaryTypeName",
+              "src": "469:7:16",
+              "typeDescriptions": {
+                "typeIdentifier": "t_address",
+                "typeString": "address"
+              }
+            },
+            "value": null,
+            "visibility": "public"
+          },
+          {
+            "body": {
+              "id": 3542,
+              "nodeType": "Block",
+              "src": "673:134:16",
+              "statements": [
+                {
+                  "expression": {
+                    "argumentTypes": null,
+                    "id": 3536,
+                    "isConstant": false,
+                    "isLValue": false,
+                    "isPure": false,
+                    "lValueRequested": false,
+                    "leftHandSide": {
+                      "argumentTypes": null,
+                      "id": 3532,
+                      "name": "regulator",
+                      "nodeType": "Identifier",
+                      "overloadedDeclarations": [],
+                      "referencedDeclaration": 3082,
+                      "src": "716:9:16",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_contract$_Regulator_$832",
+                        "typeString": "contract Regulator"
+                      }
+                    },
+                    "nodeType": "Assignment",
+                    "operator": "=",
+                    "rightHandSide": {
+                      "argumentTypes": null,
+                      "arguments": [
+                        {
+                          "argumentTypes": null,
+                          "id": 3534,
+                          "name": "_regulator",
+                          "nodeType": "Identifier",
+                          "overloadedDeclarations": [],
+                          "referencedDeclaration": 3523,
+                          "src": "754:10:16",
+                          "typeDescriptions": {
+                            "typeIdentifier": "t_address",
+                            "typeString": "address"
+                          }
+                        }
+                      ],
+                      "expression": {
+                        "argumentTypes": [
+                          {
+                            "typeIdentifier": "t_address",
+                            "typeString": "address"
+                          }
+                        ],
+                        "id": 3533,
+                        "name": "WhitelistedTokenRegulator",
+                        "nodeType": "Identifier",
+                        "overloadedDeclarations": [],
+                        "referencedDeclaration": 1591,
+                        "src": "728:25:16",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_type$_t_contract$_WhitelistedTokenRegulator_$1591_$",
+                          "typeString": "type(contract WhitelistedTokenRegulator)"
+                        }
+                      },
+                      "id": 3535,
+                      "isConstant": false,
+                      "isLValue": false,
+                      "isPure": false,
+                      "kind": "typeConversion",
+                      "lValueRequested": false,
+                      "names": [],
+                      "nodeType": "FunctionCall",
+                      "src": "728:37:16",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_contract$_WhitelistedTokenRegulator_$1591",
+                        "typeString": "contract WhitelistedTokenRegulator"
+                      }
+                    },
+                    "src": "716:49:16",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_contract$_Regulator_$832",
+                      "typeString": "contract Regulator"
+                    }
+                  },
+                  "id": 3537,
+                  "nodeType": "ExpressionStatement",
+                  "src": "716:49:16"
+                },
+                {
+                  "expression": {
+                    "argumentTypes": null,
+                    "id": 3540,
+                    "isConstant": false,
+                    "isLValue": false,
+                    "isPure": false,
+                    "lValueRequested": false,
+                    "leftHandSide": {
+                      "argumentTypes": null,
+                      "id": 3538,
+                      "name": "cusdAddress",
+                      "nodeType": "Identifier",
+                      "overloadedDeclarations": [],
+                      "referencedDeclaration": 3519,
+                      "src": "778:11:16",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_address",
+                        "typeString": "address"
+                      }
+                    },
+                    "nodeType": "Assignment",
+                    "operator": "=",
+                    "rightHandSide": {
+                      "argumentTypes": null,
+                      "id": 3539,
+                      "name": "_cusd",
+                      "nodeType": "Identifier",
+                      "overloadedDeclarations": [],
+                      "referencedDeclaration": 3525,
+                      "src": "792:5:16",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_address",
+                        "typeString": "address"
+                      }
+                    },
+                    "src": "778:19:16",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "id": 3541,
+                  "nodeType": "ExpressionStatement",
+                  "src": "778:19:16"
+                }
+              ]
+            },
+            "documentation": null,
+            "id": 3543,
+            "implemented": true,
+            "isConstructor": true,
+            "isDeclaredConst": false,
+            "modifiers": [
+              {
+                "arguments": [
+                  {
+                    "argumentTypes": null,
+                    "id": 3528,
+                    "name": "_implementation",
+                    "nodeType": "Identifier",
+                    "overloadedDeclarations": [],
+                    "referencedDeclaration": 3521,
+                    "src": "644:15:16",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  {
+                    "argumentTypes": null,
+                    "id": 3529,
+                    "name": "_regulator",
+                    "nodeType": "Identifier",
+                    "overloadedDeclarations": [],
+                    "referencedDeclaration": 3523,
+                    "src": "661:10:16",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  }
+                ],
+                "id": 3530,
+                "modifierName": {
+                  "argumentTypes": null,
+                  "id": 3527,
+                  "name": "PermissionedTokenProxy",
+                  "nodeType": "Identifier",
+                  "overloadedDeclarations": [],
+                  "referencedDeclaration": 3133,
+                  "src": "621:22:16",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_type$_t_contract$_PermissionedTokenProxy_$3133_$",
+                    "typeString": "type(contract PermissionedTokenProxy)"
+                  }
+                },
+                "nodeType": "ModifierInvocation",
+                "src": "621:51:16"
+              }
+            ],
+            "name": "",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 3526,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 3521,
+                  "name": "_implementation",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 3543,
+                  "src": "518:23:16",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 3520,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "518:7:16",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 3523,
+                  "name": "_regulator",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 3543,
+                  "src": "561:18:16",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 3522,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "561:7:16",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 3525,
+                  "name": "_cusd",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 3543,
+                  "src": "599:13:16",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 3524,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "599:7:16",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "517:96:16"
+            },
+            "payable": false,
+            "returnParameters": {
+              "id": 3531,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "673:0:16"
+            },
+            "scope": 3544,
+            "src": "506:301:16",
+            "stateMutability": "nonpayable",
+            "superFunction": null,
+            "visibility": "public"
+          }
+        ],
+        "scope": 3545,
+        "src": "405:405:16"
+      }
+    ],
+    "src": "0:810:16"
+  },
+  "compiler": {
+    "name": "solc",
+    "version": "0.4.24+commit.e67f0147.Emscripten.clang"
+  },
+  "networks": {},
+  "schemaVersion": "2.0.1",
+  "updatedAt": "2018-10-06T05:55:34.642Z"
+}
