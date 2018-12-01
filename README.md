@@ -20,7 +20,7 @@ Run `sol-merger ./contracts/[CONTRACT].sol "./flatten/"` to flatten any contract
 To verify contracts created by the Factories, you will need to retrieve the ABI-ecoded constructor arguments that were passed during creation. This is a useful online [ABI encoding service](https://abi.hashex.org/)
 
 ## Connecting to an Ethereum node
-truffle-config currently connects to Ethereum via an [Infura account](https://infura.io/) using the account [mnemonic](https://en.bitcoin.it/wiki/Seed_phrase) stored in a .env 
+truffle-config currently connects to Ethereum node via websocket provided by our [Infura account](https://infura.io/)
 
 `provider: function () {
         return new HDWalletProvider(process.env.MNEMONIC, "https://mainnet.infura.io/v3/" + process.env.INFURA_API_KEY_MAIN, i)
@@ -84,34 +84,31 @@ What you need to keep secret:
 ### Setting up CUSD token for local
 1) The Regulator/CarbonDollar/Whitelisted Proxy Factories can create new CUSD, WT0, and Regulator contracts. 
 
-`RegulatorProxyFactory.createRegulatorProxy(Regulator.address)` creates a new Regulator instance that uses the same logic as the abstract Regulator Logic contract. For example, `RegulatorProxyFactory.createRegulatorProxy(CarbonDollarRegulatorInstance.address)` would act as a Regulator that can regulate the CUSD token. Importantly, since Regulators are ownable contracts, the Factory will transfer ownership to the specified owner account in `./scripts/addresses.js` and must be claimed via `newRegulator.claimOwnership({ from: newOwner })`.
+`RegulatorProxyFactory.createRegulatorProxy(Regulator.address)` creates a new Regulator instance that uses the same logic as the abstract Regulator Logic contract. For example, `RegulatorProxyFactory.createRegulatorProxy` would act as a Regulator that can regulate a Permissioned token. Importantly, since Regulators are ownable proxy contracts, ownership of newly created proxies must be claimed via `newRegulator.claimOwnership({ from: newOwner })`.
 
 For convenience, the caller of createRegulatorProxy() is designated a Validator for that Regulator. This can be changed by the Regulator owner.
 
-*[Sept18] Carbon created two Regulators initially, a CarbonDollarRegulator and a WhitelistedTokenRegualtor, respectively in the 0th and the 1st index position in Regulator.getRegulator(i)*
-
-2) Newly created contracts are initialized with empty data storages. A newly created token contract must be assigned a chosen regulated upon creation. `CarbonDollarProxyFactory` and `WhitelistedTokenProxyFactory` work similarly to the Regulator factory. They create new tokens via `CarbonDollarProxyFactory.createToken(CUSD.address, CUSDRegulator.address)` and `WhitelistedTOkenProxyFactory.createToken(WT.address, CUSD.address, WTRegulator.address)` where CUSD, WT and CUSD/WTRegulators are abstract logic contracts. CUSD is the CarbonDollar that a given WT is fungible with. Again, ownerships of token contracts must be claimed.
-
-3) Now, we have to do some additional setup steps to ensure that CUSD and WT work properly.
+2) Now, we have to do some additional setup steps to ensure that CUSD and WT work properly.
 	
-i) CarbonDollarRegulator and WhitelistedTokenRegulator instances must whitelist the CUSD active address to enforce fungibility between CUSD and WT
-
-	`WTRegulator.whitelist(CUSD.address, {from: validator})`
-	`CUSDRegulator.whitelist(CUSD.address, {from: validator})`
-
-ii) CUSD must whitelist WT as an official stablecoin that CUSD is redeemable for
+i) CUSD must whitelist WT as an official stablecoin that CUSD is redeemable for
 
 	`CUSD.listToken(WT.address, {from:cusdOwner})`
 
-iii) To mint new tokens, both the CarbonDollarRegulator and WhitelistedTokenRegulator must designate a minter capable of calling `mint()`
+ii) To mint new tokens, the Regulator contracts for WT0 and CUSD (these contracts could be the same) must designate a minter capable of calling `mint()`
 
 	`Regulator.setMinter(minter, {from: validator})`
 
-iv) To set a fee charged upon redeeming CUSD into WT, the CUSD contract owner may call `CUSD.setFee(fee)` on the active CUSD contract. Fees can optionally be collected be escrowed by the CUSD contract to pay for transaction fees.
+iii) To set a fee charged upon redeeming CUSD into WT, the CUSD contract owner may call `CUSD.setFee(fee)` on the active CUSD contract. Fees can optionally be collected be escrowed by the CUSD contract to pay for transaction fees.
 
-v) An address must be whitelisted by both CUSD and WT0 regulators to receive newly minted CUSD and whitelisted by WT0 to receive WT0
+### Tests!
 
-Model scripts are provided in `./scripts/` for convenient contract interactions that can be run with `truffle exc ./scripts/[script] --network [network]`
+Look at `package.json::scripts` to see some possible test suites that we've created to rigorously test our smart contracts. For example, run `npm run test-permissioned-token` to unit test PermissionedToken.sol. Note that these tests should be run locally on a local ethereum node, which you can spin up using `npm run eth`.
+
+Run `npm run test` to run all tests
+
+### Scripts to interact with deployed contracts
+
+Model scripts are provided in `./scripts/` for convenient contract interactions that can be run with `npm run scripts`. Modify `./scripts/src/index.js` to customize which scripts you want `npm run scripts` to execute. 
 
 ### Ropsten
 
@@ -136,11 +133,3 @@ Model scripts are provided in `./scripts/` for convenient contract interactions 
 [WhitelistedToken (logic)](https://ropsten.etherscan.io/address/0x99f72bd9aebbd1e51ba977157d5f0eca73dadd8f)
 
 [WhitelistedToken (active)](https://ropsten.etherscan.io/address/0xcd36463470c4b92700b4d5fbe270e680d9d48968)
-
-## Scripts to interact with deployed contracts
-
-### Get owners of active token contracts 
-
-`truffle exec ./scripts/getOwners.js --network [mainnet/testnet]`
-
-This command will print current ownership of CUSD and WT0 contracts as well as their regulators
