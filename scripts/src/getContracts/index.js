@@ -73,3 +73,37 @@ export const getWt0Proxy = () => {
     const instance = new web3.eth.Contract(abi, deployedAddress)
     return instance
 }
+
+// Regulator
+export const getRegulatorFactory = () => {
+    var jsonFile = "./build/contracts/RegulatorProxyFactory.json";
+    var parsed = JSON.parse(fs.readFileSync(jsonFile));
+    var abi = parsed.abi;
+    var deployedAddress = config.REGULATOR_FACTORY_ADDRESS;
+    const instance = new web3.eth.Contract(abi, deployedAddress)
+    return instance
+}
+
+export const getRegulatorCount = async () => {
+    let factory = getRegulatorFactory()
+    let count = await factory.methods.getCount().call()
+    return count
+}
+
+export const getRegulator = () => {
+    var jsonFile = "./build/contracts/Regulator.json";
+    var parsed = JSON.parse(fs.readFileSync(jsonFile));
+    var abi = parsed.abi;
+    var deployedAddress = config.REGULATOR_ADDRESS;
+    const instance = new web3.eth.Contract(abi, deployedAddress)
+    return instance
+}
+
+export const getRegulatorProxy = () => {
+    var jsonFile = "./build/contracts/RegulatorProxy.json";
+    var parsed = JSON.parse(fs.readFileSync(jsonFile));
+    var abi = parsed.abi;
+    var deployedAddress = config.REGULATOR_ADDRESS;
+    const instance = new web3.eth.Contract(abi, deployedAddress)
+    return instance
+}
