@@ -4,11 +4,10 @@ const { RegulatorProxyFactory,
         CarbonDollarProxyFactory,
         CarbonDollarProxy,
         CarbonDollar,
-        CarbonDollarRegulator,
-        WhitelistedTokenRegulator,
+        Regulator,
         WhitelistedToken,
         WhitelistedTokenProxyFactory } = require('../helpers/artifacts');
-const { CarbonDollarMock, WhitelistedRegulatorMock } = require('../helpers/mocks')
+const { RegulatorMock } = require('../helpers/mocks')
 
 contract('CarbonDollar Factory creating CD proxies', _accounts => {
     const commonVars = new CommonVariables(_accounts);
@@ -16,15 +15,12 @@ contract('CarbonDollar Factory creating CD proxies', _accounts => {
     const other_owner = commonVars.user;
     const validator = commonVars.validator;
     const minter = commonVars.user2;
-    const whitelisted = commonVars.user3;
-    const minterCD = commonVars.user4;
+    const user = commonVars.user3;
 
     beforeEach(async function () {
-
         this.proxyFactory = await CarbonDollarProxyFactory.new({from: proxy_owner });
-        this.regulator_CD = await CarbonDollarMock.new({from: validator })
+        this.regulator_CD = await RegulatorMock.new({from: validator })
         this.impl_v0 = await CarbonDollar.new(ZERO_ADDRESS, {from: other_owner })
-
     })
 
     describe('Creating brand new CarbonDollar proxies from the factory', function () {
@@ -47,10 +43,8 @@ contract('CarbonDollar Factory creating CD proxies', _accounts => {
 
     describe('getToken', function () {
         beforeEach(async function () {
-
             // Create a CD proxy using factory
             await this.proxyFactory.createToken(this.impl_v0.address, this.regulator_CD.address, {from: proxy_owner})
-
         })
         it('i is negative, reverts', async function () {
             await expectRevert(this.proxyFactory.getToken(-1))
@@ -89,7 +83,7 @@ contract('CarbonDollar Factory creating CD proxies', _accounts => {
         }) 
         it('Proxy can change storage', async function () {
 
-            const newRegulator = (await CarbonDollarMock.new({from: validator})).address
+            const newRegulator = (await RegulatorMock.new({from: validator})).address
 
             await this.token_0.setRegulator(newRegulator, {from:proxy_owner})
 
@@ -111,14 +105,14 @@ contract('CarbonDollar Factory creating CD proxies', _accounts => {
 
             beforeEach(async function () {
                 // Create a WT regulator
-                this.regulator_WT = await WhitelistedRegulatorMock.new({from: validator})
+                this.regulator_WT = await RegulatorMock.new({from: validator})
 
                 // Create a WT token
                 this.token_WT_model = await WhitelistedToken.new(ZERO_ADDRESS, ZERO_ADDRESS, {from:other_owner})
                 this.wtProxyFactory = await WhitelistedTokenProxyFactory.new({ from: proxy_owner })
                 await this.wtProxyFactory.createToken(this.token_WT_model.address, this.token_0.address, this.regulator_WT.address, {from:proxy_owner})
                 this.token_WT = WhitelistedToken.at(await this.wtProxyFactory.getToken((await this.wtProxyFactory.getCount())-1))
-                this.regulator_WT = WhitelistedTokenRegulator.at(await this.token_WT.regulator())
+                this.regulator_WT = Regulator.at(await this.token_WT.regulator())
 
                 await this.token_WT.claimOwnership({ from:proxy_owner })
 
@@ -136,36 +130,31 @@ contract('CarbonDollar Factory creating CD proxies', _accounts => {
             })  
             describe('burnCarbonDollar and convertCarbonDollar', function () {
                 beforeEach(async function () {
-                    // Set up CD permissions
-                    await this.regulator_CD.setWhitelistedUser(whitelisted, {from:validator})
-                    await this.regulator_CD.setWhitelistedUser(this.token_0.address, {from:validator})
                     await this.token_0.listToken(this.token_WT.address, {from:proxy_owner})
 
                     // Set up WT permissions
                     await this.regulator_WT.setMinter(minter, {from:validator})
-                    await this.regulator_WT.setWhitelistedUser(whitelisted, {from:validator})
-                    await this.regulator_WT.setWhitelistedUser(this.token_0.address, {from:validator})
                 })
                 it('no fee, burns carbon dollar', async function () {
-                    await this.token_WT.mintCUSD(whitelisted, 10 * 10 ** 18, {from: minter})
-                    await assertBalance(this.token_0, whitelisted, 10 * 10 ** 18)
-                    await assertBalance(this.token_WT, whitelisted, 0)
+                    await this.token_WT.mintCUSD(user, 10 * 10 ** 18, {from: minter})
+                    await assertBalance(this.token_0, user, 10 * 10 ** 18)
+                    await assertBalance(this.token_WT, user, 0)
                     await assertBalance(this.token_WT, this.token_0.address, 10 * 10 ** 18)
                     
-                    await this.token_0.burnCarbonDollar(this.token_WT.address, 5 * 10 ** 18, {from:whitelisted})
-                    await assertBalance(this.token_0, whitelisted, 5 * 10 ** 18)
-                    await assertBalance(this.token_WT, whitelisted, 0)
+                    await this.token_0.burnCarbonDollar(this.token_WT.address, 5 * 10 ** 18, {from:user})
+                    await assertBalance(this.token_0, user, 5 * 10 ** 18)
+                    await assertBalance(this.token_WT, user, 0)
                     await assertBalance(this.token_WT, this.token_0.address, 5 * 10 ** 18)
                 })
                 it('no fee, converts carbon dollar', async function () {
-                    await this.token_WT.mintCUSD(whitelisted, 10 * 10 ** 18, {from: minter})
-                    await assertBalance(this.token_0, whitelisted, 10 * 10 ** 18)
-                    await assertBalance(this.token_WT, whitelisted, 0)
+                    await this.token_WT.mintCUSD(user, 10 * 10 ** 18, {from: minter})
+                    await assertBalance(this.token_0, user, 10 * 10 ** 18)
+                    await assertBalance(this.token_WT, user, 0)
                     await assertBalance(this.token_WT, this.token_0.address, 10 * 10 ** 18)
                     
-                    await this.token_0.convertCarbonDollar(this.token_WT.address, 5 * 10 ** 18, {from:whitelisted})
-                    await assertBalance(this.token_0, whitelisted, 5 * 10 ** 18)
-                    await assertBalance(this.token_WT, whitelisted, 5 * 10 ** 18)
+                    await this.token_0.convertCarbonDollar(this.token_WT.address, 5 * 10 ** 18, {from:user})
+                    await assertBalance(this.token_0, user, 5 * 10 ** 18)
+                    await assertBalance(this.token_WT, user, 5 * 10 ** 18)
                     await assertBalance(this.token_WT, this.token_0.address, 5 * 10 ** 18)
                 })
             })

@@ -8,17 +8,16 @@ contract('CarbonDollar', _accounts => {
     const minter = commonVars.user
     const validator = commonVars.validator
     const blacklisted = commonVars.attacker
-    const whitelisted = commonVars.user2
-    const nonlisted = commonVars.user3
+    const anotherUser = commonVars.user3
     const user = commonVars.validator2
 
     beforeEach(async function () {
-        await tokenSetup.call(this, validator, minter, user, owner, whitelisted, blacklisted, nonlisted);
+        await tokenSetup.call(this, validator, minter, user, owner, blacklisted, anotherUser);
         this.token = this.cdToken;
     });
 
     describe("Carbon Dollar tests", function () {
-        carbonDollarBehaviorTests(owner, minter, whitelisted, validator);
+        carbonDollarBehaviorTests(owner, minter, user, validator, blacklisted);
         carbonDollarStorageInteractionTests(owner, minter)
     });
 })

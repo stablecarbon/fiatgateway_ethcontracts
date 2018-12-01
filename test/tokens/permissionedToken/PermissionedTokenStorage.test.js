@@ -16,7 +16,6 @@ contract('PermissionedTokenStorage', _accounts => {
     const spender = commonVars.user3;
 
     beforeEach(async function () {
-
         this.storage = await PermissionedTokenStorage.new({ from:owner })
     })
 

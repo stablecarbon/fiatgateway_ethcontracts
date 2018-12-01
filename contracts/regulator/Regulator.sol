@@ -27,6 +27,7 @@ contract Regulator is RegulatorStorage {
         Events 
     */
     event LogBlacklistedUser(address indexed who);
+    event LogRemovedBlacklistedUser(address indexed who);
     event LogSetMinter(address indexed who);
     event LogRemovedMinter(address indexed who);
     event LogSetBlacklistDestroyer(address indexed who);
@@ -100,6 +101,15 @@ contract Regulator is RegulatorStorage {
         _setBlacklistedUser(_who);
     }
 
+    /**
+    * @notice Removes the necessary permissions for a "blacklisted" user. A blacklisted user has their accounts
+    * frozen; they cannot transfer, burn, or withdraw any tokens.
+    * @param _who The address of the account that we are changing permissions for.
+    */
+    function removeBlacklistedUser(address _who) public onlyValidator {
+        _removeBlacklistedUser(_who);
+    }
+
     /** Returns whether or not a user is blacklisted.
      * @param _who The address of the account in question.
      * @return `true` if the user is blacklisted, `false` otherwise.
@@ -151,10 +161,15 @@ contract Regulator is RegulatorStorage {
         emit LogRemovedMinter(_who);
     }
 
-
     function _setBlacklistedUser(address _who) internal {
         require(isPermission(BLACKLISTED_SIG), "Self-destruct method not supported by token");
         setUserPermission(_who, BLACKLISTED_SIG);
         emit LogBlacklistedUser(_who);
+    }
+
+    function _removeBlacklistedUser(address _who) internal {
+        require(isPermission(BLACKLISTED_SIG), "Self-destruct method not supported by token");
+        removeUserPermission(_who, BLACKLISTED_SIG);
+        emit LogRemovedBlacklistedUser(_who);
     }
 }
