@@ -66,14 +66,6 @@ contract PermissionedToken is ERC20, Pausable, Lockable {
         _;
     }
 
-    /** @notice Modifier that checks whether a user is whitelisted.
-     * @param _user The address of the user to check.
-    **/
-    modifier userWhitelisted(address _user) {
-        require(regulator.isWhitelistedUser(_user), "User must be whitelisted");
-        _;
-    }
-
     /** @notice Modifier that checks whether a user is blacklisted.
      * @param _user The address of the user to check.
     **/
@@ -94,23 +86,21 @@ contract PermissionedToken is ERC20, Pausable, Lockable {
 
     /**
     * @notice Allows user to mint if they have the appropriate permissions. User generally
-    * has to be some sort of centralized authority.
+    * must have minting authority.
     * @dev Should be access-restricted with the 'requiresPermission' modifier when implementing.
     * @param _to The address of the receiver
     * @param _amount The number of tokens to mint
     */
-    function mint(address _to, uint256 _amount) public requiresPermission whenNotPaused {
+    function mint(address _to, uint256 _amount) public userNotBlacklisted(_to) requiresPermission whenNotPaused {
         _mint(_to, _amount);
     }
 
     /**
-    * @notice Allows user to mint if they have the appropriate permissions. User generally
-    * is just a "whitelisted" user (i.e. a user registered with the fiat gateway.)
-    * @dev Should be access-restricted with the 'requiresPermission' modifier when implementing.
+    * @notice Remove CUSD from supply
     * @param _amount The number of tokens to burn
     * @return `true` if successful and `false` if unsuccessful
     */
-    function burn(uint256 _amount) public requiresPermission whenNotPaused {
+    function burn(uint256 _amount) userNotBlacklisted(msg.sender) public whenNotPaused {
         _burn(msg.sender, _amount);
     }
 
@@ -292,7 +282,7 @@ contract PermissionedToken is ERC20, Pausable, Lockable {
         emit Transfer(_tokensOf, address(0), _amount);
     }
 
-    function _mint(address _to, uint256 _amount) internal userWhitelisted(_to) {
+    function _mint(address _to, uint256 _amount) internal {
         tokenStorage.addTotalSupply(_amount);
         tokenStorage.addBalance(_to, _amount);
         emit Mint(_to, _amount);

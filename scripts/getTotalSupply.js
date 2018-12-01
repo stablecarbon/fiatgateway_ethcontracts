@@ -7,7 +7,8 @@ const CarbonDollar_abi = require('../build/contracts/CarbonDollar.json')
 const WhitelistedToken_abi = require('../build/contracts/WhitelistedToken.json')
 
 // Addresses of contracts
-const { owner, cusd } = require('./addresses')
+const { owner, cusd_main, validator, cusd_test } = require('./addresses')
+let cusd = cusd_test // Change for mainnet or testnet CUSD contract balance from collected txn fees
 
 let CarbonDollarProxyFactory = contract(CarbonDollarProxyFactory_abi);
 let WhitelistedTokenProxyFactory = contract(WhitelistedTokenProxyFactory_abi);
@@ -25,6 +26,14 @@ let WT0
 let CUSD
 let conversion = 10**18
 module.exports = function(callback) {
+
+    if(cusd == cusd_test) {
+        console.log('******TESTNET: ')
+    } else if (cusd == cusd_main) {
+        console.log('******MAINNET: ')
+    } else {
+        console.log('PLEASE SPECIFY A NETWORK')
+    }
 
     CarbonDollarProxyFactory.deployed().then(cusdFactory => {
         cusdFactory.getToken(0).then(cusdAddress => {

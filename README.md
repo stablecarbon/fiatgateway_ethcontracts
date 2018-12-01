@@ -43,13 +43,11 @@ What you need to keep secret:
 ### Token Permissions:
 
 	MintPermissions: account capable of minting or issuing new CUSD or WT0 tokens to any account
-
-	Whitelisted: whitelisted accounts can(1) receive newly minted tokens and (2) redeem tokens with our partner banks
-
+	Blacklisted: account barred from interacting with active CUSD tokens
 
 ### Regulator Permissions:
 
-	Validator: account capable of setting user permissions/roles including MintPermissions and Whitelisted
+	Validator: account capable of setting user permissions/roles including MintPermissions and Blacklisted
 
 ### Architecture Description
 

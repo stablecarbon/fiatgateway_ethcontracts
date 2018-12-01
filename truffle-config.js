@@ -48,7 +48,12 @@ module.exports = {
     },
     mainnet: {
       provider: function () {
-        return new HDWalletProvider(process.env.MNEMONIC, "https://mainnet.infura.io/v3/" + process.env.INFURA_API_KEY_MAIN)
+        var privateKey = ""
+        if (privateKey) {
+          return new HDWalletProvider(privateKey, "https://mainnet.infura.io/v3/" + process.env.INFURA_API_KEY_MAIN)
+        } else {
+          return new HDWalletProvider(process.env.MNEMONIC, "https://mainnet.infura.io/v3/" + process.env.INFURA_API_KEY_MAIN)
+        }
       },
       network_id: 1,
       gas: 7000000, // Largest contracts can take almost 7mm gas

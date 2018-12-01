@@ -3,7 +3,6 @@ pragma solidity ^0.4.24;
 import "./dataStorage/CarbonDollarStorage.sol";
 import "../permissionedToken/PermissionedToken.sol";
 import "../whitelistedToken/WhitelistedToken.sol";
-import '../../regulator/carbonDollarRegulator/CarbonDollarRegulator.sol';
 
 /**
 * @title CarbonDollar
@@ -35,7 +34,7 @@ contract CarbonDollar is PermissionedToken {
     constructor(address _regulator) public PermissionedToken(_regulator) {
 
         // base class override
-        regulator = CarbonDollarRegulator(_regulator);
+        regulator = Regulator(_regulator);
 
         tokenStorage_CD = new CarbonDollarStorage();
     }
@@ -103,7 +102,7 @@ contract CarbonDollar is PermissionedToken {
      * @param _amount Amount of CarbonUSD to convert.
      * we credit the user's account at the sender address with the _amount minus the percentage fee we want to charge.
      */
-    function convertCarbonDollar(address stablecoin, uint256 _amount) public requiresPermission whenNotPaused  {
+    function convertCarbonDollar(address stablecoin, uint256 _amount) public userNotBlacklisted(msg.sender) whenNotPaused  {
         require(isWhitelisted(stablecoin), "Stablecoin must be whitelisted prior to setting conversion fee");
         WhitelistedToken whitelisted = WhitelistedToken(stablecoin);
         require(whitelisted.balanceOf(address(this)) >= _amount, "Carbon escrow account in WT0 doesn't have enough tokens for burning");
@@ -124,7 +123,7 @@ contract CarbonDollar is PermissionedToken {
      * @param stablecoin Represents the stablecoin whose fee will be charged.
      * @param _amount Amount of CarbonUSD to burn.
      */
-    function burnCarbonDollar(address stablecoin, uint256 _amount) public requiresPermission whenNotPaused {
+    function burnCarbonDollar(address stablecoin, uint256 _amount) public userNotBlacklisted(msg.sender) whenNotPaused {
         require(isWhitelisted(stablecoin), "Stablecoin must be whitelisted prior to setting conversion fee");
         WhitelistedToken whitelisted = WhitelistedToken(stablecoin);
         require(whitelisted.balanceOf(address(this)) >= _amount, "Carbon escrow account in WT0 doesn't have enough tokens for burning");

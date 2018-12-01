@@ -26,9 +26,7 @@ contract Regulator is RegulatorStorage {
     /** 
         Events 
     */
-    event LogWhitelistedUser(address indexed who);
     event LogBlacklistedUser(address indexed who);
-    event LogNonlistedUser(address indexed who);
     event LogSetMinter(address indexed who);
     event LogRemovedMinter(address indexed who);
     event LogSetBlacklistDestroyer(address indexed who);
@@ -94,14 +92,6 @@ contract Regulator is RegulatorStorage {
     }
 
     /**
-    * @notice Sets the necessary permissions for a "whitelisted" user.
-    * @param _who The address of the account that we are setting permissions for.
-    */
-    function setWhitelistedUser(address _who) public onlyValidator {
-        _setWhitelistedUser(_who);
-    }
-
-    /**
     * @notice Sets the necessary permissions for a "blacklisted" user. A blacklisted user has their accounts
     * frozen; they cannot transfer, burn, or withdraw any tokens.
     * @param _who The address of the account that we are setting permissions for.
@@ -110,38 +100,14 @@ contract Regulator is RegulatorStorage {
         _setBlacklistedUser(_who);
     }
 
-    /**
-    * @notice Sets the necessary permissions for a "nonlisted" user. Nonlisted users can trade tokens,
-    * but cannot burn them (and therefore cannot convert them into fiat.)
-    * @param _who The address of the account that we are setting permissions for.
-    */
-    function setNonlistedUser(address _who) public onlyValidator {
-        _setNonlistedUser(_who);
-    }
-
-    /** Returns whether or not a user is whitelisted.
-     * @param _who The address of the account in question.
-     * @return `true` if the user is whitelisted, `false` otherwise.
-     */
-    function isWhitelistedUser(address _who) public view returns (bool) {
-        return (hasUserPermission(_who, BURN_SIG) && !hasUserPermission(_who, BLACKLISTED_SIG));
-    }
-
     /** Returns whether or not a user is blacklisted.
      * @param _who The address of the account in question.
      * @return `true` if the user is blacklisted, `false` otherwise.
      */
     function isBlacklistedUser(address _who) public view returns (bool) {
-        return (!hasUserPermission(_who, BURN_SIG) && hasUserPermission(_who, BLACKLISTED_SIG));
+        return (hasUserPermission(_who, BLACKLISTED_SIG));
     }
 
-    /** Returns whether or not a user is nonlisted.
-     * @param _who The address of the account in question.
-     * @return `true` if the user is nonlisted, `false` otherwise.
-     */
-    function isNonlistedUser(address _who) public view returns (bool) {
-        return (!hasUserPermission(_who, BURN_SIG) && !hasUserPermission(_who, BLACKLISTED_SIG));
-    }
 
     /** Returns whether or not a user is a blacklist spender.
      * @param _who The address of the account in question.
@@ -164,44 +130,31 @@ contract Regulator is RegulatorStorage {
      * @return `true` if the user is a minter, `false` otherwise.
      */
     function isMinter(address _who) public view returns (bool) {
-        return hasUserPermission(_who, MINT_SIG);
+        return (hasUserPermission(_who, MINT_SIG) && hasUserPermission(_who, MINT_CUSD_SIG));
     }
 
     /** Internal Functions **/
 
     function _setMinter(address _who) internal {
         require(isPermission(MINT_SIG), "Minting not supported by token");
+        require(isPermission(MINT_CUSD_SIG), "Minting to CUSD not supported by token");
         setUserPermission(_who, MINT_SIG);
+        setUserPermission(_who, MINT_CUSD_SIG);
         emit LogSetMinter(_who);
     }
 
     function _removeMinter(address _who) internal {
         require(isPermission(MINT_SIG), "Minting not supported by token");
+        require(isPermission(MINT_CUSD_SIG), "Minting to CUSD not supported by token");
+        removeUserPermission(_who, MINT_CUSD_SIG);
         removeUserPermission(_who, MINT_SIG);
         emit LogRemovedMinter(_who);
     }
 
-    function _setNonlistedUser(address _who) internal {
-        require(isPermission(BURN_SIG), "Burn method not supported by token");
-        require(isPermission(BLACKLISTED_SIG), "Self-destruct method not supported by token");
-        removeUserPermission(_who, BURN_SIG);
-        removeUserPermission(_who, BLACKLISTED_SIG);
-        emit LogNonlistedUser(_who);
-    }
 
     function _setBlacklistedUser(address _who) internal {
-        require(isPermission(BURN_SIG), "Burn method not supported by token");
         require(isPermission(BLACKLISTED_SIG), "Self-destruct method not supported by token");
-        removeUserPermission(_who, BURN_SIG);
         setUserPermission(_who, BLACKLISTED_SIG);
         emit LogBlacklistedUser(_who);
-    }
-
-    function _setWhitelistedUser(address _who) internal {
-        require(isPermission(BURN_SIG), "Burn method not supported by token");
-        require(isPermission(BLACKLISTED_SIG), "Self-destruct method not supported by token");
-        setUserPermission(_who, BURN_SIG);
-        removeUserPermission(_who, BLACKLISTED_SIG);
-        emit LogWhitelistedUser(_who);
     }
 }
