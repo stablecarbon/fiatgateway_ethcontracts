@@ -1,6 +1,6 @@
-import { getWeb3 } from './getWeb3'
+import { getWeb3 } from '../getWeb3'
 import fs from 'fs'
-require('dotenv').config()  // Store environment-specific variable from '.env' to process.env
+import config from '../config'
 
 const web3 = getWeb3()
 
@@ -9,7 +9,7 @@ export const getCusdFactory = () => {
     var jsonFile = "./build/contracts/CarbonDollarProxyFactory.json";
     var parsed = JSON.parse(fs.readFileSync(jsonFile));
     var abi = parsed.abi;
-    var deployedAddress = process.env.CUSD_FACTORY_ADDRESS;
+    var deployedAddress = config.CUSD_FACTORY_ADDRESS;
     const instance = new web3.eth.Contract(abi, deployedAddress)
     return instance
 }
@@ -25,7 +25,16 @@ export const getCusd = () => {
     var jsonFile = "./build/contracts/CarbonDollar.json";
     var parsed = JSON.parse(fs.readFileSync(jsonFile));
     var abi = parsed.abi;
-    var deployedAddress = process.env.CUSD_ADDRESS;
+    var deployedAddress = config.CUSD_ADDRESS;
+    const instance = new web3.eth.Contract(abi, deployedAddress)
+    return instance
+}
+
+export const getCusdProxy = () => {
+    var jsonFile = "./build/contracts/CarbonDollarProxy.json";
+    var parsed = JSON.parse(fs.readFileSync(jsonFile));
+    var abi = parsed.abi;
+    var deployedAddress = config.CUSD_ADDRESS;
     const instance = new web3.eth.Contract(abi, deployedAddress)
     return instance
 }
@@ -35,7 +44,7 @@ export const getWt0Factory = () => {
     var jsonFile = "./build/contracts/WhitelistedTokenProxyFactory.json";
     var parsed = JSON.parse(fs.readFileSync(jsonFile));
     var abi = parsed.abi;
-    var deployedAddress = process.env.WT0_FACTORY_ADDRESS;
+    var deployedAddress = config.WT0_FACTORY_ADDRESS;
     const instance = new web3.eth.Contract(abi, deployedAddress)
     return instance
 }
@@ -51,7 +60,16 @@ export const getWt0 = () => {
     var jsonFile = "./build/contracts/WhitelistedToken.json";
     var parsed = JSON.parse(fs.readFileSync(jsonFile));
     var abi = parsed.abi;
-    var deployedAddress = process.env.WT0_ADDRESS;
+    var deployedAddress = config.WT0_ADDRESS;
+    const instance = new web3.eth.Contract(abi, deployedAddress)
+    return instance
+}
+
+export const getWt0Proxy = () => {
+    var jsonFile = "./build/contracts/WhitelistedTokenProxy.json";
+    var parsed = JSON.parse(fs.readFileSync(jsonFile));
+    var abi = parsed.abi;
+    var deployedAddress = config.WT0_ADDRESS;
     const instance = new web3.eth.Contract(abi, deployedAddress)
     return instance
 }
