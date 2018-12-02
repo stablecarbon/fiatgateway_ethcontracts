@@ -6,6 +6,7 @@ import {
     getWt0Count,
     getRegulatorFactory,
     getRegulatorCount,
+    getRegulator
 } from './getContracts'
 
 let web3 = getWeb3()
@@ -41,6 +42,9 @@ export const getFactoryStats = async () => {
     for (var i = 0; i < reg_count; i++) {
         var instance = await reg_factory.methods.getRegulatorProxy(i).call()
         console.log('Regulator factory ' + i + 'th regulator proxy: ' + instance)
+        let regulator = getRegulator(instance)
+        let owner = await regulator.methods.owner().call()
+        console.log(i + 'th regulator proxy owner: ' + owner)
     }
 
     console.log('\n***** END FIAT GATEWAY FACTORIES *****\n')

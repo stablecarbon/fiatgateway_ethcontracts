@@ -90,11 +90,11 @@ export const getRegulatorCount = async () => {
     return count
 }
 
-export const getRegulator = () => {
+export const getRegulator = (address) => {
     var jsonFile = "./build/contracts/Regulator.json";
     var parsed = JSON.parse(fs.readFileSync(jsonFile));
     var abi = parsed.abi;
-    var deployedAddress = config.REGULATOR_ADDRESS;
+    var deployedAddress = address ? address : config.REGULATOR_ACTIVE_ADDRESS;
     const instance = new web3.eth.Contract(abi, deployedAddress)
     return instance
 }
@@ -103,7 +103,7 @@ export const getRegulatorProxy = () => {
     var jsonFile = "./build/contracts/RegulatorProxy.json";
     var parsed = JSON.parse(fs.readFileSync(jsonFile));
     var abi = parsed.abi;
-    var deployedAddress = config.REGULATOR_ADDRESS;
+    var deployedAddress = config.REGULATOR_ACTIVE_ADDRESS;
     const instance = new web3.eth.Contract(abi, deployedAddress)
     return instance
 }

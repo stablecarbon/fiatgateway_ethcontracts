@@ -29,6 +29,11 @@ export const getTokenStats = async () => {
     console.log('CUSD owner: ', cusd_owner)
     console.log('WT0 owner: ', wt0_owner)
 
+    let cusd_regulator = await cusd.methods.regulator().call()
+    let wt0_regulator = await wt0.methods.regulator().call()
+    console.log('CUSD regulator: ', cusd_regulator)
+    console.log('WT0 regulator: ', wt0_regulator)
+
     let cusd_proxy = getCusdProxy()
     let wt0_proxy = getWt0Proxy()
     let cusd_impl = await cusd_proxy.methods.implementation().call()

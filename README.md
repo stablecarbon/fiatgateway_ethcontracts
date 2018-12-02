@@ -108,28 +108,24 @@ Run `npm run test` to run all tests
 
 ### Scripts to interact with deployed contracts
 
-Model scripts are provided in `./scripts/` for convenient contract interactions that can be run with `npm run scripts`. Modify `./scripts/src/index.js` to customize which scripts you want `npm run scripts` to execute. 
+Model scripts are provided in `./scripts/` for reading contract stats that can be run with `npm run stats`. Modify `./scripts/src/index.js` to customize which scripts you want `npm run stats` to execute. 
 
 ### Ropsten
 
-[RegulatorProxyFactory](https://ropsten.etherscan.io/address/0x2d35b31f1b760e22b6f926abaca365f97b261b2e)
+[RegulatorProxyFactory](https://ropsten.etherscan.io/address/0xd5B983717e66B171e713aba404b5bB83eA65B70d)
 
 [CarbonDollarProxyFactory](https://ropsten.etherscan.io/address/0xa7c6ade3951b5bac577f69eb514da005dd26d05c)
 
 [WhitelistedTokenProxyFactory](https://ropsten.etherscan.io/address/0xba6dac4d0367e0a4f854296d117cad0e6d7a97b3)
 
-[WhitelistedTokenRegulator (logic)](https://ropsten.etherscan.io/address/0x64db6b6f3a9b3c0d2f6fcea14a18976cebfc9e66)
+[Regulator (logic)](https://ropsten.etherscan.io/address/0xD1aFc88c7F65914d3A6d3Da965A648bd2607bE41)
 
-[WhitelistedTokenRegulator (active)](https://ropsten.etherscan.io/address/0xd0ead2198a14f1766f6aa0c9e3e14959da50b265)
+[Regulator (active)](https://ropsten.etherscan.io/address/0x36c18981984D58880C0378DED290f9BD2B30576E)
 
-[CarbonDollarRegulator (logic)](https://ropsten.etherscan.io/address/0x56a3e755a1df17884a87a328080d0b4f77fb7fa9)
-
-[CarbonDollarRegulator (active)](https://ropsten.etherscan.io/address/0xe8bfa3ab2449a049522866b8f4f000fef3ac26d5)
-
-[CarbonDollar (logic)](https://ropsten.etherscan.io/address/0x11027eda599d638bdabe26ec503f0a9301eee127)
+[CarbonDollar (logic)](https://ropsten.etherscan.io/address/0x301cc729F73604F2ce2F062D3a219d0A2cF31F80)
 
 [CarbonDollar (active)](https://ropsten.etherscan.io/address/0x67450c8908e2701abfa6745be3949ad32acf42d8)
 
-[WhitelistedToken (logic)](https://ropsten.etherscan.io/address/0x99f72bd9aebbd1e51ba977157d5f0eca73dadd8f)
+[WhitelistedToken (logic)](https://ropsten.etherscan.io/address/0x14Ac5fee795105983c5cc15493fe7C034aEC31BD)
 
 [WhitelistedToken (active)](https://ropsten.etherscan.io/address/0xcd36463470c4b92700b4d5fbe270e680d9d48968)
