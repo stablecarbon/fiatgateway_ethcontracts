@@ -179,12 +179,7 @@ contract PermissionedToken is ERC20, Pausable, Lockable {
     * @return `true` if successful 
     */
     function transfer(address _to, uint256 _amount) public userNotBlacklisted(_to) userNotBlacklisted(msg.sender) whenNotPaused returns (bool) {
-        require(_to != address(0),"to address cannot be 0x0");
-        require(_amount <= balanceOf(msg.sender),"not enough balance to transfer");
-
-        tokenStorage.subBalance(msg.sender, _amount);
-        tokenStorage.addBalance(_to, _amount);
-        emit Transfer(msg.sender, _to, _amount);
+        _transfer(_to, msg.sender, _amount);
         return true;
     }
 
@@ -203,13 +198,8 @@ contract PermissionedToken is ERC20, Pausable, Lockable {
     function transferFrom(address _from, address _to, uint256 _amount) 
     public whenNotPaused transferFromConditionsRequired(_from, _to) returns (bool) {
         require(_amount <= allowance(_from, msg.sender),"not enough allowance to transfer");
-        require(_to != address(0),"to address cannot be 0x0");
-        require(_amount <= balanceOf(_from),"not enough balance to transfer");
-        
+        _transfer(_to, _from, _amount);
         tokenStorage.subAllowance(_from, msg.sender, _amount);
-        tokenStorage.addBalance(_to, _amount);
-        tokenStorage.subBalance(_from, _amount);
-        emit Transfer(_from, _to, _amount);
         return true;
     }
 
@@ -287,6 +277,15 @@ contract PermissionedToken is ERC20, Pausable, Lockable {
         tokenStorage.addBalance(_to, _amount);
         emit Mint(_to, _amount);
         emit Transfer(address(0), _to, _amount);
+    }
+
+    function _transfer(address _to, address _from, uint256 _amount) internal {
+        require(_to != address(0),"to address cannot be 0x0");
+        require(_amount <= balanceOf(_from),"not enough balance to transfer");
+
+        tokenStorage.addBalance(_to, _amount);
+        tokenStorage.subBalance(_from, _amount);
+        emit Transfer(_from, _to, _amount);
     }
 
 }
