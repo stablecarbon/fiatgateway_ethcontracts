@@ -1,15 +1,15 @@
-const { CommonVariables, ZERO_ADDRESS, RANDOM_ADDRESS, expectRevert, assertBalance } = require('../helpers/common');
+const { CommonVariables, ZERO_ADDRESS, RANDOM_ADDRESS, expectRevert, assertBalance } = require('../../helpers/common');
 
-const { RegulatorProxyFactory, 
+const { 
         CarbonDollarProxyFactory,
         CarbonDollarProxy,
-        CarbonDollar,
+        MetaToken,
         Regulator,
         WhitelistedToken,
-        WhitelistedTokenProxyFactory } = require('../helpers/artifacts');
-const { RegulatorMock } = require('../helpers/mocks')
+        WhitelistedTokenProxyFactory } = require('../../helpers/artifacts');
+const { RegulatorMock } = require('../../helpers/mocks')
 
-contract('CarbonDollar Factory creating CD proxies based on CarbonDollar', _accounts => {
+contract('CarbonDollar Factory creating CD proxies based on MetaToken logic', _accounts => {
     const commonVars = new CommonVariables(_accounts);
     const proxy_owner = commonVars.owner;
     const other_owner = commonVars.user;
@@ -20,7 +20,7 @@ contract('CarbonDollar Factory creating CD proxies based on CarbonDollar', _acco
     beforeEach(async function () {
         this.proxyFactory = await CarbonDollarProxyFactory.new({from: proxy_owner });
         this.regulator_CD = await RegulatorMock.new({from: validator })
-        this.impl_v0 = await CarbonDollar.new(ZERO_ADDRESS, {from: other_owner })
+        this.impl_v0 = await MetaToken.new(ZERO_ADDRESS, {from: other_owner })
     })
 
     describe('Creating brand new CarbonDollar proxies from the factory', function () {
@@ -28,7 +28,7 @@ contract('CarbonDollar Factory creating CD proxies based on CarbonDollar', _acco
         it('initiates the factories', async function () {
             assert.equal(await this.proxyFactory.getCount(), 0)
         })
-        it('proxy creates a new CarbonDollar', async function () {
+        it('proxy creates a new CarbonDollarProxy based on MetaToken', async function () {
 
             // Create a CD proxy using factory
             const { logs } = await this.proxyFactory.createToken(this.impl_v0.address, this.regulator_CD.address, {from: proxy_owner})
@@ -38,35 +38,16 @@ contract('CarbonDollar Factory creating CD proxies based on CarbonDollar', _acco
             assert.equal(logs[0].args.index, 0)
             assert.equal(await this.proxyFactory.getCount(), 1)
         })
-    
     })
 
-    describe('getToken', function () {
-        beforeEach(async function () {
-            // Create a CD proxy using factory
-            await this.proxyFactory.createToken(this.impl_v0.address, this.regulator_CD.address, {from: proxy_owner})
-        })
-        it('i is negative, reverts', async function () {
-            await expectRevert(this.proxyFactory.getToken(-1))
-        })
-        it('i is equal to or greater than length, reverts', async function () {
-            await expectRevert(this.proxyFactory.getToken(1))
-            await expectRevert(this.proxyFactory.getToken(2))
-        })
-        it('i >= 0 and < length, retrieves token', async function () {
-            assert.equal(await this.proxyFactory.getToken(0), await this.proxyFactory.tokens(0))
-
-        })
-    })
-
-    describe('Casting children to CarbonDollar and CarbonDollarProxy', function () {
+    describe('Casting children to MetaToken and CarbonDollarProxy', function () {
         beforeEach(async function () {
 
             // Create a CD proxy using factory
             await this.proxyFactory.createToken(this.impl_v0.address, this.regulator_CD.address, {from: proxy_owner})
 
             this.proxy_0 = CarbonDollarProxy.at(await this.proxyFactory.getToken((await this.proxyFactory.getCount())-1))
-            this.token_0 = CarbonDollar.at(this.proxy_0.address)
+            this.token_0 = MetaToken.at(this.proxy_0.address)
 
             // Claim ownership of newly created proxy   
             await this.token_0.claimOwnership({ from:proxy_owner})
@@ -92,7 +73,7 @@ contract('CarbonDollar Factory creating CD proxies based on CarbonDollar', _acco
         describe("Proxy upgradeTo and implentation", function () {
             it('upgrades to next implementation', async function () {
     
-                this.impl_v1 = await CarbonDollar.new(ZERO_ADDRESS, {from: other_owner })
+                this.impl_v1 = await MetaToken.new(ZERO_ADDRESS, {from: other_owner })
                 const { logs } = await this.proxy_0.upgradeTo(this.impl_v1.address, {from: proxy_owner}) 
                 assert.equal(await this.proxy_0.implementation(), this.impl_v1.address) 
                 assert.equal(logs.length, 1)
