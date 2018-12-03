@@ -36,7 +36,9 @@
     "clean-scripts": "rimraf ./scripts/dist/*",
     "build-scripts": "npm run clean-scripts && babel ./scripts/src -d ./scripts/dist",
     "stats-ropsten": "npm run build-scripts && node ./scripts/dist/index.js",
-    "test-token-ropsten": "npm run build-scripts && node ./scripts/dist/testTokens/index.js"
+    "upgrade-cusd": "npm run build-scripts && node ./scripts/dist/upgradeTokens/index.js",
+    "test-token-ropsten": "npm run build-scripts && node ./scripts/dist/testTokens/index.js",
+    "test-metatoken-ropsten": "npm run build-scripts && node ./scripts/dist/testTokensMeta/index.js"
   },
   "author": "npai",
   "license": "ISC",

@@ -74,6 +74,16 @@ export const getWt0Proxy = () => {
     return instance
 }
 
+// MetaToken
+export const getMetaToken = () => {
+    var jsonFile = "./build/contracts/MetaToken.json";
+    var parsed = JSON.parse(fs.readFileSync(jsonFile));
+    var abi = parsed.abi;
+    var deployedAddress = config.CUSD_ADDRESS;
+    const instance = new web3.eth.Contract(abi, deployedAddress)
+    return instance
+}
+
 // Regulator
 export const getRegulatorFactory = () => {
     var jsonFile = "./build/contracts/RegulatorProxyFactory.json";

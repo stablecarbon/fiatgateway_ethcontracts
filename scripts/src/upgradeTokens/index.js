@@ -1,15 +1,15 @@
 import {
     setRegulatorCusd
-} from './upgradeTokens/setRegulatorCusd'
+} from './setRegulatorCusd'
 import {
     setRegulatorWt0
-} from './upgradeTokens/setRegulatorWt0'
+} from './setRegulatorWt0'
 import {
     upgradeCusd
-} from './upgradeTokens/upgradeCusd'
+} from './upgradeCusd'
 import {
     upgradeWt0
-} from './upgradeTokens/upgradeWt0'
+} from './upgradeWt0'
 
 const main = async () => {
 

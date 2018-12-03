@@ -17,7 +17,7 @@ const config = (network) => {
             web3node: 'wss://ropsten.infura.io/ws',
             CUSD_FACTORY_ADDRESS: '0xa7c6ade3951b5bac577f69eb514da005dd26d05c',
             CUSD_ADDRESS: '0x67450c8908e2701abfa6745be3949ad32acf42d8',
-            CUSD_MODEL_ADDRESS: '0x301cc729F73604F2ce2F062D3a219d0A2cF31F80',
+            CUSD_MODEL_ADDRESS: '0x5A0cd6550810ba38743Ee704743cFf135c072f6E',
             WT0_FACTORY_ADDRESS: '0xba6dac4d0367e0a4f854296d117cad0e6d7a97b3',
             WT0_ADDRESS: '0xcd36463470c4b92700b4d5fbe270e680d9d48968',
             WT0_MODEL_ADDRESS: '0x14Ac5fee795105983c5cc15493fe7C034aEC31BD',

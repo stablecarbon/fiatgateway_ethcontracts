@@ -122,7 +122,7 @@ Model scripts are provided in `./scripts/` for reading contract stats on Ropsten
 
 [Regulator (active)](https://ropsten.etherscan.io/address/0x36c18981984D58880C0378DED290f9BD2B30576E)
 
-[CarbonDollar (logic)](https://ropsten.etherscan.io/address/0x301cc729F73604F2ce2F062D3a219d0A2cF31F80)
+[CarbonDollar (logic) (this is now a MetaToken, which extends CarbonDollar)](https://ropsten.etherscan.io/address/0x5A0cd6550810ba38743Ee704743cFf135c072f6E)
 
 [CarbonDollar (active)](https://ropsten.etherscan.io/address/0x67450c8908e2701abfa6745be3949ad32acf42d8)
 
