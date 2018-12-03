@@ -33,7 +33,8 @@
     "eth": "ganache-cli -a 10 -i development -l 100000000000 -e 100000000000000",
     "clean-scripts": "rimraf ./scripts/dist/*",
     "build-scripts": "npm run clean-scripts && babel ./scripts/src -d ./scripts/dist",
-    "scripts": "npm run build-scripts && node ./scripts/dist/index.js"
+    "stats-ropsten": "npm run build-scripts && node ./scripts/dist/index.js",
+    "test-token-ropsten": "npm run build-scripts && node ./scripts/dist/testTokens/index.js"
   },
   "author": "npai",
   "license": "ISC",

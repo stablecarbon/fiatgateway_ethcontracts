@@ -11,10 +11,8 @@ require('dotenv').config()  // Store environment-specific variable from '.env' t
 
 let web3 = getWeb3()
 
-export const mintCusd = async () => {
+export const mintCusd = async (amountToMint, receiver) => {
 
-    const amountToMint = 250*10**18
-    const receiver = getMinter().address
     console.log('\n***** CUSD::MINT() *****\n')
 
     let wt0 = getWt0()

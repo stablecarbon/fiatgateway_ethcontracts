@@ -108,7 +108,7 @@ Run `npm run test` to run all tests
 
 ### Scripts to interact with deployed contracts
 
-Model scripts are provided in `./scripts/` for reading contract stats that can be run with `npm run stats`. Modify `./scripts/src/index.js` to customize which scripts you want `npm run stats` to execute. 
+Model scripts are provided in `./scripts/` for reading contract stats on Ropsten (or Mainnet with a small tweak) that can be run with `npm run stats-ropsten`. `npm run test-token-ropsten` will mint, transfer, and burn CUSD on Ropsten for testing purposes.
 
 ### Ropsten
 

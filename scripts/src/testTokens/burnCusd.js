@@ -12,10 +12,8 @@ require('dotenv').config()  // Store environment-specific variable from '.env' t
 
 let web3 = getWeb3()
 
-export const burnCusd = async () => {
+export const burnCusd = async (amountToBurn, burner) => {
 
-    const amountToBurn = 250*10**18
-    const burner = getMinter()
     console.log('\n***** CUSD::BURN() *****\n')
 
     let cusd = getCusd()

@@ -23,6 +23,11 @@ export const claimOwnershipRegulator = async () => {
     console.log("Current owner: " + current_owner)
     console.log("Pending owner: " + pending_owner)
 
+    if (owner.address !== pending_owner) {
+        console.log('invalid pending owner, exiting')
+        return
+    }
+
     /** Constructing and sending transaction **/
     let to = regulator_active_address
     let data = regulator.methods.claimOwnership().encodeABI()
