@@ -22,6 +22,9 @@ function carbonDollarStorageInteractionTests(owner, wtMinter) {
                     })
                 })
                 describe('token is not whitelisted', function () {
+                    beforeEach(async function () {
+                        await this.token.unlistToken(this.wtToken.address, {from: owner});
+                    })
                     it('reverts', async function () {
                         await expectRevert(this.token.setFee(this.wtToken.address, 100, {from:owner}))
                     })
@@ -47,6 +50,9 @@ function carbonDollarStorageInteractionTests(owner, wtMinter) {
 
                 })
                 describe('token is not whitelisted', function () {
+                    beforeEach(async function () {
+                        await this.token.unlistToken(this.wtToken.address, {from: owner});
+                    })
                     it('reverts', async function () {
                         await expectRevert(this.token.removeFee(this.wtToken.address, {from:owner}))
                     }) 

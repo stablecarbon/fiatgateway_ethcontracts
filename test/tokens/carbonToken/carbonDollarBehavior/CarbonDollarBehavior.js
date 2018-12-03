@@ -35,7 +35,6 @@ function carbonDollarBehaviorTests(owner, wtMinter, user, validator, blacklisted
                 describe('when CUSD WT0 escrow account within stablecoin holds enough funds', function () {
                     beforeEach(async function () {
                         // Whitelist the WT0 contract and add a fee
-                        await this.token.listToken(this.wtToken.address, { from: owner });
                         await this.token.setFee(this.wtToken.address, 100, { from: owner });  // 10% fee
                         // Mint WT for user directly into CUSD
                         await this.wtToken.mintCUSD(user, 100 * 10 ** 18, { from: wtMinter });
@@ -80,7 +79,6 @@ function carbonDollarBehaviorTests(owner, wtMinter, user, validator, blacklisted
                 describe('when CUSD escrow account within stablecoin does not hold enough funds', function () {
                     const burner = user
                     it('reverts call', async function () {
-                        await this.token.listToken(this.wtToken.address, { from: owner });
                         await this.token.setFee(this.wtToken.address, 100, { from: owner });  // 10% fee
                         // Mint CarbonUSD for user
                         await this.wtToken.mintCUSD(burner, 100 * 10 ** 18, { from: wtMinter });
@@ -97,7 +95,6 @@ function carbonDollarBehaviorTests(owner, wtMinter, user, validator, blacklisted
             describe('when desired stablecoin is not whitelisted', function () {
                 const burner = user
                 it('reverts call', async function () {
-                    await this.token.listToken(this.wtToken.address, { from: owner });
                     await this.token.setFee(this.wtToken.address, 100, { from: owner });
                     // Mint CarbonUSD for user
                     await this.wtToken.mintCUSD(burner, 100 * 10 ** 18, { from: wtMinter });
@@ -112,7 +109,6 @@ function carbonDollarBehaviorTests(owner, wtMinter, user, validator, blacklisted
                 describe('when CUSD WT0 escrow account within stablecoin holds enough funds', function () {
                     beforeEach(async function () {
                         // Whitelist the WT0 contract and add a fee
-                        await this.token.listToken(this.wtToken.address, { from: owner });
                         await this.token.setDefaultFee(50, { from: owner });  // 5% fee
                         await this.token.setFee(this.wtToken.address, 100, { from: owner });  // 10% fee
                         // Mint WT for user directly into CUSD
@@ -173,7 +169,6 @@ function carbonDollarBehaviorTests(owner, wtMinter, user, validator, blacklisted
                 });
                 describe('when CUSD escrow account within stablecoin does not hold enough funds', function () {
                     it('reverts call', async function () {
-                        await this.token.listToken(this.wtToken.address, { from: owner });
                         await this.token.setFee(this.wtToken.address, 100, { from: owner });  // 10% fee
                         // Mint CarbonUSD for user
                         await this.wtToken.mintCUSD(user, 100 * 10 ** 18, { from: wtMinter });
@@ -189,7 +184,6 @@ function carbonDollarBehaviorTests(owner, wtMinter, user, validator, blacklisted
             });
             describe('when desired stablecoin is not whitelisted', function () {
                 it('reverts call', async function () {
-                    await this.token.listToken(this.wtToken.address, { from: owner });
                     await this.token.setFee(this.wtToken.address, 100, { from: owner });
                     // Mint CarbonUSD for user
                     await this.wtToken.mintCUSD(user, 100 * 10 ** 18, { from: wtMinter });
@@ -202,7 +196,6 @@ function carbonDollarBehaviorTests(owner, wtMinter, user, validator, blacklisted
         describe('releaseCarbonDollar', function () {
             beforeEach(async function () {
                 // Whitelist the WT0 contract and add a fee
-                await this.token.listToken(this.wtToken.address, { from: owner });
                 await this.token.setFee(this.wtToken.address, 100, { from: owner });  // 10% fee
                 // Mint WT for user directly into CUSD. We assume this function call works as intended
                 // (since WhitelistedToken will end up testing it.)
@@ -252,7 +245,6 @@ function carbonDollarBehaviorTests(owner, wtMinter, user, validator, blacklisted
     describe("Computational functions", function() {
         describe("computeFeeRate", function() {
             beforeEach(async function () {
-                await this.token.listToken(this.wtToken.address, { from: owner });
                 await this.token.setFee(this.wtToken.address, 100, { from: owner });  // 10% fee
             })
             it("When stablecoin fee is specified, fee is listed correctly", async function () {

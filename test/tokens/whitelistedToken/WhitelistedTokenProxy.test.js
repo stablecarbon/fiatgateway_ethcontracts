@@ -80,7 +80,7 @@ contract('WhitelistedTokenProxy', _accounts => {
     describe('upgradeTo v1', function () {
         beforeEach(async function () {
             // Second logic contract 
-            await tokenSetup.call(this, validator, minter, user, owner, blacklisted, anotherUser);
+            await tokenSetup.call(this, validator, minter, owner, blacklisted);
             this.impl_v1 = this.wtToken.address
         })
         describe('owner calls upgradeTo', function () {

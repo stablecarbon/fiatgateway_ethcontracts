@@ -3,12 +3,10 @@
 const { 
     WhitelistedToken,
     CarbonDollar,
-    PermissionedTokenStorage,
-    CarbonDollarStorage,
  } = require('./artifacts');
  const { RegulatorMock } = require('./mocks')
 
-async function tokenSetup(validator, minter, user, owner, blacklisted, anotherUser) {
+async function tokenSetup(validator, minter, owner, blacklisted) {
     const from = owner
 
     // REGULATORS
@@ -29,6 +27,9 @@ async function tokenSetup(validator, minter, user, owner, blacklisted, anotherUs
 
     // WhitelistedToken
     this.wtToken = await WhitelistedToken.new(this.regulator.address, this.cdToken.address, { from: owner })
+
+    // Authorize WT0 to be paired with CUSD
+    await this.cdToken.listToken(this.wtToken.address, { from: owner });
 }
 
 module.exports = {

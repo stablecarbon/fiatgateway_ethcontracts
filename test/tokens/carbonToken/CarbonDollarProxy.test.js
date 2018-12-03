@@ -62,11 +62,10 @@ contract('CarbonDollarProxy', _accounts => {
         })
         describe('call proxy to convertCarbonDollar, relies on PermissionedToken calls working correctly', function () {
             beforeEach(async function () {
-                await tokenSetupCDProxy.call(this, this.tokenProxy.address, validator, minter, user, owner, blacklisted, anotherUser);
+                await tokenSetupCDProxy.call(this, this.tokenProxy.address, validator, minter, proxyOwner, blacklisted);
             })
             beforeEach(async function () {  
                 // Whitelist the WT0 contract and add a fee
-                await this.tokenProxy.listToken(this.wtToken.address, { from: proxyOwner });
                 await this.tokenProxy.setFee(this.wtToken.address, 100, { from: proxyOwner });  // 10% fee
                 // Mint WT for user directly into CUSD (user is set as minter in token setup)
                 await this.wtToken.mintCUSD(user, 100 * 10 ** 18, { from: minter });
@@ -98,7 +97,7 @@ contract('CarbonDollarProxy', _accounts => {
     describe('upgradeTo v1', function () {
         beforeEach(async function () {
             // Second logic contract 
-            await tokenSetup.call(this, validator, minter, user, owner, blacklisted, anotherUser);
+            await tokenSetup.call(this, validator, minter, owner, blacklisted);
             this.impl_v1 = this.cdToken.address
         })
         describe('owner calls upgradeTo', function () {

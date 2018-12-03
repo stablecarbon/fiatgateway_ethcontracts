@@ -37,17 +37,17 @@ contract MetaToken is PermissionedToken {
     //     _burn(msg.sender, _amount);
     // }
 
-    // /**
-    //  * @dev Increase the amount of tokens that an owner allowed to a spender.
-    //  * @notice increaseApproval should be used instead of approve when the user's allowance
-    //  * is greater than 0. Using increaseApproval protects against potential double-spend attacks
-    //  * by moving the check of whether the user has spent their allowance to the time that the transaction 
-    //  * is mined, removing the user's ability to double-spend
-    //  * @param _spender The address which will spend the funds.
-    //  * @param _addedValue The amount of tokens to increase the allowance by.
-    //  */
-    // function metaIncreaseApproval(address _spender, uint256 _addedValue) 
-    // public userNotBlacklisted(_spender) userNotBlacklisted(msg.sender) whenNotPaused returns (bool) {
+    /**
+     * @dev Increase the amount of tokens that an owner allowed to a spender.
+     * @notice increaseApproval should be used instead of approve when the user's allowance
+     * is greater than 0. Using increaseApproval protects against potential double-spend attacks
+     * by moving the check of whether the user has spent their allowance to the time that the transaction 
+     * is mined, removing the user's ability to double-spend
+     * @param _spender The address which will spend the funds.
+     * @param _addedValue The amount of tokens to increase the allowance by.
+     */
+    // function metaIncreaseApproval(address _spender, uint256 _addedValue, bytes _signature, uint256 _nonce, uint256 _reward) 
+    // public userNotBlacklisted(_spender) whenNotPaused returns (bool) {
     //     _increaseApproval(_spender, _addedValue, msg.sender);
     //     return true;
     // }
@@ -69,10 +69,11 @@ contract MetaToken is PermissionedToken {
         require(!regulator.isBlacklistedUser(signer), "signer is blacklisted");
         require(_nonce == replayNonce[signer], "this transaction has already been broadcast");
         replayNonce[signer]++;
+
+        require( _reward > 0, "reward to incentivize relayer must be positive");
+        require( (_amount + _reward) <= balanceOf(signer),"not enough balance to transfer and reward relayer");
         _transfer(_to, signer, _amount);
-        if (_reward > 0) {
-            _transfer(msg.sender, signer, _reward);
-        }
+        _transfer(msg.sender, signer, _reward);
         return true;
     }
 

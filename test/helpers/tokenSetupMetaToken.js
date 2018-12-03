@@ -1,14 +1,11 @@
-// beforeEach setup function for CarbonDollarProxyTests 
-// Identical to toknSetup except that CD references a proxy address
+// beforeEach setup function for CarbonDollarTests and WhitelistedToken tests.
 
 const { 
-    WhitelistedToken,
-    CarbonDollar,
+    MetaToken,
  } = require('./artifacts');
-
  const { RegulatorMock } = require('./mocks')
 
-async function tokenSetupCDProxy(CarbonDollarAddress, validator, minter, owner, blacklisted) {
+async function tokenSetupMetaToken(validator, minter, owner, blacklisted) {
     const from = owner
 
     // REGULATORS
@@ -24,18 +21,10 @@ async function tokenSetupCDProxy(CarbonDollarAddress, validator, minter, owner, 
     // TOKENS
 
     /* ----------------------------------------------------------------------------*/
-    
-    // CarbonDollar taken from proxy
-    this.cdToken = await CarbonDollar.at(CarbonDollarAddress)
-    
-    // WhitelistedToken
-    this.wtToken = await WhitelistedToken.new(this.regulator.address, this.cdToken.address, { from: owner })
-
-    // Authorize WT0 to be paired with CUSD
-    await this.cdToken.listToken(this.wtToken.address, { from: owner });
-
+    // MetaToken
+    this.metatoken = await MetaToken.new(this.regulator.address, { from: owner })
 }
 
 module.exports = {
-    tokenSetupCDProxy
+    tokenSetupMetaToken
 }

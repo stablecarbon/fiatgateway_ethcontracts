@@ -12,7 +12,7 @@ contract('CarbonDollar', _accounts => {
     const user = commonVars.validator2
 
     beforeEach(async function () {
-        await tokenSetup.call(this, validator, minter, user, owner, blacklisted, anotherUser);
+        await tokenSetup.call(this, validator, minter, owner, blacklisted);
         this.token = this.cdToken;
     });
 

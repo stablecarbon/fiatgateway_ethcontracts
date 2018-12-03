@@ -15,7 +15,7 @@ contract('WhitelistedToken', _accounts => {
     const user = commonVars.validator2
 
     beforeEach(async function () {
-        await tokenSetup.call(this, validator, minter, user, owner, blacklisted, anotherUser);
+        await tokenSetup.call(this, validator, minter, owner, blacklisted);
         this.token = this.wtToken;
     });
 
@@ -25,9 +25,6 @@ contract('WhitelistedToken', _accounts => {
         describe('mintCUSD', function () {    
             describe('user has mint CUSD permission', function () {
                 const from = minter
-                beforeEach(async function () {
-                    await this.cdToken.listToken(this.token.address, { from: owner });
-                });
                 describe('receiver is blacklisted', function () {
                     const to = blacklisted
 
@@ -71,7 +68,6 @@ contract('WhitelistedToken', _accounts => {
 
                 describe('user has sufficient funds', function () {
                     beforeEach(async function () {
-                        await this.cdToken.listToken(this.token.address, { from: owner });
                         await this.token.mint(from, hundred, { from: minter });
                     });
                     it('user loses WT0', async function () {
