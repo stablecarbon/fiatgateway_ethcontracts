@@ -23,20 +23,15 @@ To verify contracts created by the Factories, you will need to retrieve the ABI-
 truffle-config currently connects to Ethereum node via websocket provided by our [Infura account](https://infura.io/)
 
 `provider: function () {
-        return new HDWalletProvider(process.env.MNEMONIC, "https://mainnet.infura.io/v3/" + process.env.INFURA_API_KEY_MAIN, i)
+        return new HDWalletProvider(process.env.MNEMONIC/privateKey, "wss://mainnet.infura.io/ws" + process.env.INFURA_API_KEY_MAIN)
       },`
 
-## MetaMask!: This application runs best with the MetaMask browser extension
-Any browser-based wallet should work with this app, but if there is one we missed then we are happy to add it!
-
-Why MetaMask: a MetaMask password is less worrisome than a private key to lose track of. It's a wrapper over multiple wallets, but can expose private keys. MetaMask is also a lot more convenient for users who do want to deal with the complexities of other web-based wallets like MyEtherwallet.
-
-What you need to keep secret:
-	A) password: Your metamask is unique to your computer on local computer
-	B) seedwords --> can restore metamask account including ETH keypairs on any computer.
+## Metatransactions
+[Update as of November 2018: Interact with CUSD without paying ETH gas fees!](https://medium.com/gitcoin/native-meta-transactions-e509d91a8482)
 
 ## Architecture
 ### Core Token:
+
 	CUSD: "CUSD" is a regulated ERC20 token redeemable into any whitelisted token, the initial of which is "WT0" (Whitelisted Token v.0)
 
 ### Our Regulators can assign accounts Permissions
