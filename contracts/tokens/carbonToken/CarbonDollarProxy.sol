@@ -3,7 +3,6 @@ pragma solidity ^0.4.24;
 import "./dataStorage/CarbonDollarStorage.sol";
 import "../permissionedToken/dataStorage/PermissionedTokenStorage.sol";
 import "../permissionedToken/PermissionedTokenProxy.sol";
-import '../../regulator/carbonDollarRegulator/CarbonDollarRegulator.sol';
 
 /**
 * @title CarbonDollarProxy
@@ -20,7 +19,7 @@ contract CarbonDollarProxy is PermissionedTokenProxy {
     */
     constructor(address _implementation, address _regulator) public PermissionedTokenProxy(_implementation, _regulator) {
         // base class override
-        regulator = CarbonDollarRegulator(_regulator);
+        regulator = Regulator(_regulator);
 
         tokenStorage_CD = new CarbonDollarStorage();
 

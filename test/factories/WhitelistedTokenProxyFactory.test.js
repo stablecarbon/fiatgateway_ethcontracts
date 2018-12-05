@@ -7,8 +7,8 @@ const { RegulatorProxyFactory,
         WhitelistedTokenProxyFactory,
         WhitelistedTokenProxy,
         WhitelistedToken,
-        WhitelistedTokenRegulator } = require('../helpers/artifacts');
-const { CarbonDollarMock, WhitelistedRegulatorMock } = require('../helpers/mocks')
+        Regulator } = require('../helpers/artifacts');
+const { RegulatorMock } = require('../helpers/mocks')
 
 contract('WhitelistedToken Factory creating WT proxies', _accounts => {
     const commonVars = new CommonVariables(_accounts);
@@ -16,19 +16,19 @@ contract('WhitelistedToken Factory creating WT proxies', _accounts => {
     const other_owner = commonVars.user;
     const validator = commonVars.validator;
     const minter = commonVars.user2;
-    const whitelisted = commonVars.user3;
+    const user = commonVars.user3;
 
     beforeEach(async function () {
 
         this.proxyFactory = await WhitelistedTokenProxyFactory.new({ from: proxy_owner });
 
-        this.regulator_WT = await WhitelistedRegulatorMock.new({from: validator })
+        this.regulator_WT = await RegulatorMock.new({from: validator })
         this.impl_v0 = await WhitelistedToken.new(ZERO_ADDRESS, ZERO_ADDRESS, {from: other_owner })
 
         // Create a CD Token necessary to create a WT token
         this.cdTokenModel = await CarbonDollar.new(ZERO_ADDRESS, {from: other_owner })
         this.cdProxyFactory = await CarbonDollarProxyFactory.new({from: proxy_owner });
-        this.regulator_CD = await CarbonDollarMock.new({from: validator})
+        this.regulator_CD = await RegulatorMock.new({from: validator})
         await this.cdProxyFactory.createToken(this.cdTokenModel.address, this.regulator_CD.address, { from: proxy_owner })
         this.cdTokenAddress = await this.cdProxyFactory.getToken((await this.cdProxyFactory.getCount())-1)
 
@@ -84,7 +84,7 @@ contract('WhitelistedToken Factory creating WT proxies', _accounts => {
             await this.token_0.claimOwnership({ from: proxy_owner })
 
             this.cusd_0 = CarbonDollar.at(await this.token_0.cusdAddress())
-            this.regulator_WT = WhitelistedTokenRegulator.at(await this.token_0.regulator())
+            this.regulator_WT = Regulator.at(await this.token_0.regulator())
             
             await this.cusd_0.claimOwnership({ from: proxy_owner})
         })
@@ -100,7 +100,7 @@ contract('WhitelistedToken Factory creating WT proxies', _accounts => {
         }) 
         it('Proxy can change storage', async function () {
             const newCD = await CarbonDollar.new(ZERO_ADDRESS, {from:other_owner})
-            const newRegulator = await WhitelistedRegulatorMock.new({ from:validator})
+            const newRegulator = await Regulator.new({ from:validator})
 
             await this.token_0.setCUSDAddress(newCD.address, {from: proxy_owner})
             await this.token_0.setRegulator(newRegulator.address, {from:proxy_owner})
@@ -123,36 +123,33 @@ contract('WhitelistedToken Factory creating WT proxies', _accounts => {
 
             beforeEach(async function () {
                 // Set up CD permissions
-                await this.regulator_CD.setWhitelistedUser(whitelisted, {from:validator})
                 await this.cusd_0.listToken(this.token_0.address, {from:proxy_owner})
 
                 // Set up WT permissions
                 await this.regulator_WT.setMinter(minter, {from:validator})
-                await this.regulator_WT.setWhitelistedUser(whitelisted, {from:validator})
-                await this.regulator_WT.setWhitelistedUser(this.cusd_0.address, {from:validator})
             })
             describe('mintCUSD', function () {
                 // Permissions: CD must whitelist WT token, whitelist the mintCUSD() caller, and WT must whitelist the CD address
                 it('minter calls', async function () {
-                    await this.token_0.mintCUSD(whitelisted, 10 * 10 ** 18, {from:minter})
+                    await this.token_0.mintCUSD(user, 10 * 10 ** 18, {from:minter})
                     await assertBalance(this.token_0, this.cusd_0.address, 10 * 10 ** 18)
-                    await assertBalance(this.cusd_0, whitelisted, 10 * 10 ** 18)
+                    await assertBalance(this.cusd_0, user, 10 * 10 ** 18)
                 })
             })
             describe('convertWT', function () {
 
                 it('should convert whitelisted CUSD into WT', async function () {
                     // Mint user some WT tokens for testing purposes
-                    await this.token_0.mint(whitelisted, 10 * 10 ** 18, {from:minter})
+                    await this.token_0.mint(user, 10 * 10 ** 18, {from:minter})
 
-                    await assertBalance(this.token_0, whitelisted, 10 * 10 ** 18)
-                    await assertBalance(this.cusd_0, whitelisted, 0)
+                    await assertBalance(this.token_0, user, 10 * 10 ** 18)
+                    await assertBalance(this.cusd_0, user, 0)
                     await assertBalance(this.token_0, this.cusd_0.address, 0)
 
-                    await this.token_0.convertWT( 5 * 10 ** 18, {from:whitelisted})
+                    await this.token_0.convertWT( 5 * 10 ** 18, {from:user})
 
-                    await assertBalance(this.token_0, whitelisted, 5 * 10 ** 18)
-                    await assertBalance(this.cusd_0, whitelisted, 5 * 10 ** 18)
+                    await assertBalance(this.token_0, user, 5 * 10 ** 18)
+                    await assertBalance(this.cusd_0, user, 5 * 10 ** 18)
                     await assertBalance(this.token_0, this.cusd_0.address, 5 * 10 ** 18)
                 })
 

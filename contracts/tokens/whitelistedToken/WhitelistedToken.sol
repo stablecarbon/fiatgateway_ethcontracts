@@ -3,7 +3,6 @@ pragma solidity ^0.4.24;
 import "../permissionedToken/PermissionedToken.sol";
 import "../carbonToken/CarbonDollar.sol";
 import "openzeppelin-solidity/contracts/AddressUtils.sol";
-import "../../regulator/whitelistedRegulator/WhitelistedTokenRegulator.sol";
 
 /**
 * @title WhitelistedToken
@@ -31,7 +30,7 @@ contract WhitelistedToken is PermissionedToken {
     constructor(address _regulator, address _cusd) public PermissionedToken(_regulator) {
 
         // base class fields
-        regulator = WhitelistedTokenRegulator(_regulator);
+        regulator = Regulator(_regulator);
 
         cusdAddress = _cusd;
 
@@ -43,7 +42,7 @@ contract WhitelistedToken is PermissionedToken {
     * @param _to The address of the receiver
     * @param _amount The number of CarbonTokens to mint to user
     */
-    function mintCUSD(address _to, uint256 _amount) public requiresPermission whenNotPaused userWhitelisted(_to) {
+    function mintCUSD(address _to, uint256 _amount) public requiresPermission whenNotPaused userNotBlacklisted(_to) {
         return _mintCUSD(_to, _amount);
     }
 
@@ -52,7 +51,7 @@ contract WhitelistedToken is PermissionedToken {
     * into the CarbonUSD contract's escrow account.
     * @param _amount The number of Whitelisted tokens to convert
     */
-    function convertWT(uint256 _amount) public requiresPermission whenNotPaused {
+    function convertWT(uint256 _amount) public userNotBlacklisted(msg.sender) whenNotPaused {
         require(balanceOf(msg.sender) >= _amount, "Conversion amount should be less than balance");
         _burn(msg.sender, _amount);
         _mintCUSD(msg.sender, _amount);

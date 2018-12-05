@@ -1,7 +1,6 @@
 pragma solidity ^0.4.24;
 
 import "../permissionedToken/PermissionedTokenProxy.sol";
-import "../../regulator/whitelistedRegulator/WhitelistedTokenRegulator.sol";
 
 /**
 * @title WhitelistedTokenProxy
@@ -17,7 +16,7 @@ contract WhitelistedTokenProxy is PermissionedTokenProxy {
                 address _regulator, 
                 address _cusd) public PermissionedTokenProxy(_implementation, _regulator) {
         // base class override
-        regulator = WhitelistedTokenRegulator(_regulator);
+        regulator = Regulator(_regulator);
 
         cusdAddress = _cusd;
 

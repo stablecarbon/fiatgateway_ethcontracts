@@ -12,9 +12,8 @@ contract('PermissionedToken', _accounts => {
     const minter = commonVars.user
     const validator = commonVars.validator
     const blacklisted = commonVars.attacker
-    const whitelisted = commonVars.user2
-    const nonlisted = commonVars.user3
-    const user = commonVars.validator2
+    const anotherUser = commonVars.user2
+    const user = commonVars.user3
     
     beforeEach(async function () {
 
@@ -22,8 +21,6 @@ contract('PermissionedToken', _accounts => {
 
         // Set user permissions
         await this.regulator.setMinter(minter, {from:validator})
-        await this.regulator.setWhitelistedUser(whitelisted, {from:validator})
-        await this.regulator.setNonlistedUser(nonlisted, {from:validator})
         await this.regulator.setBlacklistedUser(blacklisted, {from:validator})
 
         this.token = await PermissionedToken.new(this.regulator.address, {from:owner})
@@ -35,9 +32,9 @@ contract('PermissionedToken', _accounts => {
     })
 
     describe("Permissioned Token tests", function () {
-        permissionedTokenBasicTests(owner, whitelisted, nonlisted, minter);
+        permissionedTokenBasicTests(owner, user, anotherUser, minter);
         permissionedTokenMutableStorageTests(owner, user)
-        permissionedTokenBehaviorTests( minter, whitelisted, blacklisted, nonlisted, user, validator, owner );
+        permissionedTokenBehaviorTests( minter, user, blacklisted, anotherUser, validator, owner );
     });
 
 

@@ -54,14 +54,10 @@ contract RegulatorProxyFactory {
         // Make this contract a temporary validator to add all permissions
         regulator.addValidator(this);
         regulator.addPermission(regulator.MINT_SIG(), "", "", "" );
-        regulator.addPermission(regulator.BURN_SIG(), "", "", "" );
         regulator.addPermission(regulator.DESTROY_BLACKLISTED_TOKENS_SIG(), "", "", "" );
         regulator.addPermission(regulator.APPROVE_BLACKLISTED_ADDRESS_SPENDER_SIG(), "", "", "" );
         regulator.addPermission(regulator.BLACKLISTED_SIG(), "", "", "" );
-        regulator.addPermission(regulator.CONVERT_CARBON_DOLLAR_SIG(), "", "", "" );
-        regulator.addPermission(regulator.BURN_CARBON_DOLLAR_SIG(), "", "", "" );
         regulator.addPermission(regulator.MINT_CUSD_SIG(), "", "", "" );
-        regulator.addPermission(regulator.CONVERT_WT_SIG(), "", "", "" );
         regulator.removeValidator(this);
     }
 

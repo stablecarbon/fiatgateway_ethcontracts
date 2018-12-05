@@ -4,9 +4,9 @@ const { tokenSetupCDProxy } = require('../../helpers/tokenSetupCDProxy')
 
 const { tokenSetup } = require('../../helpers/tokenSetup')
 
-const { CarbonDollarProxy, CarbonDollar, BalanceSheet, AllowanceSheet, CarbonDollarRegulator, FeeSheet, StablecoinWhitelist, PermissionSheet, ValidatorSheet } = require('../../helpers/artifacts');
+const { CarbonDollarProxy, CarbonDollar, Regulator } = require('../../helpers/artifacts');
 
-const { CarbonDollarMock } = require('../../helpers/mocks');
+const { RegulatorMock } = require('../../helpers/mocks');
 
 contract('CarbonDollarProxy', _accounts => {
     const commonVars = new CommonVariables(_accounts);
@@ -16,12 +16,11 @@ contract('CarbonDollarProxy', _accounts => {
     const user = commonVars.user2;
     const minter = commonVars.user3;
     const blacklisted = commonVars.attacker
-    const whitelisted = commonVars.user4
-    const nonlisted = commonVars.user5
+    const anotherUser = commonVars.user5
 
     beforeEach(async function () {
         // Empty Proxy Data storage + fully loaded regulator
-        this.proxyRegulator = (await CarbonDollarMock.new({from:validator})).address
+        this.proxyRegulator = (await RegulatorMock.new({from:validator})).address
         
         // First logic contract
         this.impl_v0 = (await CarbonDollar.new(this.proxyRegulator, { from:owner })).address
@@ -41,7 +40,7 @@ contract('CarbonDollarProxy', _accounts => {
     
     describe('Proxy delegates calls to logic contract', function () {
         beforeEach(async function () {
-            this.tokenProxyRegulator = CarbonDollarRegulator.at(this.proxyRegulator)
+            this.tokenProxyRegulator = Regulator.at(this.proxyRegulator)
             this.tokenProxy = CarbonDollar.at(this.proxyAddress)
 
             this.logic_v0 = CarbonDollar.at(this.impl_v0)
@@ -63,34 +62,33 @@ contract('CarbonDollarProxy', _accounts => {
         })
         describe('call proxy to convertCarbonDollar, relies on PermissionedToken calls working correctly', function () {
             beforeEach(async function () {
-                await tokenSetupCDProxy.call(this, this.tokenProxy.address, validator, minter, user, owner, whitelisted, blacklisted, nonlisted);
+                await tokenSetupCDProxy.call(this, this.tokenProxy.address, validator, minter, proxyOwner, blacklisted);
             })
             beforeEach(async function () {  
                 // Whitelist the WT0 contract and add a fee
-                await this.tokenProxy.listToken(this.wtToken.address, { from: proxyOwner });
                 await this.tokenProxy.setFee(this.wtToken.address, 100, { from: proxyOwner });  // 10% fee
                 // Mint WT for user directly into CUSD (user is set as minter in token setup)
-                await this.wtToken.mintCUSD(whitelisted, 100 * 10 ** 18, { from: user });
+                await this.wtToken.mintCUSD(user, 100 * 10 ** 18, { from: minter });
 
                 // Whitelisted account should have no WT tokens
-                assert.equal(await this.wtToken.balanceOf(whitelisted), 0)
+                assert.equal(await this.wtToken.balanceOf(user), 0)
                 // CUSD account should have WT tokens 
                 assert.equal(await this.wtToken.balanceOf(this.tokenProxy.address), 100 * 10 ** 18)
                 // Whitelisted account should have carbon dollars
-                assert.equal(await this.tokenProxy.balanceOf(whitelisted), 100 * 10 ** 18)
+                assert.equal(await this.tokenProxy.balanceOf(user), 100 * 10 ** 18)
             })
             it('converts user CUSD into WT0, minus a fee', async function () {
                 // User now could call CarbonDollar.convertCarbonDollar to convert CUSD back into WT
-                await this.tokenProxy.convertCarbonDollar(this.wtToken.address, 50 * 10 ** 18, { from: whitelisted });
-                assertBalance(this.wtToken, whitelisted, 45 * 10 ** 18); // User gets WT0 returned to them
-                assertBalance(this.tokenProxy, whitelisted, 50 * 10 ** 18); // User's remaining CUSD balance
+                await this.tokenProxy.convertCarbonDollar(this.wtToken.address, 50 * 10 ** 18, { from: user });
+                assertBalance(this.wtToken, user, 45 * 10 ** 18); // User gets WT0 returned to them
+                assertBalance(this.tokenProxy, user, 50 * 10 ** 18); // User's remaining CUSD balance
             });
             it('deposits fee into CarbonDollar contract address as CUSD', async function () {
-                await this.tokenProxy.convertCarbonDollar(this.wtToken.address, 50 * 10 ** 18, { from: whitelisted });
+                await this.tokenProxy.convertCarbonDollar(this.wtToken.address, 50 * 10 ** 18, { from: user });
                 assertBalance(this.tokenProxy, this.tokenProxy.address, 5 * 10 ** 18); // Fee deposited into Carbon account for transaction                         
             });
             it('diminishes amount in CUSD WT0 escrow account', async function () {
-                await this.tokenProxy.convertCarbonDollar(this.wtToken.address, 50 * 10 ** 18, { from: whitelisted });
+                await this.tokenProxy.convertCarbonDollar(this.wtToken.address, 50 * 10 ** 18, { from: user });
                 assertBalance(this.wtToken, this.tokenProxy.address, 50 * 10 ** 18); // Carbon's remaining WT0 escrowed balance
             });
         })
@@ -99,7 +97,7 @@ contract('CarbonDollarProxy', _accounts => {
     describe('upgradeTo v1', function () {
         beforeEach(async function () {
             // Second logic contract 
-            await tokenSetup.call(this, validator, minter, user, owner, whitelisted, blacklisted, nonlisted);
+            await tokenSetup.call(this, validator, minter, owner, blacklisted);
             this.impl_v1 = this.cdToken.address
         })
         describe('owner calls upgradeTo', function () {

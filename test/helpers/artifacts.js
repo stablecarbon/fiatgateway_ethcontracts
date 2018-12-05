@@ -23,6 +23,9 @@ const CarbonDollarRegulator = artifacts.require("CarbonDollarRegulator");
 const CarbonDollarProxy = artifacts.require("CarbonDollarProxy");
 const CarbonDollarProxyFactory = artifacts.require("CarbonDollarProxyFactory");
 
+// MetaToken
+const MetaToken = artifacts.require("MetaToken")
+
 // Upgradeability
 const DelayedUpgradeabilityProxy = artifacts.require("DelayedUpgradeabilityProxy");
 
@@ -49,5 +52,7 @@ module.exports = {
 	CarbonDollarStorage,
 	CarbonDollarRegulator,
 	// Utils
-	DelayedUpgradeabilityProxy
+	DelayedUpgradeabilityProxy,
+	// MetaToken
+	MetaToken
 }

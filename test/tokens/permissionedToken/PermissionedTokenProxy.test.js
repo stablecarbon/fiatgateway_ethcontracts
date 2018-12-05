@@ -4,8 +4,6 @@ const { PermissionedTokenProxy, PermissionedToken, Regulator } = require('../../
 
 const { RegulatorMock } = require('../../helpers/mocks');
 
-const { permissionedTokenMutableStorageTests } = require('./permissionedTokenBehavior/PermissionedTokenMutableStorage');
-
 contract('PermissionedTokenProxy', _accounts => {
     const commonVars = new CommonVariables(_accounts);
     const owner = commonVars.owner;
@@ -39,7 +37,6 @@ contract('PermissionedTokenProxy', _accounts => {
             this.tokenProxyRegulator = Regulator.at(this.proxyRegulator)
 
             await this.tokenProxyRegulator.setMinter(owner, {from:validator})
-            await this.tokenProxyRegulator.setWhitelistedUser(user, {from:validator})
         })
         describe('call to proxy to mint', function () {
             it('proxy mints to whitelisted user', async function () {

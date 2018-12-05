@@ -2,9 +2,9 @@ const { CommonVariables, ZERO_ADDRESS, RANDOM_ADDRESS, expectRevert, assertBalan
 
 const { tokenSetup } = require('../../helpers/tokenSetup')
 
-const { WhitelistedTokenProxy, WhitelistedToken, CarbonDollar, WhitelistedTokenRegulator } = require('../../helpers/artifacts');
+const { WhitelistedTokenProxy, WhitelistedToken, CarbonDollar } = require('../../helpers/artifacts');
 
-const { WhitelistedRegulatorMock } = require('../../helpers/mocks');
+const { RegulatorMock } = require('../../helpers/mocks');
 
 contract('WhitelistedTokenProxy', _accounts => {
     const commonVars = new CommonVariables(_accounts);
@@ -14,12 +14,11 @@ contract('WhitelistedTokenProxy', _accounts => {
     const user = commonVars.user2;
     const minter = commonVars.user3;
     const blacklisted = commonVars.attacker
-    const whitelisted = commonVars.user4
-    const nonlisted = commonVars.user5
+    const anotherUser = commonVars.user5
 
     beforeEach(async function () {
         // Empty Proxy Data storage + fully loaded regulator (all permissions + 1 validator)
-        this.proxyRegulator = (await WhitelistedRegulatorMock.new({from:owner})).address
+        this.proxyRegulator = (await RegulatorMock.new({from:owner})).address
         
         this.proxyCUSD = (await CarbonDollar.new(ZERO_ADDRESS, {from:owner})).address
         // First logic contract
@@ -81,7 +80,7 @@ contract('WhitelistedTokenProxy', _accounts => {
     describe('upgradeTo v1', function () {
         beforeEach(async function () {
             // Second logic contract 
-            await tokenSetup.call(this, validator, minter, user, owner, whitelisted, blacklisted, nonlisted);
+            await tokenSetup.call(this, validator, minter, owner, blacklisted);
             this.impl_v1 = this.wtToken.address
         })
         describe('owner calls upgradeTo', function () {

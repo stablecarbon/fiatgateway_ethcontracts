@@ -3,7 +3,6 @@ pragma solidity ^0.4.24;
 import "./dataStorage/CarbonDollarStorage.sol";
 import "../permissionedToken/PermissionedToken.sol";
 import "../whitelistedToken/WhitelistedToken.sol";
-import '../../regulator/carbonDollarRegulator/CarbonDollarRegulator.sol';
 
 /**
 * @title CarbonDollar
@@ -35,7 +34,7 @@ contract CarbonDollar is PermissionedToken {
     constructor(address _regulator) public PermissionedToken(_regulator) {
 
         // base class override
-        regulator = CarbonDollarRegulator(_regulator);
+        regulator = Regulator(_regulator);
 
         tokenStorage_CD = new CarbonDollarStorage();
     }
@@ -103,7 +102,7 @@ contract CarbonDollar is PermissionedToken {
      * @param _amount Amount of CarbonUSD to convert.
      * we credit the user's account at the sender address with the _amount minus the percentage fee we want to charge.
      */
-    function convertCarbonDollar(address stablecoin, uint256 _amount) public requiresPermission whenNotPaused  {
+    function convertCarbonDollar(address stablecoin, uint256 _amount) public userNotBlacklisted(msg.sender) whenNotPaused  {
         require(isWhitelisted(stablecoin), "Stablecoin must be whitelisted prior to setting conversion fee");
         WhitelistedToken whitelisted = WhitelistedToken(stablecoin);
         require(whitelisted.balanceOf(address(this)) >= _amount, "Carbon escrow account in WT0 doesn't have enough tokens for burning");
@@ -124,18 +123,8 @@ contract CarbonDollar is PermissionedToken {
      * @param stablecoin Represents the stablecoin whose fee will be charged.
      * @param _amount Amount of CarbonUSD to burn.
      */
-    function burnCarbonDollar(address stablecoin, uint256 _amount) public requiresPermission whenNotPaused {
-        require(isWhitelisted(stablecoin), "Stablecoin must be whitelisted prior to setting conversion fee");
-        WhitelistedToken whitelisted = WhitelistedToken(stablecoin);
-        require(whitelisted.balanceOf(address(this)) >= _amount, "Carbon escrow account in WT0 doesn't have enough tokens for burning");
- 
-        // Burn user's CUSD, but with a fee reduction.
-        uint256 chargedFee = tokenStorage_CD.computeFee(_amount, computeFeeRate(stablecoin));
-        uint256 feedAmount = _amount.sub(chargedFee);
-        _burn(msg.sender, _amount);
-        whitelisted.burn(_amount);
-        _mint(address(this), chargedFee);
-        emit BurnedCUSD(msg.sender, feedAmount, chargedFee); // Whitelisted trust account should send user feedAmount USD
+    function burnCarbonDollar(address stablecoin, uint256 _amount) public userNotBlacklisted(msg.sender) whenNotPaused {
+        _burnCarbonDollar(msg.sender, stablecoin, _amount);
     }
 
     /** 
@@ -190,8 +179,18 @@ contract CarbonDollar is PermissionedToken {
         return tokenStorage_CD.defaultFee();
     }
 
-    function _mint(address _to, uint256 _amount) internal {
-        super._mint(_to, _amount);
+    function _burnCarbonDollar(address _tokensOf, address _stablecoin, uint256 _amount) internal {
+        require(isWhitelisted(_stablecoin), "Stablecoin must be whitelisted prior to burning");
+        WhitelistedToken whitelisted = WhitelistedToken(_stablecoin);
+        require(whitelisted.balanceOf(address(this)) >= _amount, "Carbon escrow account in WT0 doesn't have enough tokens for burning");
+
+        // Burn user's CUSD, but with a fee reduction.
+        uint256 chargedFee = tokenStorage_CD.computeFee(_amount, computeFeeRate(_stablecoin));
+        uint256 feedAmount = _amount.sub(chargedFee);
+        _burn(_tokensOf, _amount);
+        whitelisted.burn(_amount);
+        _mint(address(this), chargedFee);
+        emit BurnedCUSD(_tokensOf, feedAmount, chargedFee); // Whitelisted trust account should send user feedAmount USD
     }
 
 }

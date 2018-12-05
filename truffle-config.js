@@ -42,13 +42,13 @@ module.exports = {
     },
     ropsten: {
       provider: function () {
-          return new HDWalletProvider(process.env.MNEMONIC, "https://ropsten.infura.io/v3/" + process.env.INFURA_API_KEY_MAIN)
+          return new HDWalletProvider(process.env.OWNER_KEY, "https://ropsten.infura.io/v3/" + process.env.INFURA_API_KEY_MAIN)
       },
       network_id: 3,
     },
     mainnet: {
       provider: function () {
-        return new HDWalletProvider(process.env.MNEMONIC, "https://mainnet.infura.io/v3/" + process.env.INFURA_API_KEY_MAIN)
+          return new HDWalletProvider(process.env.OWNER_KEY, "https://mainnet.infura.io/v3/" + process.env.INFURA_API_KEY_MAIN)
       },
       network_id: 1,
       gas: 7000000, // Largest contracts can take almost 7mm gas

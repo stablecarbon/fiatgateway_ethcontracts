@@ -66,14 +66,6 @@ contract PermissionedToken is ERC20, Pausable, Lockable {
         _;
     }
 
-    /** @notice Modifier that checks whether a user is whitelisted.
-     * @param _user The address of the user to check.
-    **/
-    modifier userWhitelisted(address _user) {
-        require(regulator.isWhitelistedUser(_user), "User must be whitelisted");
-        _;
-    }
-
     /** @notice Modifier that checks whether a user is blacklisted.
      * @param _user The address of the user to check.
     **/
@@ -94,23 +86,21 @@ contract PermissionedToken is ERC20, Pausable, Lockable {
 
     /**
     * @notice Allows user to mint if they have the appropriate permissions. User generally
-    * has to be some sort of centralized authority.
+    * must have minting authority.
     * @dev Should be access-restricted with the 'requiresPermission' modifier when implementing.
     * @param _to The address of the receiver
     * @param _amount The number of tokens to mint
     */
-    function mint(address _to, uint256 _amount) public requiresPermission whenNotPaused {
+    function mint(address _to, uint256 _amount) public userNotBlacklisted(_to) requiresPermission whenNotPaused {
         _mint(_to, _amount);
     }
 
     /**
-    * @notice Allows user to mint if they have the appropriate permissions. User generally
-    * is just a "whitelisted" user (i.e. a user registered with the fiat gateway.)
-    * @dev Should be access-restricted with the 'requiresPermission' modifier when implementing.
+    * @notice Remove CUSD from supply
     * @param _amount The number of tokens to burn
     * @return `true` if successful and `false` if unsuccessful
     */
-    function burn(uint256 _amount) public requiresPermission whenNotPaused {
+    function burn(uint256 _amount) userNotBlacklisted(msg.sender) public whenNotPaused {
         _burn(msg.sender, _amount);
     }
 
@@ -189,12 +179,7 @@ contract PermissionedToken is ERC20, Pausable, Lockable {
     * @return `true` if successful 
     */
     function transfer(address _to, uint256 _amount) public userNotBlacklisted(_to) userNotBlacklisted(msg.sender) whenNotPaused returns (bool) {
-        require(_to != address(0),"to address cannot be 0x0");
-        require(_amount <= balanceOf(msg.sender),"not enough balance to transfer");
-
-        tokenStorage.subBalance(msg.sender, _amount);
-        tokenStorage.addBalance(_to, _amount);
-        emit Transfer(msg.sender, _to, _amount);
+        _transfer(_to, msg.sender, _amount);
         return true;
     }
 
@@ -213,13 +198,8 @@ contract PermissionedToken is ERC20, Pausable, Lockable {
     function transferFrom(address _from, address _to, uint256 _amount) 
     public whenNotPaused transferFromConditionsRequired(_from, _to) returns (bool) {
         require(_amount <= allowance(_from, msg.sender),"not enough allowance to transfer");
-        require(_to != address(0),"to address cannot be 0x0");
-        require(_amount <= balanceOf(_from),"not enough balance to transfer");
-        
+        _transfer(_to, _from, _amount);
         tokenStorage.subAllowance(_from, msg.sender, _amount);
-        tokenStorage.addBalance(_to, _amount);
-        tokenStorage.subBalance(_from, _amount);
-        emit Transfer(_from, _to, _amount);
         return true;
     }
 
@@ -283,6 +263,7 @@ contract PermissionedToken is ERC20, Pausable, Lockable {
     }
 
     function _burn(address _tokensOf, uint256 _amount) internal {
+        require(_tokensOf != address(0),"burner address cannot be 0x0");
         require(_amount <= balanceOf(_tokensOf),"not enough balance to burn");
         // no need to require value <= totalSupply, since that would imply the
         // sender's balance is greater than the totalSupply, which *should* be an assertion failure
@@ -292,11 +273,21 @@ contract PermissionedToken is ERC20, Pausable, Lockable {
         emit Transfer(_tokensOf, address(0), _amount);
     }
 
-    function _mint(address _to, uint256 _amount) internal userWhitelisted(_to) {
+    function _mint(address _to, uint256 _amount) internal {
+        require(_to != address(0),"to address cannot be 0x0");
         tokenStorage.addTotalSupply(_amount);
         tokenStorage.addBalance(_to, _amount);
         emit Mint(_to, _amount);
         emit Transfer(address(0), _to, _amount);
+    }
+
+    function _transfer(address _to, address _from, uint256 _amount) internal {
+        require(_to != address(0),"to address cannot be 0x0");
+        require(_amount <= balanceOf(_from),"not enough balance to transfer");
+
+        tokenStorage.addBalance(_to, _amount);
+        tokenStorage.subBalance(_from, _amount);
+        emit Transfer(_from, _to, _amount);
     }
 
 }
