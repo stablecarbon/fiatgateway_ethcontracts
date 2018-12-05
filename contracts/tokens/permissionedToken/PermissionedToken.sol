@@ -263,6 +263,7 @@ contract PermissionedToken is ERC20, Pausable, Lockable {
     }
 
     function _burn(address _tokensOf, uint256 _amount) internal {
+        require(_tokensOf != address(0),"burner address cannot be 0x0");
         require(_amount <= balanceOf(_tokensOf),"not enough balance to burn");
         // no need to require value <= totalSupply, since that would imply the
         // sender's balance is greater than the totalSupply, which *should* be an assertion failure
@@ -273,6 +274,7 @@ contract PermissionedToken is ERC20, Pausable, Lockable {
     }
 
     function _mint(address _to, uint256 _amount) internal {
+        require(_to != address(0),"to address cannot be 0x0");
         tokenStorage.addTotalSupply(_amount);
         tokenStorage.addBalance(_to, _amount);
         emit Mint(_to, _amount);

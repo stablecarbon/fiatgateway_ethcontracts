@@ -7,7 +7,6 @@ import {
     getMinter
 } from '../getUsers'
 import config from '../config'
-require('dotenv').config()  // Store environment-specific variable from '.env' to process.env
 
 let web3 = getWeb3()
 

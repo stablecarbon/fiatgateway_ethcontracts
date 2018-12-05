@@ -1,6 +1,7 @@
 import { getWeb3 } from '../getWeb3'
 import { 
     getCusd,
+    getWt0
 } from '../getContracts'
 import {
     getOwner
@@ -9,15 +10,17 @@ import config from '../config'
 
 let web3 = getWeb3()
 
-export const setRegulatorCusd = async () => {
+export const changeCusdFee = async () => {
 
-    console.log('\n***** CUSD::SET_REGULATOR() *****\n')
+    console.log('\n***** CUSD::SET_FEE() *****\n')
 
     let cusd = getCusd()
+    let wt0 = getWt0()
     console.log('CUSD: ', cusd.options.address)
+    console.log('WT0: ', wt0.options.address)
 
     let owner = getOwner(config.MINTER_KEY)
-    console.log('Changing regulator from account: ', owner.address)
+    console.log('Changing fee from account: ', owner.address)
 
     let cusd_owner = await cusd.methods.owner().call()
     console.log('CUSD owner: ', cusd_owner)
@@ -27,21 +30,22 @@ export const setRegulatorCusd = async () => {
         return
     }
 
-    let cusd_regulator = await cusd.methods.regulator().call()
-    console.log('CUSD current regulator: ', cusd_regulator)
+    let cusd_fee = await cusd.methods.getFee(wt0.options.address).call()
+    console.log('CUSD current fee: ', cusd_fee)
 
-    let new_regulator = config.REGULATOR_ACTIVE_ADDRESS
-    console.log('CUSD owner changing regulator to: ', new_regulator)
+    // @dev: change this fee!
+    let new_fee = 1
+    console.log('CUSD owner changing fee to: ', new_fee)
 
-    if (new_regulator === cusd_regulator) {
-        console.log('this regulator is already the current regulator, exiting')
+    if (new_fee === cusd_fee) {
+        console.log('this fee is already the current fee, exiting')
         return
     }
 
     let to = cusd.options.address
-    let data = cusd.methods.setRegulator(new_regulator).encodeABI()
+    let data = cusd.methods.setFee(wt0.options.address, new_fee).encodeABI()
     let gasPrice = web3.utils.toWei('25', 'gwei')
-    let gas = Math.ceil((await cusd.methods.setRegulator(new_regulator).estimateGas({ from: owner.address }))*1.2)
+    let gas = Math.ceil((await cusd.methods.setFee(wt0.options.address, new_fee).estimateGas({ from: owner.address }))*1.2)
     console.log('Estimated gas cost: ', gas)
     let tx = {
         to,
@@ -58,7 +62,7 @@ export const setRegulatorCusd = async () => {
         console.log(err)
     }
 
-    console.log('\n***** END CUSD::SET_REGULATOR() *****\n')
+    console.log('\n***** END CUSD::SET_FEE() *****\n')
 
     return;
 }

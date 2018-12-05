@@ -153,6 +153,9 @@ contract('MetaToken', _accounts => {
             assert.equal(this.eth_balance_signer_after, this.eth_balance_signer_before)
 
             this.eth_balance_relayer_after = await _web3.eth.getBalance(relayer)
+            console.log('Sometimes this test fails because the ETH difference is so small')
+            console.log('relayer ETH balance before: ', this.eth_balance_relayer_before)
+            console.log('relayer ETH balance after: ', this.eth_balance_relayer_after)
             assert(this.eth_balance_relayer_after < this.eth_balance_relayer_before)
         })
         it('does not revert', async function () {

@@ -24,6 +24,9 @@ export const getTokenStats = async () => {
     console.log('CUSD supply: ', cusd_supply)
     console.log('WT0 supply: ', wt0_supply)
 
+    let cusd_fee = await cusd.methods.getFee(wt0.options.address).call()
+    console.log('CUSD fee: ', cusd_fee)
+
     let cusd_owner = await cusd.methods.owner().call()
     let wt0_owner = await wt0.methods.owner().call()
     console.log('CUSD owner: ', cusd_owner)

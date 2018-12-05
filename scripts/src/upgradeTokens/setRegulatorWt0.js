@@ -6,7 +6,6 @@ import {
     getOwner
 } from '../getUsers'
 import config from '../config'
-require('dotenv').config()  // Store environment-specific variable from '.env' to process.env
 
 let web3 = getWeb3()
 
@@ -17,8 +16,7 @@ export const setRegulatorWt0 = async () => {
     let wt0 = getWt0()
     console.log('WT0: ', wt0.options.address)
 
-    // Ropsten token owner is 0xf886...
-    let owner = getOwner(process.env.MINTER_KEY)
+    let owner = getOwner(config.MINTER_KEY)
     console.log('Changing regulator from account: ', owner.address)
 
     let wt0_owner = await wt0.methods.owner().call()

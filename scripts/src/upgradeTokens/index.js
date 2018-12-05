@@ -10,6 +10,9 @@ import {
 import {
     upgradeWt0
 } from './upgradeWt0'
+import {
+    changeCusdFee
+} from './changeCusdFee'
 
 const main = async () => {
 
@@ -18,6 +21,7 @@ const main = async () => {
     // await setRegulatorWt0()
     // await upgradeCusd()
     // await upgradeWt0()
+    // await changeCusdFee()
 
     return
 }

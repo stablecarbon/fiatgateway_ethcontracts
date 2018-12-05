@@ -6,7 +6,6 @@ import {
     getOwner
 } from '../getUsers'
 import config from '../config'
-require('dotenv').config()  // Store environment-specific variable from '.env' to process.env
 
 let web3 = getWeb3()
 
@@ -18,7 +17,7 @@ export const upgradeCusd = async () => {
     console.log('CUSD Proxy: ', proxy.options.address)
 
     // Ropsten token owner is 0xf886...
-    let owner = getOwner(process.env.MINTER_KEY)
+    let owner = getOwner(config.MINTER_KEY)
     console.log('Upgrading implementation from account: ', owner.address)
 
     let proxy_owner = await proxy.methods.owner().call()
@@ -33,7 +32,7 @@ export const upgradeCusd = async () => {
     console.log('Proxy current implementation: ', current_implementation)
 
     let new_implementation = config.CUSD_MODEL_ADDRESS
-    console.log('CUSD owner changing regulator to: ', new_implementation)
+    console.log('CUSD owner changing implementation to: ', new_implementation)
 
     if (new_implementation === current_implementation) {
         console.log('this token model is already the current model, exiting')

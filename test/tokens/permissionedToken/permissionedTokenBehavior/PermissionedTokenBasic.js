@@ -62,13 +62,21 @@ function permissionedTokenBasicTests(owner, user, anotherAccount, minter) {
                         })
                     })
                 })
+                describe('when the target is the zero address', function () {
+                    const to = ZERO_ADDRESS
+                    const amount = new BigNumber("100000000000000000000")
+
+                    it('reverts', async function () {
+                        await expectRevert(this.token.transfer(to, amount, { from: user }))
+                    })
+                })
             })
         })
         
         describe('--BurnableToken Tests--', function () {
             const from = user
             const ZERO_ADDRESS = '0x0000000000000000000000000000000000000000'
-            
+
             describe('when the given amount is not greater than balance of the sender', function () {
                 const amount = new BigNumber("10000000000000000000")
                 
@@ -122,6 +130,15 @@ function permissionedTokenBasicTests(owner, user, anotherAccount, minter) {
                 assert.equal(logs[1].args.from, ZERO_ADDRESS)
                 assert.equal(logs[1].args.to, user)
                 assert(logs[1].args.value.eq(amount))
+            })
+
+            describe('when the target is the zero address', function () {
+                const to = ZERO_ADDRESS
+                const amount = new BigNumber("100000000000000000000")
+                
+                it('reverts', async function () {
+                    await expectRevert(this.token.mint(to, amount, { from }))
+                })
             })
         })
         

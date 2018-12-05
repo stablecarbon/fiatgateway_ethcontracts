@@ -13,11 +13,13 @@ The gas limit may have to be adjusted in `truffle-config.js`.
 [Sep 18] The latest deployment cost ~2.5 ETH to deploy.
 
 ## Contract Verification 
-Code dependencies need to be flattened into a single `*.sol` contract in order for popular block explorers like etherscan.io to verify their byteccode. 
+Code dependencies need to be flattened into a single `*.sol` contract in order for popular block explorers like etherscan.io to verify their bytecode. 
 
 Run `sol-merger ./contracts/[CONTRACT].sol "./flatten/"` to flatten any contract into the flatten/ directory named [CONTRACT]\_merged.sol
 
 To verify contracts created by the Factories, you will need to retrieve the ABI-ecoded constructor arguments that were passed during creation. This is a useful online [ABI encoding service](https://abi.hashex.org/)
+
+You can also deploy the flattened contract using the [Remix IDE](https://remix.ethereum.org)
 
 ## Connecting to an Ethereum node
 truffle-config currently connects to Ethereum node via websocket provided by our [Infura account](https://infura.io/)
@@ -54,25 +56,21 @@ truffle-config currently connects to Ethereum node via websocket provided by our
 
 ### Mainnet (Logic contracts are proxy "implementations", *Only the Active contracts can be used*):
 
-[RegulatorProxyFactory](https://etherscan.io/address/0xf363c6de4a27c202fd8e3216351c242fb4a39d8c)
+[RegulatorProxyFactory](https://etherscan.io/address/0x8180522F083bF9A1F756745e5deCFf48E007D370)
 
 [CarbonDollarProxyFactory](https://etherscan.io/address/0x4a5693fa90442aff3067b59a4256834fe612b541)
 
 [WhitelistedTokenProxyFactory](https://etherscan.io/address/0x3aa4a0482e6f475856d98c12e71b658d0c1d0b68)
 
-[WhitelistedTokenRegulator (logic)](https://etherscan.io/address/0x0eb1b93c35dc7513c1e6cd683850734686fc9106)
+[Regulator (logic)](https://etherscan.io/address/0x0632920566c04878f948307c30f54681835a094a)
 
-[WhitelistedTokenRegulator (active)](https://etherscan.io/address/0x8644b70d1e40e954d8397e79a210624cbc22e1fe)
+[Regulator (active)](https://etherscan.io/address/0xad439b784ff3c09fad40ee0db262eb82c8512b1f)
 
-[CarbonDollarRegulator (logic)](https://etherscan.io/address/0x78a87623e381c395f6b02c649893642dcb3d245e)
-
-[CarbonDollarRegulator (active)](https://etherscan.io/address/0xbe729d06dd2d7b2e953b40e234c62bd5f0204a12)
-
-[CarbonDollar (logic)](https://etherscan.io/address/0xe05b1e8463773a2368760bfff14c2bb20821d990)
+[CarbonDollar (logic)](https://etherscan.io/address/0x05fbf58f7171aa60df1483188071d0cf996b630e)
 
 [CarbonDollar (active)](https://etherscan.io/address/0x1410d4ec3d276c0ebbf16ccbe88a4383ae734ed0)
 
-[WhitelistedToken (logic)](https://etherscan.io/address/0xe5b58d53caabc455a4ea1ad6a9ea48bca0e42c7a)
+[WhitelistedToken (logic)](https://etherscan.io/address/0xa832885ca9440ab6ff1d13d34ef64c037a59d3c8)
 
 [WhitelistedToken (active)](https://etherscan.io/address/0x21683397aa53aaf7baca416c27f2c1e0e84bb493)
 

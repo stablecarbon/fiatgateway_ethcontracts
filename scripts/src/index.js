@@ -4,6 +4,9 @@ import {
 import {
     getFactoryStats
 } from './getFactoryStats'
+import {
+    getRegulatorStats
+} from './getRegulatorStats'
 
 const main = async () => {
 
@@ -12,6 +15,9 @@ const main = async () => {
 
     // 2. Get deployed token facts
     await getTokenStats()
+
+    // 3. Get deployed regualtor facts
+    await getRegulatorStats()
 
     return
 }

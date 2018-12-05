@@ -18,30 +18,30 @@ import {
 const main = async () => {
 
     // Test newly upgraded token contracts
-    const amountToMint = 250*10**18
-    const amountToSend = 50*10**18
+    const amountToMint = 1*10**18
+    const amountToSend = 0*10**18
     const amountToBurn = amountToMint-amountToSend
     const user = getMinter()
     const anotherUser = getOwner().address
 
     await balanceOf(user.address) 
 
-    // 1. Mint to user
-    await mintCusd(amountToMint, user.address)
+    // // 1. Mint to user
+    // await mintCusd(amountToMint, user.address)
 
-    await balanceOf(user.address)
-    await balanceOf(anotherUser)
+    // await balanceOf(user.address)
+    // await balanceOf(anotherUser)
 
-    // 2. Transfer to another user
-    await transferCusd(amountToSend, user, anotherUser)
+    // // 2. Transfer to another user
+    // await transferCusd(amountToSend, user, anotherUser)
 
-    await balanceOf(user.address)
-    await balanceOf(anotherUser)
+    // await balanceOf(user.address)
+    // await balanceOf(anotherUser)
 
-    // 3. Burn
-    await burnCusd(amountToBurn, user)
+    // // 3. Burn
+    // await burnCusd(amountToBurn, user)
 
-    await balanceOf(user.address)
+    // await balanceOf(user.address)
 
     return
 }
