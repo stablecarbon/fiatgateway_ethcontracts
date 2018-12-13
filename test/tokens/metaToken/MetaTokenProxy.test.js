@@ -139,6 +139,23 @@ contract('CarbonDollar Factory creating CD proxies based on MetaToken logic', _a
                     await assertBalance(this.token_WT, this.token_0.address, 5 * 10 ** 18)
                 })
             })
+            describe('name, symbol, decimals', function () {
+                const NAME="CUSD"
+                const SYM="CUSD"
+                const DECIMALS=18
+                it('call to proxy::name() returns implementation name', async function () {
+                    let metadata = await this.token_0.name()
+                    assert.equal(metadata, NAME)
+                })
+                it('call to proxy::symbol() returns implementation symbol', async function () {
+                    let metadata = await this.token_0.symbol()
+                    assert.equal(metadata, SYM)
+                })
+                it('call to proxy::decimals() returns implementation decimals', async function () {
+                    let metadata = await this.token_0.decimals()
+                    assert.equal(metadata, DECIMALS)
+                })
+            })
         })
     })
 })

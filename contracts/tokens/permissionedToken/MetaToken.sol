@@ -25,6 +25,13 @@ contract MetaToken is CarbonDollar {
     */
     mapping (address => uint256) public replayNonce;
 
+    /** 
+        ERC20 Metadata
+    */
+    string public constant name = "CUSD";
+    string public constant symbol = "CUSD";
+    uint8 public constant decimals = 18;
+
 
     /** Functions **/
 
