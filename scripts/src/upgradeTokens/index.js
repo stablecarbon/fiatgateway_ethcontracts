@@ -13,6 +13,9 @@ import {
 import {
     changeCusdFee
 } from './changeCusdFee'
+import {
+    unlock
+} from './unlock'
 
 const main = async () => {
 
@@ -22,6 +25,7 @@ const main = async () => {
     // await upgradeCusd()
     // await upgradeWt0()
     // await changeCusdFee()
+    // await unlock()
 
     return
 }

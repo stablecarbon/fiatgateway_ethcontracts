@@ -18,8 +18,8 @@ import {
 const main = async () => {
 
     // Test newly upgraded token contracts
-    const amountToMint = 1*10**18
-    const amountToSend = 0*10**18
+    const amountToMint = 10*10**18
+    const amountToSend = 2.5*10**18
     const amountToBurn = amountToMint-amountToSend
     const user = getMinter()
     const anotherUser = getOwner().address

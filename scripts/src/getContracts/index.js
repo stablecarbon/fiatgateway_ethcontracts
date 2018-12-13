@@ -22,7 +22,7 @@ export const getCusdCount = async () => {
 
 // CUSD
 export const getCusd = () => {
-    var jsonFile = "./build/contracts/CarbonDollar.json";
+    var jsonFile = "./build/contracts/MetaToken.json";
     var parsed = JSON.parse(fs.readFileSync(jsonFile));
     var abi = parsed.abi;
     var deployedAddress = config.CUSD_ADDRESS;
