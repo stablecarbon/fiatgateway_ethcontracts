@@ -10,7 +10,7 @@ To deploy, run:
 `truffle migrate --network [network]`
 The gas limit may have to be adjusted in `truffle-config.js`.
 
-[Sep 18] The latest deployment cost ~2.5 ETH to deploy.
+(Dec 18): Deployment of the entire protocol should not cost more than 2 ETH
 
 ## Contract Verification 
 Code dependencies need to be flattened into a single `*.sol` contract in order for popular block explorers like etherscan.io to verify their bytecode. 
@@ -31,6 +31,8 @@ truffle-config currently connects to Ethereum node via websocket provided by our
 ## Metatransactions
 [Update as of November 2018: Interact with CUSD without paying ETH gas fees!](https://medium.com/gitcoin/native-meta-transactions-e509d91a8482)
 
+New metatransaction functionality was upgraded in the `MetaToken.sol` CUSD implementation contract
+
 ## Architecture
 ### Core Token:
 
@@ -50,7 +52,7 @@ truffle-config currently connects to Ethereum node via websocket provided by our
 
 	CUSD is a Permissioned ERC20 Token whose methods are protected by a Regulator
 
-	WhitelistedToken is also a PermissionedToken and is two-convertible into CUSD`
+	WhitelistedToken is also a PermissionedToken and is two-way convertible into CUSD`
 
 ## Deployment Addresses:
 
@@ -77,7 +79,7 @@ truffle-config currently connects to Ethereum node via websocket provided by our
 ### Setting up CUSD token for local
 1) The Regulator/CarbonDollar/Whitelisted Proxy Factories can create new CUSD, WT0, and Regulator contracts. 
 
-`RegulatorProxyFactory.createRegulatorProxy(Regulator.address)` creates a new Regulator instance that uses the same logic as the abstract Regulator Logic contract. For example, `RegulatorProxyFactory.createRegulatorProxy` would act as a Regulator that can regulate a Permissioned token. Importantly, since Regulators are ownable proxy contracts, ownership of newly created proxies must be claimed via `newRegulator.claimOwnership({ from: newOwner })`.
+`RegulatorProxyFactory.createRegulatorProxy(Regulator.address)` creates a new Regulator instance that uses the same logic as the Regulator Logic contract. For example, `RegulatorProxyFactory.createRegulatorProxy` would act as a Regulator that can regulate a Permissioned token. Importantly, since Regulators are ownable proxy contracts, ownership of newly created proxies must be claimed via `newRegulator.claimOwnership({ from: newOwner })`.
 
 For convenience, the caller of createRegulatorProxy() is designated a Validator for that Regulator. This can be changed by the Regulator owner.
 
@@ -93,13 +95,13 @@ ii) To mint new tokens, the Regulator contracts for WT0 and CUSD (these contract
 
 iii) To set a fee charged upon redeeming CUSD into WT, the CUSD contract owner may call `CUSD.setFee(fee)` on the active CUSD contract. Fees can optionally be collected be escrowed by the CUSD contract to pay for transaction fees.
 
-### Tests!
+### Test locally
 
 Look at `package.json::scripts` to see some possible test suites that we've created to rigorously test our smart contracts. For example, run `npm run test-permissioned-token` to unit test PermissionedToken.sol. Note that these tests should be run locally on a local ethereum node, which you can spin up using `npm run eth`.
 
-Run `npm run test` to run all tests
+Run `npm run test` to run all tests on the local network
 
-### Scripts to interact with deployed contracts
+### Test deployed contracts on the Ropsten testnet
 
 Model scripts are provided in `./scripts/` for reading contract stats on Ropsten (or Mainnet with a small tweak) that can be run with `npm run stats-ropsten`. `npm run test-token-ropsten` will mint, transfer, and burn CUSD on Ropsten for testing purposes.
 
