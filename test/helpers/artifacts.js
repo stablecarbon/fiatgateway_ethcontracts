@@ -9,19 +9,7 @@ const RegulatorProxyFactory = artifacts.require('RegulatorProxyFactory')
 const PermissionedToken = artifacts.require("PermissionedToken");
 const PermissionedTokenStorage = artifacts.require("PermissionedTokenStorage");
 const PermissionedTokenProxy = artifacts.require("PermissionedTokenProxy");
-
-// WhitelistedToken
-const WhitelistedToken = artifacts.require("WhitelistedToken");
-const WhitelistedTokenRegulator = artifacts.require("WhitelistedTokenRegulator");
-const WhitelistedTokenProxy = artifacts.require("WhitelistedTokenProxy");
-const WhitelistedTokenProxyFactory = artifacts.require("WhitelistedTokenProxyFactory")
-
-// CarbonDollar
-const CarbonDollar = artifacts.require("CarbonDollar");
-const CarbonDollarStorage = artifacts.require("CarbonDollarStorage");
-const CarbonDollarRegulator = artifacts.require("CarbonDollarRegulator");
-const CarbonDollarProxy = artifacts.require("CarbonDollarProxy");
-const CarbonDollarProxyFactory = artifacts.require("CarbonDollarProxyFactory");
+const PermissionedTokenProxyFactory = artifacts.require("PermissionedTokenProxyFactory");
 
 // MetaToken
 const MetaToken = artifacts.require("MetaToken")
@@ -40,17 +28,7 @@ module.exports = {
 	PermissionedToken,
 	PermissionedTokenStorage,
 	PermissionedTokenProxy,
-	// WToken + Regulator
-	WhitelistedToken,
-	WhitelistedTokenRegulator,
-	WhitelistedTokenProxy,
-	WhitelistedTokenProxyFactory,
-	//CDollar 
-	CarbonDollarProxy,
-	CarbonDollarProxyFactory,
-	CarbonDollar,
-	CarbonDollarStorage,
-	CarbonDollarRegulator,
+	PermissionedTokenProxyFactory,
 	// Utils
 	DelayedUpgradeabilityProxy,
 	// MetaToken

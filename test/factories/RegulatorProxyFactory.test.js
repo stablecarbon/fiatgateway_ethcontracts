@@ -19,21 +19,12 @@ contract('Regulator Factory creating Regulators', _accounts => {
         this.impl_v0 = await Regulator.new({from: other_owner })
 
         this.MINT_SIG = await this.impl_v0.MINT_SIG()
-        this.MINT_CUSD_SIG = await this.impl_v0.MINT_CUSD_SIG()
     })
 
     describe('Creating brand new Regulator proxies from the factory', function () {
 
         it('initiates the factories', async function () {
             assert.equal(await this.proxyFactory.getCount(), 0)
-        })
-        it('proxy creates a new WhitelistedToken regulator', async function () {
-            const { logs } = await this.proxyFactory.createRegulatorProxy(this.impl_v0.address)
-            assert.equal(logs.length, 1)
-            assert.equal(logs[0].event, "CreatedRegulatorProxy")
-            assert.equal(logs[0].args.newRegulator, await this.proxyFactory.getRegulatorProxy(0))
-            assert.equal(logs[0].args.index, 0)
-            assert.equal(await this.proxyFactory.getCount(), 1)
         })
         it('proxy creates a new CarbonDollar regulator', async function () {
             const { logs } = await this.proxyFactory.createRegulatorProxy(this.impl_v0.address)
@@ -43,14 +34,12 @@ contract('Regulator Factory creating Regulators', _accounts => {
             assert.equal(logs[0].args.index, 0)
             assert.equal(await this.proxyFactory.getCount(), 1)
         })
-    
     })
 
     describe('getRegulator', function () {
         beforeEach(async function () {
             await this.proxyFactory.createRegulatorProxy(this.impl_v0.address)
             await this.proxyFactory.createRegulatorProxy(this.impl_v0.address)
-
         })
         it('i is negative, reverts', async function () {
             await expectRevert(this.proxyFactory.getRegulatorProxy(-1))
@@ -150,7 +139,7 @@ contract('Regulator Factory creating Regulators', _accounts => {
             it('regulators have different addresses', async function () {
                 assert.notEqual(this.regulator_0.address, this.regulator_1.address)
             })
-            it('WT minter is not a CD minter', async function () {
+            it('example: WT minter is not a CD minter', async function () {
                 assert(await this.regulator_0.isMinter(minter))
                 assert(!(await this.regulator_1.isMinter(minter)))
             })

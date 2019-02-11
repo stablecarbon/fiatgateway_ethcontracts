@@ -20,7 +20,6 @@ function regulatorUserPermissionsTests(owner, user) {
 
                 // storing method signatures for testing convenience
                 this.MINT_SIG = await this.sheet.MINT_SIG();
-                this.MINT_CUSD_SIG = await this.sheet.MINT_CUSD_SIG();
                 this.DESTROY_BLACKLISTED_TOKENS_SIG = await this.sheet.DESTROY_BLACKLISTED_TOKENS_SIG();
                 this.APPROVE_BLACKLISTED_ADDRESS_SPENDER_SIG = await this.sheet.APPROVE_BLACKLISTED_ADDRESS_SPENDER_SIG();
                 this.BLACKLISTED_SIG = await this.sheet.BLACKLISTED_SIG();
@@ -28,7 +27,6 @@ function regulatorUserPermissionsTests(owner, user) {
                 // Assert pre-test invariants
                 assert(await this.sheet.isValidator(owner));
                 assert(await this.sheet.isPermission(this.MINT_SIG));
-                assert(await this.sheet.isPermission(this.MINT_CUSD_SIG));
                 assert(await this.sheet.isPermission(this.DESTROY_BLACKLISTED_TOKENS_SIG));
                 assert(await this.sheet.isPermission(this.APPROVE_BLACKLISTED_ADDRESS_SPENDER_SIG));
                 assert(await this.sheet.isPermission(this.BLACKLISTED_SIG));
@@ -42,7 +40,6 @@ function regulatorUserPermissionsTests(owner, user) {
                         await this.sheet.setMinter(user, { from });
                         assert(await this.sheet.isMinter(user));
                         assert(await this.sheet.hasUserPermission(user, this.MINT_SIG));
-                        assert(await this.sheet.hasUserPermission(user, this.MINT_CUSD_SIG));
 
                     })
                     it('emits a LogSetMinter event', async function () {
@@ -75,7 +72,6 @@ function regulatorUserPermissionsTests(owner, user) {
                         await this.sheet.removeMinter(user, { from });
                         assert(!(await this.sheet.isMinter(user)));
                         assert(!(await this.sheet.hasUserPermission(user, this.MINT_SIG)));
-                        assert(!(await this.sheet.hasUserPermission(user, this.MINT_CUSD_SIG)));
                     })
                     it('emits a LogRemovedMinter event', async function () {
                         const { logs } = await this.sheet.removeMinter(user, { from })

@@ -31,17 +31,15 @@ contract('MetaToken', _accounts => {
         
         // Use web3@1.X wrapped version of contracts
         this.token = getContractInstance("MetaToken", this.metatoken.address)
-        this.wt0 = getContractInstance("WhitelistedToken", this.wtToken.address)
 
         // Mint signer new USD
-        let receipt = await this.wt0.methods.mintCUSD(signer, amountToMintSigner).send({ from: minter, gas: 200000 })
+        let receipt = await this.token.methods.mint(signer, amountToMintSigner).send({ from: minter, gas: 200000 })
         this.totalSupply_before = await this.token.methods.totalSupply().call()
 
         // Snapshot CUSD balances before
         this.balance_signer_before = await this.token.methods.balanceOf(signer).call()
         this.balance_relayer_before = await this.token.methods.balanceOf(relayer).call()
         this.balance_receiver_before = await this.token.methods.balanceOf(receiver).call()
-        this.balance_token_before = await this.token.methods.balanceOf(this.token.options.address).call()
         this.total_supply_before = await this.token.methods.totalSupply().call()
 
         // Snapshot CUSD allowances before
@@ -600,22 +598,19 @@ contract('MetaToken', _accounts => {
             ).send({from: relayer, gas: 200000 }))
         })
     })
-    describe('metaBurnCarbonDollar', async function () {
+    describe('metaBurn', async function () {
         const amountToBurn = new BigNumber(100*10**18)
         let fee = new BigNumber(0.001 * amountToBurn)
         let reward = new BigNumber(1*10**18)
 
         it('metaBurnHash returns same hash as web3.sign', async function () {
-            let stablecoin = this.wt0.options.address
-            let data = this.token.methods.burnCarbonDollar(stablecoin, amountToBurn).encodeABI()
+            let data = this.token.methods.burn(amountToBurn).encodeABI()
             let nonce = await this.token.methods.replayNonce(signer).call()
             let metatoken = this.token.options.address
-            // Hash must be in this format: keccak256(abi.encodePacked(address(this),"metaTransfer", _to, _amount, _nonce, _reward));
             // @devs: cast all signed ints to unsigned ints via web3.utils.toTwosComplement()
             let metaTx = [
                 metatoken,   
-                "metaBurnCarbonDollar",   
-                stablecoin,                           
+                "metaBurn",   
                 amountToBurn,        
                 _web3.utils.toTwosComplement(nonce), 
                 _web3.utils.toTwosComplement(reward), 
@@ -623,19 +618,17 @@ contract('MetaToken', _accounts => {
 
             let hash = _web3.utils.soliditySha3(...metaTx)
             
-            let contractCalculatedHash = await this.token.methods.metaBurnHash(stablecoin, amountToBurn, nonce, reward).call()
+            let contractCalculatedHash = await this.token.methods.metaBurnHash(amountToBurn, nonce, reward).call()
             
             assert.equal(hash, contractCalculatedHash)
         })
-        it('burnCarbonDollar goes through, signer pays CUSD to relayer who pays for their ETH gas fee', async function () {    
-            let stablecoin = this.wt0.options.address
-            let data = this.token.methods.burnCarbonDollar(stablecoin, amountToBurn).encodeABI()
+        it('burn goes through, signer pays CUSD to relayer who pays for their ETH gas fee', async function () {    
+            let data = this.token.methods.burn(amountToBurn).encodeABI()
             let nonce = await this.token.methods.replayNonce(signer).call()
             let metatoken = this.token.options.address
             let metaTx = [
                 metatoken,   
-                "metaBurnCarbonDollar",   
-                stablecoin,                           
+                "metaBurn",   
                 amountToBurn,        
                 _web3.utils.toTwosComplement(nonce), 
                 _web3.utils.toTwosComplement(reward), 
@@ -644,8 +637,7 @@ contract('MetaToken', _accounts => {
             let hash = _web3.utils.soliditySha3(...metaTx)
             let sig = await _web3.eth.sign(hash, signer)
 
-            let receipt = await this.token.methods.metaBurnCarbonDollar(
-                stablecoin, 
+            let receipt = await this.token.methods.metaBurn(
                 amountToBurn, 
                 sig,
                 nonce,
@@ -653,36 +645,20 @@ contract('MetaToken', _accounts => {
             ).send({from: relayer, gas: 200000 })
             
             let events = receipt.events
-            assert.exists(events.BurnedCUSD)
             assert.exists(events.Burn)
-            assert.exists(events.Mint)
-                
-            // BurnCarbonDollar from signer
-            let eventParams_0 = events.BurnedCUSD.returnValues
-            assert.equal(eventParams_0.user, _web3.utils.toChecksumAddress(signer))
-            assert.equal(eventParams_0.feedAmount, new BigNumber(amountToBurn - fee))
-            assert.equal(eventParams_0.chargedFee, fee)
 
             // Burn from signer
-            let eventParams_1 = events.Burn[0].returnValues
+            let eventParams_1 = events.Burn.returnValues
             assert.equal(eventParams_1.burner, _web3.utils.toChecksumAddress(signer))
             assert.equal(eventParams_1.value, amountToBurn)
-
-            // Mint fee to token contract
-            let eventParams_2 = events.Mint.returnValues
-            assert.equal(eventParams_2.to, this.token.options.address)
-            assert.equal(eventParams_2.value, fee)
 
             // Snapshot CUSD balances after
             this.balance_signer_after = await this.token.methods.balanceOf(signer).call()
             assert.equal(this.balance_signer_after, this.balance_signer_before-reward-amountToBurn)
             
-            this.balance_token_after = await this.token.methods.balanceOf(this.token.options.address).call()
-            assert.equal(this.balance_token_after, new BigNumber(this.balance_token_before+fee))
-
             // Snapshot total supply after
             this.total_supply_after = await this.token.methods.totalSupply().call()
-            let expectedTotalSupply = (new BigNumber(this.total_supply_before) - (amountToBurn-fee))
+            let expectedTotalSupply = (new BigNumber(this.total_supply_before) - (amountToBurn))
             assert.equal(this.total_supply_after, expectedTotalSupply)
 
             // Snapshot ETH balances before
@@ -693,14 +669,12 @@ contract('MetaToken', _accounts => {
             assert(this.eth_balance_relayer_after < this.eth_balance_relayer_before)
         })
         it('does not revert', async function () {
-            let stablecoin = this.wt0.options.address
-            let data = this.token.methods.burnCarbonDollar(stablecoin, amountToBurn).encodeABI()
+            let data = this.token.methods.burn(amountToBurn).encodeABI()
             let nonce = await this.token.methods.replayNonce(signer).call()
             let metatoken = this.token.options.address
             let metaTx = [
                 metatoken,   
-                "metaBurnCarbonDollar",   
-                stablecoin,                           
+                "metaBurn",   
                 amountToBurn,        
                 _web3.utils.toTwosComplement(nonce), 
                 _web3.utils.toTwosComplement(reward), 
@@ -709,8 +683,7 @@ contract('MetaToken', _accounts => {
             let hash = _web3.utils.soliditySha3(...metaTx)
             let sig = await _web3.eth.sign(hash, signer)
 
-            let receipt = await this.token.methods.metaBurnCarbonDollar(
-                stablecoin, 
+            let receipt = await this.token.methods.metaBurn(
                 amountToBurn, 
                 sig,
                 nonce,
@@ -719,14 +692,12 @@ contract('MetaToken', _accounts => {
             assert(receipt)
         })
         it('signer is blacklisted, reverts', async function () {
-            let stablecoin = this.wt0.options.address
-            let data = this.token.methods.burnCarbonDollar(stablecoin, amountToBurn).encodeABI()
+            let data = this.token.methods.burn(amountToBurn).encodeABI()
             let nonce = await this.token.methods.replayNonce(signer).call()
             let metatoken = this.token.options.address
             let metaTx = [
                 metatoken,   
-                "metaBurnCarbonDollar",   
-                stablecoin,                           
+                "metaBurn",   
                 amountToBurn,        
                 _web3.utils.toTwosComplement(nonce), 
                 _web3.utils.toTwosComplement(reward), 
@@ -735,8 +706,7 @@ contract('MetaToken', _accounts => {
             let hash = _web3.utils.soliditySha3(...metaTx)
             let sig = await _web3.eth.sign(hash, blacklisted)
 
-            let receipt = await expectRevert(this.token.methods.metaBurnCarbonDollar(
-                stablecoin, 
+            let receipt = await expectRevert(this.token.methods.metaBurn(
                 amountToBurn, 
                 sig,
                 nonce,
@@ -744,15 +714,13 @@ contract('MetaToken', _accounts => {
             ).send({from: relayer, gas: 200000 }))
         })
         it('invalid metatransaction nonce, reverts', async function () {    
-            let stablecoin = this.wt0.options.address
-            let data = this.token.methods.burnCarbonDollar(stablecoin, amountToBurn).encodeABI()
+            let data = this.token.methods.burn(amountToBurn).encodeABI()
             let nonce = await this.token.methods.replayNonce(signer).call()
             nonce += 1 // Hijack nonce here
             let metatoken = this.token.options.address
             let metaTx = [
                 metatoken,   
-                "metaBurnCarbonDollar",   
-                stablecoin,                           
+                "metaBurn",   
                 amountToBurn,        
                 _web3.utils.toTwosComplement(nonce), 
                 _web3.utils.toTwosComplement(reward), 
@@ -761,8 +729,7 @@ contract('MetaToken', _accounts => {
             let hash = _web3.utils.soliditySha3(...metaTx)
             let sig = await _web3.eth.sign(hash, signer)
 
-            let receipt = await expectRevert(this.token.methods.metaBurnCarbonDollar(
-                stablecoin, 
+            let receipt = await expectRevert(this.token.methods.metaBurn(
                 amountToBurn, 
                 sig,
                 nonce,
@@ -771,14 +738,12 @@ contract('MetaToken', _accounts => {
         })
         it('signer does not have enough token balance, reverts', async function () { 
             let amountToBurn = amountToMintSigner 
-            let stablecoin = this.wt0.options.address
-            let data = this.token.methods.burnCarbonDollar(stablecoin, amountToBurn).encodeABI()
+            let data = this.token.methods.burn(amountToBurn).encodeABI()
             let nonce = await this.token.methods.replayNonce(signer).call()
             let metatoken = this.token.options.address
             let metaTx = [
                 metatoken,   
-                "metaBurnCarbonDollar",   
-                stablecoin,                           
+                "metaBurn",   
                 amountToBurn,        
                 _web3.utils.toTwosComplement(nonce), 
                 _web3.utils.toTwosComplement(reward), 
@@ -787,8 +752,7 @@ contract('MetaToken', _accounts => {
             let hash = _web3.utils.soliditySha3(...metaTx)
             let sig = await _web3.eth.sign(hash, signer)
 
-            let receipt = await expectRevert(this.token.methods.metaBurnCarbonDollar(
-                stablecoin, 
+            let receipt = await expectRevert(this.token.methods.metaBurn(
                 amountToBurn, 
                 sig,
                 nonce,
@@ -797,14 +761,12 @@ contract('MetaToken', _accounts => {
         })
         it('signer does not specify a reward, reverts', async function () {  
             let reward = new BigNumber(0) 
-            let stablecoin = this.wt0.options.address
-            let data = this.token.methods.burnCarbonDollar(stablecoin, amountToBurn).encodeABI()
+            let data = this.token.methods.burn(amountToBurn).encodeABI()
             let nonce = await this.token.methods.replayNonce(signer).call()
             let metatoken = this.token.options.address
             let metaTx = [
                 metatoken,   
-                "metaBurnCarbonDollar",   
-                stablecoin,                           
+                "metaBurn",   
                 amountToBurn,        
                 _web3.utils.toTwosComplement(nonce), 
                 _web3.utils.toTwosComplement(reward), 
@@ -813,33 +775,7 @@ contract('MetaToken', _accounts => {
             let hash = _web3.utils.soliditySha3(...metaTx)
             let sig = await _web3.eth.sign(hash, signer)
 
-            let receipt = await expectRevert(this.token.methods.metaBurnCarbonDollar(
-                stablecoin, 
-                amountToBurn, 
-                sig,
-                nonce,
-                reward,
-            ).send({from: relayer, gas: 200000 }))
-        })
-        it('CarbonDollar::burnCarbonDollar reverts', async function () {  
-            let stablecoin = this.token.options.address
-            let data = this.token.methods.burnCarbonDollar(stablecoin, amountToBurn).encodeABI()
-            let nonce = await this.token.methods.replayNonce(signer).call()
-            let metatoken = this.token.options.address
-            let metaTx = [
-                metatoken,   
-                "metaBurnCarbonDollar",   
-                stablecoin,                           
-                amountToBurn,        
-                _web3.utils.toTwosComplement(nonce), 
-                _web3.utils.toTwosComplement(reward), 
-            ]
-
-            let hash = _web3.utils.soliditySha3(...metaTx)
-            let sig = await _web3.eth.sign(hash, signer)
-
-            let receipt = await expectRevert(this.token.methods.metaBurnCarbonDollar(
-                stablecoin, 
+            let receipt = await expectRevert(this.token.methods.metaBurn(
                 amountToBurn, 
                 sig,
                 nonce,
@@ -848,14 +784,12 @@ contract('MetaToken', _accounts => {
         })
         it('paused, reverts', async function () { 
             await this.token.methods.pause().send({ from: owner }) 
-            let stablecoin = this.wt0.options.address
-            let data = this.token.methods.burnCarbonDollar(stablecoin, amountToBurn).encodeABI()
+            let data = this.token.methods.burn(amountToBurn).encodeABI()
             let nonce = await this.token.methods.replayNonce(signer).call()
             let metatoken = this.token.options.address
             let metaTx = [
                 metatoken,   
-                "metaBurnCarbonDollar",   
-                stablecoin,                           
+                "metaBurn",   
                 amountToBurn,        
                 _web3.utils.toTwosComplement(nonce), 
                 _web3.utils.toTwosComplement(reward), 
@@ -864,8 +798,7 @@ contract('MetaToken', _accounts => {
             let hash = _web3.utils.soliditySha3(...metaTx)
             let sig = await _web3.eth.sign(hash, signer)
 
-            let receipt = await expectRevert(this.token.methods.metaBurnCarbonDollar(
-                stablecoin, 
+            let receipt = await expectRevert(this.token.methods.metaBurn(
                 amountToBurn, 
                 sig,
                 nonce,

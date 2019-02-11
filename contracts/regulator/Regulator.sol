@@ -140,23 +140,19 @@ contract Regulator is RegulatorStorage {
      * @return `true` if the user is a minter, `false` otherwise.
      */
     function isMinter(address _who) public view returns (bool) {
-        return (hasUserPermission(_who, MINT_SIG) && hasUserPermission(_who, MINT_CUSD_SIG));
+        return (hasUserPermission(_who, MINT_SIG));
     }
 
     /** Internal Functions **/
 
     function _setMinter(address _who) internal {
         require(isPermission(MINT_SIG), "Minting not supported by token");
-        require(isPermission(MINT_CUSD_SIG), "Minting to CUSD not supported by token");
         setUserPermission(_who, MINT_SIG);
-        setUserPermission(_who, MINT_CUSD_SIG);
         emit LogSetMinter(_who);
     }
 
     function _removeMinter(address _who) internal {
         require(isPermission(MINT_SIG), "Minting not supported by token");
-        require(isPermission(MINT_CUSD_SIG), "Minting to CUSD not supported by token");
-        removeUserPermission(_who, MINT_CUSD_SIG);
         removeUserPermission(_who, MINT_SIG);
         emit LogRemovedMinter(_who);
     }

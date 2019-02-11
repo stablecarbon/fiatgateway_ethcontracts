@@ -21,7 +21,6 @@ contract('RegulatorProxy', _accounts => {
         this.proxyAddress = this.proxy.address
 
         this.MINT_SIG = await (await Regulator.at(this.proxyAddress)).MINT_SIG();
-        this.MINT_CUSD_SIG = await (await Regulator.at(this.proxyAddress)).MINT_CUSD_SIG();
 
     })
 
@@ -218,7 +217,6 @@ contract('RegulatorProxy', _accounts => {
                     beforeEach(async function () {
                         await this.regulatorProxy.addValidator(validator, {from:proxyOwner})
                         await this.regulatorProxy.addPermission(this.MINT_SIG, '', '', '', {from:validator})
-                        await this.regulatorProxy.addPermission(this.MINT_CUSD_SIG, '', '', '', {from:validator})
                     })
                     describe('setMinter', function () {
                         it('emits a LogSetMinter event', async function () {

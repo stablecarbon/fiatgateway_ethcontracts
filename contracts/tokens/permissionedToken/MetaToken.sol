@@ -1,10 +1,10 @@
 pragma solidity ^0.4.24;
 
-import "../carbonToken/CarbonDollar.sol";
+import "./PermissionedToken.sol";
 
 /**
 * @title MetaToken
-* @notice Extends the CarbonDollar token by providing functionality for users to interact with
+* @notice Extends the PermissionedToken token by providing functionality for users to interact with
 * the permissioned token contract without needing to pay gas fees. MetaToken will perform the 
 * exact same actions as a normal CarbonDollar, but first it will validate a signature of the 
 * hash of the parameters and ecrecover() a signature to prove the signer so everything is still 
@@ -12,12 +12,12 @@ import "../carbonToken/CarbonDollar.sol";
 * it will move the signer’s tokens. Finally, we can also wrap in a token reward to incentivise the relayer.
 * @notice inspiration from @austingriffith and @PhABCD for leading the meta-transaction innovations
 */
-contract MetaToken is CarbonDollar {
+contract MetaToken is PermissionedToken {
 
     /**
     * @dev create a new CarbonDollar with a brand new data storage
     **/
-    constructor (address _regulator) CarbonDollar(_regulator) public {
+    constructor (address _regulator) PermissionedToken(_regulator) public {
     }
 
     /**
@@ -95,15 +95,14 @@ contract MetaToken is CarbonDollar {
     * @notice Verify and broadcast a burnCarbonDollar() signed metatransaction. The msg.sender or "relayer"
     *           will pay for the ETH gas fees since they are sending this transaction, and in exchange
     *           the "signer" will pay CUSD to the relayer.
-    * @param _stablecoin Represents the stablecoin that is backing the active CUSD.
     * @param _amount The number of tokens to transfer
     * @param _signature the metatransaction signature, which metaTransfer verifies is signed by the original transfer() sender
     * @param _nonce to prevent replay attack of metatransactions
     * @param _reward amount of CUSD to pay relayer in
     * @return `true` if successful 
     */
-    function metaBurnCarbonDollar(address _stablecoin, uint256 _amount, bytes _signature, uint256 _nonce, uint256 _reward) public whenNotPaused returns (bool) {
-        bytes32 metaHash = metaBurnHash(_stablecoin, _amount, _nonce, _reward);
+    function metaBurn(uint256 _amount, bytes _signature, uint256 _nonce, uint256 _reward) public whenNotPaused returns (bool) {
+        bytes32 metaHash = metaBurnHash(_amount, _nonce, _reward);
         address signer = _getSigner(metaHash, _signature);
         require(!regulator.isBlacklistedUser(signer), "signer is blacklisted");
         require(_nonce == replayNonce[signer], "this transaction has already been broadcast");
@@ -111,7 +110,7 @@ contract MetaToken is CarbonDollar {
 
         require( _reward > 0, "reward to incentivize relayer must be positive");
         require( (_amount + _reward) <= balanceOf(signer),"not enough balance to burn and reward relayer");
-        _burnCarbonDollar(signer, _stablecoin, _amount);
+        _burn(signer, _amount);
         _transfer(msg.sender, signer, _reward);
         return true;
     }
@@ -141,15 +140,14 @@ contract MetaToken is CarbonDollar {
     }
 
     /**
-    * @notice Return hash containing all of the information about the burnCarbonDollar() metatransaction
-    * @param _stablecoin Represents the stablecoin that is backing the active CUSD.    
+    * @notice Return hash containing all of the information about the burn() metatransaction
     * @param _amount The number of tokens to burn
     * @param _nonce to prevent replay attack of metatransactions
     * @param _reward amount of CUSD to pay relayer in
     * @return bytes32 hash of metatransaction
     */
-    function metaBurnHash(address _stablecoin, uint256 _amount, uint256 _nonce, uint256 _reward) public view returns(bytes32){
-        return keccak256(abi.encodePacked(address(this),"metaBurnCarbonDollar", _stablecoin, _amount, _nonce, _reward));
+    function metaBurnHash(uint256 _amount, uint256 _nonce, uint256 _reward) public view returns(bytes32){
+        return keccak256(abi.encodePacked(address(this),"metaBurn", _amount, _nonce, _reward));
     }
 
     /**

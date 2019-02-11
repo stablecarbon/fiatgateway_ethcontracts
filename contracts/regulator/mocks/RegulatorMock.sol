@@ -14,7 +14,6 @@ contract RegulatorMock is Regulator {
     constructor() public {
         addValidator(msg.sender);
         setMintPermission();
-        setMintCUSDPermission();
         setDestroyBlacklistedTokensPermission();
         setApproveBlacklistedAddressSpenderPermission();
         setDestroySelfPermission();
@@ -22,10 +21,6 @@ contract RegulatorMock is Regulator {
 
     function setMintPermission() internal {
         addPermission(MINT_SIG, "","","");
-    }
-
-    function setMintCUSDPermission() internal {
-        addPermission(MINT_CUSD_SIG, "","","");
     }
 
     function setDestroyBlacklistedTokensPermission() internal {

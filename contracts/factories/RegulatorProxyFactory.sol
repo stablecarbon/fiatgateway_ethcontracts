@@ -57,7 +57,6 @@ contract RegulatorProxyFactory {
         regulator.addPermission(regulator.DESTROY_BLACKLISTED_TOKENS_SIG(), "", "", "" );
         regulator.addPermission(regulator.APPROVE_BLACKLISTED_ADDRESS_SPENDER_SIG(), "", "", "" );
         regulator.addPermission(regulator.BLACKLISTED_SIG(), "", "", "" );
-        regulator.addPermission(regulator.MINT_CUSD_SIG(), "", "", "" );
         regulator.removeValidator(this);
     }
 

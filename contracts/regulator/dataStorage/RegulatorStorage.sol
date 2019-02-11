@@ -28,7 +28,6 @@ contract RegulatorStorage is Ownable {
         and each permission gives the user the ability to call the associated PermissionedToken method signature
     */
     bytes4 public constant MINT_SIG = bytes4(keccak256("mint(address,uint256)"));
-    bytes4 public constant MINT_CUSD_SIG = bytes4(keccak256("mintCUSD(address,uint256)"));
     bytes4 public constant DESTROY_BLACKLISTED_TOKENS_SIG = bytes4(keccak256("destroyBlacklistedTokens(address,uint256)"));
     bytes4 public constant APPROVE_BLACKLISTED_ADDRESS_SPENDER_SIG = bytes4(keccak256("approveBlacklistedAddressSpender(address)"));
     bytes4 public constant BLACKLISTED_SIG = bytes4(keccak256("blacklisted()"));

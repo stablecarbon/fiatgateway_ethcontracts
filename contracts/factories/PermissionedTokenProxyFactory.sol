@@ -1,19 +1,19 @@
 pragma solidity ^0.4.24;
 
-import "../tokens/carbonToken/CarbonDollarProxy.sol";
+import "../tokens/permissionedToken/PermissionedTokenProxy.sol";
 
 /**
 *
-* @dev CarbonDollarProxyFactory creates new CarbonDollarProxy contracts with new data storage sheets, properly configured
-* with ownership, and the proxy logic implementations are based on a user-specified CarbonDollar. 
+* @dev PermissionedTokenProxyFactory creates new PermissionedTokenProxy contracts with new data storage sheets, properly configured
+* with ownership, and the proxy logic implementations are based on a user-specified PermissionedToken. 
 *
 **/
-contract CarbonDollarProxyFactory {
+contract PermissionedTokenProxyFactory {
     // Parameters
     address[] public tokens;
 
     // Events
-    event CreatedCarbonDollarProxy(address newToken, uint256 index);
+    event CreatedPermissionedTokenProxy(address newToken, uint256 index);
     
     /**
     *
@@ -26,13 +26,13 @@ contract CarbonDollarProxyFactory {
     **/
     function createToken(address tokenImplementation, address regulator) public {
         
-        address proxy = address(new CarbonDollarProxy(tokenImplementation, regulator));
+        address proxy = address(new PermissionedTokenProxy(tokenImplementation, regulator));
 
         // The function caller should own the proxy contract
-        CarbonDollarProxy(proxy).transferOwnership(msg.sender);
+        PermissionedTokenProxy(proxy).transferOwnership(msg.sender);
 
         tokens.push(proxy);
-        emit CreatedCarbonDollarProxy(proxy, getCount()-1);
+        emit CreatedPermissionedTokenProxy(proxy, getCount()-1);
     }
 
     // Return number of token proxy contracts created so far
