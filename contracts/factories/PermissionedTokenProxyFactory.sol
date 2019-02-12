@@ -9,7 +9,6 @@ import "../tokens/permissionedToken/PermissionedTokenProxy.sol";
 *
 **/
 contract PermissionedTokenProxyFactory {
-    // Parameters
     address[] public tokens;
 
     // Events
@@ -17,7 +16,7 @@ contract PermissionedTokenProxyFactory {
     
     /**
     *
-    * @dev generate a new proxy address that users can cast to a PermissionedToken or PermissionedTokenProxy. The
+    * @dev generate a new proxy contract that users can cast to a PermissionedToken or PermissionedTokenProxy. The
     * proxy has empty data storage contracts connected to it and it is set with an initial logic contract
     * to which it will delegate functionality
     * @param regulator the address of the initial regulator contract that regulates the proxy
@@ -29,6 +28,7 @@ contract PermissionedTokenProxyFactory {
         address proxy = address(new PermissionedTokenProxy(tokenImplementation, regulator));
 
         // The function caller should own the proxy contract
+        // @dev: the function caller must call claimOwnership() to complete the ownership transfer
         PermissionedTokenProxy(proxy).transferOwnership(msg.sender);
 
         tokens.push(proxy);

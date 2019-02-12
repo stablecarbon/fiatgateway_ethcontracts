@@ -8,7 +8,7 @@ import "openzeppelin-solidity/contracts/AddressUtils.sol";
 
 /**
 * @title PermissionedTokenProxy
-* @notice A proxy contract that serves the latest implementation of PermissionedToken.
+* @notice A proxy contract that delegates functionality to the latest implementation of PermissionedToken.
 */
 contract PermissionedTokenProxy is UpgradeabilityProxy, Ownable {
     

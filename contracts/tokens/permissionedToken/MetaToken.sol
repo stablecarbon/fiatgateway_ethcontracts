@@ -15,7 +15,7 @@ import "./PermissionedToken.sol";
 contract MetaToken is PermissionedToken {
 
     /**
-    * @dev create a new CarbonDollar with a brand new data storage
+    * @dev create a new MetaToken with brand new data storage
     **/
     constructor (address _regulator) PermissionedToken(_regulator) public {
     }
@@ -92,11 +92,11 @@ contract MetaToken is PermissionedToken {
     }
 
     /**
-    * @notice Verify and broadcast a burnCarbonDollar() signed metatransaction. The msg.sender or "relayer"
+    * @notice Verify and broadcast a burn() signed metatransaction. The msg.sender or "relayer"
     *           will pay for the ETH gas fees since they are sending this transaction, and in exchange
     *           the "signer" will pay CUSD to the relayer.
-    * @param _amount The number of tokens to transfer
-    * @param _signature the metatransaction signature, which metaTransfer verifies is signed by the original transfer() sender
+    * @param _amount The number of tokens to burn
+    * @param _signature the metatransaction signature, which metaBurn verifies is signed by the original transfer() sender
     * @param _nonce to prevent replay attack of metatransactions
     * @param _reward amount of CUSD to pay relayer in
     * @return `true` if successful 

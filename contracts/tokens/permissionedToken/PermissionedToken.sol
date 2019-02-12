@@ -87,7 +87,7 @@ contract PermissionedToken is ERC20, Pausable, Lockable {
     /**
     * @notice Allows user to mint if they have the appropriate permissions. User generally
     * must have minting authority.
-    * @dev Should be access-restricted with the 'requiresPermission' modifier when implementing.
+    * @dev Should be access-restricted with the 'requiresPermission' modifier to enforce only Minters are capable of minting
     * @param _to The address of the receiver
     * @param _amount The number of tokens to mint
     */

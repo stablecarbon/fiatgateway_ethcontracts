@@ -60,6 +60,23 @@ contract('MetaToken', _accounts => {
         assert.equal(total_supply, amountToMintSigner)
     })
 
+    describe('token metadata', function () {
+        const NAME="CUSD"
+        const SYM="CUSD"
+        const DECIMALS=18
+        it(`name = ${NAME}`, async function () {
+            let metadata = await this.token.methods.name().call()
+            assert.equal(metadata, NAME)
+        })
+        it(`symbol = ${SYM}`, async function () {
+            let metadata = await this.token.methods.symbol().call()
+            assert.equal(metadata, SYM)
+        })
+        it(`decimals = ${DECIMALS}`, async function () {
+            let metadata = await this.token.methods.decimals().call()
+            assert.equal(metadata, DECIMALS)
+        })
+    })
     describe('metaTransfer', async function () {
         const amountToTransfer = new BigNumber(100*10**18)
         let to = receiver

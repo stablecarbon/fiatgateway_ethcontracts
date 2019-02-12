@@ -10,9 +10,6 @@ import "../regulator/Regulator.sol";
 *
 **/
 contract RegulatorProxyFactory {
-
-    // TODO: Instead of a single array of addresses, this should be a mapping or an array
-    // of objects of type { address: ...new_regulator, type: whitelisted_or_cusd }
     address[] public regulators;
 
     // Events
@@ -20,7 +17,7 @@ contract RegulatorProxyFactory {
 
     /**
     *
-    * @dev generate a new proxyaddress that users can cast to a Regulator or RegulatorProxy. The
+    * @dev generate a new proxy contract that users can cast to a Regulator or RegulatorProxy. The
     * proxy has empty data storage contracts connected to it and it is set with an initial logic contract
     * to which it will delegate functionality
     * @notice the method caller will have to claim ownership of regulators since regulators are claimable
@@ -29,15 +26,15 @@ contract RegulatorProxyFactory {
     **/
     function createRegulatorProxy(address regulatorImplementation) public {
 
-        // Store new data storage contracts for regulator proxy
         address proxy = address(new RegulatorProxy(regulatorImplementation));
         Regulator newRegulator = Regulator(proxy);
 
-        // Testing: Add msg.sender as a validator, add all permissions
+        // Add caller as a validator and add permissions
         newRegulator.addValidator(msg.sender);
         addAllPermissions(newRegulator);
 
-        // The function caller should own the proxy contract, so they will need to claim ownership
+        // The function caller should own the proxy contract
+        // @dev: the function caller must call claimOwnership() to complete the ownership transfer
         RegulatorProxy(proxy).transferOwnership(msg.sender);
 
         regulators.push(proxy);
