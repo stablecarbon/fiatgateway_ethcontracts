@@ -5,6 +5,9 @@ Carbon's CUSD-Fiat gateway: smart contracts
 
 Smart contract code audited by [New Alchemy](https://medium.com/@newalchemy/carbon-money-smart-contract-audit-c5ae62cbe5d4)
 
+## Upgradeability
+[delegatecall proxy pattern](https://blog.trailofbits.com/2018/09/05/contract-upgrade-anti-patterns/#comments)
+
 ## Deployment
 To deploy, run:
 `truffle migrate --network [network]`
